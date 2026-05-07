@@ -1,0 +1,12 @@
+# Archivos temporales
+*.tmp
+*.log
+*.swp
+*~
+
+# Carpetas de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración personal
+.config/
