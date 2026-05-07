@@ -21,5 +21,8 @@ Java, C++, Python, MySQL, PostgreSQL, Git, Maven, Gradle, UML, IntelliJ, Eclipse
 - **Repositorio GitHub**: https://github.com/GalvanAlexis/Progresos-Academicos
 - **Perfil GitHub**: https://github.com/GalvanAlexis
 
+## 🤖 Para Agentes IA (Nueva Sesión)
+Si eres un agente de IA, lee primero: **`Carreras/Readme.md`** - Contiene instrucciones detalladas, estructura del proyecto y estado actual para tu sesión.
+
 ---
 *Última actualización: Mayo 2026*
