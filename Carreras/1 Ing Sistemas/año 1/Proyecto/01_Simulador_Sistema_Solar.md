@@ -1,28 +1,28 @@
 # Proyecto: Simulador de Sistema Solar
 
-## Descripción General
+## Descripcion General
 
-Aplicación de consola (y eventualmente gráfica) que simula las órbitas planetarias usando cálculo básico y física.
+Aplicacion de consola (y eventualmente grafica) que simula las orbitas planetarias usando calculo basico y fisica.
 El objetivo es modelar el movimiento de los planetas alrededor del Sol aplicando las leyes de Newton y Kepler, permitiendo visualizar las trayectorias en el tiempo.
 
 ---
 
-## Stack Tecnológico
+## Stack Tecnologico
 
-| Componente | Tecnología | Propósito |
+| Componente | Tecnologia | Proposito |
 |------------|-------------|-----------|
-| **Lenguaje** | Python 3.x | Lógica principal, cálculos |
-| **Matemáticas** | `math` (estándar), `NumPy` | Funciones trigonométricas, álgebra lineal |
-| **Visualización** | `matplotlib` | Gráficas 2D de órbitas |
+| **Lenguaje** | Python 3.x | Logica principal, calculos |
+| **Matematicas** | `math` (estandar), `NumPy` | Funciones trigonometricas, algebra lineal |
+| **Visualizacion** | `matplotlib` | Graficas 2D de orbitas |
 | **Control de Versiones** | Git, GitHub | Seguimiento del progreso |
-| **Editor** | VS Code | Desarrollo e implementación |
+| **Editor** | VS Code | Desarrollo e implementacion |
 
 ---
 
-## Arquitectura del Código (POO)
+## Arquitectura del Codigo (POO)
 
 ### Clase `CuerpoCeleste`
-Representa un planeta o estrella con sus propiedades físicas.
+Representa un planeta o estrella con sus propiedades fisicas.
 
 ```python
 import math
@@ -34,18 +34,18 @@ class CuerpoCeleste:
     def __init__(self, nombre, masa, x, y, vx, vy):
         self.nombre = nombre
         self.masa = masa  # kg
-        self.x = x      # posición en eje x (metros)
-        self.y = y      # posición en eje y (metros)
+        self.x = x      # posicion en eje x (metros)
+        self.y = y      # posicion en eje y (metros)
         self.vx = vx     # velocidad x (m/s)
         self.vy = vy     # velocidad y (m/s)
         
     def actualizar_posicion(self, fx, fy, dt):
         """
-        Actualiza posición y velocidad basado en fuerzas aplicadas (Newton 2).
+        Actualiza posicion y velocidad basado en fuerzas aplicadas (Newton 2).
         fx, fy: Fuerzas netas en Newtons.
         dt: intervalo de tiempo (segundos).
         """
-        # Aceleración: a = F/m
+        # Aceleracion: a = F/m
         ax = fx / self.masa
         ay = fy / self.masa
         
@@ -53,7 +53,7 @@ class CuerpoCeleste:
         self.vx += ax * dt
         self.vy += ay * dt
         
-        # Actualizar posición: x = x0 + v*dt
+        # Actualizar posicion: x = x0 + v*dt
         self.x += self.vx * dt
         self.y += self.vy * dt
         
@@ -65,7 +65,7 @@ class CuerpoCeleste:
 ```
 
 ### Clase `SistemaSolar`
-Gestiona la simulación.
+Gestiona la simulacion.
 
 ```python
 class SistemaSolar:
@@ -79,11 +79,11 @@ class SistemaSolar:
         
     def calcular_fuerzas(self):
         """Calcula la fuerza gravitacional entre todos los cuerpos (N^2)."""
-        fuerzas = {cuerpo: [0, 0] for cuerpo in self.cuerpos}
+        fuerzas = {cuerpo: [0,0] for cuerpo in self.cuerpos}
         
         for i, c1 in enumerate(self.cuerpos):
             for c2 in self.cuerpos[i+1:]:
-                # Ley de Gravitación Universal: F = G * (m1*m2)/r^2
+                # Ley de Gravitacion Universal: F = G * (m1*m2)/r^2
                 r = c1.distancia_a(c2)
                 if r == 0: continue
                 
@@ -94,13 +94,13 @@ class SistemaSolar:
                 
                 fuerzas[c1][0] += fx
                 fuerzas[c1][1] += fy
-                fuerzas[c2][0] -= fx  # Acción y reacción
+                fuerzas[c2][0] -= fx  # Accion y reaccion
                 fuerzas[c2][1] -= fy
                 
         return fuerzas
     
     def simular(self, pasos, dt):
-        """Ejecuta la simulación paso a paso."""
+        """Ejecuta la simulacion paso a paso."""
         historial = {cuerpo.nombre: [] for cuerpo in self.cuerpos}
         
         for _ in range(pasos):
@@ -115,20 +115,20 @@ class SistemaSolar:
 
 ---
 
-## Aplicación de Conceptos de Año 1
+## Aplicacion de Conceptos de Año 1
 
-### 1. Aplicar Matemáticas en Programación
-*   **Funciones Trigonométricas:** Uso de `math.sin`, `math.cos` para órbitas elípticas iniciales.
-*   **Cálculo:** Aproximación de derivadas (velocidad = dx/dt) e integrales (posición = ∫velocidad dt) usando el **Método de Euler** (integración numérica básica).
-*   **Álgebra Lineal:** Operaciones vectoriales básicas (suma de vectores de fuerza).
+### 1. Aplicar Matematicas en Programacion
+*   **Funciones Trigonometricas:** Uso de `math.sin`, `math.cos` para orbitas elipticas iniciales.
+*   **Calculo:** Aproximacion de derivadas (velocidad = dx/dt) e integrales (posicion = ∫velocidad dt) usando el **Metodo de Euler** (integracion numerica basica).
+*   **Algebra Lineal:** Operaciones vectoriales basicas (suma de vectores de fuerza).
 
-### 2. Estructurar Código en Funciones y Clases
+### 2. Estructurar Codigo en Funciones y Clases
 *   **Funciones:** `calcular_fuerzas()`, `actualizar_posicion()`.
-*   **Clases:** `CuerpoCeleste` (POO), `SistemaSolar` (Gestión).
+*   **Clases:** `CuerpoCeleste` (POO), `SistemaSolar` (Gestion).
 
 ### 3. Uso de Bibliotecas Externas
-*   **`math`:** Funciones matemáticas puras.
-*   **`matplotlib`:** Para graficar las órbitas.
+*   **`math`:** Funciones matematicas puras.
+*   **`matplotlib`:** Para graficar las orbitas.
 
 ```python
 import matplotlib.pyplot as plt
@@ -142,9 +142,9 @@ def graficar_trayectorias(historial):
         plt.plot(xs, ys, label=nombre)
     
     plt.scatter([0], [0], color='yellow', s=200, label='Sol')  # El Sol en el centro
-    plt.xlabel('Posición X (m)')
-    plt.ylabel('Posición Y (m)')
-    plt.title('Simulación del Sistema Solar')
+    plt.xlabel('Posicion X (m)')
+    plt.ylabel('Posicion Y (m)')
+    plt.title('Simulacion del Sistema Solar')
     plt.legend()
     plt.grid(True)
     plt.axis('equal')
@@ -166,14 +166,14 @@ git push -u origin main
 
 ---
 
-## Ejemplo de Ejecución (Main)
+## Ejemplo de Ejecucion (Main)
 
 ```python
 # main.py
 from sistema_solar import CuerpoCeleste, SistemaSolar
 import matplotlib.pyplot as plt
 
-# Configuración (Datos aproximados, escala simplificada)
+# Configuracion (Datos aproximados, escala simplificada)
 sol = CuerpoCeleste("Sol", 1.989e30, 0, 0, 0, 0)
 tierra = CuerpoCeleste("Tierra", 5.972e24, 1.496e11, 0, 0, 2.978e4)  # 1 UA, velocidad orbital
 
@@ -186,18 +186,18 @@ segundos_en_año = 365 * 24 * 3600
 historial = sistema.simular(pasos=8760, dt=3600)  # 1 paso por hora
 
 # Graficar
-# (Función graficar_trayectorias definida arriba)
+# (Funcion graficar_trayectorias definida arriba)
 ```
 
 ---
 
 ## Objetivos de Aprendizaje (Checklist)
 
-- [ ] Aplicar **Cálculo** (derivadas/integrales) mediante aproximación numérica (Euler).
-- [ ] Estructurar código usando **POO** (Clases `CuerpoCeleste` y `SistemaSolar`).
-- [ ] Usar bibliotecas externas: `math` (física) y `matplotlib` (visualización).
-- [ ] Implementar **Ley de Gravitación Universal** (Newton).
-- [ ] Manejar **Vectores** (posición, velocidad, fuerza) como pares de valores.
+- [ ] Aplicar **Calculo** (derivadas/integrales) mediante aproximacion numerica (Euler).
+- [ ] Estructurar codigo usando **POO** (Clases `CuerpoCeleste` y `SistemaSolar`).
+- [ ] Usar bibliotecas externas: `math` (fisica) y `matplotlib` (visualizacion).
+- [ ] Implementar **Ley de Gravitacion Universal** (Newton).
+- [ ] Manejar **Vectores** (posicion, velocidad, fuerza) como pares de valores.
 - [ ] Control de versiones: `git init`, `commit`, `push` a **GitHub**.
 - [ ] Crear `.gitignore` para excluir archivos `.pyc` o carpetas `__pycache__`.
 
@@ -205,22 +205,22 @@ historial = sistema.simular(pasos=8760, dt=3600)  # 1 paso por hora
 
 ## Posibles Extensiones (Bonus)
 
-1.  **Incluir más planetas:** Marte, Júpiter, Venus.
-2.  **Visualización 3D:** Usar `matplotlib` con `Axes3D`.
-3.  **Animación:** Usar `matplotlib.animation` para ver el movimiento en tiempo real.
-4.  **Calculo de Energía:** Calcular Energía Cinética y Potencial para validar la simulación (Conservación de Energía).
+1.  **Incluir mas planetas:** Marte, Jupiter, Venus.
+2.  **Visualizacion 3D:** Usar `matplotlib` con `Axes3D`.
+3.  **Animacion:** Usar `matplotlib.animation` para ver el movimiento en tiempo real.
+4.  **Calculo de Energia:** Calcular Energia Cinetica y Potencial para validar la simulacion (Conservacion de Energia).
 
 ---
 
 ## Recursos Recomendados
 
-### Física
-*   **"Fundamentos de Física"** - Halliday, Resnick, Walker (Volumen 1: Mecánica).
+### Fisica
+*   **"Fundamentos de Fisica"** - Halliday, Resnick, Walker (Volumen 1: Mecanica).
 *   **NASA Solar System Dynamics:** https://ssd.jpl.nasa.gov/ (Datos reales de posiciones).
 
 ### Python
 *   **Matplotlib Tutorial:** https://matplotlib.org/stable/tutorials/
 *   **Real Python - OOP:** https://realpython.com/python3-object-oriented-programming/
 
-### Simulación
-*   **"Computational Physics"** - Mark Newman (Libro gratis online, capítulos de ODEs).
+### Simulacion
+*   **"Computational Physics"** - Mark Newman (Libro gratis online, capitulos de ODEs).

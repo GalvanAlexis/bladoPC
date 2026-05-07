@@ -1,31 +1,31 @@
-# Proyecto: Generador de Documentación Técnica
+# Proyecto: Generador de Documentacion Tecnica
 
-## 📋 Descripción
-Herramienta de consola que genera documentación técnica básica en formato Markdown. Permite crear reportes, README templates y documentación de funciones a partir de entradas del usuario.
+## Descripcion
+Herramienta de consola que genera documentacion tecnica basica en formato Markdown. Permite crear reportes, README templates y documentacion de funciones a partir de entradas del usuario.
 
 ---
 
-## 🛠️ Stack Tecnológico
+## Stack Tecnologico
 - **Lenguaje**: Python 3.x
 - **Formato**: Markdown
-- **POO Básico**: Clases para estructurar documentos
+- **POO Basico**: Clases para estructurar documentos
 - **Control de Versiones**: Git, GitHub
 - **Editor**: VS Code
-- **Metodología**: Comunicación Oral y Escrita (redacción técnica)
+- **Metodologia**: Comunicacion Oral y Escrita (redaccion tecnica)
 
 ---
 
-## 🎯 Objetivos de Aprendizaje
-- [ ] Aplicar **Comunicación Oral y Escrita**: Redacción técnica, formato Markdown
-- [ ] Aplicar **Metodología de Investigación**: Estructura de documentos técnicos
-- [ ] Estructurar código en **Funciones** y **POO básico** (clase `Documento`)
+## Objetivos de Aprendizaje
+- [ ] Aplicar **Comunicacion Oral y Escrita**: Redaccion tecnica, formato Markdown
+- [ ] Aplicar **Metodologia de Investigacion**: Estructura de documentos tecnico
+- [ ] Estructurar código en **Funciones** y **POO basico** (clase `Documento`)
 - [ ] Uso de **Variables**, **Tipos de datos** (strings, listas)
 - [ ] Uso de **Ciclos** para generar secciones repetitivas
 - [ ] Control de versiones: `git init`, `commit`, `push` a GitHub
 
 ---
 
-## 💻 Estructura Sugerida del Código
+## Estructura Sugerida del Codigo
 
 ### Clase `DocumentoMarkdown`
 ```python
@@ -42,7 +42,7 @@ class DocumentoMarkdown:
         self.fecha = fecha
     
     def agregar_seccion(self, titulo_seccion, contenido):
-        """Agrega una sección al documento."""
+        """Agrega una seccion al documento."""
         self.secciones.append({
             'titulo': titulo_seccion,
             'contenido': contenido
@@ -81,17 +81,17 @@ class DocumentoMarkdown:
 
 # Funciones auxiliares
 def generar_readme(nombre_proyecto):
-    """Genera un README.md básico para un proyecto."""
+    """Genera un README.md basco para un proyecto."""
     doc = DocumentoMarkdown(f"Proyecto: {nombre_proyecto}")
     doc.agregar_metadatos("Blado", "2026-05-06")
     
-    doc.agregar_seccion("Descripción", 
-        "Breve descripción del proyecto y sus objetivos.")
+    doc.agregar_seccion("Descripcion", 
+        "Breve descripcion del proyecto y sus objetivos.")
     
-    doc.agregar_seccion("Tecnologías", 
+    doc.agregar_seccion("Tecnologias", 
         "- Python 3.x\n- Git\n- VS Code")
     
-    doc.agregar_seccion("Instalación", 
+    doc.agregar_seccion("Instalacion", 
         "```bash\npip install -r requirements.txt\n```")
     
     doc.agregar_seccion("Uso", 
@@ -101,13 +101,13 @@ def generar_readme(nombre_proyecto):
 
 # main.py
 def main():
-    print("=== Generador de Documentación Técnica ===")
+    print("=== Generador de Documentacion Tecnica ===")
     
     print("\n1. README para proyecto")
-    print("2. Documentación de función")
+    print("2. Documentacion de funcion")
     print("3. Reporte personalizado")
     
-    opcion = input("Elige una opción (1-3): ")
+    opcion = input("Elige una opcion (1-3): ")
     
     if opcion == '1':
         nombre = input("Nombre del proyecto: ")
@@ -115,21 +115,21 @@ def main():
         doc.guardar_archivo("README.md")
     
     elif opcion == '2':
-        doc = DocumentoMarkdown("Documentación de Función")
-        nombre_func = input("Nombre de la función: ")
-        descripcion = input("Descripción: ")
-        parametros = input("Parámetros (separados por coma): ")
+        doc = DocumentoMarkdown("Documentacion de Funcion")
+        nombre_func = input("Nombre de la funcion: ")
+        descripcion = input("Descripcion: ")
+        parametros = input("Parametros (separados por coma): ")
         
-        contenido = f"### {nombre_func}\n\n{descripcion}\n\n**Parámetros:** {parametros}"
+        contenido = f"### {nombre_func}\n\n{descripcion}\n\n**Parametros:** {parametros}"
         doc.agregar_seccion(nombre_func, contenido)
         doc.guardar_archivo(f"{nombre_func}.md")
     
     elif opcion == '3':
-        doc = DocumentoMarkdown(input("Título del reporte: "))
+        doc = DocumentoMarkdown(input("Titulo del reporte: "))
         doc.agregar_metadatos(input("Autor: "), input("Fecha: "))
         
         while True:
-            titulo = input("Título de sección (vacío para terminar): ")
+            titulo = input("Titulo de seccion (vacio para terminar): ")
             if not titulo:
                 break
             contenido = input(f"Contenido de '{titulo}': ")
@@ -143,60 +143,60 @@ if __name__ == "__main__":
 
 ---
 
-## 📝 Ejemplo de Salida (README.md)
+## Ejemplo de Salida (README.md)
 ```markdown
-# Proyecto: Mi Primera App
+# Proyecto: Mi Primera App#
 
 **Autor:** Blado
 **Fecha:** 2026-05-06
 
 ---
 
-## 1. Descripción
+## 1. Descripcion
 
-Breve descripción del proyecto y sus objetivos.
+Breve descripcion del proyecto y sus objetivos.
 
-## 2. Tecnologías
+## 2. Tecnologias#
 
 - Python 3.x
 - Git
 - VS Code
 
-## 3. Instalación
+## 3. Instalacion#
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.txt#
 ```
 
-## 4. Uso
+## 4. Uso#
 
 ```python
-python main.py
+python main.py#
 ```
 ```
 
 ---
 
-## ✅ Criterios de Aceptación
-1. **POO**: Clase `DocumentoMarkdown` con métodos para agregar y guardar
-2. **Markdown**: Generación correcta de headers, listas y bloques de código
+## Criterios de Aceptacion
+1. **POO**: Clase `DocumentoMarkdown` con metodos para agregar y guardar
+2. **Markdown**: Generacion correcta de headers, listas y bloques de codigo
 3. **Funcionalidad**: Mínimo 3 tipos de documentos generados
-4. **Validación**: Manejo de errores al escribir archivos
+4. **Validacion**: Manejo de errores al escribir archivos
 5. **Git**: Repositorio en GitHub con mínimo 3 commits
 
 ---
 
-## 📚 Recursos de Apoyo
+## Recursos de Apoyo
 - **Markdown Guide**: https://www.markdownguide.org/
 - **Python File I/O**: https://docs.python.org/3/tutorial/inputoutput.html
 - **Technical Writing**: Revisar carpeta `Tecnologias/`
 
 ---
 
-## 🚀 Pasos Sugeridos de Implementación
-1. Crear la clase `DocumentoMarkdown` con su estructura básica
+## Pasos Sugeridos de Implementacion
+1. Crear la clase `DocumentoMarkdown` con su estructura basica
 2. Implementar `generar_markdown()` con formato limpio
-3. Agregar función `generar_readme()` con template predefinido
-4. Crear el menú interactivo en `main.py`
+3. Agregar funcion `generar_readme()` con template predefinido
+4. Crear el menu interactivo en `main.py`
 5. Probar generando diferentes tipos de documentos
 6. Hacer commits en Git por cada funcionalidad

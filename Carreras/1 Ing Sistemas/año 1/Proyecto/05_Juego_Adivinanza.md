@@ -1,30 +1,30 @@
 # Proyecto: Juego de Adivinanza (Number Guessing Game)
 
-## 📋 Descripción
-Juego interactivo de consola donde el jugador debe adivinar un número aleatorio. Incluye sistema de pistas, puntuación y estadísticas de juego.
+## Descripcion
+Juego interactivo de consola donde el jugador debe adivinar un numero aleatorio. Incluye sistema de pistas, puntuacion y estadisticas de juego.
 
 ---
 
-## 🛠️ Stack Tecnológico
+## Stack Tecnologico
 - **Lenguaje**: Python 3.x
 - **Bibliotecas**: `random`
-- **POO Básico**: Clases `Juego`, `Jugador`
+- **POO Basico**: Clases `Juego`, `Jugador`
 - **Control de Versiones**: Git, GitHub
 - **Editor**: VS Code
 
 ---
 
-## 🎯 Objetivos de Aprendizaje
-- [ ] Aplicar **Introducción a la Programación**: Lógica, variables, estructuras de control
-- [ ] Estructurar código en **Funciones** y **POO básico** (clases)
+## Objetivos de Aprendizaje
+- [ ] Aplicar **Introduccion a la Programacion**: Logica, variables, estructuras de control
+- [ ] Estructurar código en **Funciones** y **POO basico** (clases)
 - [ ] Uso de **Variables**, **Tipos de datos**, **Condicionales**, **Ciclos**
-- [ ] Uso de **POO básico**: Clases, atributos, métodos
-- [ ] Manejo de **Random** para generación de números
+- [ ] Uso de **POO basico**: Clases, atributos, metodos
+- [ ] Manejo de **Random** para generacion de numeros
 - [ ] Control de versiones: `git init`, `commit`, `push` a GitHub
 
 ---
 
-## 💻 Estructura Sugerida del Código
+## Estructura Sugerida del Codigo#
 
 ### Clases `Jugador` y `Juego`
 ```python
@@ -38,21 +38,21 @@ class Jugador:
         self.puntuacion_maxima = 0
     
     def actualizar_estadisticas(self, intentos, gano):
-        """Actualiza estadísticas tras una partida."""
+        """Actualiza estadisticas tras una partida."""
         self.intentos_totales += intentos
         if gano:
             self.partidas_ganadas += 1
-            # Puntuación: 100 - (intentos * 5), mínimo 10
+            # Puntuacion: 100 - (intentos * 5), minimo 10
             puntos = max(100 - (intentos * 5), 10)
             if puntos > self.puntuacion_maxima:
                 self.puntuacion_maxima = puntos
     
     def mostrar_estadisticas(self):
-        """Muestra las estadísticas del jugador."""
-        print(f"\n--- Estadísticas de {self.nombre} ---")
+        """Muestra las estadisticas del jugador."""
+        print(f"\n--- Estadisticas de {self.nombre} ---")
         print(f"Partidas ganadas: {self.partidas_ganadas}")
         print(f"Intentos totales: {self.intentos_totales}")
-        print(f"Puntuación máxima: {self.puntuacion_maxima}")
+        print(f"Puntuacion maxima: {self.puntuacion_maxima}")
 
 class Juego:
     def __init__(self, minimo=1, maximo=100):
@@ -67,29 +67,29 @@ class Juego:
         self.jugador = jugador
         self.numero_secreto = random.randint(self.minimo, self.maximo)
         self.intentos = 0
-        print(f"\n¡Bienvenido {jugador.nombre}!")
-        print(f"Adivina el número entre {self.minimo} y {self.maximo}")
+        print(f"\nBienvenido {jugador.nombre}!")
+        print(f"Adivina el numero entre {self.minimo} y {self.maximo}")
     
     def dar_pista(self, numero_ingresado):
         """Proporciona pistas basadas en el intento."""
         if numero_ingresado < self.numero_secreto:
-            print("Pista: El número es MAYOR")
+            print("Pista: El numero es MAYOR")
         else:
-            print("Pista: El número es MENOR")
+            print("Pista: El numero es MENOR")
     
     def jugar(self):
-        """Lógica principal del juego."""
+        """Logica principal del juego."""
         if not self.jugador:
             print("Error: Configura primero el jugador.")
             return False
         
         while True:
             try:
-                intento = int(input(f"Intento {self.intentos + 1}: Ingresa un número: "))
+                intento = int(input(f"Intento {self.intentos + 1}: Ingresa un numero: "))
                 self.intentos += 1
                 
                 if intento == self.numero_secreto:
-                    print(f"¡CORRECTO! Adivinaste en {self.intentos} intentos.")
+                    print(f"CORRECTO! Adivinaste en {self.intentos} intentos.")
                     self.jugador.actualizar_estadisticas(self.intentos, True)
                     return True
                 else:
@@ -98,10 +98,10 @@ class Juego:
                     # Pista adicional cada 3 intentos
                     if self.intentos % 3 == 0:
                         rango = self.maximo - self.minimo
-                        print(f"Pista extra: El número está en el rango medio")
+                        print(f"Pista extra: El numero esta en el rango medio")
             
             except ValueError:
-                print("Error: Ingresa un número válido.")
+                print("Error: Ingresa un numero valido.")
     
     def reiniciar(self):
         """Reinicia el juego manteniendo al jugador."""
@@ -118,21 +118,21 @@ def main():
     jugador = Jugador(nombre)
     
     # Configurar juego
-    juego = Juego(1, 50)  # Números del 1 al 50
+    juego = Juego(1, 50)  # Numeros del 1 al 50
     juego.configurar(jugador)
     
     while True:
         juego.jugar()
         
-        opcion = input("\n¿Jugar otra partida? (s/n): ").lower()
+        opcion = input("\nJugar otra partida? (s/n): ").lower()
         if opcion != 's':
             break
         
         juego.reiniciar()
     
-    # Mostrar estadísticas finales
+    # Mostrar estadisticas finales
     jugador.mostrar_estadisticas()
-    print("\n¡Gracias por jugar!")
+    print("\nGracias por jugar!")
 
 if __name__ == "__main__":
     main()
@@ -140,57 +140,57 @@ if __name__ == "__main__":
 
 ---
 
-## 📝 Ejemplo de Partida
+## Ejemplo de Partida
 ```
 === JUEGO DE ADIVINANZA ===
 Ingresa tu nombre: Blado
 
-¡Bienvenido Blado!
-Adivina el número entre 1 y 50
+Bienvenido Blado!
+Adivina el numero entre 1 y 50
 
-Intento 1: Ingresa un número: 25
-Pista: El número es MAYOR
+Intento 1: Ingresa un numero: 25
+Pista: El numero es MAYOR
 
-Intento 2: Ingresa un número: 37
-Pista: El número es MENOR
+Intento 2: Ingresa un numero: 37
+Pista: El numero es MENOR
 
-Intento 3: Ingresa un número: 30
-Pista: El número es MAYOR
-Pista extra: El número está en el rango medio
+Intento 3: Ingresa un numero: 30
+Pista: El numero es MAYOR
+Pista extra: El numero esta en el rango medio
 
-Intento 4: Ingresa un número: 33
-¡CORRECTO! Adivinaste en 4 intentos.
+Intento 4: Ingresa un numero: 33
+CORRECTO! Adivinaste en 4 intentos.
 
-¿Jugar otra partida? (s/n): n
+Jugar otra partida? (s/n): n
 
---- Estadísticas de Blado ---
+--- Estadisticas de Blado ---
 Partidas ganadas: 1
 Intentos totales: 4
-Puntuación máxima: 80
+Puntuacion maxima: 80
 ```
 
 ---
 
-## ✅ Criterios de Aceptación
-1. **POO**: Clases `Jugador` y `Juego` con atributos y métodos claros
-2. **Lógica**: Generación aleatoria, comparación, pistas, puntuación
-3. **Interacción**: Entrada de usuario, validación de datos (try/except)
-4. **Estadísticas**: Llevar conteo de partidas, intentos y puntuación
+## Criterios de Aceptacion
+1. **POO**: Clases `Jugador` y `Juego` con atributos y metodos claros
+2. **Logica**: Generacion aleatoria, comparacion, pistas, puntuacion
+3. **Interaccion**: Entrada de usuario, validacion de datos (try/except)
+4. **Estadisticas**: Llevar conteo de partidas, intentos y puntuacion
 5. **Git**: Repositorio en GitHub con mínimo 4 commits
 
 ---
 
-## 📚 Recursos de Apoyo
+## Recursos de Apoyo
 - **Python Random**: https://docs.python.org/3/library/random.html
 - **Python Input/Output**: https://docs.python.org/3/tutorial/inputoutput.html
-- **POO Basics**: Revisar carpeta `Tecnologias/POO_básico.md`
+- **POO Basics**: Revisar carpeta `Tecnologias/POO_basico.md`
 
 ---
 
-## 🚀 Pasos Sugeridos de Implementación
-1. Crear las clases `Jugador` y `Juego` con estructura básica
-2. Implementar `jugar()` con lógica de adivinanza simple
+## Pasos Sugeridos de Implementacion
+1. Crear las clases `Jugador` y `Juego` con estructura basica
+2. Implementar `jugar()` con logica de adivinanza simple
 3. Agregar sistema de pistas (mayor/menor)
-4. Implementar puntuación y estadísticas del jugador
-5. Crear el bucle principal en `main.py` con opción de reiniciar
+4. Implementar puntuacion y estadisticas del jugador
+5. Crear el bucle principal en `main.py` con opcion de reiniciar
 6. Hacer commits en Git por cada funcionalidad nueva

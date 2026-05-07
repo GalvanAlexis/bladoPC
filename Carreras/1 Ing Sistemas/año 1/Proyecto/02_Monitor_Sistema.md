@@ -1,11 +1,11 @@
 # Proyecto: Monitor de Sistema (CLI)
 
-## 📋 Descripción
-Aplicación de consola que monitorea recursos del sistema (CPU, memoria, procesos) usando Python y comandos de Linux CLI. Permite visualizar el estado del sistema en tiempo real.
+## Descripcion
+Aplicacion de consola que monitorea recursos del sistema (CPU, memoria, procesos) usando Python y comandos de Linux CLI. Permite visualizar el estado del sistema en tiempo real.
 
 ---
 
-## 🛠️ Stack Tecnológico
+## Stack Tecnologico
 - **Lenguaje**: Python 3.x
 - **Bibliotecas**: `psutil` (monitoreo), `time`
 - **Sistemas Operativos**: Linux CLI básico (comandos `top`, `ps`, `free`)
@@ -14,7 +14,7 @@ Aplicación de consola que monitorea recursos del sistema (CPU, memoria, proceso
 
 ---
 
-## 🎯 Objetivos de Aprendizaje
+## Objetivos de Aprendizaje
 - [ ] Aplicar **Sistemas Operativos I**: Conceptos de procesos, uso de CPU/memoria
 - [ ] Usar **Linux CLI**: Ejecutar comandos, parsear salidas
 - [ ] Estructurar código en **Funciones** y **POO básico** (clase `Monitor`)
@@ -24,7 +24,7 @@ Aplicación de consola que monitorea recursos del sistema (CPU, memoria, proceso
 
 ---
 
-## 💻 Estructura Sugerida del Código
+## Estructura Sugerida del Codigo
 
 ### Clase `MonitorSistema`
 ```python
@@ -40,7 +40,7 @@ class MonitorSistema:
         return psutil.cpu_percent(interval=1)
     
     def obtener_memoria(self):
-        """Retorna información de memoria virtual."""
+        """Retorna informacion de memoria virtual."""
         mem = psutil.virtual_memory()
         return {
             'total': mem.total,
@@ -49,7 +49,7 @@ class MonitorSistema:
         }
     
     def listar_procesos(self, limite=5):
-        """Lista los procesos que más consumen."""
+        """Lista los procesos que mas consumen."""
         procesos = []
         for proc in psutil.process_iter(['pid', 'name', 'cpu_percent']):
             try:
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
 ---
 
-## 📝 Comandos Linux CLI Relacionados
+## Comandos Linux CLI Relacionados
 ```bash
 # Ver procesos activos
 ps aux
@@ -110,8 +110,8 @@ print(resultado.stdout)
 
 ---
 
-## ✅ Criterios de Aceptación
-1. **POO**: Clase `MonitorSistema` con atributos y métodos claros
+## Criterios de Aceptacion
+1. **POO**: Clase `MonitorSistema` con atributos y metodos claros
 2. **Funcionalidad**: Muestra CPU, memoria y procesos correctamente
 3. **Ciclos**: Uso de bucles para muestreo continuo
 4. **Manejo de Errores**: Try/except para procesos que terminan durante monitoreo
@@ -119,16 +119,16 @@ print(resultado.stdout)
 
 ---
 
-## 📚 Recursos de Apoyo
+## Recursos de Apoyo
 - **psutil Docs**: https://psutil.readthedocs.io/
-- **Linux CLI Basics**: Revisar carpeta `Tecnologias/Linux_CLI_básico.md`
+- **Linux CLI Basics**: Revisar carpeta `Tecnologias/Linux_CLI_basico.md`
 - **Subprocess Module**: https://docs.python.org/3/library/subprocess.html
 
 ---
 
-## 🚀 Pasos Sugeridos de Implementación
+## Pasos Sugeridos de Implementacion
 1. Instalar `psutil`: `pip install psutil`
-2. Crear la clase `MonitorSistema` con métodos básicos
+2. Crear la clase `MonitorSistema` con metodos básicos
 3. Implementar `mostrar_estado()` usando print formateado
 4. Agregar bucle en `main.py` para muestreo continuo
 5. Probar en Linux (o WSL) y capturar salida
