@@ -13,7 +13,7 @@ export default function VisualNovelScene({ scene, bladoPose }: VisualNovelSceneP
   const bladoImage = `/blado-${bladoPose}.png`;
 
   return (
-    <div className="absolute inset-0 w-full h-full -z-10 bg-black overflow-hidden">
+    <div className="absolute inset-0 w-full h-full z-0 bg-black overflow-hidden">
       {/* Background Image with transition */}
       <AnimatePresence mode="wait">
         <motion.img
