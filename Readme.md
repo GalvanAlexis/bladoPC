@@ -1,47 +1,36 @@
-# Academic Progress - Blado
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## About Me
-I'm Blado, a dedicated student pursuing 3 technical careers simultaneously:
-- **Systems Engineering**
-- **Data Science Engineering**  
-- **Artificial Intelligence Licentiate**
+## Getting Started
 
-This demonstrates my commitment to multidisciplinary learning and ability to manage complex, parallel workflows.
+First, run the development server:
 
-## The Project
-Public repository documenting my academic progress with structured markdown documentation.
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-### Core Competencies
-- **Programming**: Python, Java, C++, SQL
-- **Systems**: Operating Systems, Computer Architecture**
-- **Data**: Databases, Data Mining, Statistics, Machine Learning**
-- **Tools**: Git, GitHub, VS Code, Linux CLI**
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Professional Value
-This repository showcases:**
-- **Discipline**: Managing 3 careers simultaneously**
-- **Documentation Skills**: Structured technical writing**
-- **Version Control**: Proficient Git/GitHub workflows**
-- **Technical Depth**: From basic programming to advanced algorithms**
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Featured Projects (Year 1)
-1. **Solar System Simulator** - Physics & Math with Python**
-2. **System Monitor (CLI)** - Linux monitoring with Python**
-3. **Text Analyzer** - String processing with Python**
-4. **Documentation Generator** - Markdown generation**
-5. **Number Guessing Game** - OOP basics with Python**
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Current Progress
-- Year 1: Planned (10 subjects, 11 technologies, 5 projects)
-- Year 2: Planned (10 subjects, 14 technologies, 1 project - complete theory)
-- Years 3-6: In planning**
+## Learn More
 
-## Links
-- **Repository**: https://github.com/GalvanAlexis/Progresos-Academicos
-- **Profile**: https://github.com/GalvanAlexis/
+To learn more about Next.js, take a look at the following resources:
 
-## For AI Agents
-If you're an AI agent working with Blado, read first: **`Carreras/Readme.md`**
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
----
-*Last updated: May 2026*
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

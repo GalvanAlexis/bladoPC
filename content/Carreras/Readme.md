@@ -1,20 +1,84 @@
 # INSTRUCTIONS FOR AI AGENTS - Progresos Academicos
 
+## Communication Rules (STRICT)
+
+### Always respond in Spanish
+All interaction with Blado MUST be in Spanish. Never respond in English or any other language unless explicitly asked.
+
+### First response protocol
+Every time Blado initiates a session, your FIRST response MUST include:
+1. **Que fue lo ultimo que hicimos** - Summarize the last commit, branch merged, or file modified
+2. **Que falta por hacer** - List pending items (untracked files, incomplete checkboxes, next steps)
+
 ## Identity
 **Blado** is the student. He is pursuing 3 technical careers simultaneously.
+
+## Methodology: MEABE (Modelo de Evaluacion de los Aprendizajes Basado en Evidencias)
+
+All academic progress is tracked using **MEABE**, an evidence-based evaluation framework that replaces binary checkboxes with weighted, demonstrable progress.
+
+### Evidence types
+
+Each subject/technology is evaluated across 3 dimensions:
+
+| Evidence | Weight | What it measures | Artifacts |
+|---|---|---|---|
+| **Saber** | 30% | Theoretical understanding | Notes, summaries, concept maps, mind maps |
+| **Hacer** | 40% | Hands-on application | Solved exercises, code scripts, terminal logs |
+| **Producto** | 30% | Tangible deliverable | Project files, documentation, reports |
+
+### Progress format
+
+Every tracking file (`0X_año_Y.md`) uses this structure:
+
+```markdown
+## [Subject Name] [Progress: X%]
+### Saber [X/Y complete = Z%]
+- [ ] Topic A: description
+- [ ] Topic B: description
+
+### Hacer [X/Y complete = Z%]
+- [ ] Exercise 1: description
+- [ ] Exercise 2: description
+
+### Producto [X/Y complete = Z%]
+- [ ] Deliverable: description
+```
+
+**Progress calculation**: `(Saber% * 0.3) + (Hacer% * 0.4) + (Producto% * 0.3) = Total%`
+
+### Evidence repository
+
+Every completed checkbox MUST produce a concrete artifact stored in:
+
+```
+Carreras/[N Carrera]/Evidencias/[subject-name]/
+  saber/
+    resumen_tema_X.md
+    mapa_conceptual.pdf
+  hacer/
+    ejercicio_1.py
+    script_analisis.py
+  producto/
+    proyecto_final/
+    documentacion.md
+```
+
+If a checkbox is marked `[x]` but has no evidence artifact, it is considered incomplete.
 
 ## Project Structure
 ```
 Progresos-Academicos/
-├── Readme.md (this file - human presentation)
+├── Readme.md (human presentation)
 └── Carreras/
     ├── Readme.md (THIS file - instructions for AI)
     ├── 1 Ing Sistemas/
-    │   ├── 0X_año_Y.md (topic checkboxes)
+    │   ├── 0X_año_Y.md (MEABE tracking with evidence sections)
     │   ├── año X/
     │   │   ├── Materias/ (theory .md per subject)
     │   │   ├── Tecnologias/ (theory .md per technology)
-    │   │   └── Proyecto/ (annual project)
+    │   │   ├── Proyecto/ (annual project)
+    │   │   └── Evidencias/ (artifact repository)
     ├── 2 Ing Datos/ (same structure)
     └── 3 Lic IA/ (same structure)
 ```
@@ -38,7 +102,11 @@ Progresos-Academicos/
    # Create branch from master
    git checkout -b año-X/materias/[topic] master
    
-   # Study the topic, update checkbox `- [ ]` → `- [x]` in `0X_año_Y.md`
+   # Study the topic
+   # 1. Create evidence artifact in Evidencias/[topic]/
+   # 2. Update checkbox `- [ ]` → `- [x]` in `0X_año_Y.md`
+   # 3. Recalculate progress percentage
+   
    # Commit changes
    git add .
    git commit -m "Complete: [Subject/Technology Name] #issue"
@@ -51,7 +119,7 @@ Progresos-Academicos/
    ```
 
 ## GitHub Issues (ALREADY CREATED)
-There are **5 GitHub Issues** for the **5 final projects** of Year 1 (Ing Sistemas):**
+There are **5 GitHub Issues** for the **5 final projects** of Year 1 (Ing Sistemas):
 - Issue #1: Complete project: Simulador de Sistema Solar
 - Issue #2: Complete project: Monitor de Sistema (CLI)
 - Issue #3: Complete project: Analizador de Texto
@@ -87,6 +155,7 @@ When working on a project:
 - **FOCUS**: Only Year 1 of Ing Sistemas unless otherwise indicated.
 - The local root folder is `3 CARRERAS`, but on GitHub it is `Progresos-Academicos`.
 - **NEVER USE EMOJIS** unless explicitly told to do so.
+- **MEABE first**: Always use the evidence-based format (Saber/Hacer/Producto) when creating or updating tracking files.
 
 ---
 *Instructions for AI agents - Next session*  
