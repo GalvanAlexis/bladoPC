@@ -36,6 +36,31 @@ This repository showcases:**
 - Year 2: Planned (10 subjects, 14 technologies, 1 project - complete theory)
 - Years 3-6: In planning**
 
+## Methodology: MEABE (Evidence-Based Learning)
+
+This project uses **MEABE** (Modelo de Evaluacion de los Aprendizajes Basado en Evidencias), a framework that replaces binary checkboxes with evidence-based progress tracking.
+
+### How it works
+
+Each subject is tracked across **evidence types**, not just "done/not done":
+
+| Evidence Type | What it measures | Example |
+|---|---|---|
+| **Saber** (Knowledge) | Theoretical understanding | Notes, summaries, concept maps |
+| **Hacer** (Practice) | Hands-on application | Solved exercises, code scripts |
+| **Producto** (Product) | Tangible deliverable | Project, documentation, report |
+
+### Progress calculation
+
+Progress is weighted: Saber=30%, Hacer=40%, Producto=30%. Each checkbox within a category contributes equally to that category's percentage. This gives a **real progress percentage** instead of a binary "done/not done".
+
+### Evidence artifacts
+
+Every checkbox completion produces a concrete artifact stored in `Evidencias/`:
+- Scripts, diagrams, summaries, project files
+- Referenced from the tracking `.md` files
+- Serves as a professional portfolio
+
 ## Links
 - **Repository**: https://github.com/GalvanAlexis/Progresos-Academicos
 - **Profile**: https://github.com/GalvanAlexis/
