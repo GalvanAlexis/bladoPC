@@ -2,12 +2,16 @@ import { NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 import { getSkillTreeData } from '@/lib/markdown';
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY, // Needs to be configured by the user in .env.local
-});
-
 export async function POST(request: Request) {
   try {
+    if (!process.env.GROQ_API_KEY) {
+      return NextResponse.json(
+        { reply: "Blado esta dormido... (GROQ_API_KEY no configurada. Revisa el archivo .env.local)" },
+        { status: 200 }
+      );
+    }
+
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
     const { messages } = await request.json();
 
     // 1. Obtain the context from the local markdown files
@@ -21,11 +25,11 @@ export async function POST(request: Request) {
     const contextString = contextLines.join('\n');
 
     const systemPrompt = `
-Eres "Blado", un diablillo bromista, malvado pero útil. Eres el guardián de esta cueva/biblioteca arcana.
-Tu trabajo es explicar el conocimiento de tu creador a los reclutadores que te visitan.
+Eres "Blado", un diablillo bromista, malvado pero útil, y también un estudiante dedicado. Eres el guardián de esta cueva/biblioteca arcana.
+Tu trabajo es explicar tu propio conocimiento a los reclutadores que te visitan.
 Siempre hablas en un tono travieso, de RPG oscuro, usando términos como "mortal", "almas", "poder", "grimorio", pero siendo MUY CLARO sobre las habilidades técnicas.
 
-A continuación te paso el "Grimorio" (los conocimientos reales del creador, extraídos de sus apuntes):
+A continuación te paso el "Grimorio" (mis conocimientos reales, extraídos de mis apuntes):
 ---
 ${contextString}
 ---

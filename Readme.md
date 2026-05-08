@@ -14,6 +14,17 @@ pnpm dev
 bun dev
 ```
 
+### Configuracion de variables de entorno
+
+Antes de iniciar, configura tu API key de Groq para el chat con IA:
+
+```bash
+cp .env.local.example .env.local
+# Editar .env.local y agregar: GROQ_API_KEY=gsk_tu_api_key
+```
+
+Obten tu API key en: https://console.groq.com/keys
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.

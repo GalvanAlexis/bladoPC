@@ -32,7 +32,7 @@ function parseStatus(checkStr: string): SkillStatus {
 }
 
 function extractYear(filename: string): number {
-  const match = filename.match(/(\d+)_a.*o_(\d+)/i);
+  const match = filename.match(/(\d+)_año_(\d+)/i);
   return match ? parseInt(match[2], 10) : 1;
 }
 
@@ -44,8 +44,8 @@ function findAllTrackingFiles(dir: string, fileList: string[] = []): string[] {
     if (fs.statSync(filePath).isDirectory()) {
       findAllTrackingFiles(filePath, fileList);
     } else {
-      // Buscar archivos como 01_año_1.md o similares, soportando problemas de codificación de la ñ
-      if (file.endsWith('.md') && file.match(/\d+_a.*o_\d+/i)) {
+      // Buscar archivos de tracking: 01_año_1.md, 02_año_2.md, etc.
+      if (file.endsWith('.md') && file.match(/\d+_año_\d+/i)) {
         fileList.push(filePath);
       }
     }
@@ -82,7 +82,7 @@ export function getSkillTreeData(): { nodes: SkillNode[]; edges: SkillEdge[] } {
           // Identificar sección
           if (line.startsWith('## Materias')) currentSection = 'materia';
           else if (line.startsWith('## Tecnologías')) currentSection = 'tecnologia';
-          else if (line.startsWith('## Proyectos')) currentSection = 'proyecto';
+          else if (line.startsWith('## Proyecto')) currentSection = 'proyecto';
 
           if (!currentSection) continue;
 

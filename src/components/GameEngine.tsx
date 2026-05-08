@@ -33,13 +33,13 @@ const DIALOGUES = {
     choices: ['whoAmI', 'skills', 'projects', 'knowledge'],
   },
   whoAmI: {
-    text: "¡Ah! Mi creador es Alexis Galván... o como yo lo llamo: el mortal que firmó un pacto con el conocimiento. Backend, IA y Datos son sus armas. Estudia Ingeniería de Sistemas mientras forja sus habilidades en el fuego de proyectos reales.",
+    text: "¡Soy Alexis Galván! El mortal que firmó un pacto con el conocimiento. Backend, IA y Datos son mis armas. Estudio Ingeniería de Sistemas mientras forjo mis habilidades en el fuego de proyectos reales.",
     scene: 'cave' as Scene,
     pose: 'base' as BladoPose,
     choices: ['skills', 'projects', 'knowledge', 'back'],
   },
   skills: {
-    text: "Sus habilidades... *frota sus manos maliciosamente*. Python, SQL, FastAPI, algoritmos... todas forjadas con sudor y código. ¿Quieres ver el árbol completo de poder? ¡Invoco el Grimorio!",
+    text: "Mis habilidades... *frota sus manos maliciosamente*. Python, SQL, FastAPI, algoritmos... todas forjadas con sudor y código. ¿Quieres ver el árbol completo de poder? ¡Invoco el Grimorio!",
     scene: 'cave' as Scene,
     pose: 'base' as BladoPose,
     choices: ['openSkillTree', 'projects', 'knowledge', 'back'],
@@ -57,7 +57,7 @@ const DIALOGUES = {
     choices: ['askTheory', 'askProjects', 'askFree', 'back'],
   },
   askTheory: {
-    text: "Bien, mortal. ¿Sobre qué materia deseas interrogarme? Pregúntame y yo, Blado, buscaré en los grimoires de mi creador y te responderé con honestidad... o casi.",
+    text: "Bien, mortal. ¿Sobre qué materia deseas interrogarme? Pregúntame y yo, Blado, buscaré en los grimoires de mi conocimiento y te responderé con honestidad... o casi.",
     scene: 'library' as Scene,
     pose: 'phone' as BladoPose,
     choices: ['back'],
@@ -71,20 +71,20 @@ const DIALOGUES = {
     allowFreeQuestion: true,
   },
   askFree: {
-    text: "Puedes preguntarme lo que desees, mortal. Yo consulto el grimorio de conocimientos de mi creador y te respondo. ¿Qué quieres saber?",
+    text: "Puedes preguntarme lo que desees, mortal. Yo consulto el grimorio de conocimientos que he forjado y te respondo. ¿Qué quieres saber?",
     scene: 'library' as Scene,
     pose: 'phone' as BladoPose,
     choices: ['back'],
     allowFreeQuestion: true,
   },
   back: {
-    text: "Como gustes. *bosteza demoníacamente*. ¿Qué más deseas saber sobre mi creador?",
+    text: "Como gustes. *bosteza demoníacamente*. ¿Qué más deseas saber sobre mis conocimientos?",
     scene: 'cave' as Scene,
     pose: 'base' as BladoPose,
     choices: ['whoAmI', 'skills', 'projects', 'knowledge'],
   },
   openSkillTree: {
-    text: "¡El Grimorio! Aquí verás cada habilidad que ha conquistado... los nodos verdes brillan con poder, los rojos aún luchan por ser dominados.",
+    text: "¡El Grimorio! Aquí verás cada habilidad que he conquistado... los nodos verdes brillan con poder, los rojos aún luchan por ser dominados.",
     scene: 'cave' as Scene,
     pose: 'base' as BladoPose,
     choices: ['closeSkillTree', 'back'],
@@ -101,10 +101,10 @@ const DIALOGUES = {
 type DialogueKey = keyof typeof DIALOGUES;
 
 const CHOICE_LABELS: Record<string, string> = {
-  whoAmI: "¿Quién es tu creador?",
-  skills: "Muéstrame sus habilidades",
-  projects: "Cuéntame sobre sus proyectos",
-  knowledge: "Quiero ver su conocimiento teórico",
+  whoAmI: "¿Quién eres?",
+  skills: "Muéstrame tus habilidades",
+  projects: "Cuéntame sobre tus proyectos",
+  knowledge: "Quiero ver tu conocimiento teórico",
   openSkillTree: "🗺️ Abrir el Grimorio de Habilidades",
   closeSkillTree: "📖 Cerrar el Grimorio",
   askTheory: "Preguntar sobre teoría y materias",
@@ -119,6 +119,7 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
   const [currentKey, setCurrentKey] = useState<DialogueKey>('intro');
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [dialogVisible, setDialogVisible] = useState(true);
 
   const current = DIALOGUES[currentKey];
   const scene: Scene = current.scene;
@@ -199,14 +200,29 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
         </span>
       </div>
 
+      {/* Dialog Box Toggle Button */}
+      <button
+        onClick={() => setDialogVisible(v => !v)}
+        className="absolute bottom-4 right-4 z-50
+          w-8 h-8 rounded-full bg-black/60 border border-gray-700
+          text-gray-500 hover:text-gray-300 hover:border-gray-500
+          flex items-center justify-center transition-all
+          text-lg leading-none font-mono"
+        title={dialogVisible ? "Minimizar dialogo" : "Mostrar dialogo"}
+      >
+        {dialogVisible ? '−' : '+'}
+      </button>
+
       {/* Dialog Box */}
-      <DialogBox
-        speakerName="Blado"
-        text={displayText}
-        choices={displayChoices}
-        onAskQuestion={allowFreeQuestion ? handleFreeQuestion : undefined}
-        isTyping={isLoading}
-      />
+      {dialogVisible && (
+        <DialogBox
+          speakerName="Blado"
+          text={displayText}
+          choices={displayChoices}
+          onAskQuestion={allowFreeQuestion ? handleFreeQuestion : undefined}
+          isTyping={isLoading}
+        />
+      )}
     </main>
   );
 }

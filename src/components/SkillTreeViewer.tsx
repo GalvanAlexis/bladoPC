@@ -21,13 +21,24 @@ const nodeTypes = {
 
 const CAREERS = ['Todos', '1 Ing Sistemas', '2 Ing Datos', '3 Lic IA'];
 
-function SkillTreeInner({ initialNodes, initialEdges, selectedCareer }: { initialNodes: SkillNode[], initialEdges: SkillEdge[], selectedCareer: string }) {
+function SkillTreeInner({ initialNodes, initialEdges, selectedCareer, selectedYear }: { 
+  initialNodes: SkillNode[], 
+  initialEdges: SkillEdge[], 
+  selectedCareer: string,
+  selectedYear: number | null 
+}) {
   const { fitView } = useReactFlow();
 
   const filteredNodes = useMemo(() => {
-    if (selectedCareer === 'Todos') return initialNodes;
-    return initialNodes.filter(n => n.career === selectedCareer);
-  }, [initialNodes, selectedCareer]);
+    let result = initialNodes;
+    if (selectedCareer !== 'Todos') {
+      result = result.filter(n => n.career === selectedCareer);
+    }
+    if (selectedYear !== null) {
+      result = result.filter(n => n.year === selectedYear);
+    }
+    return result;
+  }, [initialNodes, selectedCareer, selectedYear]);
 
   const filteredEdges = useMemo(() => {
     // Solo mantener aristas cuyos nodos origen y destino existan en los nodos filtrados
@@ -79,11 +90,17 @@ function SkillTreeInner({ initialNodes, initialEdges, selectedCareer }: { initia
 
 export default function SkillTreeViewer({ initialNodes, initialEdges }: { initialNodes: SkillNode[], initialEdges: SkillEdge[] }) {
   const [selectedCareer, setSelectedCareer] = useState<string>('Todos');
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
+
+  const availableYears = useMemo(() => {
+    const yearSet = new Set(initialNodes.map(n => n.year));
+    return Array.from(yearSet).filter(y => y != null).sort((a, b) => a - b) as number[];
+  }, [initialNodes]);
 
   return (
     <div className="w-full h-full flex flex-col bg-obsidian">
-      {/* Panel de filtros */}
-      <div className="flex gap-2 p-4 bg-black/50 border-b border-gray-800 backdrop-blur-sm z-10">
+      {/* Panel de filtros - Carreras */}
+      <div className="flex flex-wrap gap-2 p-4 pb-2 bg-black/50 border-b border-gray-800 backdrop-blur-sm z-10">
         {CAREERS.map(c => (
           <button
             key={c}
@@ -94,7 +111,34 @@ export default function SkillTreeViewer({ initialNodes, initialEdges }: { initia
                 : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
               }`}
           >
-            {c.replace(/^\d\s/, '')} {/* Limpiar "1 Ing Sistemas" -> "Ing Sistemas" visualmente */}
+            {c.replace(/^\d\s/, '')}
+          </button>
+        ))}
+      </div>
+
+      {/* Panel de filtros - Años */}
+      <div className="flex flex-wrap gap-2 px-4 py-2 bg-black/30 border-b border-gray-800/50 backdrop-blur-sm z-10">
+        <button
+          onClick={() => setSelectedYear(null)}
+          className={`px-3 py-1 rounded-md text-xs transition-colors font-medium border
+            ${selectedYear === null 
+              ? 'bg-toxic/20 text-toxic border-toxic shadow-[0_0_10px_rgba(57,255,20,0.3)]' 
+              : 'bg-gray-800 text-gray-500 border-gray-700 hover:bg-gray-700 hover:text-gray-300'
+            }`}
+        >
+          Todos los años
+        </button>
+        {availableYears.map(y => (
+          <button
+            key={y}
+            onClick={() => setSelectedYear(y)}
+            className={`px-3 py-1 rounded-md text-xs transition-colors font-medium border
+              ${selectedYear === y 
+                ? 'bg-toxic/20 text-toxic border-toxic shadow-[0_0_10px_rgba(57,255,20,0.3)]' 
+                : 'bg-gray-800 text-gray-500 border-gray-700 hover:bg-gray-700 hover:text-gray-300'
+              }`}
+          >
+            Año {y}
           </button>
         ))}
       </div>
@@ -106,6 +150,7 @@ export default function SkillTreeViewer({ initialNodes, initialEdges }: { initia
             initialNodes={initialNodes} 
             initialEdges={initialEdges} 
             selectedCareer={selectedCareer} 
+            selectedYear={selectedYear}
           />
         </ReactFlowProvider>
       </div>
