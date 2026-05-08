@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-obsidian: #050505;
+  --color-crimson: #dc2626;
+  --color-toxic: #39ff14;
+  --color-sulfur: #9333ea;
+  
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --background: #050505;
+  --foreground: #e5e5e5;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* React Flow custom dark styles */
+.react-flow {
+  background-color: var(--background);
+}
+.react-flow__node {
+  background: #111;
+  color: white;
+  border: 1px solid #333;
+}
