@@ -128,7 +128,7 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
 
   // Build choice objects from the keys in the current dialogue
   const choices: Choice[] = (current.choices as readonly string[])
-    .filter(key => key !== 'back' || current.choices.includes('back'))
+    .filter(key => key !== 'back' || (current.choices as readonly string[]).includes('back'))
     .map(key => ({
       label: CHOICE_LABELS[key] ?? key,
       action: () => setCurrentKey(key as DialogueKey),
@@ -170,7 +170,7 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
     : choices;
 
   return (
-    <main className="relative w-screen h-screen overflow-hidden bg-black font-mono select-none">
+    <main className="relative w-screen h-screen overflow-hidden font-mono select-none">
       {/* 2D Scene + Blado Sprite */}
       <VisualNovelScene scene={scene} bladoPose={bladoPose} />
 
@@ -200,15 +200,13 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
       </div>
 
       {/* Dialog Box */}
-      <div className="relative z-40">
-        <DialogBox
-          speakerName="Blado"
-          text={displayText}
-          choices={displayChoices}
-          onAskQuestion={allowFreeQuestion ? handleFreeQuestion : undefined}
-          isTyping={isLoading}
-        />
-      </div>
+      <DialogBox
+        speakerName="Blado"
+        text={displayText}
+        choices={displayChoices}
+        onAskQuestion={allowFreeQuestion ? handleFreeQuestion : undefined}
+        isTyping={isLoading}
+      />
     </main>
   );
 }

@@ -10,6 +10,8 @@ export interface SkillNode {
   type: SkillType;
   status: SkillStatus;
   description?: string;
+  career?: string;
+  year?: number;
 }
 
 export interface SkillEdge {
@@ -18,7 +20,7 @@ export interface SkillEdge {
   target: string;
 }
 
-const CONTENT_DIR = path.join(process.cwd(), 'content', 'Carreras', '1 Ing Sistemas');
+const CONTENT_DIR_BASE = path.join(process.cwd(), 'content', 'Carreras');
 
 /**
  * Parsea el texto del estado de un checkbox markdown
@@ -29,72 +31,123 @@ function parseStatus(checkStr: string): SkillStatus {
   return 'locked';
 }
 
+function extractYear(filename: string): number {
+  const match = filename.match(/(\d+)_a.*o_(\d+)/i);
+  return match ? parseInt(match[2], 10) : 1;
+}
+
+function findAllTrackingFiles(dir: string, fileList: string[] = []): string[] {
+  if (!fs.existsSync(dir)) return fileList;
+  const files = fs.readdirSync(dir);
+  for (const file of files) {
+    const filePath = path.join(dir, file);
+    if (fs.statSync(filePath).isDirectory()) {
+      findAllTrackingFiles(filePath, fileList);
+    } else {
+      // Buscar archivos como 01_año_1.md o similares, soportando problemas de codificación de la ñ
+      if (file.endsWith('.md') && file.match(/\d+_a.*o_\d+/i)) {
+        fileList.push(filePath);
+      }
+    }
+  }
+  return fileList;
+}
+
 /**
- * Procesa un archivo markdown de seguimiento (como 01_año_1.md)
+ * Procesa todos los archivos markdown de seguimiento de todas las carreras
  */
 export function getSkillTreeData(): { nodes: SkillNode[]; edges: SkillEdge[] } {
   const nodes: SkillNode[] = [];
   const edges: SkillEdge[] = [];
+  const processedNodes = new Set<string>();
 
   try {
-    const year1Path = path.join(CONTENT_DIR, 'año 1', '01_año_1.md');
-    if (!fs.existsSync(year1Path)) return { nodes, edges };
+    const CAREERS = ['1 Ing Sistemas', '2 Ing Datos', '3 Lic IA'];
 
-    const content = fs.readFileSync(year1Path, 'utf8');
-    const lines = content.split('\n');
+    for (const career of CAREERS) {
+      const careerDir = path.join(CONTENT_DIR_BASE, career);
+      const trackingFiles = findAllTrackingFiles(careerDir);
 
-    let currentSection: SkillType | null = null;
-    let currentProject: SkillNode | null = null;
+      for (const filePath of trackingFiles) {
+        const year = extractYear(path.basename(filePath));
+        const content = fs.readFileSync(filePath, 'utf8');
+        const lines = content.split('\n');
 
-    const regexCheck = /-\s\[([ xX\/])\]\s(.+)/;
+        let currentSection: SkillType | null = null;
+        let currentProject: SkillNode | null = null;
 
-    for (const line of lines) {
-      // Identificar sección
-      if (line.startsWith('## Materias')) currentSection = 'materia';
-      else if (line.startsWith('## Tecnologías')) currentSection = 'tecnologia';
-      else if (line.startsWith('## Proyectos')) currentSection = 'proyecto';
+        const regexCheck = /-\s\[([ xX\/])\]\s(.+)/;
 
-      if (!currentSection) continue;
+        for (const line of lines) {
+          // Identificar sección
+          if (line.startsWith('## Materias')) currentSection = 'materia';
+          else if (line.startsWith('## Tecnologías')) currentSection = 'tecnologia';
+          else if (line.startsWith('## Proyectos')) currentSection = 'proyecto';
 
-      const match = line.match(regexCheck);
-      if (match) {
-        const status = parseStatus(match[1]);
-        const text = match[2].trim();
+          if (!currentSection) continue;
 
-        if (currentSection === 'materia' || currentSection === 'tecnologia') {
-          // Extraer nombre (ignorando descripciones despues de ':')
-          const namePart = text.split(':')[0].trim();
-          nodes.push({
-            id: namePart,
-            label: namePart,
-            type: currentSection,
-            status: status,
-            description: text
-          });
-        } 
-        else if (currentSection === 'proyecto') {
-          if (text.startsWith('Nombre:')) {
-            const projName = text.replace('Nombre:', '').trim();
-            currentProject = {
-              id: projName,
-              label: projName,
-              type: 'proyecto',
-              status: status
-            };
-            nodes.push(currentProject);
-          } else if (currentProject && text.startsWith('Stack:')) {
-            // Crear Edge automático del proyecto hacia la tecnología
-            const techName = text.replace('Stack:', '').trim();
-            edges.push({
-              id: `e-${currentProject.id}-${techName}`,
-              source: techName, // Depende de la tech
-              target: currentProject.id
-            });
+          const match = line.match(regexCheck);
+          if (match) {
+            const status = parseStatus(match[1]);
+            const text = match[2].trim();
+
+            if (currentSection === 'materia' || currentSection === 'tecnologia') {
+              // Extraer nombre (ignorando descripciones despues de ':')
+              const namePart = text.split(':')[0].trim();
+              const globalId = `${career}-${namePart}`;
+              
+              if (!processedNodes.has(globalId)) {
+                nodes.push({
+                  id: globalId,
+                  label: namePart,
+                  type: currentSection,
+                  status: status,
+                  description: text,
+                  career: career,
+                  year: year
+                });
+                processedNodes.add(globalId);
+              }
+            } 
+            else if (currentSection === 'proyecto') {
+              if (text.startsWith('Nombre:')) {
+                const projName = text.replace('Nombre:', '').trim();
+                const globalId = `${career}-${projName}`;
+                
+                if (!processedNodes.has(globalId)) {
+                  currentProject = {
+                    id: globalId,
+                    label: projName,
+                    type: 'proyecto',
+                    status: status,
+                    career: career,
+                    year: year
+                  };
+                  nodes.push(currentProject);
+                  processedNodes.add(globalId);
+                } else {
+                  currentProject = nodes.find(n => n.id === globalId) || null;
+                }
+              } else if (currentProject && text.startsWith('Stack:')) {
+                // Crear Edge automático del proyecto hacia la tecnología
+                const techName = text.replace('Stack:', '').trim();
+                const globalTechId = `${career}-${techName}`;
+                
+                // Asegurarse de no duplicar aristas
+                const edgeId = `e-${currentProject.id}-${globalTechId}`;
+                if (!edges.some(e => e.id === edgeId)) {
+                  edges.push({
+                    id: edgeId,
+                    source: globalTechId, // Depende de la tech
+                    target: currentProject.id
+                  });
+                }
+              }
+            }
           }
         }
       }
     }
-
   } catch (error) {
     console.error("Error leyendo archivos markdown:", error);
   }
