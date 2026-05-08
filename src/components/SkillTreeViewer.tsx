@@ -14,6 +14,7 @@ import {
 import '@xyflow/react/dist/style.css';
 import RuneNode from './RuneNode';
 import { SkillNode, SkillEdge } from '@/lib/markdown';
+import { getLayoutedElements, LayoutDirection } from '@/lib/dagre-layout';
 
 const nodeTypes = {
   rune: RuneNode,
@@ -28,6 +29,7 @@ function SkillTreeInner({ initialNodes, initialEdges, selectedCareer, selectedYe
   selectedYear: number | null 
 }) {
   const { fitView } = useReactFlow();
+  const [layoutDirection, setLayoutDirection] = useState<LayoutDirection>('TB');
 
   const filteredNodes = useMemo(() => {
     let result = initialNodes;
@@ -41,17 +43,15 @@ function SkillTreeInner({ initialNodes, initialEdges, selectedCareer, selectedYe
   }, [initialNodes, selectedCareer, selectedYear]);
 
   const filteredEdges = useMemo(() => {
-    // Solo mantener aristas cuyos nodos origen y destino existan en los nodos filtrados
     const nodeIds = new Set(filteredNodes.map(n => n.id));
     return initialEdges.filter(e => nodeIds.has(e.source) && nodeIds.has(e.target));
   }, [initialEdges, filteredNodes]);
 
-  const flowNodes: Node[] = useMemo(() => {
-    return filteredNodes.map((n, i) => ({
+  const baseFlowNodes: Node[] = useMemo(() => {
+    return filteredNodes.map(n => ({
       id: n.id,
       type: 'rune',
-      // Layout ingenuo: distribuimos en una cuadrícula
-      position: { x: (i % 4) * 250 + 50, y: Math.floor(i / 4) * 150 + 50 },
+      position: { x: 0, y: 0 },
       data: { label: n.label, status: n.status, type: n.type }
     }));
   }, [filteredNodes]);
@@ -66,16 +66,20 @@ function SkillTreeInner({ initialNodes, initialEdges, selectedCareer, selectedYe
     }));
   }, [filteredEdges]);
 
-  // Recalcular el fitView cuando cambian los nodos
+  const layoutedNodes: Node[] = useMemo(() => {
+    if (baseFlowNodes.length === 0) return [];
+    return getLayoutedElements(baseFlowNodes, flowEdges, layoutDirection).nodes;
+  }, [baseFlowNodes, flowEdges, layoutDirection]);
+
   useEffect(() => {
     setTimeout(() => {
       fitView({ padding: 0.2, duration: 800 });
     }, 100);
-  }, [flowNodes, fitView]);
+  }, [layoutedNodes, fitView]);
 
   return (
     <ReactFlow
-      nodes={flowNodes}
+      nodes={layoutedNodes}
       edges={flowEdges}
       nodeTypes={nodeTypes}
       fitView
@@ -84,6 +88,19 @@ function SkillTreeInner({ initialNodes, initialEdges, selectedCareer, selectedYe
     >
       <Background variant={BackgroundVariant.Dots} gap={20} size={2} color="#222" />
       <Controls className="fill-white text-black" />
+      
+      {/* Re-layout button */}
+      <div className="absolute top-4 right-4 z-10 flex gap-2">
+        <button
+          onClick={() => setLayoutDirection(d => d === 'TB' ? 'LR' : 'TB')}
+          className="px-3 py-1.5 rounded-md text-xs font-mono font-medium border
+            bg-gray-800 text-gray-400 border-gray-700 
+            hover:bg-gray-700 hover:text-white transition-colors"
+          title="Cambiar direccion del layout"
+        >
+          {layoutDirection === 'TB' ? '↕ TB' : '↔ LR'}
+        </button>
+      </div>
     </ReactFlow>
   );
 }
