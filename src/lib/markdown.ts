@@ -54,6 +54,52 @@ function findAllTrackingFiles(dir: string, fileList: string[] = []): string[] {
 }
 
 /**
+ * Genera un string de contexto enriquecido para la IA de Blado.
+ * Incluye las descripciones completas de materias, tecnologias y proyectos.
+ */
+export function getFullContextString(maxChars = 16000): string {
+  const sections: string[] = [];
+  const CAREERS = ['1 Ing Sistemas', '2 Ing Datos', '3 Lic IA'];
+
+  try {
+    for (const career of CAREERS) {
+      const careerDir = path.join(CONTENT_DIR_BASE, career);
+      const trackingFiles = findAllTrackingFiles(careerDir);
+
+      for (const filePath of trackingFiles) {
+        const year = extractYear(path.basename(filePath));
+        const content = fs.readFileSync(filePath, 'utf8');
+        const lines = content.split('\n');
+
+        const relevantLines = lines.filter(line => {
+          const t = line.trim();
+          if (!t) return false;
+          if (t.startsWith('#')) return true;
+          if (t.match(/^-\s\[[ xX\/]\]\s.+/)) return true;
+          return false;
+        });
+
+        if (relevantLines.length > 0) {
+          sections.push(`=== ${career.replace(/^\d\s/, '')} — Año ${year} ===`);
+          sections.push(...relevantLines);
+          sections.push('');
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error generando contexto enriquecido:", error);
+    return "";
+  }
+
+  let result = sections.join('\n');
+  if (result.length > maxChars) {
+    const cutoff = result.lastIndexOf('\n', maxChars);
+    result = result.substring(0, cutoff > 0 ? cutoff : maxChars) + '\n... (contenido truncado por longitud)';
+  }
+  return result;
+}
+
+/**
  * Procesa todos los archivos markdown de seguimiento de todas las carreras
  */
 export function getSkillTreeData(): { nodes: SkillNode[]; edges: SkillEdge[] } {
