@@ -222,7 +222,7 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
       {/* Navbar */}
       <Navbar
         scene={scene}
-        onNavigate={handleNavigate}
+        onReplayIntro={replayIntro}
         onToggleSidebar={() => setSidebarOpen(prev => !prev)}
         sidebarOpen={sidebarOpen}
       />
@@ -231,14 +231,6 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
       <Sidebar
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
-        selectedCareer={selectedCareer}
-        selectedYear={selectedYear}
-        availableCareers={availableCareers}
-        availableYears={availableYears}
-        onSelectCareer={setSelectedCareer}
-        onSelectYear={setSelectedYear}
-        onNavigate={handleNavigate}
-        onReplayIntro={replayIntro}
       />
 
       {/* 2D Scene + Blado Sprite */}

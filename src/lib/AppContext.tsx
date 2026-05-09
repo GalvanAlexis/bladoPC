@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import StarWarsIntro from '@/components/StarWarsIntro';
+import CavernIntro from '@/components/CavernIntro';
 
 interface AppContextValue {
   replayIntro: () => void;
@@ -28,7 +28,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   if (showIntro) {
     return (
-      <StarWarsIntro
+      <CavernIntro
         onComplete={handleFinish}
         onSkip={handleFinish}
       />

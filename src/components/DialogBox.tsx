@@ -45,7 +45,7 @@ export default function DialogBox({ speakerName, text, choices, onAskQuestion, i
   };
 
   return (
-    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl z-50">
+    <div className="absolute bottom-8 left-6 w-[90%] max-w-[52%] z-50">
       <div className="bg-black/80 backdrop-blur-sm border-2 border-crimson rounded-lg p-6 shadow-[0_0_30px_rgba(220,38,38,0.5)] font-mono relative">
         
         {/* Name Badge */}
