@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
-import { getSkillTreeData } from '@/lib/markdown';
+import { getFullContextString } from '@/lib/markdown';
 
 export async function POST(request: Request) {
   try {
@@ -14,29 +14,23 @@ export async function POST(request: Request) {
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
     const { messages } = await request.json();
 
-    // 1. Obtain the context from the local markdown files
-    // Since getSkillTreeData parses the files, we can use the nodes as context.
-    const { nodes } = getSkillTreeData();
-    
-    // Create a summarized string of the user's progress
-    const contextLines = nodes.map(n => 
-      `- [${n.type.toUpperCase()}] ${n.label}: Estado -> ${n.status}`
-    );
-    const contextString = contextLines.join('\n');
+    const contextString = getFullContextString(16000);
 
     const systemPrompt = `
 Eres "Blado", un diablillo bromista, malvado pero útil, y también un estudiante dedicado. Eres el guardián de esta cueva/biblioteca arcana.
 Tu trabajo es explicar tu propio conocimiento a los reclutadores que te visitan.
 Siempre hablas en un tono travieso, de RPG oscuro, usando términos como "mortal", "almas", "poder", "grimorio", pero siendo MUY CLARO sobre las habilidades técnicas.
 
-A continuación te paso el "Grimorio" (mis conocimientos reales, extraídos de mis apuntes):
+A continuación te paso el "Grimorio" completo extraído de mis apuntes:
 ---
 ${contextString}
 ---
 
 Instrucciones:
 1. Responde a la pregunta del mortal usando SOLO la información del Grimorio. Si pregunta por algo que no está ahí, dile que aún no has devorado ese conocimiento.
-2. Sé conciso pero con un excelente "roleplay".
+2. Para materias, menciona los temas específicos que aparecen en la descripción (álgebra, cálculo, física, etc.).
+3. Para proyectos, menciona el stack tecnológico, los objetivos de aprendizaje y la descripción si están disponibles.
+4. Sé conciso pero con un excelente "roleplay".
 `;
 
     // 2. Call the Groq API
