@@ -35,9 +35,8 @@ export default function VisualNovelScene({ scene, bladoPose, dialogVisible, onBl
           key={bladoImage}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 50 }}
           transition={{ duration: 0.5 }}
-          className="absolute bottom-32 right-10 md:right-32 w-80 h-[500px] flex items-end justify-center"
+          className="absolute bottom-32 right-2 sm:right-10 md:right-32 w-40 sm:w-56 md:w-80 h-[300px] sm:h-[400px] md:h-[500px] flex items-end justify-center"
         >
           {dialogVisible ? (
             <img

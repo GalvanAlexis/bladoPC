@@ -1,6 +1,6 @@
 # ISS-015 — Responsive mobile para la Visual Novel
 
-**Estado:** 🔴 OPEN  
+**Estado:** ✅ CLOSED  
 **Prioridad:** 🟢 Baja  
 **Etiquetas:** `ui`, `responsive`  
 

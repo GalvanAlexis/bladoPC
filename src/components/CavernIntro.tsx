@@ -6,8 +6,8 @@
  * Reemplaza StarWarsIntro. Scroll vertical puro (sin perspectiva 3D)
  * sobre fondo negro con partículas tipo brasas. Legible y temático.
  */
-import React, { useEffect, useRef, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useRef, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface CavernIntroProps {
   onComplete: () => void;
@@ -18,17 +18,18 @@ const INTRO_TEXT = `Soy Alexis Galván.
 Vivo en Chascomús, Buenos Aires, Argentina.
 
 Desarrollador Full-Stack y cofundador de AIDO.
-Construyo backends, APIs y herramientas
-que resuelven problemas reales.
+Estudio Ciencia de Datos en el ISFDyT 57.
+Construyo Webs, Apps y Softwares 
+que resuelven problemas cotidianos.
 
-Esta web es mi grimorio digital.
-Aquí vas a encontrar mis habilidades,
-mis proyectos y mi forma de pensar.
+Esta web es un intento de mostrarte 
+mis conocimientos. Aquí vas a encontrar mis 
+habilidades, mis proyectos y mi forma de pensar.
 
-Si sos reclutador, cliente o simplemente curioso:
-bienvenido a la Caverna.
+Si sos reclutador, cliente o simplemente un curioso:
+bienvenido a mi Caverna.
 
-— Blado te guía desde aquí.`;
+— Yo, Blado, te guiaré a través de ella.`;
 
 const DURATION_MS = 28000; // 28s — velocidad cómoda de lectura
 
@@ -37,10 +38,10 @@ function generateEmbers(count: number) {
   return Array.from({ length: count }, (_, i) => ({
     id: i,
     left: `${Math.random() * 100}%`,
-    size: Math.random() * 3 + 1,          // 1–4px
-    duration: Math.random() * 4 + 3,      // 3–7s por ciclo
-    delay: Math.random() * 6,             // delay inicial
-    color: Math.random() > 0.5 ? '#cc3300' : '#ff6600',
+    size: Math.random() * 3 + 1, // 1–4px
+    duration: Math.random() * 4 + 3, // 3–7s por ciclo
+    delay: Math.random() * 6, // delay inicial
+    color: Math.random() > 0.5 ? "#cc3300" : "#ff6600",
   }));
 }
 
@@ -51,18 +52,22 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
   const embers = useMemo(() => generateEmbers(40), []);
 
   // Mantener refs actualizados sin re-crear efectos
-  useEffect(() => { onCompleteRef.current = onComplete; });
-  useEffect(() => { onSkipRef.current = onSkip; });
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  });
+  useEffect(() => {
+    onSkipRef.current = onSkip;
+  });
 
-  const finish = (type: 'complete' | 'skip') => {
+  const finish = (type: "complete" | "skip") => {
     if (hasFinished.current) return;
     hasFinished.current = true;
-    if (type === 'complete') onCompleteRef.current();
+    if (type === "complete") onCompleteRef.current();
     else onSkipRef.current();
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => finish('complete'), DURATION_MS);
+    const timer = setTimeout(() => finish("complete"), DURATION_MS);
     return () => clearTimeout(timer);
   }, []);
 
@@ -82,7 +87,7 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
             className="absolute rounded-full pointer-events-none"
             style={{
               left: ember.left,
-              bottom: '-8px',
+              bottom: "-8px",
               width: ember.size,
               height: ember.size,
               backgroundColor: ember.color,
@@ -97,7 +102,7 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
               duration: ember.duration,
               delay: ember.delay,
               repeat: Infinity,
-              ease: 'easeOut',
+              ease: "easeOut",
             }}
           />
         ))}
@@ -108,30 +113,30 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
         {/* Texto scrolleando — translateY puro, sin perspectiva 3D */}
         <div className="absolute inset-0 flex items-end justify-center overflow-hidden">
           <motion.div
-            initial={{ y: '100vh', opacity: 0 }}
+            initial={{ y: "100vh", opacity: 0 }}
             animate={{
-              y: '-110%',
+              y: "-110%",
               opacity: [0, 1, 1, 0],
             }}
             transition={{
-              y: { duration: DURATION_MS / 1000, ease: 'linear' },
+              y: { duration: DURATION_MS / 1000, ease: "linear" },
               opacity: {
                 duration: DURATION_MS / 1000,
-                ease: 'linear',
+                ease: "linear",
                 times: [0, 0.06, 0.88, 1],
               },
             }}
-            onAnimationComplete={() => finish('complete')}
+            onAnimationComplete={() => finish("complete")}
             style={{
-              width: 'min(65%, 680px)',
+              width: "min(65%, 680px)",
               fontFamily: "'Courier New', Courier, monospace",
-              fontSize: 'clamp(15px, 2vw, 22px)',
+              fontSize: "clamp(15px, 2vw, 22px)",
               lineHeight: 2,
-              color: '#cc4400',
-              textShadow: '0 0 18px rgba(200, 50, 0, 0.6)',
-              whiteSpace: 'pre-wrap',
-              textAlign: 'center',
-              paddingBottom: '40vh', // espacio para que el texto desaparezca por arriba
+              color: "#cc4400",
+              textShadow: "0 0 18px rgba(200, 50, 0, 0.6)",
+              whiteSpace: "pre-wrap",
+              textAlign: "center",
+              paddingBottom: "40vh", // espacio para que el texto desaparezca por arriba
             }}
           >
             {INTRO_TEXT}
@@ -140,7 +145,7 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
 
         {/* Botón omitir */}
         <button
-          onClick={() => finish('skip')}
+          onClick={() => finish("skip")}
           className="fixed bottom-8 right-8 z-[110] px-5 py-2 rounded
             bg-black/70 border border-red-900/50 text-red-800
             hover:text-red-500 hover:border-red-700

@@ -251,7 +251,7 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="absolute inset-8 z-30 rounded-xl overflow-hidden border-2 border-toxic shadow-[0_0_50px_rgba(57,255,20,0.3)]"
+            className="absolute inset-2 sm:inset-4 md:inset-8 z-30 rounded-xl overflow-hidden border-2 border-toxic shadow-[0_0_50px_rgba(57,255,20,0.3)]"
           >
             <SkillTreeViewer
               initialNodes={initialNodes}

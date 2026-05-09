@@ -10,10 +10,7 @@
 | ID | Título | Prioridad | Etiquetas |
 |---|---|---|---|
 | [ISS-013](./issues/ISS-013_env-and-config.md) | Setup .env.local y documentar configuración | 🟡 Media | `config`, `docs` |
-| [ISS-015](./issues/ISS-015_mobile-responsive.md) | Responsive mobile para la Visual Novel | 🟢 Baja | `ui`, `responsive` |
 | [ISS-016](./issues/ISS-016_vercel-deploy.md) | Deploy a Vercel | 🟢 Baja | `devops`, `deploy` |
-| [ISS-018](./issues/ISS-018_cavern-intro.md) | CavernIntro: scroll vertical fondo caverna | 🔥 Alta | `ui`, `intro`, `animation` |
-| [ISS-019](./issues/ISS-019_navbar-sidebar-chat.md) | Navbar/Sidebar/Chat Panel rediseño | 🔥 Alta | `ui`, `navbar`, `sidebar`, `chat` |
 
 ---
 
@@ -35,6 +32,9 @@
 | [ISS-012](./issues/ISS-012_blado-avatar-cleanup.md) | Limpiar componente BladoAvatar huérfano | 2026-05-08 |
 | [ISS-014](./issues/ISS-014_multi-year-parser.md) | Parsear multi-año dentro de cada carrera | 2026-05-09 |
 | [ISS-017](./issues/ISS-017_planificacion-narrativa.md) | Layout, UX, Narrativa, Intro y CV | 2026-05-08 |
+| [ISS-018](./issues/ISS-018_cavern-intro.md) | CavernIntro: scroll vertical fondo caverna | 2026-05-09 |
+| [ISS-019](./issues/ISS-019_navbar-sidebar-chat.md) | Navbar/Sidebar/Chat Panel rediseño | 2026-05-09 |
+| [ISS-015](./issues/ISS-015_mobile-responsive.md) | Responsive mobile para la Visual Novel | 2026-05-09 |
 
 ---
 
@@ -57,11 +57,8 @@
   ISS-014 Multi-year parser
   ISS-011 Rich AI context
 
-[FASE 3 — UX & Polish 🔴]
-  ISS-018 CavernIntro (scroll caverna)
-  ISS-019 Navbar / Sidebar / Chat rediseño
-  ISS-010 Dagre auto-layout
-  ISS-015 Mobile responsive
+[FASE 3 — UX & Polish ✅]
+  -- COMPLETADA --
 
 [FASE 4 — Deploy 🔴]
   ISS-013 .env config
