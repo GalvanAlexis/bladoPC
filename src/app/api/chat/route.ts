@@ -47,8 +47,9 @@ Instrucciones:
     const reply = chatCompletion.choices[0]?.message?.content || "El abismo está silencioso hoy...";
 
     return NextResponse.json({ reply });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Groq API Error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Error desconocido";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

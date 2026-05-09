@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import {
   ReactFlow,
   Controls,
@@ -20,13 +20,11 @@ const nodeTypes = {
   rune: RuneNode,
 };
 
-const CAREERS = ['Todos', '1 Ing Sistemas', '2 Ing Datos', '3 Lic IA'];
-
-function SkillTreeInner({ initialNodes, initialEdges, selectedCareer, selectedYear }: { 
-  initialNodes: SkillNode[], 
-  initialEdges: SkillEdge[], 
+function SkillTreeInner({ initialNodes, initialEdges, selectedCareer, selectedYear }: {
+  initialNodes: SkillNode[],
+  initialEdges: SkillEdge[],
   selectedCareer: string,
-  selectedYear: number | null 
+  selectedYear: number | null
 }) {
   const { fitView } = useReactFlow();
   const [layoutDirection, setLayoutDirection] = useState<LayoutDirection>('TB');
@@ -98,17 +96,21 @@ function SkillTreeInner({ initialNodes, initialEdges, selectedCareer, selectedYe
             hover:bg-gray-700 hover:text-white transition-colors"
           title="Cambiar direccion del layout"
         >
-          {layoutDirection === 'TB' ? '↕ TB' : '↔ LR'}
+          {layoutDirection === 'TB' ? 'TB' : 'LR'}
         </button>
       </div>
     </ReactFlow>
   );
 }
 
-export default function SkillTreeViewer({ initialNodes, initialEdges }: { initialNodes: SkillNode[], initialEdges: SkillEdge[] }) {
-  const [selectedCareer, setSelectedCareer] = useState<string>('Todos');
-  const [selectedYear, setSelectedYear] = useState<number | null>(null);
-
+export default function SkillTreeViewer({ initialNodes, initialEdges, selectedCareer, selectedYear, onCareerChange, onYearChange }: {
+  initialNodes: SkillNode[],
+  initialEdges: SkillEdge[],
+  selectedCareer: string,
+  selectedYear: number | null,
+  onCareerChange: (career: string) => void,
+  onYearChange: (year: number | null) => void,
+}) {
   const availableYears = useMemo(() => {
     const yearSet = new Set(initialNodes.map(n => n.year));
     return Array.from(yearSet).filter(y => y != null).sort((a, b) => a - b) as number[];
@@ -118,10 +120,10 @@ export default function SkillTreeViewer({ initialNodes, initialEdges }: { initia
     <div className="w-full h-full flex flex-col bg-obsidian">
       {/* Panel de filtros - Carreras */}
       <div className="flex flex-wrap gap-2 p-4 pb-2 bg-black/50 border-b border-gray-800 backdrop-blur-sm z-10">
-        {CAREERS.map(c => (
+        {['Todos', '1 Ing Sistemas', '2 Ing Datos', '3 Lic IA'].map(c => (
           <button
             key={c}
-            onClick={() => setSelectedCareer(c)}
+            onClick={() => onCareerChange(c)}
             className={`px-4 py-2 rounded-md text-sm transition-colors font-medium border border-gray-700
               ${selectedCareer === c 
                 ? 'bg-purple-600 text-white shadow-[0_0_15px_rgba(147,51,234,0.5)]' 
@@ -136,26 +138,26 @@ export default function SkillTreeViewer({ initialNodes, initialEdges }: { initia
       {/* Panel de filtros - Años */}
       <div className="flex flex-wrap gap-2 px-4 py-2 bg-black/30 border-b border-gray-800/50 backdrop-blur-sm z-10">
         <button
-          onClick={() => setSelectedYear(null)}
+          onClick={() => onYearChange(null)}
           className={`px-3 py-1 rounded-md text-xs transition-colors font-medium border
             ${selectedYear === null 
               ? 'bg-toxic/20 text-toxic border-toxic shadow-[0_0_10px_rgba(57,255,20,0.3)]' 
               : 'bg-gray-800 text-gray-500 border-gray-700 hover:bg-gray-700 hover:text-gray-300'
             }`}
         >
-          Todos los años
+          Todos los a�os
         </button>
         {availableYears.map(y => (
           <button
             key={y}
-            onClick={() => setSelectedYear(y)}
+            onClick={() => onYearChange(y)}
             className={`px-3 py-1 rounded-md text-xs transition-colors font-medium border
               ${selectedYear === y 
                 ? 'bg-toxic/20 text-toxic border-toxic shadow-[0_0_10px_rgba(57,255,20,0.3)]' 
                 : 'bg-gray-800 text-gray-500 border-gray-700 hover:bg-gray-700 hover:text-gray-300'
               }`}
           >
-            Año {y}
+            A�o {y}
           </button>
         ))}
       </div>

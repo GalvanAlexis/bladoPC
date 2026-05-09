@@ -1,8 +1,17 @@
-// Server Component — lee el sistema de archivos y pasa los datos al motor del juego
+import { Suspense, lazy } from 'react';
 import { getSkillTreeData } from '@/lib/markdown';
-import GameEngine from '@/components/GameEngine';
+import BladoAvatar from '@/components/BladoAvatar';
+import AppShell from '@/components/AppShell';
+
+const GameEngine = lazy(() => import('@/components/GameEngine'));
 
 export default function Home() {
   const { nodes, edges } = getSkillTreeData();
-  return <GameEngine initialNodes={nodes} initialEdges={edges} />;
+  return (
+    <AppShell>
+      <Suspense fallback={<BladoAvatar message="Invocando el Grimorio..." />}>
+        <GameEngine initialNodes={nodes} initialEdges={edges} />
+      </Suspense>
+    </AppShell>
+  );
 }

@@ -1,7 +1,7 @@
 # 📋 ISSUES — Blado_Cavern
 
 > Sistema de tracking de issues para el proyecto **Blado_Cavern**.  
-> Última actualización: 2026-05-08
+> Ultima actualizacion: 2026-05-08
 
 ---
 
@@ -12,11 +12,12 @@
 | [ISS-009](./issues/ISS-009_multi-career-parser.md) | Expandir parser para 3 carreras | 🔥 Alta | `feature`, `data`, `markdown` |
 | [ISS-010](./issues/ISS-010_dagre-autolayout.md) | Auto-layout Dagre en Skill Tree | 🔥 Alta | `feature`, `ui`, `react-flow` |
 | [ISS-011](./issues/ISS-011_rich-context-ai.md) | Contexto enriquecido para IA Blado | 🔥 Alta | `feature`, `ai`, `groq` |
-| [ISS-012](./issues/ISS-012_blado-avatar-cleanup.md) | Limpiar componente BladoAvatar huérfano | 🟡 Media | `refactor`, `cleanup` |
+| ~~[ISS-012](./issues/ISS-012_blado-avatar-cleanup.md)~~ | ~~Limpiar componente BladoAvatar huérfano~~ | 🟡 Media | ✅ CLOSED |
 | [ISS-013](./issues/ISS-013_env-and-config.md) | Setup .env.local y documentar configuración | 🟡 Media | `config`, `docs` |
 | [ISS-014](./issues/ISS-014_multi-year-parser.md) | Parsear multi-año dentro de cada carrera | 🟡 Media | `feature`, `data`, `markdown` |
 | [ISS-015](./issues/ISS-015_mobile-responsive.md) | Responsive mobile para la Visual Novel | 🟢 Baja | `ui`, `responsive` |
 | [ISS-016](./issues/ISS-016_vercel-deploy.md) | Deploy a Vercel | 🟢 Baja | `devops`, `deploy` |
+| [ISS-017](./issues/ISS-017_planificacion-narrativa.md) | Layout, UX, Narrativa, Intro y CV | 🔥 Alta | `layout`, `navbar`, `sidebar`, `narrative`, `intro`, `cv`, `ux` |
 
 ---
 
@@ -57,6 +58,7 @@
   ISS-010 Dagre auto-layout
   ISS-012 BladoAvatar cleanup
   ISS-015 Mobile responsive
+  ISS-017 Layout, UX, Intro y CV
 
 [FASE 4 — Deploy 🔴]
   ISS-013 .env config

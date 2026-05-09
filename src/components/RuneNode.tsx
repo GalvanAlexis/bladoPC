@@ -1,7 +1,9 @@
-import { Handle, Position } from '@xyflow/react';
+import { Handle, Position, type NodeProps, type Node } from '@xyflow/react';
 import React from 'react';
 
-export default function RuneNode({ data }: { data: any }) {
+type RuneNodeType = Node<{ label: string; status: string; type: string }, 'rune'>;
+
+export default function RuneNode({ data }: NodeProps<RuneNodeType>) {
   const { label, status, type } = data;
 
   let bgClass = "bg-obsidian border-gray-700 text-gray-500";

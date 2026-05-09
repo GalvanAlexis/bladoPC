@@ -1,13 +1,17 @@
 "use client";
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import VisualNovelScene from '@/components/VisualNovelScene';
 import DialogBox, { Choice } from '@/components/DialogBox';
 import SkillTreeViewer from '@/components/SkillTreeViewer';
+import Navbar from '@/components/Navbar';
+import Sidebar from '@/components/Sidebar';
+import ReadmeModal from '@/components/ReadmeModal';
+import { useAppContext } from '@/lib/AppContext';
 import { SkillNode, SkillEdge } from '@/lib/markdown';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// --- Types -------------------------------------------------------------------
 
 type Scene = 'cave' | 'library';
 type BladoPose = 'base' | 'phone';
@@ -22,118 +26,161 @@ interface GameEngineProps {
   initialEdges: SkillEdge[];
 }
 
-// ─── Dialogue Tree ─────────────────────────────────────────────────────────────
-// This is the scripted part of the game — predefined paths the recruiter can take.
+// --- Dialogue Tree ------------------------------------------------------------
 
 const DIALOGUES = {
   intro: {
-    text: "¡Bienvenido, mortal! Soy Blado, guardián de estos dominios de conocimiento. ¿A qué has venido?",
+    text: "Bienvenido, mortal! Soy Blado, guardian de estos dominios de conocimiento. A que has venido?",
     scene: 'cave' as Scene,
     pose: 'base' as BladoPose,
-    choices: ['whoAmI', 'skills', 'projects', 'knowledge'],
+    choices: ['whoAmI', 'skills', 'projects', 'knowledge', 'cv'],
   },
   whoAmI: {
-    text: "¡Soy Alexis Galván! El mortal que firmó un pacto con el conocimiento. Backend, IA y Datos son mis armas. Estudio Ingeniería de Sistemas mientras forjo mis habilidades en el fuego de proyectos reales.",
+    text: "Soy Alexis Galvan! El mortal que firmo un pacto con el conocimiento. Backend, IA y Datos son mis armas. Estudio Ingenieria de Sistemas mientras forjo mis habilidades en el fuego de proyectos reales.",
     scene: 'cave' as Scene,
     pose: 'base' as BladoPose,
-    choices: ['skills', 'projects', 'knowledge', 'back'],
+    choices: ['skills', 'projects', 'knowledge', 'cv', 'back'],
   },
   skills: {
-    text: "Mis habilidades... *frota sus manos maliciosamente*. Python, SQL, FastAPI, algoritmos... todas forjadas con sudor y código. ¿Quieres ver el árbol completo de poder? ¡Invoco el Grimorio!",
+    text: "Mis habilidades... frota sus manos maliciosamente. Python, SQL, FastAPI, algoritmos... todas forjadas con sudor y codigo. Quieres ver el arbol completo de poder? Invoco el Grimorio!",
     scene: 'cave' as Scene,
     pose: 'base' as BladoPose,
-    choices: ['openSkillTree', 'projects', 'knowledge', 'back'],
+    choices: ['openSkillTree', 'projects', 'knowledge', 'cv', 'back'],
   },
   projects: {
-    text: "¡Proyectos! Esas son las batallas reales. InmoVoz (buscador de propiedades con NLP), sistemas de autenticación, dashboards de análisis... Cada uno, una cicatriz de aprendizaje.",
+    text: "Proyectos! Esas son las batallas reales. InmoVoz (buscador de propiedades con NLP), sistemas de autenticacion, dashboards de analisis... Cada uno, una cicatriz de aprendizaje.",
     scene: 'cave' as Scene,
     pose: 'phone' as BladoPose,
-    choices: ['knowledge', 'skills', 'back'],
+    choices: ['knowledge', 'skills', 'cv', 'back'],
   },
   knowledge: {
-    text: "¿Conocimiento teórico? Para eso... debemos ir a mi Biblioteca. *abre un portal de fuego*",
+    text: "Conocimiento teorico? Para eso... debemos ir a mi Biblioteca. abre un portal de fuego",
     scene: 'library' as Scene,
     pose: 'base' as BladoPose,
-    choices: ['askTheory', 'askProjects', 'askFree', 'back'],
+    choices: ['askTheory', 'askProjects', 'askFree', 'cv', 'back'],
   },
   askTheory: {
-    text: "Bien, mortal. ¿Sobre qué materia deseas interrogarme? Pregúntame y yo, Blado, buscaré en los grimoires de mi conocimiento y te responderé con honestidad... o casi.",
+    text: "Bien, mortal. Sobre que materia deseas interrogarme? Preguntame y yo, Blado, buscare en los grimoires de mi conocimiento y te respondere con honestidad... o casi.",
     scene: 'library' as Scene,
     pose: 'phone' as BladoPose,
     choices: ['back'],
     allowFreeQuestion: true,
   },
   askProjects: {
-    text: "¿Los proyectos aplicados? ¡Excelente elección! Pregunta lo que quieras sobre la arquitectura, el código, las decisiones de diseño... yo consulto los archivos.",
+    text: "Los proyectos aplicados? Excelente eleccion! Pregunta lo que quieras sobre la arquitectura, el codigo, las decisiones de diseno... yo consulto los archivos.",
     scene: 'library' as Scene,
     pose: 'phone' as BladoPose,
     choices: ['back'],
     allowFreeQuestion: true,
   },
   askFree: {
-    text: "Puedes preguntarme lo que desees, mortal. Yo consulto el grimorio de conocimientos que he forjado y te respondo. ¿Qué quieres saber?",
+    text: "Puedes preguntarme lo que desees, mortal. Yo consulto el grimorio de conocimientos que he forjado y te respondo. Que quieres saber?",
     scene: 'library' as Scene,
     pose: 'phone' as BladoPose,
     choices: ['back'],
     allowFreeQuestion: true,
   },
+  cv: {
+    text: "Mi CV? Claro, mortal. Aqui tienes el grimorio de mi experiencia profesional... saca un pergamino en llamas. Todo lo que he hecho y lo que puedo hacer esta ahi.",
+    scene: 'library' as Scene,
+    pose: 'phone' as BladoPose,
+    choices: ['back'],
+    showCV: true,
+  },
   back: {
-    text: "Como gustes. *bosteza demoníacamente*. ¿Qué más deseas saber sobre mis conocimientos?",
+    text: "Como gustes. bosteza demoniacamente. Que mas deseas saber sobre mis conocimientos?",
     scene: 'cave' as Scene,
     pose: 'base' as BladoPose,
-    choices: ['whoAmI', 'skills', 'projects', 'knowledge'],
+    choices: ['whoAmI', 'skills', 'projects', 'knowledge', 'cv'],
   },
   openSkillTree: {
-    text: "¡El Grimorio! Aquí verás cada habilidad que he conquistado... los nodos verdes brillan con poder, los rojos aún luchan por ser dominados.",
+    text: "El Grimorio! Aqui veras cada habilidad que he conquistado... los nodos verdes brillan con poder, los rojos aun luchan por ser dominados.",
     scene: 'cave' as Scene,
     pose: 'base' as BladoPose,
     choices: ['closeSkillTree', 'back'],
     showSkillTree: true,
   },
   closeSkillTree: {
-    text: "Bien, cerramos el Grimorio. ¿Qué más te interesa?",
+    text: "Bien, cerramos el Grimorio. Que mas te interesa?",
     scene: 'cave' as Scene,
     pose: 'base' as BladoPose,
-    choices: ['whoAmI', 'skills', 'projects', 'knowledge'],
+    choices: ['whoAmI', 'skills', 'projects', 'knowledge', 'cv'],
   },
 } as const;
 
 type DialogueKey = keyof typeof DIALOGUES;
 
 const CHOICE_LABELS: Record<string, string> = {
-  whoAmI: "¿Quién eres?",
-  skills: "Muéstrame tus habilidades",
-  projects: "Cuéntame sobre tus proyectos",
-  knowledge: "Quiero ver tu conocimiento teórico",
-  openSkillTree: "🗺️ Abrir el Grimorio de Habilidades",
-  closeSkillTree: "📖 Cerrar el Grimorio",
-  askTheory: "Preguntar sobre teoría y materias",
-  askProjects: "Preguntar sobre proyectos específicos",
+  whoAmI: "Quien eres?",
+  skills: "Mostrame tus habilidades",
+  projects: "Contame sobre tus proyectos",
+  knowledge: "Quiero ver tu conocimiento teorico",
+  cv: "Ver tu CV / Experiencia",
+  openSkillTree: "Abrir el Grimorio de Habilidades",
+  closeSkillTree: "Cerrar el Grimorio",
+  askTheory: "Preguntar sobre teoria y materias",
+  askProjects: "Preguntar sobre proyectos especificos",
   askFree: "Hacer una pregunta libre",
-  back: "← Volver",
+  back: "Volver",
 };
 
-// ─── Component ────────────────────────────────────────────────────────────────
+// --- Component ----------------------------------------------------------------
 
 export default function GameEngine({ initialNodes, initialEdges }: GameEngineProps) {
+  const { replayIntro } = useAppContext();
   const [currentKey, setCurrentKey] = useState<DialogueKey>('intro');
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [dialogVisible, setDialogVisible] = useState(true);
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedCareer, setSelectedCareer] = useState<string>('Todos');
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const [showCVModal, setShowCVModal] = useState(false);
 
   const current = DIALOGUES[currentKey];
   const scene: Scene = current.scene;
   const bladoPose: BladoPose = current.pose;
   const showSkillTree = 'showSkillTree' in current && current.showSkillTree;
   const allowFreeQuestion = 'allowFreeQuestion' in current && current.allowFreeQuestion;
+  // Available careers for sidebar
+  const availableCareers = useMemo(() => {
+    const careerSet = new Set(initialNodes.map(n => n.career));
+    return ['Todos', ...Array.from(careerSet).filter((c): c is string => c != null)];
+  }, [initialNodes]);
+
+  // Available years for sidebar
+  const availableYears = useMemo(() => {
+    const yearSet = new Set(initialNodes.map(n => n.year));
+    return Array.from(yearSet).filter((y): y is number => y != null).sort((a, b) => a - b);
+  }, [initialNodes]);
 
   // Build choice objects from the keys in the current dialogue
   const choices: Choice[] = (current.choices as readonly string[])
-    .filter(key => key !== 'back' || (current.choices as readonly string[]).includes('back'))
     .map(key => ({
       label: CHOICE_LABELS[key] ?? key,
-      action: () => setCurrentKey(key as DialogueKey),
+      action: () => {
+        setCurrentKey(key as DialogueKey);
+        setMessages([]);
+        if (key === 'cv') {
+          setShowCVModal(true);
+        }
+      },
     }));
+
+  const handleBladoClick = useCallback(() => {
+    setDialogVisible(true);
+  }, []);
+
+  const handleCloseDialog = useCallback(() => {
+    setDialogVisible(false);
+    setMessages([]);
+  }, []);
+
+  const handleNavigate = useCallback((key: string) => {
+    setCurrentKey(key as DialogueKey);
+    setMessages([]);
+    setDialogVisible(true);
+  }, []);
 
   const handleFreeQuestion = useCallback(async (question: string) => {
     setIsLoading(true);
@@ -148,7 +195,7 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
         body: JSON.stringify({ messages: updatedMessages }),
       });
       const data = await res.json();
-      const reply = data.reply ?? "Los portales de conocimiento están bloqueados... (error al contactar a mi cerebro de fuego)";
+      const reply = data.reply ?? "Los portales de conocimiento estan bloqueados... (error al contactar a mi cerebro de fuego)";
 
       setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
     } catch {
@@ -163,17 +210,44 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
   const displayText = (lastMessage?.role === 'assistant')
     ? lastMessage.content
     : isLoading
-    ? "Consultando el grimorio... *llamas en los ojos*"
+    ? "Consultando el grimorio... llamas en los ojos"
     : current.text;
 
   const displayChoices: Choice[] = (lastMessage?.role === 'assistant' || isLoading)
-    ? [{ label: "← Volver al menú", action: () => { setMessages([]); } }]
+    ? [{ label: "Volver al menu", action: () => { setMessages([]); } }]
     : choices;
 
   return (
     <main className="relative w-screen h-screen overflow-hidden font-mono select-none">
+      {/* Navbar */}
+      <Navbar
+        scene={scene}
+        onNavigate={handleNavigate}
+        onToggleSidebar={() => setSidebarOpen(prev => !prev)}
+        sidebarOpen={sidebarOpen}
+      />
+
+      {/* Sidebar */}
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        selectedCareer={selectedCareer}
+        selectedYear={selectedYear}
+        availableCareers={availableCareers}
+        availableYears={availableYears}
+        onSelectCareer={setSelectedCareer}
+        onSelectYear={setSelectedYear}
+        onNavigate={handleNavigate}
+        onReplayIntro={replayIntro}
+      />
+
       {/* 2D Scene + Blado Sprite */}
-      <VisualNovelScene scene={scene} bladoPose={bladoPose} />
+      <VisualNovelScene
+        scene={scene}
+        bladoPose={bladoPose}
+        dialogVisible={dialogVisible}
+        onBladoClick={handleBladoClick}
+      />
 
       {/* Atmospheric vignette */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_40%,_black_100%)] pointer-events-none z-10" />
@@ -187,42 +261,45 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
             exit={{ opacity: 0, scale: 0.9 }}
             className="absolute inset-8 z-30 rounded-xl overflow-hidden border-2 border-toxic shadow-[0_0_50px_rgba(57,255,20,0.3)]"
           >
-            <SkillTreeViewer initialNodes={initialNodes} initialEdges={initialEdges} />
+            <SkillTreeViewer
+              initialNodes={initialNodes}
+              initialEdges={initialEdges}
+              selectedCareer={selectedCareer}
+              selectedYear={selectedYear}
+              onCareerChange={setSelectedCareer}
+              onYearChange={setSelectedYear}
+            />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Top HUD */}
-      <div className="absolute top-6 left-6 z-40 flex items-center gap-3">
-        <div className="w-3 h-3 rounded-full bg-toxic animate-pulse shadow-[0_0_10px_rgba(57,255,20,0.8)]" />
-        <span className="text-xs uppercase tracking-widest text-gray-400">
-          {scene === 'cave' ? '🗻 La Cueva de Blado' : '📚 Biblioteca Arcana'}
-        </span>
-      </div>
-
-      {/* Dialog Box Toggle Button */}
-      <button
-        onClick={() => setDialogVisible(v => !v)}
-        className="absolute bottom-4 right-4 z-50
-          w-8 h-8 rounded-full bg-black/60 border border-gray-700
-          text-gray-500 hover:text-gray-300 hover:border-gray-500
-          flex items-center justify-center transition-all
-          text-lg leading-none font-mono"
-        title={dialogVisible ? "Minimizar dialogo" : "Mostrar dialogo"}
-      >
-        {dialogVisible ? '−' : '+'}
-      </button>
+      {/* Readme CV Modal */}
+      <ReadmeModal
+        isOpen={showCVModal}
+        onClose={() => setShowCVModal(false)}
+      />
 
       {/* Dialog Box */}
-      {dialogVisible && (
-        <DialogBox
-          speakerName="Blado"
-          text={displayText}
-          choices={displayChoices}
-          onAskQuestion={allowFreeQuestion ? handleFreeQuestion : undefined}
-          isTyping={isLoading}
-        />
-      )}
+      <AnimatePresence>
+        {dialogVisible && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          >
+            <DialogBox
+              key={currentKey + '-' + (lastMessage?.role === 'assistant' ? 'ai' : '')}
+              speakerName="Blado"
+              text={displayText}
+              choices={displayChoices}
+              onAskQuestion={allowFreeQuestion ? handleFreeQuestion : undefined}
+              isTyping={isLoading}
+              onClose={handleCloseDialog}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
