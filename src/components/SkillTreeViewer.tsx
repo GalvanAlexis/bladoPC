@@ -80,7 +80,6 @@ function SkillTreeInner({ initialNodes, initialEdges, selectedCareer, selectedYe
       nodes={layoutedNodes}
       edges={flowEdges}
       nodeTypes={nodeTypes}
-      fitView
       className="bg-obsidian"
       colorMode="dark"
     >
@@ -95,8 +94,8 @@ function SkillTreeInner({ initialNodes, initialEdges, selectedCareer, selectedYe
             bg-gray-800 text-gray-400 border-gray-700 
             hover:bg-gray-700 hover:text-white transition-colors"
           title="Cambiar direccion del layout"
-        >
-          {layoutDirection === 'TB' ? 'TB' : 'LR'}
+          >
+          {layoutDirection === 'TB' ? '→ LR' : '↕ TB'}
         </button>
       </div>
     </ReactFlow>
@@ -145,7 +144,7 @@ export default function SkillTreeViewer({ initialNodes, initialEdges, selectedCa
               : 'bg-gray-800 text-gray-500 border-gray-700 hover:bg-gray-700 hover:text-gray-300'
             }`}
         >
-          Todos los a�os
+          Todos los años
         </button>
         {availableYears.map(y => (
           <button
@@ -157,7 +156,7 @@ export default function SkillTreeViewer({ initialNodes, initialEdges, selectedCa
                 : 'bg-gray-800 text-gray-500 border-gray-700 hover:bg-gray-700 hover:text-gray-300'
               }`}
           >
-            A�o {y}
+            Año {y}
           </button>
         ))}
       </div>

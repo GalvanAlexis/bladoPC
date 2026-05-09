@@ -32,7 +32,8 @@ function parseStatus(checkStr: string): SkillStatus {
 }
 
 function extractYear(filename: string): number {
-  const match = filename.match(/(\d+)_año_(\d+)/i);
+  // Acepta tanto 'año' (UTF-8) como 'ano' (encoding legacy de Windows)
+  const match = filename.match(/(\d+)_a[nñ]o_(\d+)/i);
   return match ? parseInt(match[2], 10) : 1;
 }
 
@@ -45,7 +46,8 @@ function findAllTrackingFiles(dir: string, fileList: string[] = []): string[] {
       findAllTrackingFiles(filePath, fileList);
     } else {
       // Buscar archivos de tracking: 01_año_1.md, 02_año_2.md, etc.
-      if (file.endsWith('.md') && file.match(/\d+_año_\d+/i)) {
+      // Acepta tanto 'año' como 'ano' para compatibilidad con encoding legacy de Windows
+      if (file.endsWith('.md') && file.match(/\d+_a[nñ]o_\d+/i)) {
         fileList.push(filePath);
       }
     }
@@ -175,18 +177,20 @@ export function getSkillTreeData(): { nodes: SkillNode[]; edges: SkillEdge[] } {
                   currentProject = nodes.find(n => n.id === globalId) || null;
                 }
               } else if (currentProject && text.startsWith('Stack:')) {
-                // Crear Edge automático del proyecto hacia la tecnología
-                const techName = text.replace('Stack:', '').trim();
-                const globalTechId = `${career}-${techName}`;
-                
-                // Asegurarse de no duplicar aristas
-                const edgeId = `e-${currentProject.id}-${globalTechId}`;
-                if (!edges.some(e => e.id === edgeId)) {
-                  edges.push({
-                    id: edgeId,
-                    source: globalTechId, // Depende de la tech
-                    target: currentProject.id
-                  });
+                // Parsear el Stack como lista de tecnologías separadas por coma
+                // Antes: "Python, FastAPI" generaba UN edge con ID que nunca coincidía con ningún nodo
+                // Ahora: genera un edge individual por cada tecnología
+                const techNames = text.replace('Stack:', '').split(',').map(t => t.trim()).filter(Boolean);
+                for (const tn of techNames) {
+                  const globalTechId = `${career}-${tn}`;
+                  const edgeId = `e-${currentProject.id}-${globalTechId}`;
+                  if (!edges.some(e => e.id === edgeId)) {
+                    edges.push({
+                      id: edgeId,
+                      source: globalTechId, // tech → proyecto
+                      target: currentProject.id
+                    });
+                  }
                 }
               }
             }

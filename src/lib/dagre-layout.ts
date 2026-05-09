@@ -23,13 +23,16 @@ export function getLayoutedElements(nodes: Node[], edges: Edge[], direction: Lay
 
   dagre.layout(dagreGraph);
 
+  const isLR = direction === 'LR';
+
   const layoutedNodes = nodes.map((node) => {
     const nodeWithPosition = dagreGraph.node(node.id);
     
     return {
       ...node,
-      targetPosition: Position.Top,
-      sourcePosition: Position.Bottom,
+      // Adaptar handles según la dirección del layout
+      targetPosition: isLR ? Position.Left  : Position.Top,
+      sourcePosition: isLR ? Position.Right : Position.Bottom,
       position: {
         x: nodeWithPosition.x - NODE_WIDTH / 2,
         y: nodeWithPosition.y - NODE_HEIGHT / 2,
