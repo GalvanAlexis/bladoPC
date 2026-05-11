@@ -129,7 +129,7 @@ export function getSkillTreeData(): { nodes: SkillNode[]; edges: SkillEdge[] } {
         for (const line of lines) {
           // Identificar sección
           if (line.startsWith('## Materias')) currentSection = 'materia';
-          else if (line.startsWith('## Tecnologías')) currentSection = 'tecnologia';
+          else if (line.startsWith('## Tecnolog')) currentSection = 'tecnologia';
           else if (line.startsWith('## Proyecto')) currentSection = 'proyecto';
 
           if (!currentSection) continue;
@@ -202,5 +202,9 @@ export function getSkillTreeData(): { nodes: SkillNode[]; edges: SkillEdge[] } {
     console.error("Error leyendo archivos markdown:", error);
   }
 
-  return { nodes, edges };
+  // BUG-07: Filtrar edges cuyos nodos source/target no existen (evita edges colgados)
+  const nodeIds = new Set(nodes.map(n => n.id));
+  const cleanEdges = edges.filter(e => nodeIds.has(e.source) && nodeIds.has(e.target));
+
+  return { nodes, edges: cleanEdges };
 }

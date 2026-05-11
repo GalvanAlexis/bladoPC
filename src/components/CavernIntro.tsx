@@ -8,6 +8,7 @@
  */
 import React, { useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAppContext } from "@/lib/AppContext";
 
 interface CavernIntroProps {
   onComplete: () => void;
@@ -50,6 +51,7 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
   const onCompleteRef = useRef(onComplete);
   const onSkipRef = useRef(onSkip);
   const embers = useMemo(() => generateEmbers(40), []);
+  const { animationsEnabled } = useAppContext();
 
   // Mantener refs actualizados sin re-crear efectos
   useEffect(() => {

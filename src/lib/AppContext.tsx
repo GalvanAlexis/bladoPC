@@ -5,10 +5,18 @@ import CavernIntro from '@/components/CavernIntro';
 
 interface AppContextValue {
   replayIntro: () => void;
+  particlesEnabled: boolean;
+  animationsEnabled: boolean;
+  setParticlesEnabled: (v: boolean) => void;
+  setAnimationsEnabled: (v: boolean) => void;
 }
 
-const AppContext = createContext<AppContextValue>({
+export const AppContext = createContext<AppContextValue>({
   replayIntro: () => {},
+  particlesEnabled: true,
+  animationsEnabled: true,
+  setParticlesEnabled: () => {},
+  setAnimationsEnabled: () => {},
 });
 
 export function useAppContext() {
@@ -17,6 +25,8 @@ export function useAppContext() {
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [showIntro, setShowIntro] = useState(true);
+  const [particlesEnabled, setParticlesEnabled] = useState(true);
+  const [animationsEnabled, setAnimationsEnabled] = useState(true);
 
   const handleFinish = useCallback(() => {
     setShowIntro(false);
@@ -36,7 +46,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AppContext.Provider value={{ replayIntro }}>
+    <AppContext.Provider value={{ replayIntro, particlesEnabled, animationsEnabled, setParticlesEnabled, setAnimationsEnabled }}>
       {children}
     </AppContext.Provider>
   );

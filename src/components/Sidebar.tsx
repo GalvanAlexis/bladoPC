@@ -4,8 +4,9 @@
  * Sidebar — ISS-019
  * Panel lateral de opciones y ajustes. Sin filtros de Grimorio ni nav items.
  */
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAppContext } from '@/lib/AppContext';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -13,9 +14,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
-  // Toggles de ajustes visuales (placeholder para features futuras)
-  const [particles, setParticles] = useState(true);
-  const [animations, setAnimations] = useState(true);
+  const { particlesEnabled, animationsEnabled, setParticlesEnabled, setAnimationsEnabled } = useAppContext();
 
   return (
     <AnimatePresence>
@@ -69,17 +68,17 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     </span>
                     <button
                       role="switch"
-                      aria-checked={particles}
-                      onClick={() => setParticles(p => !p)}
+                      aria-checked={particlesEnabled}
+                      onClick={() => setParticlesEnabled(!particlesEnabled)}
                       className={`relative w-10 h-5 rounded-full border transition-colors duration-200
-                        ${particles
+                        ${particlesEnabled
                           ? 'bg-toxic/20 border-toxic/50'
                           : 'bg-gray-800 border-gray-700'
                         }`}
                     >
                       <span
                         className={`absolute top-0.5 w-4 h-4 rounded-full transition-all duration-200
-                          ${particles
+                          ${particlesEnabled
                             ? 'left-5 bg-toxic shadow-[0_0_6px_rgba(57,255,20,0.6)]'
                             : 'left-0.5 bg-gray-600'
                           }`}
@@ -94,17 +93,17 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     </span>
                     <button
                       role="switch"
-                      aria-checked={animations}
-                      onClick={() => setAnimations(a => !a)}
+                      aria-checked={animationsEnabled}
+                      onClick={() => setAnimationsEnabled(!animationsEnabled)}
                       className={`relative w-10 h-5 rounded-full border transition-colors duration-200
-                        ${animations
+                        ${animationsEnabled
                           ? 'bg-toxic/20 border-toxic/50'
                           : 'bg-gray-800 border-gray-700'
                         }`}
                     >
                       <span
                         className={`absolute top-0.5 w-4 h-4 rounded-full transition-all duration-200
-                          ${animations
+                          ${animationsEnabled
                             ? 'left-5 bg-toxic shadow-[0_0_6px_rgba(57,255,20,0.6)]'
                             : 'left-0.5 bg-gray-600'
                           }`}

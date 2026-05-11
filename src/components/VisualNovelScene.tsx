@@ -25,7 +25,7 @@ export default function VisualNovelScene({ scene, bladoPose, dialogVisible, onBl
           animate={{ opacity: 0.8, scale: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1 }}
-          className="absolute inset-0 w-full h-full object-contain"
+          className="absolute inset-0 w-full h-full object-cover"
         />
       </AnimatePresence>
 

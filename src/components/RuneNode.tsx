@@ -3,7 +3,7 @@ import React from 'react';
 
 type RuneNodeType = Node<{ label: string; status: string; type: string }, 'rune'>;
 
-export default function RuneNode({ data }: NodeProps<RuneNodeType>) {
+export default function RuneNode({ data, targetPosition, sourcePosition }: NodeProps<RuneNodeType>) {
   const { label, status, type } = data;
 
   let bgClass = "bg-obsidian border-gray-700 text-gray-500";
@@ -21,13 +21,13 @@ export default function RuneNode({ data }: NodeProps<RuneNodeType>) {
 
   return (
     <div className={`px-4 py-3 rounded-lg border-2 min-w-[150px] text-center font-mono ${bgClass} ${glowClass}`}>
-      <Handle type="target" position={Position.Top} className="w-2 h-2 bg-gray-500" />
+      <Handle type="target" position={targetPosition ?? Position.Top} className="w-2 h-2 bg-gray-500" />
       
       <div className="text-xl mb-1">{icon}</div>
       <div className="font-bold text-sm uppercase tracking-widest">{label}</div>
       <div className="text-xs opacity-70 mt-1">{status}</div>
 
-      <Handle type="source" position={Position.Bottom} className="w-2 h-2 bg-gray-500" />
+      <Handle type="source" position={sourcePosition ?? Position.Bottom} className="w-2 h-2 bg-gray-500" />
     </div>
   );
 }

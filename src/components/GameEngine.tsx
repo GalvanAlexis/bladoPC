@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import VisualNovelScene from '@/components/VisualNovelScene';
 import DialogBox, { Choice } from '@/components/DialogBox';
@@ -142,19 +142,7 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
   const bladoPose: BladoPose = current.pose;
   const showSkillTree = 'showSkillTree' in current && current.showSkillTree;
   const allowFreeQuestion = 'allowFreeQuestion' in current && current.allowFreeQuestion;
-  // Available careers for sidebar
-  const availableCareers = useMemo(() => {
-    const careerSet = new Set(initialNodes.map(n => n.career));
-    return ['Todos', ...Array.from(careerSet).filter((c): c is string => c != null)];
-  }, [initialNodes]);
 
-  // Available years for sidebar
-  const availableYears = useMemo(() => {
-    const yearSet = new Set(initialNodes.map(n => n.year));
-    return Array.from(yearSet).filter((y): y is number => y != null).sort((a, b) => a - b);
-  }, [initialNodes]);
-
-  // Build choice objects from the keys in the current dialogue
   const choices: Choice[] = (current.choices as readonly string[])
     .map(key => ({
       label: CHOICE_LABELS[key] ?? key,
