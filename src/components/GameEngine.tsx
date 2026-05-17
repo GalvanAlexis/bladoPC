@@ -170,28 +170,43 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
     setDialogVisible(true);
   }, []);
 
+  // BUG-02: Usamos useRef como snapshot buffer para evitar stale closure.
+  // handleFreeQuestion nunca depende del estado messages directamente,
+  // lo que estabiliza su referencia y evita re-renders innecesarios en DialogBox.
+  const messagesRef = React.useRef<Message[]>(messages);
+  messagesRef.current = messages;
+
   const handleFreeQuestion = useCallback(async (question: string) => {
     setIsLoading(true);
 
-    const updatedMessages: Message[] = [...messages, { role: 'user', content: question }];
-    setMessages(updatedMessages);
+    // Capturamos el snapshot del estado actual sin depender de messages en closure
+    const snapshot: Message[] = [...messagesRef.current, { role: 'user', content: question }];
+    setMessages(snapshot);
 
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: updatedMessages }),
+        body: JSON.stringify({ messages: snapshot }),
       });
-      const data = await res.json();
+
+      // BUG-03: Validar res.ok antes de parsear para no ignorar errores HTTP
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({})) as { error?: string };
+        throw new Error(errData.error ?? `HTTP ${res.status}`);
+      }
+
+      const data = await res.json() as { reply?: string };
       const reply = data.reply ?? "Los portales de conocimiento estan bloqueados... (error al contactar a mi cerebro de fuego)";
 
       setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
-    } catch {
+    } catch (err) {
+      console.error("Chat API error:", err);
       setMessages(prev => [...prev, { role: 'assistant', content: "Mis conexiones al inframundo fallaron. Intenta de nuevo, mortal." }]);
     } finally {
       setIsLoading(false);
     }
-  }, [messages]);
+  }, []); // referencia estable — no depende de messages
 
   // The text shown in the box: if there's an AI reply, show it. Otherwise, show scripted text.
   const lastMessage = messages[messages.length - 1];

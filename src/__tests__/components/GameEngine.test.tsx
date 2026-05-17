@@ -54,7 +54,6 @@ jest.mock('@/components/Sidebar', () =>
 );
 
 jest.mock('@/components/DialogBox', () => {
-  const { forwardRef } = jest.requireActual('react') as typeof import('react');
   return function MockDialogBox({
     text,
     choices,

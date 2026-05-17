@@ -22,6 +22,9 @@ export interface SkillEdge {
 
 const CONTENT_DIR_BASE = path.join(process.cwd(), 'content', 'Carreras');
 
+// BUG-04: Constante exportada para evitar duplicación entre módulos
+export const CAREERS = ['1 Ing Sistemas', '2 Ing Datos', '3 Lic IA'] as const;
+
 /**
  * Parsea el texto del estado de un checkbox markdown
  */
@@ -61,7 +64,7 @@ function findAllTrackingFiles(dir: string, fileList: string[] = []): string[] {
  */
 export function getFullContextString(maxChars = 16000): string {
   const sections: string[] = [];
-  const CAREERS = ['1 Ing Sistemas', '2 Ing Datos', '3 Lic IA'];
+  // BUG-04: usa la constante exportada del módulo
 
   try {
     for (const career of CAREERS) {
@@ -110,7 +113,7 @@ export function getSkillTreeData(): { nodes: SkillNode[]; edges: SkillEdge[] } {
   const processedNodes = new Set<string>();
 
   try {
-    const CAREERS = ['1 Ing Sistemas', '2 Ing Datos', '3 Lic IA'];
+    // BUG-04: usa la constante exportada del módulo
 
     for (const career of CAREERS) {
       const careerDir = path.join(CONTENT_DIR_BASE, career);

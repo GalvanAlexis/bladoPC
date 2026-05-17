@@ -21,8 +21,9 @@ export default function DialogBox({ speakerName, text, choices, onAskQuestion, i
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
-  // Typewriter effect
+  // Typewriter effect — BUG-01: limpiar texto previo antes de arrancar nuevo intervalo
   useEffect(() => {
+    setDisplayedText(''); // evita glitch visual con texto anterior
     let i = 0;
     const interval = setInterval(() => {
       setDisplayedText(text.substring(0, i + 1));
@@ -99,6 +100,7 @@ export default function DialogBox({ speakerName, text, choices, onAskQuestion, i
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 autoFocus
+                aria-label="Pregunta a Blado"
                 className="flex-1 bg-transparent border-b border-sulfur text-sulfur p-2 outline-none focus:border-toxic focus:text-toxic transition-colors"
                 placeholder="Preguntale a Blado..."
               />

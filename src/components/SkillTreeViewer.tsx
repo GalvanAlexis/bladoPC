@@ -13,7 +13,7 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import RuneNode from './RuneNode';
-import { SkillNode, SkillEdge } from '@/lib/markdown';
+import { SkillNode, SkillEdge, CAREERS } from '@/lib/markdown';
 import { getLayoutedElements, LayoutDirection } from '@/lib/dagre-layout';
 
 const nodeTypes = {
@@ -70,9 +70,12 @@ function SkillTreeInner({ initialNodes, initialEdges, selectedCareer, selectedYe
   }, [baseFlowNodes, flowEdges, layoutDirection]);
 
   useEffect(() => {
-    setTimeout(() => {
+    // BUG-05: requestAnimationFrame garantiza que los nodos ya tienen dimensiones
+    // antes de llamar fitView, a diferencia del setTimeout(100) frágil
+    const raf = requestAnimationFrame(() => {
       fitView({ padding: 0.2, duration: 800 });
-    }, 100);
+    });
+    return () => cancelAnimationFrame(raf);
   }, [layoutedNodes, fitView]);
 
   return (
@@ -119,7 +122,7 @@ export default function SkillTreeViewer({ initialNodes, initialEdges, selectedCa
     <div className="w-full h-full flex flex-col bg-obsidian">
       {/* Panel de filtros - Carreras */}
       <div className="flex flex-wrap gap-2 p-4 pb-2 bg-black/50 border-b border-gray-800 backdrop-blur-sm z-10">
-        {['Todos', '1 Ing Sistemas', '2 Ing Datos', '3 Lic IA'].map(c => (
+        {(['Todos', ...CAREERS] as string[]).map(c => (
           <button
             key={c}
             onClick={() => onCareerChange(c)}
@@ -161,16 +164,22 @@ export default function SkillTreeViewer({ initialNodes, initialEdges, selectedCa
         ))}
       </div>
       
-      {/* Contenedor del Grafo */}
+      {/* Contenedor del Grafo — MEJ-01: empty state cuando no hay nodos */}
       <div className="flex-1 relative">
-        <ReactFlowProvider>
-          <SkillTreeInner 
-            initialNodes={initialNodes} 
-            initialEdges={initialEdges} 
-            selectedCareer={selectedCareer} 
-            selectedYear={selectedYear}
-          />
-        </ReactFlowProvider>
+        {filteredNodes.length === 0 ? (
+          <div className="w-full h-full flex items-center justify-center text-gray-500 font-mono text-sm">
+            No hay habilidades registradas para este filtro.
+          </div>
+        ) : (
+          <ReactFlowProvider>
+            <SkillTreeInner 
+              initialNodes={initialNodes} 
+              initialEdges={initialEdges} 
+              selectedCareer={selectedCareer} 
+              selectedYear={selectedYear}
+            />
+          </ReactFlowProvider>
+        )}
       </div>
     </div>
   );
