@@ -1,7 +1,7 @@
 # 📋 ISSUES — Blado_Cavern
 
 > Sistema de tracking de issues para el proyecto **Blado_Cavern**.  
-> Ultima actualizacion: 2026-05-09
+> Ultima actualizacion: 2026-05-17
 
 ---
 
@@ -10,6 +10,10 @@
 | ID | Título | Prioridad | Etiquetas |
 |---|---|---|---|
 | [ISS-016](./issues/ISS-016_vercel-deploy.md) | Deploy a Vercel | 🟢 Baja | `devops`, `deploy` |
+| [ISS-020](./issues/ISS-020_prisma-supabase-setup.md) | Setup Prisma + Supabase | 🔴 Alta | `database`, `prisma`, `supabase` |
+| [ISS-021](./issues/ISS-021_chat-history.md) | Chat History Persistence | 🔴 Alta | `database`, `chat`, `api` |
+| [ISS-022](./issues/ISS-022_visitor-analytics.md) | Visitor Analytics Tracking | 🟡 Media | `analytics`, `database` |
+| [ISS-023](./issues/ISS-023_privacy-notice.md) | Aviso de Privacidad | 🟢 Baja | `legal`, `ui` |
 
 ---
 
@@ -63,4 +67,10 @@
 [FASE 4 — Deploy 🔴]
   ISS-013 .env config ✅
   ISS-016 Vercel deploy
+
+[FASE 5 — Data Layer 🔴]
+  ISS-020 Prisma + Supabase setup (prerequisito)
+  ISS-021 Chat history persistence
+  ISS-022 Visitor analytics tracking
+  ISS-023 Privacy notice
 ```

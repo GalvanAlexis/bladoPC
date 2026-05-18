@@ -1,0 +1,832 @@
+# DevOps + Platform Engineering
+
+## Filosofía Moderna de Operaciones, Automatización e Infraestructura
+
+Empresas históricamente influyentes:
+
+- Google
+- Amazon
+- Netflix
+- Facebook/Meta
+
+Tecnologías asociadas:
+
+- Linux
+- Docker
+- Kubernetes
+- Terraform
+- GitHub Actions
+- Prometheus
+- Grafana
+
+---
+
+# ¿Qué es DevOps?
+
+DevOps es una filosofía y cultura de ingeniería enfocada en:
+
+- automatización,
+- integración entre desarrollo y operaciones,
+- despliegue continuo,
+- infraestructura escalable,
+- observabilidad,
+- confiabilidad operativa.
+
+La idea central es:
+
+```text
+El software no termina cuando el programador hace "git push".
+```
+
+Incluye:
+
+- despliegue,
+- monitoreo,
+- infraestructura,
+- escalabilidad,
+- disponibilidad,
+- seguridad,
+- mantenimiento,
+- automatización.
+
+---
+
+# Problema histórico que intenta resolver
+
+Antes de DevOps existían dos mundos separados:
+
+```text
+[Developers]
+creaban software
+
+[Operations]
+intentaban mantenerlo funcionando
+```
+
+---
+
+# Problema típico
+
+Los developers:
+
+- querían velocidad.
+
+Operations:
+
+- quería estabilidad.
+
+Resultado:
+
+- conflictos constantes,
+- deploys fallidos,
+- caídas,
+- caos operativo,
+- errores manuales,
+- sistemas imposibles de escalar.
+
+---
+
+# Filosofía central de DevOps
+
+DevOps propone:
+
+```text
+Desarrollo y operaciones deben funcionar como un único sistema integrado.
+```
+
+---
+
+# Objetivos principales
+
+- automatizar infraestructura,
+- reducir errores humanos,
+- acelerar releases,
+- mejorar estabilidad,
+- aumentar observabilidad,
+- escalar sistemas,
+- reducir tiempo de recuperación.
+
+---
+
+# Cultura DevOps
+
+DevOps NO es solo herramientas.
+
+Es:
+
+- cultura,
+- metodología,
+- ingeniería operativa.
+
+---
+
+# Filosofía profunda
+
+```text
+Si el software no puede operar correctamente,
+el desarrollo está incompleto.
+```
+
+---
+
+# Principios fundamentales
+
+---
+
+# 1. Automatización
+
+Uno de los pilares más importantes.
+
+DevOps intenta automatizar:
+
+- deploys,
+- testing,
+- infraestructura,
+- monitoreo,
+- escalado,
+- backups,
+- recovery,
+- pipelines.
+
+---
+
+# Filosofía
+
+```text
+Todo proceso manual repetitivo
+es un potencial error humano.
+```
+
+---
+
+# Ejemplo
+
+Malo:
+
+```text
+Deploy manual por SSH.
+```
+
+Bueno:
+
+```text
+Pipeline automático CI/CD.
+```
+
+---
+
+# 2. CI/CD
+
+## Continuous Integration / Continuous Delivery
+
+---
+
+# Continuous Integration (CI)
+
+Cada cambio:
+
+- se integra automáticamente,
+- se testea automáticamente.
+
+---
+
+# Objetivo
+
+Detectar errores rápido.
+
+---
+
+# Continuous Delivery / Deployment (CD)
+
+Automatizar:
+
+- releases,
+- deploys,
+- distribución.
+
+---
+
+# Pipeline típico
+
+```text
+Push → Tests → Build → Docker → Deploy
+```
+
+---
+
+# Herramientas comunes
+
+- GitHub Actions
+- GitLab CI
+- Jenkins
+- CircleCI
+
+---
+
+# 3. Infrastructure as Code (IaC)
+
+Infraestructura definida mediante código.
+
+Ejemplo:
+
+```yaml
+server:
+  cpu: 4
+  memory: 8GB
+```
+
+---
+
+# Beneficios
+
+- reproducibilidad,
+- automatización,
+- versionado,
+- escalabilidad,
+- auditoría.
+
+---
+
+# Herramientas típicas
+
+- Terraform
+- Ansible
+- Pulumi
+
+---
+
+# Filosofía importante
+
+```text
+La infraestructura debe ser tratada como software.
+```
+
+---
+
+# 4. Observabilidad
+
+Uno de los conceptos más importantes del DevOps moderno.
+
+Incluye:
+
+- métricas,
+- logs,
+- tracing,
+- monitoreo.
+
+---
+
+# Objetivo
+
+Entender:
+
+- qué ocurre,
+- cuándo ocurre,
+- por qué ocurre.
+
+---
+
+# Stack típico
+
+```text
+Prometheus
+Grafana
+ELK Stack
+Jaeger
+OpenTelemetry
+```
+
+---
+
+# Filosofía
+
+```text
+No puedes mantener lo que no puedes observar.
+```
+
+---
+
+# 5. Escalabilidad
+
+DevOps busca:
+
+- sistemas capaces de crecer dinámicamente.
+
+---
+
+# Ejemplo
+
+Autoescalado:
+
+```text
+Más tráfico → más contenedores
+```
+
+---
+
+# Tecnologías asociadas
+
+- Kubernetes
+- Docker Swarm
+- Cloud autoscaling
+
+---
+
+# 6. Contenedores
+
+Docker revolucionó DevOps.
+
+---
+
+# Problema histórico
+
+"En mi máquina funciona."
+
+---
+
+# Docker resuelve
+
+- entornos inconsistentes,
+- dependencias rotas,
+- diferencias entre servidores.
+
+---
+
+# Filosofía
+
+```text
+Empaquetar software junto con su entorno.
+```
+
+---
+
+# 7. Kubernetes
+
+Uno de los pilares modernos.
+
+Kubernetes automatiza:
+
+- despliegue,
+- escalado,
+- balanceo,
+- recuperación,
+- networking.
+
+---
+
+# Filosofía
+
+```text
+La infraestructura debe autocorregirse.
+```
+
+---
+
+# Ejemplo
+
+Si un contenedor cae:
+
+- Kubernetes lo recrea automáticamente.
+
+---
+
+# 8. Resiliencia
+
+DevOps asume:
+
+```text
+Los sistemas van a fallar.
+```
+
+Por lo tanto:
+
+- se diseña para resistir fallos.
+
+---
+
+# Conceptos asociados
+
+- retry
+- circuit breakers
+- failover
+- redundancy
+- load balancing
+
+---
+
+# 9. DevSecOps
+
+Evolución moderna.
+
+Integra:
+
+- seguridad
+  dentro del pipeline DevOps.
+
+---
+
+# Filosofía
+
+```text
+La seguridad debe integrarse desde el inicio.
+```
+
+---
+
+# Incluye
+
+- scanning automático,
+- análisis de vulnerabilidades,
+- secretos,
+- compliance,
+- seguridad cloud.
+
+---
+
+# 10. Cloud Native
+
+DevOps moderno está profundamente ligado al cloud.
+
+---
+
+# Características
+
+- contenedores,
+- microservicios,
+- elasticidad,
+- infraestructura dinámica.
+
+---
+
+# Providers típicos
+
+- AWS
+- GCP
+- Azure
+
+---
+
+# Relación con Microservicios
+
+DevOps y microservicios crecieron juntos.
+
+Porque:
+
+- microservicios requieren automatización masiva.
+
+---
+
+# Problema
+
+Sin DevOps:
+
+- administrar cientos de servicios es imposible.
+
+---
+
+# Relación con Unix Philosophy
+
+Muy fuerte.
+
+DevOps hereda:
+
+- modularidad,
+- scripting,
+- automatización,
+- composición,
+- herramientas pequeñas.
+
+---
+
+# Relación con Clean Architecture
+
+Complementarias.
+
+Clean Architecture:
+
+- organiza el código.
+
+DevOps:
+
+- organiza operación e infraestructura.
+
+---
+
+# ¿Qué es Platform Engineering?
+
+Evolución moderna de DevOps.
+
+---
+
+# Problema moderno
+
+Muchas empresas descubrieron que:
+
+```text
+No todos los developers deberían administrar infraestructura compleja.
+```
+
+---
+
+# Solución
+
+Crear:
+
+- plataformas internas,
+- tooling centralizado,
+- self-service infrastructure.
+
+---
+
+# Objetivo
+
+Que developers puedan:
+
+- desplegar,
+- monitorear,
+- escalar
+
+sin ser expertos profundos en infraestructura.
+
+---
+
+# Internal Developer Platform (IDP)
+
+Ejemplo:
+
+```text
+Portal interno:
+- crear servicio
+- deploy
+- logs
+- métricas
+- escalado
+```
+
+---
+
+# Herramientas modernas
+
+- Backstage
+- ArgoCD
+- Crossplane
+- Terraform Cloud
+
+---
+
+# Filosofía de Platform Engineering
+
+```text
+La infraestructura debe ser una plataforma usable.
+```
+
+---
+
+# Site Reliability Engineering (SRE)
+
+Muy relacionado.
+
+Popularizado por:
+
+- Google.
+
+---
+
+# Idea central
+
+Aplicar ingeniería de software a operaciones.
+
+---
+
+# Conceptos importantes
+
+- SLI
+- SLO
+- SLA
+- Error budgets
+
+---
+
+# Filosofía
+
+```text
+La confiabilidad debe medirse y gestionarse.
+```
+
+---
+
+# Ventajas reales
+
+# 1. Escalabilidad masiva
+
+Fundamental para:
+
+- SaaS,
+- cloud,
+- IA,
+- plataformas globales.
+
+---
+
+# 2. Menos errores humanos
+
+Gracias a automatización.
+
+---
+
+# 3. Deploys más rápidos
+
+CI/CD acelera muchísimo releases.
+
+---
+
+# 4. Recuperación más rápida
+
+Observabilidad y automatización mejoran recovery.
+
+---
+
+# 5. Infraestructura reproducible
+
+Muy importante profesionalmente.
+
+---
+
+# 6. Mayor estabilidad
+
+Especialmente en producción.
+
+---
+
+# 7. Excelente para sistemas distribuidos
+
+---
+
+# Desventajas reales
+
+# 1. Complejidad enorme
+
+DevOps moderno puede volverse extremadamente complejo.
+
+---
+
+# 2. Curva de aprendizaje brutal
+
+Requiere:
+
+- backend,
+- redes,
+- Linux,
+- cloud,
+- seguridad,
+- scripting,
+- infraestructura.
+
+---
+
+# 3. Tooling excesivo
+
+El ecosistema DevOps cambia constantemente.
+
+---
+
+# 4. Sobrecarga operacional
+
+Mal implementado:
+
+- puede generar burocracia técnica.
+
+---
+
+# Riesgo moderno
+
+Muchas empresas:
+
+- adoptan herramientas DevOps
+  sin entender filosofía real.
+
+Resultado:
+
+- complejidad innecesaria.
+
+---
+
+# Stack DevOps moderno típico
+
+Infraestructura:
+
+- Linux
+- Docker
+- Kubernetes
+
+Cloud:
+
+- AWS
+- GCP
+- Azure
+
+IaC:
+
+- Terraform
+- Ansible
+
+CI/CD:
+
+- GitHub Actions
+- GitLab CI
+
+Observabilidad:
+
+- Prometheus
+- Grafana
+- Loki
+
+Mensajería:
+
+- Kafka
+- RabbitMQ
+
+Seguridad:
+
+- Vault
+- Trivy
+
+---
+
+# Relación con tu perfil
+
+Por lo que vienes preguntando:
+
+- backend,
+- robustez,
+- sistemas serios,
+- arquitectura,
+- planificación,
+- IA,
+- infraestructura,
+
+DevOps probablemente sea una de las áreas que más encajan contigo.
+
+Porque combina:
+
+- ingeniería,
+- automatización,
+- arquitectura,
+- sistemas distribuidos,
+- robustez operacional.
+
+Y además:
+
+- requiere pensamiento estructurado,
+- disciplina,
+- diseño profesional.
+
+---
+
+# Filosofía profunda detrás de DevOps
+
+DevOps nace de una idea central:
+
+```text
+El software real incluye operación.
+```
+
+No basta:
+
+- escribir código.
+
+Hay que garantizar:
+
+- disponibilidad,
+- estabilidad,
+- recuperación,
+- observabilidad,
+- escalabilidad,
+- automatización.
+
+---
+
+# Conclusión
+
+DevOps + Platform Engineering es una filosofía de:
+
+- automatización,
+- infraestructura,
+- confiabilidad,
+- escalabilidad,
+- operación profesional.
+
+No busca:
+
+- simplicidad académica,
+- prototipos rápidos,
+- desarrollo aislado.
+
+Busca:
+
+- sistemas robustos,
+- plataformas resilientes,
+- despliegues confiables,
+- operación industrial del software.
+
+Es una de las filosofías más importantes del software moderno a gran escala.

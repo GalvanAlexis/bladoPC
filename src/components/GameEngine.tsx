@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import VisualNovelScene from '@/components/VisualNovelScene';
 import DialogBox, { Choice } from '@/components/DialogBox';
@@ -176,6 +176,19 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
   const messagesRef = React.useRef<Message[]>(messages);
   messagesRef.current = messages;
 
+  // ISS-021: sessionId persistido en localStorage para vincular mensajes a una sesión
+  const sessionIdRef = useRef<string>('');
+  useEffect(() => {
+    const stored = localStorage.getItem('blado_session_id');
+    if (stored) {
+      sessionIdRef.current = stored;
+    } else {
+      const newId = crypto.randomUUID();
+      localStorage.setItem('blado_session_id', newId);
+      sessionIdRef.current = newId;
+    }
+  }, []);
+
   const handleFreeQuestion = useCallback(async (question: string) => {
     setIsLoading(true);
 
@@ -187,7 +200,7 @@ export default function GameEngine({ initialNodes, initialEdges }: GameEnginePro
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: snapshot }),
+        body: JSON.stringify({ messages: snapshot, sessionId: sessionIdRef.current }),
       });
 
       // BUG-03: Validar res.ok antes de parsear para no ignorar errores HTTP
