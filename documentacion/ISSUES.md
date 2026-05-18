@@ -9,7 +9,6 @@
 
 | ID | Título | Prioridad | Etiquetas |
 |---|---|---|---|
-| [ISS-013](./issues/ISS-013_env-and-config.md) | Setup .env.local y documentar configuración | 🟡 Media | `config`, `docs` |
 | [ISS-016](./issues/ISS-016_vercel-deploy.md) | Deploy a Vercel | 🟢 Baja | `devops`, `deploy` |
 
 ---
@@ -18,6 +17,7 @@
 
 | ID | Título | Fecha cierre |
 |---|---|---|
+| [ISS-013](./issues/ISS-013_env-and-config.md) | Setup .env.local y documentar configuración | 2026-05-17 |
 | [ISS-001](./issues/ISS-001_setup-nextjs.md) | Setup Next.js App Router + TypeScript + Tailwind | 2026-05-08 |
 | [ISS-009](./issues/ISS-009_multi-career-parser.md) | Expandir parser para 3 carreras | 2026-05-09 |
 | [ISS-010](./issues/ISS-010_dagre-autolayout.md) | Auto-layout Dagre en Skill Tree | 2026-05-09 |
@@ -61,6 +61,6 @@
   -- COMPLETADA --
 
 [FASE 4 — Deploy 🔴]
-  ISS-013 .env config
+  ISS-013 .env config ✅
   ISS-016 Vercel deploy
 ```

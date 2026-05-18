@@ -13,7 +13,8 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import RuneNode from './RuneNode';
-import { SkillNode, SkillEdge, CAREERS } from '@/lib/markdown';
+import { SkillNode, SkillEdge } from '@/lib/markdown';
+import { CAREERS } from '@/lib/constants';
 import { getLayoutedElements, LayoutDirection } from '@/lib/dagre-layout';
 
 const nodeTypes = {
@@ -118,6 +119,17 @@ export default function SkillTreeViewer({ initialNodes, initialEdges, selectedCa
     return Array.from(yearSet).filter(y => y != null).sort((a, b) => a - b) as number[];
   }, [initialNodes]);
 
+  const hasNodes = useMemo(() => {
+    let result = initialNodes;
+    if (selectedCareer !== 'Todos') {
+      result = result.filter(n => n.career === selectedCareer);
+    }
+    if (selectedYear !== null) {
+      result = result.filter(n => n.year === selectedYear);
+    }
+    return result.length > 0;
+  }, [initialNodes, selectedCareer, selectedYear]);
+
   return (
     <div className="w-full h-full flex flex-col bg-obsidian">
       {/* Panel de filtros - Carreras */}
@@ -166,7 +178,7 @@ export default function SkillTreeViewer({ initialNodes, initialEdges, selectedCa
       
       {/* Contenedor del Grafo — MEJ-01: empty state cuando no hay nodos */}
       <div className="flex-1 relative">
-        {filteredNodes.length === 0 ? (
+        {!hasNodes ? (
           <div className="w-full h-full flex items-center justify-center text-gray-500 font-mono text-sm">
             No hay habilidades registradas para este filtro.
           </div>

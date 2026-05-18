@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { CAREERS } from './constants';
 
 export type SkillStatus = 'locked' | 'progress' | 'completed';
 export type SkillType = 'materia' | 'tecnologia' | 'proyecto';
@@ -22,8 +23,7 @@ export interface SkillEdge {
 
 const CONTENT_DIR_BASE = path.join(process.cwd(), 'content', 'Carreras');
 
-// BUG-04: Constante exportada para evitar duplicación entre módulos
-export const CAREERS = ['1 Ing Sistemas', '2 Ing Datos', '3 Lic IA'] as const;
+// BUG-04: Constante movida a constants.ts para evitar error de importación de modulo fs en Cliente
 
 /**
  * Parsea el texto del estado de un checkbox markdown
