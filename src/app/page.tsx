@@ -1,8 +1,13 @@
-// Server Component — lee el sistema de archivos y pasa los datos al motor del juego
 import { getSkillTreeData } from '@/lib/markdown';
-import GameEngine from '@/components/GameEngine';
+import AppShell from '@/components/AppShell';
+import GameEngineLoader from '@/components/GameEngineLoader';
 
 export default function Home() {
   const { nodes, edges } = getSkillTreeData();
-  return <GameEngine initialNodes={nodes} initialEdges={edges} />;
+  return (
+    <AppShell>
+      <GameEngineLoader initialNodes={nodes} initialEdges={edges} />
+    </AppShell>
+  );
 }
+

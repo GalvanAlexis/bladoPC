@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { CAREERS } from './constants';
 
 export type SkillStatus = 'locked' | 'progress' | 'completed';
 export type SkillType = 'materia' | 'tecnologia' | 'proyecto';
@@ -22,6 +23,8 @@ export interface SkillEdge {
 
 const CONTENT_DIR_BASE = path.join(process.cwd(), 'content', 'Carreras');
 
+// BUG-04: Constante movida a constants.ts para evitar error de importación de modulo fs en Cliente
+
 /**
  * Parsea el texto del estado de un checkbox markdown
  */
@@ -32,7 +35,8 @@ function parseStatus(checkStr: string): SkillStatus {
 }
 
 function extractYear(filename: string): number {
-  const match = filename.match(/(\d+)_año_(\d+)/i);
+  // Acepta tanto 'año' (UTF-8) como 'ano' (encoding legacy de Windows)
+  const match = filename.match(/(\d+)_a[nñ]o_(\d+)/i);
   return match ? parseInt(match[2], 10) : 1;
 }
 
@@ -45,7 +49,8 @@ function findAllTrackingFiles(dir: string, fileList: string[] = []): string[] {
       findAllTrackingFiles(filePath, fileList);
     } else {
       // Buscar archivos de tracking: 01_año_1.md, 02_año_2.md, etc.
-      if (file.endsWith('.md') && file.match(/\d+_año_\d+/i)) {
+      // Acepta tanto 'año' como 'ano' para compatibilidad con encoding legacy de Windows
+      if (file.endsWith('.md') && file.match(/\d+_a[nñ]o_\d+/i)) {
         fileList.push(filePath);
       }
     }
@@ -59,7 +64,7 @@ function findAllTrackingFiles(dir: string, fileList: string[] = []): string[] {
  */
 export function getFullContextString(maxChars = 16000): string {
   const sections: string[] = [];
-  const CAREERS = ['1 Ing Sistemas', '2 Ing Datos', '3 Lic IA'];
+  // BUG-04: usa la constante exportada del módulo
 
   try {
     for (const career of CAREERS) {
@@ -108,7 +113,7 @@ export function getSkillTreeData(): { nodes: SkillNode[]; edges: SkillEdge[] } {
   const processedNodes = new Set<string>();
 
   try {
-    const CAREERS = ['1 Ing Sistemas', '2 Ing Datos', '3 Lic IA'];
+    // BUG-04: usa la constante exportada del módulo
 
     for (const career of CAREERS) {
       const careerDir = path.join(CONTENT_DIR_BASE, career);
@@ -127,7 +132,7 @@ export function getSkillTreeData(): { nodes: SkillNode[]; edges: SkillEdge[] } {
         for (const line of lines) {
           // Identificar sección
           if (line.startsWith('## Materias')) currentSection = 'materia';
-          else if (line.startsWith('## Tecnologías')) currentSection = 'tecnologia';
+          else if (line.startsWith('## Tecnolog')) currentSection = 'tecnologia';
           else if (line.startsWith('## Proyecto')) currentSection = 'proyecto';
 
           if (!currentSection) continue;
@@ -175,18 +180,20 @@ export function getSkillTreeData(): { nodes: SkillNode[]; edges: SkillEdge[] } {
                   currentProject = nodes.find(n => n.id === globalId) || null;
                 }
               } else if (currentProject && text.startsWith('Stack:')) {
-                // Crear Edge automático del proyecto hacia la tecnología
-                const techName = text.replace('Stack:', '').trim();
-                const globalTechId = `${career}-${techName}`;
-                
-                // Asegurarse de no duplicar aristas
-                const edgeId = `e-${currentProject.id}-${globalTechId}`;
-                if (!edges.some(e => e.id === edgeId)) {
-                  edges.push({
-                    id: edgeId,
-                    source: globalTechId, // Depende de la tech
-                    target: currentProject.id
-                  });
+                // Parsear el Stack como lista de tecnologías separadas por coma
+                // Antes: "Python, FastAPI" generaba UN edge con ID que nunca coincidía con ningún nodo
+                // Ahora: genera un edge individual por cada tecnología
+                const techNames = text.replace('Stack:', '').split(',').map(t => t.trim()).filter(Boolean);
+                for (const tn of techNames) {
+                  const globalTechId = `${career}-${tn}`;
+                  const edgeId = `e-${currentProject.id}-${globalTechId}`;
+                  if (!edges.some(e => e.id === edgeId)) {
+                    edges.push({
+                      id: edgeId,
+                      source: globalTechId, // tech → proyecto
+                      target: currentProject.id
+                    });
+                  }
                 }
               }
             }
@@ -198,5 +205,9 @@ export function getSkillTreeData(): { nodes: SkillNode[]; edges: SkillEdge[] } {
     console.error("Error leyendo archivos markdown:", error);
   }
 
-  return { nodes, edges };
+  // BUG-07: Filtrar edges cuyos nodos source/target no existen (evita edges colgados)
+  const nodeIds = new Set(nodes.map(n => n.id));
+  const cleanEdges = edges.filter(e => nodeIds.has(e.source) && nodeIds.has(e.target));
+
+  return { nodes, edges: cleanEdges };
 }

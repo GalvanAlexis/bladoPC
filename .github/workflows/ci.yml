@@ -1,0 +1,53 @@
+name: CI — Tests
+
+# Se ejecuta en todo PR que apunta a main,
+# y también en push directo a main (merge).
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: 🧪 Jest — Unit & Integration Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout del código
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Setup de Node.js (misma versión que producción)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      # 3. Instalar dependencias (respeta el lockfile para reproducibilidad)
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Lint (falla el pipeline si hay errores de ESLint)
+      - name: Lint
+        run: npm run lint
+
+      # 5. TypeScript — comprobación de tipos sin emitir archivos
+      - name: Type check
+        run: npx tsc --noEmit
+
+      # 6. Tests con Jest (falla el PR si algún test no pasa)
+      - name: Run tests
+        run: npm test -- --forceExit --ci --coverage
+
+      # 7. Subir el reporte de cobertura como artefacto descargable
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7

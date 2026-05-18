@@ -1,6 +1,6 @@
 # ISS-014 — Parsear multi-año dentro de cada carrera
 
-**Estado:** 🔴 OPEN  
+**Estado:** ✅ CLOSED  
 **Prioridad:** 🟡 Media  
 **Etiquetas:** `feature`, `data`, `markdown`  
 **Depende de:** ISS-009  
