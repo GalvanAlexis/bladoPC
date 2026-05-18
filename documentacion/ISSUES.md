@@ -10,10 +10,7 @@
 | ID | Título | Prioridad | Etiquetas |
 |---|---|---|---|
 | [ISS-016](./issues/ISS-016_vercel-deploy.md) | Deploy a Vercel | 🟢 Baja | `devops`, `deploy` |
-| [ISS-020](./issues/ISS-020_prisma-supabase-setup.md) | Setup Prisma + Supabase | 🔴 Alta | `database`, `prisma`, `supabase` |
-| [ISS-021](./issues/ISS-021_chat-history.md) | Chat History Persistence | 🔴 Alta | `database`, `chat`, `api` |
-| [ISS-022](./issues/ISS-022_visitor-analytics.md) | Visitor Analytics Tracking | 🟡 Media | `analytics`, `database` |
-| [ISS-023](./issues/ISS-023_privacy-notice.md) | Aviso de Privacidad | 🟢 Baja | `legal`, `ui` |
+| [ISS-024](./issues/ISS-024_filosofia-chat-context.md) | Conectar Carpeta Filosofía con Blado y Chat | 🔴 Alta | `chat`, `markdown`, `context`, `api` |
 
 ---
 
@@ -21,6 +18,10 @@
 
 | ID | Título | Fecha cierre |
 |---|---|---|
+| [ISS-020](./issues/ISS-020_prisma-supabase-setup.md) | Setup Prisma + Supabase | 2026-05-17 |
+| [ISS-021](./issues/ISS-021_chat-history.md) | Chat History Persistence | 2026-05-17 |
+| [ISS-022](./issues/ISS-022_visitor-analytics.md) | Visitor Analytics Tracking | 2026-05-17 |
+| [ISS-023](./issues/ISS-023_privacy-notice.md) | Aviso de Privacidad | 2026-05-17 |
 | [ISS-013](./issues/ISS-013_env-and-config.md) | Setup .env.local y documentar configuración | 2026-05-17 |
 | [ISS-001](./issues/ISS-001_setup-nextjs.md) | Setup Next.js App Router + TypeScript + Tailwind | 2026-05-08 |
 | [ISS-009](./issues/ISS-009_multi-career-parser.md) | Expandir parser para 3 carreras | 2026-05-09 |
@@ -68,9 +69,12 @@
   ISS-013 .env config ✅
   ISS-016 Vercel deploy
 
-[FASE 5 — Data Layer 🔴]
-  ISS-020 Prisma + Supabase setup (prerequisito)
-  ISS-021 Chat history persistence
-  ISS-022 Visitor analytics tracking
-  ISS-023 Privacy notice
+[FASE 5 — Data Layer ✅]
+  ISS-020 Prisma + Supabase setup ✅
+  ISS-021 Chat history persistence ✅
+  ISS-022 Visitor analytics tracking ✅
+  ISS-023 Privacy notice ✅
+
+[FASE 6 — Filosofía & Chat 🔴]
+  ISS-024 Conectar Carpeta Filosofía con Blado y Chat
 ```
