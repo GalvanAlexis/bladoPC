@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 import { getFullContextString } from '@/lib/markdown';
+import { prisma } from '@/lib/prisma';
 
 export async function POST(request: Request) {
   try {
@@ -12,7 +13,7 @@ export async function POST(request: Request) {
     }
 
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-    const { messages } = await request.json();
+    const { messages, sessionId } = await request.json();
 
     const contextString = getFullContextString(16000);
 
@@ -33,18 +34,54 @@ Instrucciones:
 4. Sé conciso pero con un excelente "roleplay".
 `;
 
-    // 2. Call the Groq API
+    // 1. Llamar a Groq
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages
       ],
-      model: 'llama3-70b-8192', // Using a fast/good model from Groq
+      model: 'llama3-70b-8192',
       temperature: 0.7,
       max_tokens: 512,
     });
 
     const reply = chatCompletion.choices[0]?.message?.content || "El abismo está silencioso hoy...";
+
+    // 2. Persistir en DB (fire-and-forget safe: no bloquea la respuesta al usuario si falla)
+    if (sessionId && process.env.DATABASE_URL) {
+      try {
+        // Obtener o crear la sesión de chat
+        const session = await prisma.chatSession.upsert({
+          where: { id: sessionId },
+          update: {},
+          create: { id: sessionId },
+        });
+
+        // Guardar el último mensaje del usuario
+        const lastUserMessage = messages[messages.length - 1];
+        if (lastUserMessage?.role === 'user') {
+          await prisma.message.create({
+            data: {
+              role: 'user',
+              content: lastUserMessage.content,
+              sessionId: session.id,
+            },
+          });
+        }
+
+        // Guardar la respuesta de Blado
+        await prisma.message.create({
+          data: {
+            role: 'assistant',
+            content: reply,
+            sessionId: session.id,
+          },
+        });
+      } catch (dbError) {
+        // Si la DB falla, el chat sigue funcionando. No crashear.
+        console.error('[DB] Error persisting chat message:', dbError);
+      }
+    }
 
     return NextResponse.json({ reply });
   } catch (error: unknown) {
