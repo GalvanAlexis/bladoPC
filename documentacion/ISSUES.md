@@ -10,7 +10,6 @@
 | ID | Título | Prioridad | Etiquetas |
 |---|---|---|---|
 | [ISS-016](./issues/ISS-016_vercel-deploy.md) | Deploy a Vercel | 🟢 Baja | `devops`, `deploy` |
-| [ISS-024](./issues/ISS-024_filosofia-chat-context.md) | Conectar Carpeta Filosofía con Blado y Chat | 🔴 Alta | `chat`, `markdown`, `context`, `api` |
 
 ---
 
@@ -18,6 +17,7 @@
 
 | ID | Título | Fecha cierre |
 |---|---|---|
+| [ISS-024](./issues/ISS-024_filosofia-chat-context.md) | Conectar Carpeta Filosofía con Blado y Chat | 2026-05-18 |
 | [ISS-020](./issues/ISS-020_prisma-supabase-setup.md) | Setup Prisma + Supabase | 2026-05-17 |
 | [ISS-021](./issues/ISS-021_chat-history.md) | Chat History Persistence | 2026-05-17 |
 | [ISS-022](./issues/ISS-022_visitor-analytics.md) | Visitor Analytics Tracking | 2026-05-17 |
@@ -75,6 +75,6 @@
   ISS-022 Visitor analytics tracking ✅
   ISS-023 Privacy notice ✅
 
-[FASE 6 — Filosofía & Chat 🔴]
-  ISS-024 Conectar Carpeta Filosofía con Blado y Chat
+[FASE 6 — Filosofía & Chat ✅]
+  ISS-024 Conectar Carpeta Filosofía con Blado y Chat ✅
 ```
