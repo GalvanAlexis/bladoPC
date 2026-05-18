@@ -211,3 +211,63 @@ export function getSkillTreeData(): { nodes: SkillNode[]; edges: SkillEdge[] } {
 
   return { nodes, edges: cleanEdges };
 }
+
+const FILOSOFIA_DIR_BASE = path.join(process.cwd(), 'content', 'Filosofia');
+
+/**
+ * Genera un string de contexto enriquecido de la carpeta Filosofia para la IA de Blado.
+ * Filtra de forma inteligente para no exceder el presupuesto de tokens.
+ */
+export function getFilosofiaContextString(maxChars = 8000): string {
+  const sections: string[] = [];
+
+  try {
+    if (!fs.existsSync(FILOSOFIA_DIR_BASE)) return "";
+    const files = fs.readdirSync(FILOSOFIA_DIR_BASE);
+
+    for (const file of files) {
+      const filePath = path.join(FILOSOFIA_DIR_BASE, file);
+      if (fs.statSync(filePath).isDirectory()) continue; // Evitar libros/ y subcarpetas
+
+      if (file.endsWith('.md')) {
+        const content = fs.readFileSync(filePath, 'utf8');
+        const lines = content.split('\n');
+
+        const relevantLines = lines.filter(line => {
+          const t = line.trim();
+          if (!t) return false;
+          if (t.startsWith('#')) return true; // Títulos
+          if (t.startsWith('>')) return true; // Citas / Lemas
+          if (t.startsWith('- **') || t.startsWith('* **')) return true; // Conceptos en negrita
+          if (t.startsWith('-') && t.length < 120) return true; // Viñetas cortas
+          return false;
+        });
+
+        if (relevantLines.length > 0) {
+          // Extraer nombre descriptivo legible (ej. "01-clean-architecture-solid.md" -> "Clean Architecture + SOLID")
+          const cleanName = file
+            .replace(/^\d+-/, '')
+            .replace('.md', '')
+            .replace(/-/g, ' ')
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+
+          sections.push(`=== Filosofía de Ingeniería: ${cleanName} ===`);
+          sections.push(...relevantLines);
+          sections.push('');
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error generando contexto filosófico:", error);
+    return "";
+  }
+
+  let result = sections.join('\n');
+  if (result.length > maxChars) {
+    const cutoff = result.lastIndexOf('\n', maxChars);
+    result = result.substring(0, cutoff > 0 ? cutoff : maxChars) + '\n... (contenido de filosofía truncado por longitud)';
+  }
+  return result;
+}
