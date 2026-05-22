@@ -1,81 +1,129 @@
 # ISS-016 — Deploy a Vercel
 
 **Estado:** 🔴 OPEN  
-**Prioridad:** 🟢 Baja  
+**Prioridad:** 🟡 Media  
 **Etiquetas:** `devops`, `deploy`  
-**Depende de:** ISS-013 (variables de entorno)  
+**Depende de:** ISS-013 ✅, ISS-020 ✅, ISS-021 ✅, ISS-022 ✅  
+**Branch:** `feature/ISS-016-vercel-deploy`
 
 ---
 
 ## Descripción
 
-El proyecto necesita un URL público para compartir con recruiters y tech leads. Vercel es la plataforma ideal para proyectos Next.js (integración nativa, serverless functions para `/api/chat`).
+Desplegar **Progresos-Academicos** en Vercel para obtener una URL pública compartible con recruiters y tech leads.
 
-## Pasos para el deploy
+Stack en producción:
+- **Next.js 16.2.6** — App Router, Server Components, API Routes
+- **Prisma 7 + `@prisma/adapter-pg`** — ORM con pool de conexiones serverless
+- **Supabase** — PostgreSQL en la nube (pooler para serverless)
+- **Groq SDK** — IA para el chat con Blado
 
-### 1. Verificar el build local primero
+---
+
+## Problemas detectados y resueltos
+
+### 1. `prisma/schema.prisma` sin `url` ni `directUrl` ✅ RESUELTO
+Sin estas declaraciones, `prisma generate` falla en el build de Vercel.
+
+**Fix aplicado:**
+```prisma
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+```
+
+### 2. Sin `postinstall` en `package.json` ✅ RESUELTO
+Vercel no sabía que debía correr `prisma generate` tras instalar dependencias.
+
+**Fix aplicado:**
+```json
+"postinstall": "prisma generate"
+```
+
+El flujo de build de Vercel es: `npm install` → `postinstall (prisma generate)` → `next build`.
+
+---
+
+## Pasos del deploy
+
+### 1. Verificar build local
 ```bash
 npm run build
-# Debe terminar sin errores TypeScript ni warnings críticos
+# Debe terminar sin errores TypeScript ni errores de Prisma
 ```
-
-> ⚠️ Verificar que no haya errores de Server Components importando módulos de cliente, o uso de `fs` en código de cliente.
 
 ### 2. Preparar el repositorio
-- [ ] Confirmar que `content/` está incluido en el repo (no en `.gitignore`)
-  - Los archivos `.md` son la fuente de datos → **DEBEN** estar en el repositorio
-- [ ] Confirmar que `public/` con los assets está commiteado
-- [ ] `.env.local` NO debe estar commiteado
+- [x] `content/` está en el repo (fuente de datos del Skill Tree)
+- [x] `public/` con sprites y fondos commiteado
+- [x] `.env.local` en `.gitignore` (no se commitea)
+- [x] `.env.local.example` como template documentado
 
-### 3. Configurar Vercel
+### 3. Conectar en Vercel Dashboard
 
-```bash
-# Opción A: Vercel CLI
-npx vercel
-
-# Opción B: Dashboard
-# 1. Ir a vercel.com
-# 2. "Add New Project" → Import Git Repository
-# 3. Seleccionar GalvanAlexis/Progresos-Academicos
-# 4. Framework: Next.js (detectado automático)
-# 5. Build Command: npm run build
-# 6. Output Directory: .next
-```
+1. Ir a [vercel.com](https://vercel.com) → **Add New Project**
+2. **Import Git Repository** → `GalvanAlexis/Progresos-Academicos` (público)
+3. Framework: **Next.js** (detectado automático)
+4. Build Command: `npm run build` (default)
+5. Output Directory: `.next` (default)
+6. **No** cambiar nada más — click **Deploy**
 
 ### 4. Configurar variables de entorno en Vercel
-En el dashboard de Vercel → Settings → Environment Variables:
-```
-GROQ_API_KEY = gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
 
-### 5. Verificar el deploy
+En **Vercel Dashboard → Settings → Environment Variables**, agregar:
 
-Checklist post-deploy:
-- [ ] La página carga en `https://[project].vercel.app`
-- [ ] Los backgrounds y sprites cargan correctamente
-- [ ] El diálogo de Blado funciona (scripted)
-- [ ] El chat con IA responde (POST a `/api/chat` funciona)
-- [ ] El Skill Tree se abre y muestra nodos
+| Variable | Valor | Environments |
+|---|---|---|
+| `GROQ_API_KEY` | `gsk_xxxxxxxxxxxx` | Production, Preview |
+| `DATABASE_URL` | `postgresql://postgres.[REF]:[PWD]@aws-0-sa-east-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1` | Production, Preview |
+| `DIRECT_URL` | `postgresql://postgres:[PWD]@db.[REF].supabase.co:5432/postgres` | Production, Preview |
 
-## Consideraciones especiales para Next.js con `fs`
+> ⚠️ Obtener `DATABASE_URL` y `DIRECT_URL` en:
+> **Supabase Dashboard → Settings → Database**
+> - `DATABASE_URL` → Transaction pooler URI (puerto 6543)
+> - `DIRECT_URL` → Direct connection URI (puerto 5432)
 
-La función `getSkillTreeData()` usa `fs.readFileSync`. En Vercel (serverless), el sistema de archivos es de solo lectura pero accesible si los archivos están en el bundle.
+### 5. Re-deploy tras configurar env vars
 
-```typescript
-// next.config.ts — verificar que los md están incluidos
-// No debería requerir configuración extra para archivos en /content
-```
+Vercel → **Deployments** → **Redeploy** (el primer deploy probablemente falle sin las vars).
 
-> ⚠️ Si hay problemas con `fs` en producción, la alternativa es usar `next.config.ts` para copiar los archivos al build output, o migrar a una solución basada en API estática.
+---
+
+## Checklist de verificación post-deploy
+
+- [ ] La página principal carga en `https://[proyecto].vercel.app`
+- [ ] Los fondos de caverna y sprite de Blado cargan correctamente
+- [ ] El diálogo de introducción de Blado se reproduce
+- [ ] El chat con IA (Groq) responde correctamente
+- [ ] El Skill Tree abre y muestra los nodos de las carreras
+- [ ] El historial de chat persiste entre recargas (Supabase)
+- [ ] Las analíticas de visitas registran en la DB (POST `/api/analytics`)
+- [ ] No hay errores `500` en las API routes
+
+---
 
 ## Criterios de aceptación
 
-- [ ] `npm run build` termina sin errores
-- [ ] El proyecto está en Vercel con URL público
-- [ ] `GROQ_API_KEY` configurada en Vercel
-- [ ] El chat de Blado funciona en producción
+- [ ] `npm run build` termina sin errores TypeScript
+- [ ] `prisma generate` corre en el build de Vercel (via `postinstall`)
+- [ ] URL pública accesible y funcional
+- [ ] Chat con Blado responde en producción
 - [ ] URL compartible para recruiters
+
+---
+
+## Notas técnicas
+
+### `fs` en Vercel (serverless)
+Los archivos `content/**/*.md` son leídos con `fs.readFileSync` en Server Components.
+En Vercel, el filesystem de solo lectura incluye todos los archivos del bundle — **esto funciona por defecto**, no requiere configuración extra en `next.config.ts`.
+
+### Prisma en serverless
+Se usa `PrismaPg` (`@prisma/adapter-pg`) con `pg.Pool` para compatibilidad con el entorno serverless de Vercel. El singleton en `globalThis` evita agotar las conexiones del pooler de Supabase durante el Hot Reload en desarrollo y entre invocaciones en producción.
+
+---
 
 ## Estimación
 
-~1-2 horas (incluyendo resolución de posibles problemas de build)
+~1.5–2 horas (incluyendo posibles problemas de build)
