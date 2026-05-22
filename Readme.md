@@ -1,47 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏔️ Progresos Académicos — Blado Cavern
 
-## Getting Started
+Portfolio interactivo en formato Visual Novel RPG que muestra el progreso académico de **Alexis Galván** a través de un Skill Tree gamificado, con IA integrada (Blado) y chat persistente.
 
-First, run the development server:
+> **Demo:** [progresos-academicos.vercel.app](https://progresos-academicos.vercel.app) *(próximamente)*
+
+---
+
+## 🎮 Features
+
+- **Visual Novel** — intro narrativa con sprites, fondos de caverna y diálogos tipográficos
+- **Skill Tree** — árbol de habilidades académicas por carrera (React Flow + Dagre auto-layout)
+- **Chat con Blado** — IA basada en Groq (LLaMA 3) con contexto enriquecido del portfolio
+- **Chat History** — historial de conversaciones persistido en Supabase
+- **Visitor Analytics** — tracking anónimo de visitas (país, dispositivo, referrer)
+- **Sección Filosofía** — ensayos y reflexiones personales integrados al contexto de la IA
+
+---
+
+## 🛠️ Stack
+
+| Área | Tecnología |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Lenguaje | TypeScript 5 |
+| Estilos | Tailwind CSS 4 |
+| ORM | Prisma 7 + `@prisma/adapter-pg` |
+| Base de datos | Supabase (PostgreSQL) |
+| IA / LLM | Groq SDK (LLaMA 3) |
+| Animaciones | Framer Motion |
+| Grafos | React Flow (@xyflow) + Dagre |
+| Testing | Jest + Testing Library |
+| Deploy | Vercel |
+
+---
+
+## 🚀 Correr localmente
+
+### Prerrequisitos
+- Node.js ≥ 20
+- Una API key de [Groq](https://console.groq.com/keys)
+- Una base de datos en [Supabase](https://supabase.com) (o PostgreSQL local)
+
+### Instalación
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# 1. Clonar el repositorio
+git clone https://github.com/GalvanAlexis/Progresos-Academicos.git
+cd Progresos-Academicos
 
-### Configuracion de variables de entorno
+# 2. Instalar dependencias (también corre prisma generate)
+npm install
 
-Antes de iniciar, configura tu API key de Groq para el chat con IA:
-
-```bash
+# 3. Configurar variables de entorno
 cp .env.local.example .env.local
-# Editar .env.local y agregar: GROQ_API_KEY=gsk_tu_api_key
+# Editar .env.local con tus credenciales (ver sección Variables de entorno)
+
+# 4. Correr el servidor de desarrollo
+npm run dev
 ```
 
-Obten tu API key en: https://console.groq.com/keys
+Abrir [http://localhost:3000](http://localhost:3000) en el navegador.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Variables de entorno
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Editar `.env.local` con los siguientes valores:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Chat con IA Blado
+GROQ_API_KEY=gsk_tu_api_key_de_groq
 
-## Learn More
+# Supabase — Transaction pooler (para Next.js serverless)
+DATABASE_URL="postgresql://postgres.[REF]:[PWD]@aws-0-sa-east-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1"
 
-To learn more about Next.js, take a look at the following resources:
+# Supabase — Directo (para migraciones con prisma migrate)
+DIRECT_URL="postgresql://postgres:[PWD]@db.[REF].supabase.co:5432/postgres"
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> Ver `.env.local.example` para el template completo con instrucciones.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Migraciones de base de datos
 
-## Deploy on Vercel
+```bash
+# Crear o actualizar tablas en Supabase
+npx prisma migrate dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Ver la DB en modo visual
+npx prisma studio
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🧪 Tests
+
+```bash
+npm test              # Correr todos los tests
+npm run test:watch    # Modo watch
+npm run test:coverage # Con reporte de cobertura
+```
+
+---
+
+## 🏗️ Estructura del proyecto
+
+```
+src/
+  app/          → Rutas y layouts (Next.js App Router)
+    api/
+      chat/     → POST /api/chat — Chat con Groq (LLaMA 3)
+      analytics/→ POST /api/analytics — Tracking de visitas
+  components/   → Componentes reutilizables (Visual Novel, Skill Tree, Chat)
+  lib/          → Clientes y utilidades (Prisma, Groq, Dagre, Markdown parser)
+
+content/        → Archivos .md con datos del Skill Tree por carrera y año
+prisma/         → Schema y migraciones de la base de datos
+documentacion/  → Issues (ISS-XXX), arquitectura y README interno
+public/         → Assets estáticos (sprites, fondos RPG, iconos)
+```
+
+---
+
+## 📋 Issues y roadmap
+
+Ver [`documentacion/ISSUES.md`](./documentacion/ISSUES.md) para el tracking completo de features y bugs.
+
+---
+
+## 👤 Autor
+
+**Alexis Galván** — [GitHub](https://github.com/GalvanAlexis)
