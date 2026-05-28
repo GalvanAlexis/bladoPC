@@ -49,10 +49,14 @@ async function skipIntro() {
 
 // ── Tests ─────────────────────────────────────────────────────────────────────
 
+beforeEach(() => {
+  sessionStorage.clear();
+});
+
 describe('AppContext — valores iniciales', () => {
-  it('muestra el CavernIntro al inicio', () => {
+  it('muestra el CavernIntro al inicio', async () => {
     renderWithProvider();
-    expect(screen.getByTestId('cavern-intro')).toBeInTheDocument();
+    expect(await screen.findByTestId('cavern-intro')).toBeInTheDocument();
   });
 
   it('oculta el intro al saltearlo y muestra los children', async () => {

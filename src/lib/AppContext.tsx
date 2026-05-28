@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import CavernIntro from '@/components/CavernIntro';
 
 interface AppContextValue {
@@ -24,17 +24,32 @@ export function useAppContext() {
 }
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
+  const [isMounted, setIsMounted] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
   const [particlesEnabled, setParticlesEnabled] = useState(true);
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
 
+  useEffect(() => {
+    setIsMounted(true);
+    if (sessionStorage.getItem('blado_intro_seen') === 'true') {
+      setShowIntro(false);
+    }
+  }, []);
+
   const handleFinish = useCallback(() => {
+    sessionStorage.setItem('blado_intro_seen', 'true');
     setShowIntro(false);
   }, []);
 
   const replayIntro = useCallback(() => {
+    sessionStorage.setItem('blado_intro_seen', 'false'); // Opcional, pero para consistencia
     setShowIntro(true);
   }, []);
+
+  // Evita hydration mismatch y parpadeos bruscos
+  if (!isMounted) {
+    return <div className="min-h-screen bg-[#050505]" />;
+  }
 
   if (showIntro) {
     return (
