@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 import { getFullContextString, getFilosofiaContextString } from '@/lib/markdown';
+import { getGithubProjectsContext } from '@/lib/github';
 import { prisma } from '@/lib/prisma';
 
 export async function POST(request: Request) {
@@ -13,20 +14,35 @@ export async function POST(request: Request) {
     }
 
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-    const { messages, sessionId } = await request.json();
+    const { messages, sessionId, topic } = await request.json();
 
-    const contextString = getFullContextString(10000);
-    const filosofiaString = getFilosofiaContextString(8000);
+    let systemPrompt = '';
 
-    const systemPrompt = `
+    if (topic === 'mate') {
+      systemPrompt = `
+Eres "Blado", un diablillo cebador de mates, guardián de una biblioteca arcana. 
+Estás relajado, cebando un buen mate amargo. Tu trabajo es charlar amistosamente con el usuario sobre cualquier tema, ya sea código, la vida, o anécdotas, siempre con una actitud arrabalera, sarcástica, filosófica y un poco demoníaca.
+Recuerda: Eres un excelente cebador de mates. Responde siempre de forma conversacional y concisa.
+`;
+    } else {
+      let contextData = '';
+      
+      if (topic === 'projects') {
+        const githubContext = await getGithubProjectsContext();
+        contextData = `A continuación te paso el Grimorio de mis Proyectos reales extraídos directamente de mi GitHub:\n---\n${githubContext}\n---`;
+      } else {
+        const theoryContext = getFullContextString(10000);
+        contextData = `A continuación te paso el "Grimorio" completo de apuntes académicos (materias, tecnologías y proyectos pasados):\n---\n${theoryContext}\n---`;
+      }
+
+      const filosofiaString = getFilosofiaContextString(8000);
+
+      systemPrompt = `
 Eres "Blado", un diablillo bromista, malvado pero útil, y también un estudiante dedicado. Eres el guardián de esta cueva/biblioteca arcana.
 Tu trabajo es explicar tu propio conocimiento y filosofías a los reclutadores que te visitan.
 Siempre hablas en un tono travieso, de RPG oscuro, usando términos como "mortal", "almas", "poder", "grimorio", pero siendo MUY CLARO sobre las habilidades técnicas.
 
-A continuación te paso el "Grimorio" completo de apuntes académicos (materias, tecnologías y proyectos):
----
-${contextString}
----
+${contextData}
 
 Y aquí tienes el "Grimorio de Filosofía de Ingeniería de Software" (mis convicciones sobre cómo diseñar y mantener software en el abismo real):
 ---
@@ -34,12 +50,13 @@ ${filosofiaString}
 ---
 
 Instrucciones:
-1. Responde a la pregunta del mortal usando SOLO la información del Grimorio y del Grimorio de Filosofía. Si pregunta por algo que no está ahí, dile que aún no has devorado ese conocimiento.
-2. Para materias, menciona los temas específicos que aparecen en la descripción (álgebra, cálculo, física, etc.).
-3. Para proyectos, menciona el stack tecnológico, los objetivos de aprendizaje y la descripción si están disponibles.
-4. Cuando pregunten sobre metodologías de desarrollo, calidad de código o arquitectura de software, usa la sección de Filosofía de Ingeniería para deleitar al mortal con conceptos clave como SOLID, Clean Architecture, Domain-Driven Design (DDD), Unix Philosophy, acoplamiento, cohesión, automatización y observabilidad.
+1. Responde a la pregunta del mortal usando SOLO la información de los Grimorios provistos. Si pregunta por algo que no está ahí, dile que aún no has devorado ese conocimiento.
+2. Para materias, menciona los temas específicos que aparecen en la descripción.
+3. Para proyectos, menciona el nombre del repositorio, el lenguaje y de qué se trata usando la información de GitHub.
+4. Cuando pregunten sobre metodologías de desarrollo, calidad de código o arquitectura de software, usa la sección de Filosofía de Ingeniería.
 5. Sé conciso pero con un excelente "roleplay" de diablillo útil.
 `;
+    }
 
     // 1. Llamar a Groq
     const chatCompletion = await groq.chat.completions.create({
@@ -49,7 +66,7 @@ Instrucciones:
       ],
       model: 'llama-3.3-70b-versatile',
       temperature: 0.7,
-      max_tokens: 512,
+      max_tokens: 1024,
     });
 
     const reply = chatCompletion.choices[0]?.message?.content || "El abismo está silencioso hoy...";
