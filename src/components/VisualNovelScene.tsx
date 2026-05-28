@@ -57,14 +57,6 @@ export default function VisualNovelScene({ scene, bladoPose, dialogVisible, onBl
                 alt="Blado"
                 className="object-contain max-h-full drop-shadow-[0_0_30px_rgba(220,38,38,0.4)]"
               />
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0, 1, 0] }}
-                transition={{ repeat: Infinity, duration: 2.5, delay: 1 }}
-                className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-xs text-gray-400 whitespace-nowrap font-mono"
-              >
-                Click para hablar conmigo, mortal...
-              </motion.span>
             </motion.button>
           )}
         </motion.div>

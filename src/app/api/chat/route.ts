@@ -47,7 +47,7 @@ Instrucciones:
         { role: 'system', content: systemPrompt },
         ...messages
       ],
-      model: 'llama3-70b-8192',
+      model: 'llama-3.3-70b-versatile',
       temperature: 0.7,
       max_tokens: 512,
     });
