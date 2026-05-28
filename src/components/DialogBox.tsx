@@ -66,7 +66,7 @@ export default function DialogBox({ speakerName, text, choices, onAskQuestion, i
         )}
 
         {/* Text */}
-        <div className="text-gray-200 text-sm sm:text-base md:text-lg min-h-[60px] md:min-h-[80px] mb-4">
+        <div className="text-gray-200 text-sm sm:text-base md:text-lg min-h-[60px] md:min-h-[80px] max-h-[40vh] overflow-y-auto pr-2 dialog-scrollbar mb-4">
           {displayedText}
           {isTyping && <span className="animate-pulse">|</span>}
         </div>
