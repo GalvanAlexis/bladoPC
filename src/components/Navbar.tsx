@@ -5,6 +5,7 @@
  * Botones: Intro (replay), Timba (próximamente), Cebar Mate (próximamente)
  */
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 interface NavbarProps {
   scene: 'cave' | 'library';
@@ -23,21 +24,24 @@ const NAV_BUTTONS = [
   {
     id: 'timba',
     label: 'Timba',
-    available: false,
-    title: 'Próximamente...',
+    available: true,
+    title: 'Ir a la Timba',
   },
   {
     id: 'cebar-mate',
     label: 'Cebar Mate',
-    available: false,
-    title: 'Próximamente...',
+    available: true,
+    title: 'Ir a Cebar Mate',
   },
 ];
 
 export default function Navbar({ scene, onReplayIntro, onToggleSidebar, sidebarOpen }: NavbarProps) {
+  const router = useRouter();
+
   const handleClick = (id: string) => {
     if (id === 'intro') onReplayIntro();
-    // timba y cebar-mate: próximamente, no hacen nada
+    if (id === 'timba') router.push('/timba');
+    if (id === 'cebar-mate') router.push('/cebar-mate');
   };
 
   return (

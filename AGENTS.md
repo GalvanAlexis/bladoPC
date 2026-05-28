@@ -36,7 +36,7 @@ Para cualquier tarea que involucre cambios en el código, el agente DEBE seguir 
 3. **Implementar:** Escribir el código o solucionar el bug.
 4. **Quality Gates:** Ejecutar rigurosamente los tests (`npm test`) y comprobar compilación (`npm run build`). AMBOS deben pasar (verde).
 5. **Commit:** Hacer commit siguiendo la convención semántica indicando el ISS.
-6. **Merge:** Volver a `master` y hacer merge de la rama feature (vía PR o fast-forward).
+6. **PR, Merge y Deploy:** Hacer push de los cambios al remoto en GitHub (`git push`). Todo PR y Merge DEBE reflejarse en el repositorio remoto (origin master) para disparar el CI/CD y el despliegue automático.
 7. **Memoria (Cierre):** Ejecutar `mem_session_summary` (y `mem_save` si es necesario) para registrar la resolución en Engram.
 
 ## Quality Gates por Defecto
