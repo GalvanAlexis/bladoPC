@@ -32,7 +32,7 @@ bienvenido a mi Caverna.
 
 — Yo, Blado, te guiaré a través de ella.`;
 
-const DURATION_MS = 28000; // 28s — velocidad cómoda de lectura
+const DURATION_MS = 27000; // 27s — velocidad cómoda de lectura
 
 // Genera partículas de brasa estáticas (posición aleatoria)
 function generateEmbers(count: number) {
@@ -117,7 +117,7 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
           <motion.div
             initial={{ y: "100vh", opacity: 0 }}
             animate={{
-              y: "-110%",
+              y: "-75%",
               opacity: [0, 1, 1, 0],
             }}
             transition={{
@@ -125,20 +125,20 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
               opacity: {
                 duration: DURATION_MS / 1000,
                 ease: "linear",
-                times: [0, 0.06, 0.88, 1],
+                times: [0, 0.05, 0.95, 1],
               },
             }}
             onAnimationComplete={() => finish("complete")}
             style={{
               width: "min(65%, 680px)",
               fontFamily: "'Courier New', Courier, monospace",
-              fontSize: "clamp(15px, 2vw, 22px)",
+              fontSize: "clamp(20px, 3vw, 30px)",
               lineHeight: 2,
-              color: "#cc4400",
-              textShadow: "0 0 18px rgba(200, 50, 0, 0.6)",
+              color: "#ff6b6b",
+              textShadow: "0 0 18px rgba(255, 107, 107, 0.6)",
               whiteSpace: "pre-wrap",
               textAlign: "center",
-              paddingBottom: "40vh", // espacio para que el texto desaparezca por arriba
+              paddingBottom: "10vh", // Menos padding para no tener tiempo vacío
             }}
           >
             {INTRO_TEXT}
