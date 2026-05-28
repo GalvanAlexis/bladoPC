@@ -2,7 +2,7 @@
 
 Portfolio interactivo en formato Visual Novel RPG que muestra el progreso académico de **Alexis Galván** a través de un Skill Tree gamificado, con IA integrada (Blado) y chat persistente.
 
-> **Demo:** [progresos-academicos.vercel.app](https://progresos-academicos.vercel.app) *(próximamente)*
+> **Demo:** [blado-cavern.vercel.app](https://blado-cavern.vercel.app) *(activo)*
 
 ---
 
