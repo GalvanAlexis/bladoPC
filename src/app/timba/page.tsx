@@ -1,24 +1,39 @@
-import Link from 'next/link';
+"use client";
 
-export default function TimbaPage() {
+import React, { useState } from 'react';
+import Navbar from '@/components/Navbar';
+import Sidebar from '@/components/Sidebar';
+import GameCarousel3D from '@/components/timba/GameCarousel3D';
+import GamePreviewPanel from '@/components/timba/GamePreviewPanel';
+import { GAMES } from '@/lib/games';
+
+export default function TimbaHubPage() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scene, setScene] = useState<'cave'|'library'>('cave');
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black font-mono px-4 text-center">
-      <div className="border border-crimson/50 p-8 rounded-lg shadow-[0_0_30px_rgba(220,38,38,0.3)] max-w-xl">
-        <h1 className="text-3xl font-bold text-crimson mb-4 uppercase tracking-widest drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]">
-          Timba Arcana
-        </h1>
-        <p className="text-gray-300 mb-8 leading-relaxed">
-          Los dados del destino aún se están tallando y las cartas se están pintando con tinta de demonio...
-          <br /><br />
-          <span className="text-toxic">Este módulo está en construcción.</span>
-        </p>
-        <Link 
-          href="/"
-          className="inline-block border border-toxic text-toxic px-6 py-2 rounded uppercase tracking-widest text-sm hover:bg-toxic/10 transition-colors"
-        >
-          Volver a la caverna
-        </Link>
+    <main className="relative w-screen h-screen overflow-hidden font-mono select-none bg-[#050505]">
+      <Navbar
+        scene={scene}
+        onReplayIntro={() => {}}
+        onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
+        sidebarOpen={sidebarOpen}
+      />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_20%,_black_100%)] pointer-events-none z-0" />
+      <div className="absolute inset-0 pt-14 z-10 flex flex-col md:flex-row pb-4">
+        <div className="w-full md:w-[40%] h-[200px] md:h-full flex-shrink-0 pt-4 md:pt-0">
+          <GameCarousel3D 
+            games={GAMES}
+            selectedIndex={selectedIndex}
+            onSelect={setSelectedIndex}
+          />
+        </div>
+        <div className="w-full md:w-[60%] h-[calc(100%-200px)] md:h-full px-4 md:pr-12 md:pl-0 flex-shrink-0 min-h-0">
+          <GamePreviewPanel game={GAMES[selectedIndex]} />
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
