@@ -1,5 +1,7 @@
 # ISS-030: Evitar repetición de Intro al volver al Inicio
 
+**Estado:** Completado / Cerrado
+
 ## Descripción
 Al navegar hacia otras páginas (como `/cebar-mate` o `/timba`) y hacer click en "Volver" (`href="/"`), la cinemática introductoria de la Caverna vuelve a reproducirse desde el principio. El comportamiento deseado es que la intro se reproduzca solamente en la carga inicial de la web o cuando se presione el botón explícito de "Intro" en el Navbar.
 
