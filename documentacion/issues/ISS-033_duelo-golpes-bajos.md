@@ -9,11 +9,11 @@
 
 ## Visión General
 
-**"Duelo con Golpes Bajos"** es el primer minijuego oficial de la Timba Arcana. Inspirado directamente en el sistema *Insult Sword Fighting* de *The Secret of Monkey Island* (LucasArts, 1990), es una batalla verbal de insultos entre el jugador y Blado, el guardián demoníaco de la Caverna.
+**"Duelo con Golpes Bajos"** es el primer minijuego oficial de la Timba Arcana. Inspirado directamente en el sistema _Insult Sword Fighting_ de _The Secret of Monkey Island_ (LucasArts, 1990), es una batalla verbal de insultos entre el jugador y Blado, el guardián demoníaco de la Caverna.
 
 La magia del juego no está en la acción sino en la **progresión cognitiva**: el jugador pierde, aprende, regresa, y la segunda partida es notablemente más fuerte que la primera. El loop es infinito e irresistible porque el jugador siente que está mejorando de verdad.
 
-> **Premisa narrativa:** Blado, harto de que mortales entren sin invitación a su caverna, decidió que el único modo de ganarse su respeto es derrotarlo verbalmente. Pero como es un diablillo tramposo, el sistema está *diseñado* para que nunca pierdas del todo y nunca ganes del todo.
+> **Premisa narrativa:** Blado, promete ayudar al usuario, si puede derrotarlo en un duelo de espadas. Pero como es un diablillo tramposo, el sistema está _diseñado_ para que nunca pierdas del todo y nunca ganes del todo.
 
 ---
 
@@ -25,21 +25,21 @@ Cada insulto es un objeto con los siguientes campos:
 
 ```ts
 interface DuelInsult {
-  id: string;                  // Identificador único, ej: "INS-001"
-  attacker: string;            // El insulto que lanza el atacante
-  correctResponse: string;     // La única respuesta que funciona
-  wrongResponses: string[];    // 3 respuestas incorrectas plausibles
-  category: InsultCategory;    // Para agrupar por temática
-  unlocked: boolean;           // Si el jugador ya conoce la respuesta correcta
+  id: string; // Identificador único, ej: "INS-001"
+  attacker: string; // El insulto que lanza el atacante
+  correctResponse: string; // La única respuesta que funciona
+  wrongResponses: string[]; // 3 respuestas incorrectas plausibles
+  category: InsultCategory; // Para agrupar por temática
+  unlocked: boolean; // Si el jugador ya conoce la respuesta correcta
 }
 
-type InsultCategory = 
-  | 'apariencia'    // Insultos sobre el físico del avatar
-  | 'inteligencia'  // Sobre la capacidad mental
-  | 'coraje'        // Cobardía, miedo
-  | 'habilidad'     // Torpeza, incompetencia
-  | 'linaje'        // Sobre los ancestros, familia
-  | 'existencia';   // Filosóficos, nihilistas (estilo Blado)
+type InsultCategory =
+  | "apariencia" // Insultos sobre el físico del avatar
+  | "inteligencia" // Sobre la capacidad mental
+  | "coraje" // Cobardía, miedo
+  | "habilidad" // Torpeza, incompetencia
+  | "linaje" // Sobre los ancestros, familia
+  | "existencia"; // Filosóficos, nihilistas (estilo Blado)
 ```
 
 ### Ejemplo de Insulto
@@ -74,10 +74,10 @@ Esta es la pieza más importante del juego. Imita exactamente la progresión de 
 ```ts
 interface PlayerKnowledge {
   // Insultos que el jugador puede LANZAR
-  knownInsults: Set<string>;       // IDs de insultos que puede usar
-  
+  knownInsults: Set<string>; // IDs de insultos que puede usar
+
   // Respuestas que el jugador puede DAR cuando Blado ataca
-  unlockedResponses: Set<string>;  // IDs cuya respuesta correcta ya conoce
+  unlockedResponses: Set<string>; // IDs cuya respuesta correcta ya conoce
 }
 ```
 
@@ -85,39 +85,54 @@ interface PlayerKnowledge {
 
 ### Cómo se desbloquean las respuestas
 
-**Regla de Oro:** Una respuesta se desbloquea cuando Blado te la usa en tu contra.
+**Regla de Oro:** Ver a Blado responder a tu ataque desbloquea esa respuesta en tu arsenal.
 
-**Flujo detallado:**
-1. Blado lanza el insulto `INS-005`.
-2. El jugador ve 4 opciones. 3 están disponibles para elegir; **la opción correcta aparece en gris con candado** `🔒`.
-3. El jugador elige una respuesta incorrecta → Blado gana ese punto.
-4. Blado dice su frase de victoria para ese insulto (ej: *"¡Jeje! La respuesta era: 'Al menos yo tengo cráneo...' ¡Aprende!"*).
-5. La respuesta correcta de `INS-005` **se desbloquea** en el inventario del jugador.
-6. En la **próxima partida**, ese insulto ya tiene 4 opciones seleccionables (la correcta ya no tiene candado).
+**Flujo detallado — Blado ataca al jugador:**
+
+1. Blado lanza el insulto `INS-005` (por primera vez).
+2. El jugador ve **3 opciones**, todas incorrectas. No hay ninguna señal visual de que falte algo.
+3. El jugador elige una → Blado gana ese punto y reacciona en personaje. Nada más.
+4. Sin embargo, silenciosamente, el sistema registra que el jugador **ya fue atacado con `INS-005`**: ese insulto pasa a `knownInsults`, disponible para que el jugador lo use en su propio turno de ataque.
+
+**Flujo detallado — El jugador ataca a Blado:**
+
+1. En su turno, el jugador usa `INS-005` (porque lo desbloqueó al recibirlo).
+2. Blado responde con la contraofensiva correcta (`INS-005.correctResponse`). El jugador la ve.
+3. El sistema registra que el jugador **vio la respuesta correcta a `INS-005`**: pasa a `unlockedResponses`.
+4. A partir de ahora, cuando Blado lance `INS-005`, el jugador verá **4 opciones** en lugar de 3. La correcta estará mezclada entre las incorrectas, sin ninguna distinción visual. El jugador tendrá que recordarla.
 
 ```
-Primera vez que Blado usa INS-005:
-  [ Opción A - incorrecta ] ← seleccionable
-  [ Opción B - incorrecta ] ← seleccionable
-  [ Opción C - incorrecta ] ← seleccionable
-  [ Opción D - CORRECTA 🔒] ← bloqueada, no seleccionable
+Primera vez que Blado usa INS-005 (respuesta no desbloqueada):
+  [ Opción A ]
+  [ Opción B ]
+  [ Opción C ]
+  (solo 3 opciones, todas incorrectas. El jugador no sabe que falta una.)
+  → Jugador falla → Blado gana el punto
+  → INS-005 entra en knownInsults del jugador (puede atacar con él)
 
-Blado gana ese punto y muestra la respuesta correcta.
-INS-005 pasa a unlockedResponses.
+El jugador usa INS-005 para atacar → Blado responde con la correcta
+  → INS-005 entra en unlockedResponses
 
-Segunda vez que Blado usa INS-005:
-  [ Opción A - incorrecta ] ← seleccionable
-  [ Opción B - incorrecta ] ← seleccionable
-  [ Opción C - incorrecta ] ← seleccionable
-  [ Opción D - CORRECTA  ] ← ¡ahora seleccionable! Jugador puede bloquear.
+Próxima vez que Blado usa INS-005:
+  [ Opción A ]
+  [ Opción B ]
+  [ Opción C ]
+  [ Opción D ]  ← apareció una nueva opción (la correcta, mezclada sin aviso)
+  → El jugador puede elegirla y ganar el punto... si la recuerda.
 ```
+
+> **Diseño intencional:** El jugador descubre solo que a veces hay 3 opciones y a veces 4. Nunca se le explica por qué. La sensación de "¡ah, apareció una respuesta nueva!" es la recompensa orgánica de la progresión.
 
 ### Cómo se desbloquean los insultos del jugador
 
-Cuando el jugador ataca, Blado responde. Si Blado usa una respuesta a tu insulto que aún no conocías → **aprendes esa contrarrespuesta**, y la próxima vez que la veas en un duelo, ya sabrás cómo bloquearla.
+El jugador empieza con **2 insultos base** en su arsenal. Los demás se desbloquean de forma simétrica:
 
-Esto genera el **ciclo virtuoso**:
-> Perder → Aprender → Volver → Ganar ese punto → Sentirse imparable.
+- Cuando **Blado lo ataca** con un insulto nuevo → el jugador **aprende ese insulto** y puede usarlo en su turno.
+- Cuando **el jugador usa** ese insulto y **Blado responde** → el jugador **aprende la respuesta correcta** para bloquearlo.
+
+Esto crea el ciclo virtuoso:
+
+> Recibir insulto nuevo → Aprenderlo → Atacar con él → Ver la respuesta de Blado → Aprender la respuesta → La próxima vez tener 4 opciones y poder bloquearlo.
 
 ---
 
@@ -137,11 +152,12 @@ haya conseguido ni uno, Blado "falla" un insulto, dejando al jugador ganar ese p
 ```
 
 **¿Cómo se implementa "fallar"?**
+
 - Blado elige una respuesta incorrecta intencionalmente al bloquear un ataque del jugador.
 - Acompañado de una frase narrativa que lo justifica en personaje:
-  - *"Espera... ¿qué iba a decir yo? Me distrajeron las llamas del foso..."*
-  - *"Mmm... este mate me está nublando el ingenio..."*
-  - *"Bah, te regalo ese punto, mortal. No vaya a ser que se me acabe la diversión."*
+  - _"Espera... ¿qué iba a decir yo? Me distrajeron las llamas del foso..."_
+  - _"Mmm... este mate me está nublando el ingenio..."_
+  - _"Bah, te regalo ese punto, mortal. No vaya a ser que se me acabe la diversión."_
 
 **El límite de la confusión:** Blado solo puede "confundirse" una vez por duelo si la diferencia es de 3 puntos, y una segunda vez si llega a 5 puntos consecutivos. **Nunca se confunde cuando le falta solo un punto para ganar el duelo.**
 
@@ -160,7 +176,7 @@ Blado: 4/4 → siempre gana el punto definitivo
 
 ### Frase final de Blado (derrota del jugador)
 
-> *"Jeje... buen duelo, mortal. No fue tan patético como esperaba. Intenta de nuevo... seguro aprendiste cosas nuevas."*
+> _"Jeje... buen duelo, mortal. No fue tan patético como esperaba. Intenta de nuevo... seguro aprendiste cosas nuevas."_
 
 Esta frase se muestra con animación dramática, con Blado posando victorioso.
 
@@ -177,18 +193,18 @@ Antes del primer duelo, el jugador pasa por una pantalla de creación de persona
 ```ts
 interface AvatarConfig {
   name: string;
-  
+
   // Cabeza y rostro
-  skinTone: SkinTone;       // 6 tonos de piel
-  hairStyle: HairStyle;     // 8 estilos (rapado, largo, rulos, mohawk, gorra...)
-  hairColor: HairColor;     // 10 colores (rubio, negro, pelirrojo, azul...)
+  skinTone: SkinTone; // 6 tonos de piel
+  hairStyle: HairStyle; // 8 estilos (rapado, largo, rulos, mohawk, gorra...)
+  hairColor: HairColor; // 10 colores (rubio, negro, pelirrojo, azul...)
   faceFeature: FaceFeature; // 5 opciones (cicatriz, parche pirata, anteojos, tatuaje, ninguno)
-  expression: Expression;   // 3 expresiones base (serio, sonriente, intimidante)
+  expression: Expression; // 3 expresiones base (serio, sonriente, intimidante)
 
   // Cuerpo / Ropa
-  outfit: Outfit;           // 6 outfits (pirata, casual, formal, rockero, medieval, ninja)
-  outfitColor: string;      // Color principal del outfit (hex)
-  accessory: Accessory;     // 5 accesorios (sombrero pirata, espada, bastón, ninguno...)
+  outfit: Outfit; // 6 outfits (pirata, casual, formal, rockero, medieval, ninja)
+  outfitColor: string; // Color principal del outfit (hex)
+  accessory: Accessory; // 5 accesorios (sombrero pirata, espada, bastón, ninguno...)
 }
 ```
 
@@ -276,12 +292,12 @@ Una pantalla adicional que muestra el "Grimorio de Golpes Bajos": todas las resp
 
 ```ts
 interface PlayerProgress {
-  unlockedResponses: string[];   // IDs desbloqueados
-  totalInsults: number;          // Total en el juego
-  totalResponses: number;        // Total de respuestas posibles
+  unlockedResponses: string[]; // IDs desbloqueados
+  totalInsults: number; // Total en el juego
+  totalResponses: number; // Total de respuestas posibles
   duelsPlayed: number;
-  duelsLost: number;             // Siempre = duelsPlayed (jeje)
-  bestRound: number;             // Máximo de puntos conseguidos en un duelo
+  duelsLost: number; // Siempre = duelsPlayed (jeje)
+  bestRound: number; // Máximo de puntos conseguidos en un duelo
   avatarConfig: AvatarConfig;
 }
 ```
@@ -295,14 +311,14 @@ La colección se guarda en `localStorage` y persiste entre sesiones.
 Todo el progreso se guarda en `localStorage` bajo la clave `duelo_golpes_bajos`:
 
 ```ts
-const STORAGE_KEY = 'duelo_golpes_bajos';
+const STORAGE_KEY = "duelo_golpes_bajos";
 
 interface PersistedDuelState {
   playerName: string;
   avatar: AvatarConfig;
   knowledge: {
-    unlockedResponses: string[];  // IDs
-    knownInsults: string[];       // IDs
+    unlockedResponses: string[]; // IDs
+    knownInsults: string[]; // IDs
   };
   stats: {
     duelsPlayed: number;
@@ -324,7 +340,7 @@ src/components/timba/duelo/
   AvatarRenderer.tsx          → Composición SVG de capas del avatar
   DuelArena.tsx               → Pantalla del duelo en sí
   InsultCard.tsx              → Burbuja que muestra el insulto activo
-  ResponseOptions.tsx         → Los 4 botones de respuesta (uno puede estar bloqueado)
+  ResponseOptions.tsx         → 3 o 4 botones de respuesta según el progreso del jugador
   ScoreBoard.tsx              → Marcador de puntos (X – X)
   DuelResult.tsx              → Pantalla de derrota con frase final de Blado
   ResponseCollection.tsx      → Grimorio de respuestas desbloqueadas
@@ -349,37 +365,52 @@ public/avatar/
 function selectBladoInsult(
   availableInsults: DuelInsult[],
   usedThisRound: Set<string>,
-  playerKnowledge: PlayerKnowledge
-): DuelInsult
+  playerKnowledge: PlayerKnowledge,
+): DuelInsult;
 
 // Determina si Blado debe "confundirse" en esta ronda
 function shouldBladoConfuse(
   bladoScore: number,
   playerScore: number,
-  confusionCount: number,       // Veces que ya se confundió en este duelo
-  roundsToWin: number           // Puntos que le faltan a Blado para ganar
-): boolean
+  confusionCount: number, // Veces que ya se confundió en este duelo
+  roundsToWin: number, // Puntos que le faltan a Blado para ganar
+): boolean;
 
 // Evalúa la respuesta del jugador
 function evaluatePlayerResponse(
   insultId: string,
   chosenResponseId: string,
-  allInsults: DuelInsult[]
-): { correct: boolean; correctResponse: string }
+  allInsults: DuelInsult[],
+): { correct: boolean; correctResponse: string };
 
-// Construye las 4 opciones de respuesta para un insulto,
-// teniendo en cuenta qué respuestas ya desbloqueó el jugador
+// Construye las opciones de respuesta para un insulto.
+// Si la respuesta correcta NO está desbloqueada → devuelve 3 opciones (todas incorrectas).
+// Si la respuesta correcta SÍ está desbloqueada → devuelve 4 opciones (mezcladas aleatoriamente).
+// La UI NO recibe ninguna señal de cuántas opciones "debería" haber.
 function buildResponseOptions(
   insult: DuelInsult,
-  playerKnowledge: PlayerKnowledge
-): ResponseOption[]
+  playerKnowledge: PlayerKnowledge,
+): ResponseOption[];
 
 interface ResponseOption {
   id: string;
   text: string;
-  locked: boolean;     // Si está bloqueada (no seleccionable)
-  isCorrect: boolean;  // Solo se usa internamente para validar
+  isCorrect: boolean; // Solo se usa internamente al evaluar la respuesta, nunca expuesto a la UI
 }
+
+// Registra el efecto secundario de que Blado atacó con un insulto:
+// agrega el insulto a knownInsults del jugador (puede usarlo en su turno)
+function onBladoAttacked(
+  insultId: string,
+  knowledge: PlayerKnowledge,
+): PlayerKnowledge;
+
+// Registra el efecto secundario de que el jugador vio a Blado responder:
+// agrega la respuesta a unlockedResponses del jugador
+function onPlayerWitnessedBladoResponse(
+  insultId: string,
+  knowledge: PlayerKnowledge,
+): PlayerKnowledge;
 ```
 
 ---
@@ -388,65 +419,71 @@ interface ResponseOption {
 
 ### Pack A — Los que usa Blado al atacar (7)
 
-| ID | Insulto de Blado |
-|---|---|
-| INS-001 | ¡Tus respuestas son tan vacías como tu cráneo! |
-| INS-002 | ¡He visto estatuas de sal con más carisma que vos! |
-| INS-003 | ¡Debería cobrar entrada por dejarte escuchar mis insultos! |
-| INS-004 | ¡Tus ancestros deben estar avergonzados de haberse reproducido! |
-| INS-005 | ¡Peleas con la misma gracia que un mate sin yerba! |
-| INS-006 | ¡En el infierno, tu nivel de amenaza me daría cosquillas! |
+| ID      | Insulto de Blado                                                         |
+| ------- | ------------------------------------------------------------------------ |
+| INS-001 | ¡Tus respuestas son tan vacías como tu cráneo!                           |
+| INS-002 | ¡He visto estatuas de sal con más carisma que vos!                       |
+| INS-003 | ¡Debería cobrar entrada por dejarte escuchar mis insultos!               |
+| INS-004 | ¡Tus ancestros deben estar avergonzados de haberse reproducido!          |
+| INS-005 | ¡Peleas con la misma gracia que un mate sin yerba!                       |
+| INS-006 | ¡En el infierno, tu nivel de amenaza me daría cosquillas!                |
 | INS-007 | ¡Si el coraje fuese agua, no te alcanzaría ni para secarte las lágrimas! |
 
 ### Pack A — Respuestas correctas (las que aprende el jugador)
 
-| ID | Respuesta correcta |
-|---|---|
-| INS-001 | Al menos el mío no se derritió con el primer mate. |
-| INS-002 | Y vos tenés el doble de ego con la mitad de razón para tenerlo. |
+| ID      | Respuesta correcta                                                                     |
+| ------- | -------------------------------------------------------------------------------------- |
+| INS-001 | Al menos el mío no se derritió con el primer mate.                                     |
+| INS-002 | Y vos tenés el doble de ego con la mitad de razón para tenerlo.                        |
 | INS-003 | Gracias por la bienvenida, ¿también ofrecés descuentos para veteranos de tus fracasos? |
-| INS-004 | Los míos al menos existieron fuera de una pesadilla de azufre. |
-| INS-005 | Por eso vengo a que me enseñes, diablillo de pacotilla. |
-| INS-006 | Las cosquillas son lo único que lograrías causar en cualquier plano. |
-| INS-007 | Prefiero ahogarme en cobardía que flotar en tu soberbia. |
+| INS-004 | Los míos al menos existieron fuera de una pesadilla de azufre.                         |
+| INS-005 | Por eso vengo a que me enseñes, diablillo de pacotilla.                                |
+| INS-006 | Las cosquillas son lo único que lograrías causar en cualquier plano.                   |
+| INS-007 | Prefiero ahogarme en cobardía que flotar en tu soberbia.                               |
 
 ### Pack B — Insultos del jugador (cuando es el turno de atacar)
 
 El jugador también puede lanzar insultos cuando gana el turno. Estos tienen sus propias respuestas correctas de Blado (que el jugador también aprende para anticipar):
 
-| ID | Insulto del Jugador | Respuesta de Blado |
-|---|---|---|
-| ATK-001 | ¡Sos tan chico que hasta tu sombra te da compasión! | ¡Mi sombra gobierna reinos que vos ni imaginarías, mortal! |
-| ATK-002 | ¡Con esa cara tuya, el espejo cobra seguro! | ¡Los espejos explotan de envidia al verme, ignorante! |
-| ATK-003 | ¡Tus chistes son tan viejos que tienen moho! | ¡Son tan clásicos que volverán a ponerse de moda cuando vos ya no estés! |
-| ATK-004 | ¡Hasta las llamas del infierno te esquivan! | ¡Me las reservo para ocasiones especiales, como este insulto mediocre! |
-| ATK-005 | ¡Leí libros con más personalidad que vos! | ¡Por lo menos los libros tienen algo que decir, cosa que vos claramente no! |
-| ATK-006 | ¡Sos tan predecible que ya sé lo que vas a decir! | ¡Entonces ya sabrás que vas a perder, y sin embargo acá seguís! |
-| ATK-007 | ¡Blado el guardián... ¿de qué? ¿Del polvo? | ¡Del polvo que quedarás vos cuando te aplaste mi ingenio! |
+| ID      | Insulto del Jugador                                 | Respuesta de Blado                                                          |
+| ------- | --------------------------------------------------- | --------------------------------------------------------------------------- |
+| ATK-001 | ¡Sos tan chico que hasta tu sombra te da compasión! | ¡Mi sombra gobierna reinos que vos ni imaginarías, mortal!                  |
+| ATK-002 | ¡Con esa cara tuya, el espejo cobra seguro!         | ¡Los espejos explotan de envidia al verme, ignorante!                       |
+| ATK-003 | ¡Tus chistes son tan viejos que tienen moho!        | ¡Son tan clásicos que volverán a ponerse de moda cuando vos ya no estés!    |
+| ATK-004 | ¡Hasta las llamas del infierno te esquivan!         | ¡Me las reservo para ocasiones especiales, como este insulto mediocre!      |
+| ATK-005 | ¡Leí libros con más personalidad que vos!           | ¡Por lo menos los libros tienen algo que decir, cosa que vos claramente no! |
+| ATK-006 | ¡Sos tan predecible que ya sé lo que vas a decir!   | ¡Entonces ya sabrás que vas a perder, y sin embargo acá seguís!             |
+| ATK-007 | ¡Blado el guardián... ¿de qué? ¿Del polvo?          | ¡Del polvo que quedarás vos cuando te aplaste mi ingenio!                   |
 
 ---
 
 ## Expansión Futura (v2+)
 
 ### Nuevos packs de insultos
+
 El juego fue diseñado para escalar fácilmente. Se puede agregar un `Pack C`, `Pack D`, etc., con nuevas categorías temáticas o eventos especiales (ej: "Pack de Halloween", "Pack Universitario" con insultos académicos).
 
 ### Modos de juego adicionales
+
 - **Modo Velocidad:** El jugador tiene un timer por respuesta. Sin timer en el modo base.
 - **Modo Torneo:** Enfrentarse a 3 personajes distintos (no solo Blado) con pools de insultos diferentes.
 - **Modo Creador:** El jugador puede proponer nuevos insultos que se someten a votación.
 
 ### Multijugador (muy largo plazo)
+
 - Modo 1vs1 contra otro visitante del sitio en tiempo real (WebSockets).
 - El sistema de insultos y respuestas permanece igual, pero el "Blado" que falla estratégicamente es reemplazado por la IA del oponente.
 
 ### Avatares expandidos
+
 - Más capas: accesorios faciales, mochilas, efectos de aura.
 - Desbloqueos por progresión: después de X partidas, se desbloquea un outfit nuevo.
 - Export del avatar como imagen compartible.
 
 ### Persistencia en base de datos
+
 Migrar de `localStorage` a Supabase para:
+
 - Rankings globales (mejor puntaje por duelo).
 - Tabla de los que desbloquearon todos los insultos.
 - Guardar el progreso entre dispositivos.
@@ -464,7 +501,7 @@ Migrar de `localStorage` a Supabase para:
 3. **¿Timer por respuesta?** Para agregar tensión, ¿querés que el jugador tenga un límite de tiempo para elegir la respuesta?  
    → Confirmación pendiente.
 
-4. **¿El nombre del personaje se usa en los insultos?** Blado podría personalizar sus insultos con el nombre del usuario: *"¡Alexis, tus respuestas son tan vacías..."*  
+4. **¿El nombre del personaje se usa en los insultos?** Blado podría personalizar sus insultos con el nombre del usuario: _"¡Alexis, tus respuestas son tan vacías..."_  
    → Sería mucho más inmersivo.
 
 5. **¿Sonidos/música?** ¿Querés efectos de sonido para la espada, aplausos, etc.?
