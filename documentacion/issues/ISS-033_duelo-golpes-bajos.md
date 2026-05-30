@@ -34,12 +34,12 @@ interface DuelInsult {
 }
 
 type InsultCategory =
-  | "apariencia" // Insultos sobre el físico del avatar
   | "inteligencia" // Sobre la capacidad mental
   | "coraje" // Cobardía, miedo
   | "habilidad" // Torpeza, incompetencia
   | "linaje" // Sobre los ancestros, familia
-  | "existencia"; // Filosóficos, nihilistas (estilo Blado)
+  | "existencia" // Filosóficos, nihilistas (estilo Blado)
+  | "politica"; // a favor de Milei y en contra de los Kukas;
 ```
 
 ### Ejemplo de Insulto
@@ -148,35 +148,30 @@ Para que la experiencia sea justa y no frustrante, Blado tiene un mecanismo de *
 
 ```
 Regla de confusión: Si Blado lleva 3 puntos seguidos sin que el jugador
-haya conseguido ni uno, Blado "falla" un insulto, dejando al jugador ganar ese punto.
+haya conseguido ni uno, Blado "falla" un insulto, dejando al jugador ganar los siguientes  dos puntos. Blado pierde hasta quedar 3-3.
 ```
 
 **¿Cómo se implementa "fallar"?**
 
-- Blado elige una respuesta incorrecta intencionalmente al bloquear un ataque del jugador.
-- Acompañado de una frase narrativa que lo justifica en personaje:
-  - _"Espera... ¿qué iba a decir yo? Me distrajeron las llamas del foso..."_
-  - _"Mmm... este mate me está nublando el ingenio..."_
-  - _"Bah, te regalo ese punto, mortal. No vaya a ser que se me acabe la diversión."_
+- Blado elige una de las respuestas incorrectas al azar, pero intencionalmente al bloquear un ataque del jugador.
+- pierde el punto sin levantar sospecha, para no frustrar al jugador.
 
-**El límite de la confusión:** Blado solo puede "confundirse" una vez por duelo si la diferencia es de 3 puntos, y una segunda vez si llega a 5 puntos consecutivos. **Nunca se confunde cuando le falta solo un punto para ganar el duelo.**
+**El límite de la confusión:** Blado puede "confundirse" pero nunca perder el duelo. Si la diferencia es de 3 puntos, se confunde y pierde el punto. Pierde hasta quedar 3-3 y luego gana el ultimo punto **siempre**. Esta mecanica se activa solo si blado gana los primeros 3 puntos seguidos.
 
 ```
-Ejemplo de partida (al mejor de 7):
+Ejemplo de partida (al mejor de 7 insultos):
 Blado: 1 | Jugador: 0
 Blado: 2 | Jugador: 0
 Blado: 3 | Jugador: 0  ← "Se confunde"
-Blado: 3 | Jugador: 1  ← Jugador gana ese punto
-Blado: 4 | Jugador: 1
-Blado: 5 | Jugador: 1
-Blado: 5 | Jugador: 2  ← 5 consecutivos sin punto (3+2), se confunde por segunda vez
-...
-Blado: 4/4 → siempre gana el punto definitivo
+Blado: 3 | Jugador: 1  ← Jugador gana 1er punto
+Blado: 3 | Jugador: 2  ← Jugador gana 2do punto
+Blado: 3 | Jugador: 3  ← Jugador gana 3er punto
+Blado: 4 | Jugador: 3  ← Blado gana el ultimo punto siempre.
 ```
 
 ### Frase final de Blado (derrota del jugador)
 
-> _"Jeje... buen duelo, mortal. No fue tan patético como esperaba. Intenta de nuevo... seguro aprendiste cosas nuevas."_
+> _"Jeje... buen duelo, mortal. ¿Ya quieres irte con mamá? Intenta de nuevo... seguro aprendiste cosas nuevas."_
 
 Esta frase se muestra con animación dramática, con Blado posando victorioso.
 
@@ -202,9 +197,7 @@ interface AvatarConfig {
   expression: Expression; // 3 expresiones base (serio, sonriente, intimidante)
 
   // Cuerpo / Ropa
-  outfit: Outfit; // 6 outfits (pirata, casual, formal, rockero, medieval, ninja)
-  outfitColor: string; // Color principal del outfit (hex)
-  accessory: Accessory; // 5 accesorios (sombrero pirata, espada, bastón, ninguno...)
+  outfit: Outfit; // 9 outfits (pirata, espartano, vikingo, rockero, caballero medieval, ninja, samurai, gaucho criollo, Lord Ingles )
 }
 ```
 
@@ -270,7 +263,6 @@ El componente `AvatarRenderer.tsx` recibe `AvatarConfig` y apila las capas con `
 │  │ A) [Opción incorrecta]             │                                 │
 │  │ B) [Opción incorrecta]             │                                 │
 │  │ C) [Opción incorrecta]             │                                 │
-│  │ D) [🔒 Bloqueada - por aprender]   │                                 │
 │  └─────────────────────────────────────┘                                 │
 └──────────────────────────────────────────────────────────────────────────┘
          │
@@ -286,46 +278,71 @@ El componente `AvatarRenderer.tsx` recibe `AvatarConfig` y apila las capas con `
 
 ---
 
-## La Colección de Respuestas (Pantalla adicional)
+## La Colección de Trofeos (Pantalla adicional)
 
-Una pantalla adicional que muestra el "Grimorio de Golpes Bajos": todas las respuestas que el jugador ha desbloqueado hasta el momento. Funciona como incentivo de colección.
+Una pantalla adicional que muestra el "Reliquias Invaluables": Son medallas, copas, certificados, que se muestran al usuario con una breve descripcion de lo necesario para desbloquearlo. ej: ganarle 5 veces a Blado, Ganarle 4-0 a Blado, etc. Funciona como incentivo de colección, pero como es imposible ganarle a blado, el usuario nunca los podra obtener. Blado se burla de esto con frases como: "Ja! No mereces estas reliquias, mortal".
 
 ```ts
-interface PlayerProgress {
-  unlockedResponses: string[]; // IDs desbloqueados
-  totalInsults: number; // Total en el juego
-  totalResponses: number; // Total de respuestas posibles
+interface Trophy {
+  id: string;
+  name: string;              // ej: "Golpe Limpio"
+  description: string;       // ej: "Ganarle 5 veces a Blado"
+  bladoMockLine: string;     // ej: "¡Ja! No mereces esta reliquia, mortal"
+  unlocked: false;           // siempre false — imposible de ganar
+}
+
+interface PlayerStats {
   duelsPlayed: number;
-  duelsLost: number; // Siempre = duelsPlayed (jeje)
-  bestRound: number; // Máximo de puntos conseguidos en un duelo
-  avatarConfig: AvatarConfig;
+  bestScore: number;         // Máximo de puntos conseguidos en un duelo (máximo: 3)
 }
 ```
 
-La colección se guarda en `localStorage` y persiste entre sesiones.
+Los trofeos se muestran como vitrinas vacías con la descripción del requisito. Blado aparece con una frase burlona al pasar el cursor sobre cualquiera de ellos. La colección es **persistente** (se guarda en `localStorage`) ya que es independiente de la sesión de duelo.
 
 ---
 
 ## Persistencia de Estado
 
-Todo el progreso se guarda en `localStorage` bajo la clave `duelo_golpes_bajos`:
+El estado del juego se divide en **dos capas con ciclos de vida distintos**:
+
+### Capa 1 — Solo Avatar y Stats (localStorage, permanente)
+
+Se guarda en `localStorage` bajo la clave `duelo_avatar`. **Persiste entre sesiones y navegaciones.**
 
 ```ts
-const STORAGE_KEY = "duelo_golpes_bajos";
+const AVATAR_STORAGE_KEY = "duelo_avatar";
 
-interface PersistedDuelState {
-  playerName: string;
-  avatar: AvatarConfig;
-  knowledge: {
-    unlockedResponses: string[]; // IDs
-    knownInsults: string[]; // IDs
-  };
+interface PersistedAvatarState {
+  avatar: AvatarConfig;      // Configuración del avatar del jugador
   stats: {
-    duelsPlayed: number;
-    bestScore: number;
+    duelsPlayed: number;     // Acumulativo histórico
+    bestScore: number;       // Máximo de puntos en un duelo (histórico)
   };
 }
 ```
+
+- El avatar **siempre puede modificarse**: hay un botón "Editar Avatar" accesible tanto desde la pantalla de inicio del juego como desde el propio duelo (menú pausado).
+- Al editar el avatar, se redirige al `AvatarCreator` precargado con la config actual y se regresa al mismo punto.
+
+### Capa 2 — Progresión del duelo (estado en memoria, efímero)
+
+El conocimiento del jugador (`knownInsults` y `unlockedResponses`) **vive únicamente en el estado React** durante la sesión del duelo. **Se pierde al salir de la sala.**
+
+```ts
+// Estado en memoria (useState / useReducer), NO en localStorage
+interface SessionDuelState {
+  knowledge: {
+    knownInsults: string[];       // Insultos desbloqueados en esta sesión
+    unlockedResponses: string[];  // Respuestas desbloqueadas en esta sesión
+  };
+  bladoScore: number;
+  playerScore: number;
+  confusionActivated: boolean;
+  usedInsultsThisRound: string[];
+}
+```
+
+> **Diseño intencional:** Al abandonar `/timba/duelo-golpes-bajos` (volver al Hub, al Home, o cerrar la pestaña), la progresión vuelve a cero. Esto refuerza el loop: el jugador sabe que si quiere aprender más, **tiene que quedarse en el duelo**. La presión narrativa queda justificada en personaje: *"Si abandonas mi sala, mortal, borrará de tu mente todo lo que aprendiste."*
 
 ---
 
