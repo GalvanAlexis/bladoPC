@@ -237,7 +237,7 @@ El componente `AvatarRenderer.tsx` recibe `AvatarConfig` y apila las capas con `
   ▼
 ┌──────────────────────┐
 │  PANTALLA DE INICIO  │
-│  "El Duelo Arcano"   │
+│  "Duelo con golpes bajos"   │
 │  [Nuevo Duelo]       │
 │  [Cambiar Avatar]    │
 └──────────────────────┘
@@ -285,19 +285,19 @@ Una pantalla adicional que muestra el "Reliquias Invaluables": Son medallas, cop
 ```ts
 interface Trophy {
   id: string;
-  name: string;              // ej: "Golpe Limpio"
-  description: string;       // ej: "Ganarle 5 veces a Blado"
-  bladoMockLine: string;     // ej: "¡Ja! No mereces esta reliquia, mortal"
-  unlocked: false;           // siempre false — imposible de ganar
+  name: string; // ej: "Golpe Limpio"
+  description: string; // ej: "Ganarle 5 veces a Blado"
+  bladoMockLine: string; // ej: "¡Ja! No mereces esta reliquia, mortal"
+  unlocked: false; // siempre false — imposible de ganar
 }
 
 interface PlayerStats {
   duelsPlayed: number;
-  bestScore: number;         // Máximo de puntos conseguidos en un duelo (máximo: 3)
+  bestScore: number; // Máximo de puntos conseguidos en un duelo (máximo: 3)
 }
 ```
 
-Los trofeos se muestran como vitrinas vacías con la descripción del requisito. Blado aparece con una frase burlona al pasar el cursor sobre cualquiera de ellos. La colección es **persistente** (se guarda en `localStorage`) ya que es independiente de la sesión de duelo.
+Los trofeos se muestran dentro de vitrinas con la descripción del requisito para obtenerlos. Blado aparece con una frase burlona al pasar el cursor sobre cualquiera de ellos. La colección es **persistente** (se guarda en `localStorage`) ya que es independiente de la sesión de duelo.
 
 ---
 
@@ -313,15 +313,15 @@ Se guarda en `localStorage` bajo la clave `duelo_avatar`. **Persiste entre sesio
 const AVATAR_STORAGE_KEY = "duelo_avatar";
 
 interface PersistedAvatarState {
-  avatar: AvatarConfig;      // Configuración del avatar del jugador
+  avatar: AvatarConfig; // Configuración del avatar del jugador
   stats: {
-    duelsPlayed: number;     // Acumulativo histórico
-    bestScore: number;       // Máximo de puntos en un duelo (histórico)
+    duelsPlayed: number; // Acumulativo histórico
+    bestScore: number; // Máximo de puntos en un duelo (histórico)
   };
 }
 ```
 
-- El avatar **siempre puede modificarse**: hay un botón "Editar Avatar" accesible tanto desde la pantalla de inicio del juego como desde el propio duelo (menú pausado).
+- El avatar **puede modificarse**: hay un botón "Editar Avatar" accesible desde la pantalla de inicio del juego.
 - Al editar el avatar, se redirige al `AvatarCreator` precargado con la config actual y se regresa al mismo punto.
 
 ### Capa 2 — Progresión del duelo (estado en memoria, efímero)
@@ -332,8 +332,8 @@ El conocimiento del jugador (`knownInsults` y `unlockedResponses`) **vive única
 // Estado en memoria (useState / useReducer), NO en localStorage
 interface SessionDuelState {
   knowledge: {
-    knownInsults: string[];       // Insultos desbloqueados en esta sesión
-    unlockedResponses: string[];  // Respuestas desbloqueadas en esta sesión
+    knownInsults: string[]; // Insultos desbloqueados en esta sesión
+    unlockedResponses: string[]; // Respuestas desbloqueadas en esta sesión
   };
   bladoScore: number;
   playerScore: number;
@@ -342,7 +342,7 @@ interface SessionDuelState {
 }
 ```
 
-> **Diseño intencional:** Al abandonar `/timba/duelo-golpes-bajos` (volver al Hub, al Home, o cerrar la pestaña), la progresión vuelve a cero. Esto refuerza el loop: el jugador sabe que si quiere aprender más, **tiene que quedarse en el duelo**. La presión narrativa queda justificada en personaje: *"Si abandonas mi sala, mortal, borrará de tu mente todo lo que aprendiste."*
+> **Diseño intencional:** Al abandonar `/timba/duelo-golpes-bajos` (volver al Hub, al Home, o cerrar la pestaña), la progresión vuelve a cero. Esto refuerza el loop: el jugador sabe que si quiere aprender más, **tiene que quedarse en el duelo**. La presión narrativa queda justificada en el personaje. Blado incita a que el usuario abandone el duelo con diferentes frases, ej: _"¿Quieres abandonar el duelo? mejor ve al psicologo y dile que estas estresado... jeje"_ (abandonar: SI | NO) el boton "NO" debe estar bloqueado, no debe funcionar, solo se puede dar click en "SI". y en la "X" para cerrar el dialogo y continuar el duelo
 
 ---
 
@@ -434,35 +434,33 @@ function onPlayerWitnessedBladoResponse(
 
 ## Paleta de Insultos MVP (14 insultos — Primeros 2 packs)
 
-### Pack A — Los que usa Blado al atacar (7)
+### Pack A - Insultos
 
-| ID      | Insulto de Blado                                                         |
+| ID      | Insulto                                                                  |
 | ------- | ------------------------------------------------------------------------ |
-| INS-001 | ¡Tus respuestas son tan vacías como tu cráneo!                           |
-| INS-002 | ¡He visto estatuas de sal con más carisma que vos!                       |
-| INS-003 | ¡Debería cobrar entrada por dejarte escuchar mis insultos!               |
+| INS-001 | ¡Tenés el cerebro quemado por TikTok!                                    |
+| INS-002 | ¡Tu mama es tan gorda que es mas facil saltarla que rodearla!            |
+| INS-003 | ¡La inflacion es un fenomeno monetario determinado por... !              |
 | INS-004 | ¡Tus ancestros deben estar avergonzados de haberse reproducido!          |
 | INS-005 | ¡Peleas con la misma gracia que un mate sin yerba!                       |
 | INS-006 | ¡En el infierno, tu nivel de amenaza me daría cosquillas!                |
 | INS-007 | ¡Si el coraje fuese agua, no te alcanzaría ni para secarte las lágrimas! |
 
-### Pack A — Respuestas correctas (las que aprende el jugador)
+### Pack A — Respuestas correctas
 
-| ID      | Respuesta correcta                                                                     |
-| ------- | -------------------------------------------------------------------------------------- |
-| INS-001 | Al menos el mío no se derritió con el primer mate.                                     |
-| INS-002 | Y vos tenés el doble de ego con la mitad de razón para tenerlo.                        |
-| INS-003 | Gracias por la bienvenida, ¿también ofrecés descuentos para veteranos de tus fracasos? |
-| INS-004 | Los míos al menos existieron fuera de una pesadilla de azufre.                         |
-| INS-005 | Por eso vengo a que me enseñes, diablillo de pacotilla.                                |
-| INS-006 | Las cosquillas son lo único que lograrías causar en cualquier plano.                   |
-| INS-007 | Prefiero ahogarme en cobardía que flotar en tu soberbia.                               |
+| ID      | Respuesta correcta                                                   |
+| ------- | -------------------------------------------------------------------- |
+| INS-001 | Mirando tetas y gatitos soy feliz.                                   |
+| INS-002 | por lo menos tengo, vos fuiste adoptado por travestis                |
+| INS-003 | ... la oferta y demanda del tipo de cambio, no soy kuka.              |
+| INS-004 | Los míos al menos existieron fuera de una pesadilla de azufre.       |
+| INS-005 | Por eso vengo a que me enseñes, diablillo de pacotilla.              |
+| INS-006 | Las cosquillas son lo único que lograrías causar en cualquier plano. |
+| INS-007 | Prefiero ahogarme en cobardía que flotar en tu soberbia.             |
 
-### Pack B — Insultos del jugador (cuando es el turno de atacar)
+### Pack B — Insultos
 
-El jugador también puede lanzar insultos cuando gana el turno. Estos tienen sus propias respuestas correctas de Blado (que el jugador también aprende para anticipar):
-
-| ID      | Insulto del Jugador                                 | Respuesta de Blado                                                          |
+| ID      | Insulto                                             | Respuesta                                                                   |
 | ------- | --------------------------------------------------- | --------------------------------------------------------------------------- |
 | ATK-001 | ¡Sos tan chico que hasta tu sombra te da compasión! | ¡Mi sombra gobierna reinos que vos ni imaginarías, mortal!                  |
 | ATK-002 | ¡Con esa cara tuya, el espejo cobra seguro!         | ¡Los espejos explotan de envidia al verme, ignorante!                       |
