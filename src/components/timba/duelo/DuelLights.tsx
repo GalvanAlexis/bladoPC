@@ -30,10 +30,9 @@ export default function DuelLights({ playerScore, bladoScore }: DuelLightsProps)
 
       <div className="w-px h-6 bg-gray-700 mx-2" />
 
-      {/* Luz central (Victoria de Blado inevitable) */}
+      {/* Luz central (4to punto de Blado) */}
       <div 
-        className="w-5 h-5 rounded-full border-2 bg-crimson border-crimson shadow-[0_0_15px_rgba(220,38,38,0.9)] animate-pulse"
-        title="La Victoria Inevitable"
+        className="w-4 h-4 rounded-full border-2 transition-all duration-300 bg-crimson border-crimson shadow-[0_0_10px_rgba(220,38,38,0.8)] scale-110"
       />
 
       <div className="w-px h-6 bg-gray-700 mx-2" />
