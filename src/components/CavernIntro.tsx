@@ -73,12 +73,17 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
     const timer = setTimeout(() => finish("complete"), DURATION_MS);
     
     const handleInteraction = () => finish("skip");
-    window.addEventListener("keydown", handleInteraction);
-    window.addEventListener("click", handleInteraction);
-    window.addEventListener("touchstart", handleInteraction);
+    
+    // Retrasar 100ms para evitar que el click que abre la intro la cierre inmediatamente
+    const bindListeners = setTimeout(() => {
+      window.addEventListener("keydown", handleInteraction);
+      window.addEventListener("click", handleInteraction);
+      window.addEventListener("touchstart", handleInteraction);
+    }, 100);
     
     return () => {
       clearTimeout(timer);
+      clearTimeout(bindListeners);
       window.removeEventListener("keydown", handleInteraction);
       window.removeEventListener("click", handleInteraction);
       window.removeEventListener("touchstart", handleInteraction);
@@ -124,12 +129,12 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
         {/* Vignette inferior */}
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent pointer-events-none z-10" />
 
-        {/* Texto scrolleando — y: 100vh a -100% */}
-        <div className="absolute inset-0 flex items-start justify-center overflow-hidden">
+        {/* Texto scrolleando — de abajo (100vh) hacia arriba (-150vh) */}
+        <div className="absolute inset-0 flex items-start justify-center overflow-hidden pointer-events-none">
           <motion.div
             initial={{ y: "100vh", opacity: 0 }}
             animate={{
-              y: "-100%",
+              y: "-150vh",
               opacity: [0, 1, 1, 0],
             }}
             transition={{

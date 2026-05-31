@@ -127,6 +127,7 @@ export default function Navbar({ scene, onReplayIntro, onToggleSidebar, sidebarO
                 : '0 0 8px rgba(147,51,234,0.8)',
             }}
           />
+          </div>
         </div>
 
       </div>
