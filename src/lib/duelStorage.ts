@@ -1,6 +1,10 @@
 import { AvatarConfig, DEFAULT_AVATAR } from './avatarConfig';
+import { PlayerKnowledge } from './duelEngine';
+import { INSULTS } from './duelInsults';
 
 const AVATAR_STORAGE_KEY = "duelo_avatar";
+const KNOWLEDGE_STORAGE_KEY = "duelo_knowledge";
+const SESSION_COUNTS_KEY = "duelo_session_counts";
 
 export interface PersistedAvatarState {
   avatar: AvatarConfig;
@@ -63,4 +67,67 @@ export function hasCreatedAvatar(): boolean {
   const data = localStorage.getItem(AVATAR_STORAGE_KEY);
   // Asumimos que si existe en localStorage, el usuario ya pasó por el creador.
   return !!data;
+}
+
+// ==========================================
+// KNOWLEDGE (Persiste recargas)
+// ==========================================
+
+export function getKnowledgeState(): PlayerKnowledge {
+  const defaultKnowledge: PlayerKnowledge = {
+    knownInsults: [INSULTS[0].id, INSULTS[1].id], // Empieza con 2
+    unlockedResponses: []
+  };
+
+  if (typeof window === 'undefined') return defaultKnowledge;
+  
+  const data = localStorage.getItem(KNOWLEDGE_STORAGE_KEY);
+  if (data) {
+    try {
+      return JSON.parse(data) as PlayerKnowledge;
+    } catch (e) {
+      console.error("Error parsing duel knowledge:", e);
+      return defaultKnowledge;
+    }
+  }
+  return defaultKnowledge;
+}
+
+export function saveKnowledgeState(knowledge: PlayerKnowledge): void {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(KNOWLEDGE_STORAGE_KEY, JSON.stringify(knowledge));
+  }
+}
+
+// ==========================================
+// SESSION COUNTS (Se resetea al cerrar pestaña)
+// ==========================================
+
+export interface SessionDuelCounts {
+  player: number;
+  blado: number;
+}
+
+export function getSessionDuelCounts(): SessionDuelCounts {
+  const defaultCounts = { player: 0, blado: 0 };
+  if (typeof window === 'undefined') return defaultCounts;
+  
+  const data = sessionStorage.getItem(SESSION_COUNTS_KEY);
+  if (data) {
+    try {
+      return JSON.parse(data) as SessionDuelCounts;
+    } catch (e) {
+      console.error("Error parsing session counts:", e);
+      return defaultCounts;
+    }
+  }
+  return defaultCounts;
+}
+
+export function incrementSessionDuelCount(winner: 'player' | 'blado'): void {
+  const counts = getSessionDuelCounts();
+  counts[winner] += 1;
+  if (typeof window !== 'undefined') {
+    sessionStorage.setItem(SESSION_COUNTS_KEY, JSON.stringify(counts));
+  }
 }

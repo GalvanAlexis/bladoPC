@@ -4,13 +4,13 @@ import {
   ResponseOption, 
   selectBladoInsult, 
   buildResponseOptions, 
-  shouldBladoConfuse, 
   onBladoAttacked, 
   onPlayerWitnessedBladoResponse 
 } from '@/lib/duelEngine';
 import { INSULTS, DuelInsult } from '@/lib/duelInsults';
 import { AvatarConfig } from '@/lib/avatarConfig';
 import ScoreBoard from './ScoreBoard';
+import DuelLights from './DuelLights';
 import DuelTimer from './DuelTimer';
 import InsultBubble from './InsultBubble';
 import ResponseOptions from './ResponseOptions';
@@ -18,6 +18,8 @@ import AvatarRenderer from './AvatarRenderer';
 
 interface DuelArenaProps {
   playerAvatar: AvatarConfig;
+  initialKnowledge: PlayerKnowledge;
+  sessionCounts: { player: number; blado: number };
   onFinishDuel: (playerScore: number, bladoScore: number, finalKnowledge: PlayerKnowledge) => void;
 }
 
@@ -28,15 +30,11 @@ type TurnPhase =
   | 'BLADO_RESPONDING' // Blado da la respuesta correcta a un ataque del jugador
   | 'TRANSITION'; // Pequeña pausa antes de cambiar de turno
 
-export default function DuelArena({ playerAvatar, onFinishDuel }: DuelArenaProps) {
+export default function DuelArena({ playerAvatar, initialKnowledge, sessionCounts, onFinishDuel }: DuelArenaProps) {
   const [bladoScore, setBladoScore] = useState(0);
   const [playerScore, setPlayerScore] = useState(0);
-  const [confusionActivated, setConfusionActivated] = useState(false);
   
-  const [knowledge, setKnowledge] = useState<PlayerKnowledge>({
-    knownInsults: [INSULTS[0].id, INSULTS[1].id], // Empieza con 2
-    unlockedResponses: []
-  });
+  const [knowledge, setKnowledge] = useState<PlayerKnowledge>(initialKnowledge);
   
   const [usedInsults, setUsedInsults] = useState<string[]>([]);
   const [phase, setPhase] = useState<TurnPhase>('TRANSITION');
@@ -113,26 +111,13 @@ export default function DuelArena({ playerAvatar, onFinishDuel }: DuelArenaProps
     setPhase('BLADO_RESPONDING');
     
     setTimeout(() => {
-      // Determinar si Blado se confunde (Rubber band)
-      const willConfuse = shouldBladoConfuse(bladoScore, playerScore, confusionActivated);
-      
-      if (willConfuse) {
-        setConfusionActivated(true);
-        // Blado responde mal intencionalmente
-        setPlayerScore(prev => {
-          const newScore = prev + 1;
-          checkWinCondition(newScore, bladoScore);
-          return newScore;
-        });
-      } else {
-        // Blado responde bien
-        setKnowledge(prev => onPlayerWitnessedBladoResponse(insult.id, prev));
-        setBladoScore(prev => {
-          const newScore = prev + 1;
-          checkWinCondition(playerScore, newScore);
-          return newScore;
-        });
-      }
+      // Blado es invencible y SIEMPRE responde bien
+      setKnowledge(prev => onPlayerWitnessedBladoResponse(insult.id, prev));
+      setBladoScore(prev => {
+        const newScore = prev + 1;
+        checkWinCondition(playerScore, newScore);
+        return newScore;
+      });
     }, 2500);
   };
 
@@ -152,20 +137,20 @@ export default function DuelArena({ playerAvatar, onFinishDuel }: DuelArenaProps
     }
   };
 
-  // Iniciar la primera ronda
+  // Iniciar la primera ronda siempre con el jugador atacando
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    startBladoTurn();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    startPlayerTurn();
   }, []);
 
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col h-full relative z-10 font-mono text-white p-4 pb-12">
       <ScoreBoard 
         playerName={playerAvatar.name} 
-        playerScore={playerScore} 
-        bladoScore={bladoScore} 
+        playerScore={sessionCounts.player} 
+        bladoScore={sessionCounts.blado} 
       />
+      <DuelLights playerScore={playerScore} bladoScore={bladoScore} />
 
       <div className="flex-1 flex flex-col md:flex-row mt-8 gap-8 relative">
         {/* Lado Jugador */}
@@ -255,11 +240,7 @@ export default function DuelArena({ playerAvatar, onFinishDuel }: DuelArenaProps
               <div className="absolute bottom-4 right-0">
                 <InsultBubble 
                   speaker="blado" 
-                  text={
-                    shouldBladoConfuse(bladoScore, playerScore, confusionActivated) 
-                      ? (INSULTS.find(i => i.id !== activeInsult.id)?.correctResponse || "Me has dejado sin palabras...")
-                      : activeInsult.correctResponse
-                  } 
+                  text={activeInsult.correctResponse} 
                 />
               </div>
             )}

@@ -1,7 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { getAvatarState, hasCreatedAvatar, updatePlayerStats } from '@/lib/duelStorage';
+import { 
+  getAvatarState, 
+  hasCreatedAvatar, 
+  updatePlayerStats,
+  getKnowledgeState,
+  saveKnowledgeState,
+  getSessionDuelCounts,
+  incrementSessionDuelCount
+} from '@/lib/duelStorage';
+import { PlayerKnowledge } from '@/lib/duelEngine';
 import AvatarCreator from '@/components/timba/duelo/AvatarCreator';
 import DuelArena from '@/components/timba/duelo/DuelArena';
 import DuelResult from '@/components/timba/duelo/DuelResult';
@@ -15,10 +24,17 @@ export default function DueloGolpesBajosPage() {
   const [showExitDialog, setShowExitDialog] = useState(false);
   const [duelResult, setDuelResult] = useState<{player: number, blado: number} | null>(null);
 
-  // Evitar hidratación mismatch
+  const [knowledge, setKnowledge] = useState<PlayerKnowledge | null>(null);
+  const [sessionCounts, setSessionCounts] = useState<{player: number, blado: number} | null>(null);
+
+  // Evitar hidratación mismatch y cargar estado inicial persistente
   const [mounted, setMounted] = useState(false);
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+    setKnowledge(getKnowledgeState());
+    setSessionCounts(getSessionDuelCounts());
+  }, []);
 
   if (!mounted) return <div className="min-h-screen bg-black" />;
 
@@ -30,9 +46,17 @@ export default function DueloGolpesBajosPage() {
     }
   };
 
-  const handleFinishDuel = (playerScore: number, bladoScore: number) => {
+  const handleFinishDuel = (playerScore: number, bladoScore: number, finalKnowledge: PlayerKnowledge) => {
     setDuelResult({ player: playerScore, blado: bladoScore });
     updatePlayerStats(playerScore);
+    
+    saveKnowledgeState(finalKnowledge);
+    setKnowledge(finalKnowledge);
+    
+    const winner = bladoScore >= 4 ? 'blado' : 'player';
+    incrementSessionDuelCount(winner);
+    setSessionCounts(getSessionDuelCounts());
+    
     setScreen('RESULT'); // Fase 3, por ahora mostraremos un placeholder si no existe
   };
 
@@ -123,9 +147,11 @@ export default function DueloGolpesBajosPage() {
           />
         )}
 
-        {screen === 'ARENA' && (
+        {screen === 'ARENA' && knowledge && sessionCounts && (
           <DuelArena 
             playerAvatar={getAvatarState().avatar} 
+            initialKnowledge={knowledge}
+            sessionCounts={sessionCounts}
             onFinishDuel={handleFinishDuel} 
           />
         )}
