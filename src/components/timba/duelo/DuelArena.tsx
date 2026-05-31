@@ -205,7 +205,7 @@ export default function DuelArena({ playerAvatar, onFinishDuel }: DuelArenaProps
             {phase === 'BLADO_ATTACKING' && (
               <div className="absolute bottom-0 w-full">
                 <DuelTimer 
-                  seconds={3} 
+                  seconds={15} 
                   isActive={true} 
                   onTimeout={handleTimeout} 
                 />
