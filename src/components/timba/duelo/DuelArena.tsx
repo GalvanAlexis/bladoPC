@@ -257,7 +257,7 @@ export default function DuelArena({ playerAvatar, onFinishDuel }: DuelArenaProps
                   speaker="blado" 
                   text={
                     shouldBladoConfuse(bladoScore, playerScore, confusionActivated) 
-                      ? activeInsult.wrongResponses[0] 
+                      ? (INSULTS.find(i => i.id !== activeInsult.id)?.correctResponse || "Me has dejado sin palabras...")
                       : activeInsult.correctResponse
                   } 
                 />
