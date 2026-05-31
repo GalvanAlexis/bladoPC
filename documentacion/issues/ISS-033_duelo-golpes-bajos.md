@@ -1,6 +1,6 @@
 # ISS-033: "Duelo con Golpes Bajos" — Insult Duel Game
 
-**Estado:** Planificado  
+**Estado:** Implementado  
 **Branch de implementación:** `feature/ISS-033-duelo-golpes-bajos`  
 **Tipo:** Minijuego #1 — Timba Arcade Hub  
 **Ruta:** `/timba/duelo-golpes-bajos`
@@ -237,7 +237,7 @@ El componente `AvatarRenderer.tsx` recibe `AvatarConfig` y apila las capas con `
   ▼
 ┌──────────────────────┐
 │  PANTALLA DE INICIO  │
-│  "El Duelo Arcano"   │
+│  "Duelo con golpes bajos"   │
 │  [Nuevo Duelo]       │
 │  [Cambiar Avatar]    │
 └──────────────────────┘
@@ -285,19 +285,19 @@ Una pantalla adicional que muestra el "Reliquias Invaluables": Son medallas, cop
 ```ts
 interface Trophy {
   id: string;
-  name: string;              // ej: "Golpe Limpio"
-  description: string;       // ej: "Ganarle 5 veces a Blado"
-  bladoMockLine: string;     // ej: "¡Ja! No mereces esta reliquia, mortal"
-  unlocked: false;           // siempre false — imposible de ganar
+  name: string; // ej: "Golpe Limpio"
+  description: string; // ej: "Ganarle 5 veces a Blado"
+  bladoMockLine: string; // ej: "¡Ja! No mereces esta reliquia, mortal"
+  unlocked: false; // siempre false — imposible de ganar
 }
 
 interface PlayerStats {
   duelsPlayed: number;
-  bestScore: number;         // Máximo de puntos conseguidos en un duelo (máximo: 3)
+  bestScore: number; // Máximo de puntos conseguidos en un duelo (máximo: 3)
 }
 ```
 
-Los trofeos se muestran como vitrinas vacías con la descripción del requisito. Blado aparece con una frase burlona al pasar el cursor sobre cualquiera de ellos. La colección es **persistente** (se guarda en `localStorage`) ya que es independiente de la sesión de duelo.
+Los trofeos se muestran dentro de vitrinas con la descripción del requisito para obtenerlos. Blado aparece con una frase burlona al pasar el cursor sobre cualquiera de ellos. La colección es **persistente** (se guarda en `localStorage`) ya que es independiente de la sesión de duelo.
 
 ---
 
@@ -313,15 +313,15 @@ Se guarda en `localStorage` bajo la clave `duelo_avatar`. **Persiste entre sesio
 const AVATAR_STORAGE_KEY = "duelo_avatar";
 
 interface PersistedAvatarState {
-  avatar: AvatarConfig;      // Configuración del avatar del jugador
+  avatar: AvatarConfig; // Configuración del avatar del jugador
   stats: {
-    duelsPlayed: number;     // Acumulativo histórico
-    bestScore: number;       // Máximo de puntos en un duelo (histórico)
+    duelsPlayed: number; // Acumulativo histórico
+    bestScore: number; // Máximo de puntos en un duelo (histórico)
   };
 }
 ```
 
-- El avatar **siempre puede modificarse**: hay un botón "Editar Avatar" accesible tanto desde la pantalla de inicio del juego como desde el propio duelo (menú pausado).
+- El avatar **puede modificarse**: hay un botón "Editar Avatar" accesible desde la pantalla de inicio del juego.
 - Al editar el avatar, se redirige al `AvatarCreator` precargado con la config actual y se regresa al mismo punto.
 
 ### Capa 2 — Progresión del duelo (estado en memoria, efímero)
@@ -332,8 +332,8 @@ El conocimiento del jugador (`knownInsults` y `unlockedResponses`) **vive única
 // Estado en memoria (useState / useReducer), NO en localStorage
 interface SessionDuelState {
   knowledge: {
-    knownInsults: string[];       // Insultos desbloqueados en esta sesión
-    unlockedResponses: string[];  // Respuestas desbloqueadas en esta sesión
+    knownInsults: string[]; // Insultos desbloqueados en esta sesión
+    unlockedResponses: string[]; // Respuestas desbloqueadas en esta sesión
   };
   bladoScore: number;
   playerScore: number;
@@ -342,9 +342,9 @@ interface SessionDuelState {
 }
 ```
 
-> **Diseño intencional:** Al abandonar `/timba/duelo-golpes-bajos` (volver al Hub, al Home, o cerrar la pestaña), la progresión vuelve a cero. Esto refuerza el loop: el jugador sabe que si quiere aprender más, **tiene que quedarse en el duelo**. La presión narrativa queda justificada en personaje: *"Si abandonas mi sala, mortal, borrará de tu mente todo lo que aprendiste."*
+> **Diseño intencional:** Al abandonar `/timba/duelo-golpes-bajos` (volver al Hub, al Home, o cerrar la pestaña), la progresión vuelve a cero. Esto refuerza el loop: el jugador sabe que si quiere aprender más, **tiene que quedarse en el duelo**. La presión narrativa queda justificada en el personaje. Blado incita a que el usuario abandone el duelo con diferentes frases, ej: _"¿Quieres abandonar el duelo? mejor ve al psicologo y dile que estas estresado... jeje"_ (abandonar: SI | NO) el boton "NO" debe estar bloqueado, no debe funcionar, solo se puede dar click en "SI". y en la "X" para cerrar el dialogo y continuar el duelo
 
----
+## **Velocidad:** El jugador tiene un timer por respuesta de 3 segundos para elegirla, si no elige a tiempo pierde
 
 ## Estructura de Archivos
 
@@ -434,57 +434,40 @@ function onPlayerWitnessedBladoResponse(
 
 ## Paleta de Insultos MVP (14 insultos — Primeros 2 packs)
 
-### Pack A — Los que usa Blado al atacar (7)
+### Pack A - Insultos
 
-| ID      | Insulto de Blado                                                         |
+| ID      | Insulto                                                                  |
 | ------- | ------------------------------------------------------------------------ |
-| INS-001 | ¡Tus respuestas son tan vacías como tu cráneo!                           |
-| INS-002 | ¡He visto estatuas de sal con más carisma que vos!                       |
-| INS-003 | ¡Debería cobrar entrada por dejarte escuchar mis insultos!               |
-| INS-004 | ¡Tus ancestros deben estar avergonzados de haberse reproducido!          |
-| INS-005 | ¡Peleas con la misma gracia que un mate sin yerba!                       |
-| INS-006 | ¡En el infierno, tu nivel de amenaza me daría cosquillas!                |
+| INS-001 | ¡Tenés el cerebro quemado por TikTok!                                    |
+| INS-002 | ¡Tu mama es tan gorda que es mas facil saltarla que rodearla!            |
+| INS-003 | ¡La inflacion es un fenomeno monetario determinado por... !              |
+| INS-004 | ¡Eres un lindo Femboy, te quedas en la caverna esta noche? jeje!         |
+| INS-005 | ¡Intenta pelear como ALGO, no como OLGA!                                 |
+| INS-006 | ¡Si la luz no tiene masa, por que se curva delante de masiva gravedad?!  |
 | INS-007 | ¡Si el coraje fuese agua, no te alcanzaría ni para secarte las lágrimas! |
 
-### Pack A — Respuestas correctas (las que aprende el jugador)
+### Pack A — Respuestas correctas
 
-| ID      | Respuesta correcta                                                                     |
-| ------- | -------------------------------------------------------------------------------------- |
-| INS-001 | Al menos el mío no se derritió con el primer mate.                                     |
-| INS-002 | Y vos tenés el doble de ego con la mitad de razón para tenerlo.                        |
-| INS-003 | Gracias por la bienvenida, ¿también ofrecés descuentos para veteranos de tus fracasos? |
-| INS-004 | Los míos al menos existieron fuera de una pesadilla de azufre.                         |
-| INS-005 | Por eso vengo a que me enseñes, diablillo de pacotilla.                                |
-| INS-006 | Las cosquillas son lo único que lograrías causar en cualquier plano.                   |
-| INS-007 | Prefiero ahogarme en cobardía que flotar en tu soberbia.                               |
+| ID      | Respuesta correcta                                           |
+| ------- | ------------------------------------------------------------ |
+| INS-001 | Mirando tetas y gatitos soy feliz.                           |
+| INS-002 | por lo menos tengo, vos fuiste adoptado por travestis        |
+| INS-003 | la oferta y demanda del tipo de cambio, no soy kuka.         |
+| INS-004 | Era obvio que te gustaban los hombres!                       |
+| INS-005 | Es cierto! solo uso un 1% de mi fuerza y basta para ganarte! |
+| INS-006 | La distorcion del espacio-tiempo ejercida por el objeto.     |
+| INS-007 | Prefiero ahogarme en cobardía que flotar en tu soberbia.     |
 
-### Pack B — Insultos del jugador (cuando es el turno de atacar)
+## para cada pregunta, las respuestas deben estar mezcladas de forma aleatoria.
 
-El jugador también puede lanzar insultos cuando gana el turno. Estos tienen sus propias respuestas correctas de Blado (que el jugador también aprende para anticipar):
-
-| ID      | Insulto del Jugador                                 | Respuesta de Blado                                                          |
-| ------- | --------------------------------------------------- | --------------------------------------------------------------------------- |
-| ATK-001 | ¡Sos tan chico que hasta tu sombra te da compasión! | ¡Mi sombra gobierna reinos que vos ni imaginarías, mortal!                  |
-| ATK-002 | ¡Con esa cara tuya, el espejo cobra seguro!         | ¡Los espejos explotan de envidia al verme, ignorante!                       |
-| ATK-003 | ¡Tus chistes son tan viejos que tienen moho!        | ¡Son tan clásicos que volverán a ponerse de moda cuando vos ya no estés!    |
-| ATK-004 | ¡Hasta las llamas del infierno te esquivan!         | ¡Me las reservo para ocasiones especiales, como este insulto mediocre!      |
-| ATK-005 | ¡Leí libros con más personalidad que vos!           | ¡Por lo menos los libros tienen algo que decir, cosa que vos claramente no! |
-| ATK-006 | ¡Sos tan predecible que ya sé lo que vas a decir!   | ¡Entonces ya sabrás que vas a perder, y sin embargo acá seguís!             |
-| ATK-007 | ¡Blado el guardián... ¿de qué? ¿Del polvo?          | ¡Del polvo que quedarás vos cuando te aplaste mi ingenio!                   |
-
----
+**Contador visual:** Contador de duelos ganados por Blado y duelos ganados por el Usuario (nombre del avatar creado por el usuario). el Contador de blado debe sumar por duelo ganado, no por respuesta correcta acertada. De tal forma que, como el usuario nunca va a ganar un duelo, solo el contador de Blado suma, debe reiniciarse si se refresca la pagina. o se va a otro modulo de la pagina.
+**Contador de tiempo** debe ser visible en el duelo, que se tiene 3 segundos para responder al insulto.
 
 ## Expansión Futura (v2+)
 
 ### Nuevos packs de insultos
 
-El juego fue diseñado para escalar fácilmente. Se puede agregar un `Pack C`, `Pack D`, etc., con nuevas categorías temáticas o eventos especiales (ej: "Pack de Halloween", "Pack Universitario" con insultos académicos).
-
-### Modos de juego adicionales
-
-- **Modo Velocidad:** El jugador tiene un timer por respuesta. Sin timer en el modo base.
-- **Modo Torneo:** Enfrentarse a 3 personajes distintos (no solo Blado) con pools de insultos diferentes.
-- **Modo Creador:** El jugador puede proponer nuevos insultos que se someten a votación.
+El juego fue diseñado para escalar fácilmente. Se puede agregar un `Pack B`, `Pack C`, etc., con nuevas categorías temáticas o eventos especiales (ej: "Pack de Halloween", "Pack Universitario" con insultos académicos).
 
 ### Multijugador (muy largo plazo)
 
@@ -510,18 +493,19 @@ Migrar de `localStorage` a Supabase para:
 ## Preguntas Abiertas para la Implementación
 
 1. **¿Los SVGs del avatar los generamos nosotros o usamos una librería de avatares open-source** como DiceBear?  
-   → DiceBear (`@dicebear/core`) tiene estilos modulares y es open-source. Podría ahorrarnos mucho tiempo de diseño.
+   → DiceBear (`@dicebear/core`) tiene estilos modulares y es open-source. Podría ahorrarnos mucho tiempo de diseño. si, usalo para esto.
 
 2. **¿El jugador tiene turno de ataque?** Es decir, ¿el duelo alterna "Blado ataca → Jugador responde" con "Jugador ataca → Blado responde"? Monkey Island sí alterna.  
-   → Confirmación pendiente.
+   → Si, igual que Monkey Island.
 
 3. **¿Timer por respuesta?** Para agregar tensión, ¿querés que el jugador tenga un límite de tiempo para elegir la respuesta?  
-   → Confirmación pendiente.
+   → Sí, 3 segundos.
 
 4. **¿El nombre del personaje se usa en los insultos?** Blado podría personalizar sus insultos con el nombre del usuario: _"¡Alexis, tus respuestas son tan vacías..."_  
-   → Sería mucho más inmersivo.
+   → no, usa las preguntas y respuestas predefinidas, sin personalizar.
 
 5. **¿Sonidos/música?** ¿Querés efectos de sonido para la espada, aplausos, etc.?
+   → por ahora no, pero planifica para futuras actualizaciones
 
 ---
 

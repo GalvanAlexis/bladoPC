@@ -22,6 +22,17 @@ export const TAG_COLORS: Record<GameTag, string> = {
 
 export const GAMES: GameEntry[] = [
   {
+    id: 'duelo-golpes-bajos',
+    title: 'Duelo con Golpes Bajos',
+    shortDesc: 'Insultos como espadas. Blado nunca pierde.',
+    bladoQuote: '¡Ah, el duelo verbal! Un arte que tú, mortal, aún no dominas... ¿Te atreves a enfrentarme? Jeje.',
+    previewGif: '/games/placeholder.svg',
+    href: '/timba/duelo-golpes-bajos',
+    tags: ['RPG', 'Estrategia'],
+    available: true,
+    accentColor: '#dc2626',
+  },
+  {
     id: 'snake-arcano',
     title: 'Serpiente Arcana',
     shortDesc: 'La serpiente del abismo devora almas.',
