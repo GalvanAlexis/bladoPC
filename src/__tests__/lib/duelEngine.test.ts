@@ -1,7 +1,6 @@
 import { 
   selectBladoInsult, 
-  shouldBladoConfuse, 
-  evaluatePlayerResponse, 
+  evaluatePlayerResponse,
   buildResponseOptions,
   onBladoAttacked,
   onPlayerWitnessedBladoResponse,
@@ -27,22 +26,7 @@ describe('duelEngine', () => {
     });
   });
 
-  describe('shouldBladoConfuse', () => {
-    it('debe devolver true si Blado va 3-0 y no se confundió antes', () => {
-      expect(shouldBladoConfuse(3, 0, false)).toBe(true);
-      expect(shouldBladoConfuse(3, 1, false)).toBe(true);
-      expect(shouldBladoConfuse(3, 2, false)).toBe(true);
-    });
 
-    it('debe devolver false si Blado no va ganando 3 puntos', () => {
-      expect(shouldBladoConfuse(2, 0, false)).toBe(false);
-      expect(shouldBladoConfuse(4, 0, false)).toBe(false);
-    });
-
-    it('debe devolver false si ya se confundió antes', () => {
-      expect(shouldBladoConfuse(3, 0, true)).toBe(false);
-    });
-  });
 
   describe('evaluatePlayerResponse', () => {
     it('debe evaluar correctamente la respuesta', () => {

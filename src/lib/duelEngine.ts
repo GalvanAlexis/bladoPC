@@ -38,15 +38,7 @@ export function selectBladoInsult(
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
-// Determina si Blado debe "confundirse" en esta ronda (Rubber band)
-// Regla: si Blado va ganando 3-0 y no se ha confundido, se confunde para que quede 3-3
-export function shouldBladoConfuse(
-  bladoScore: number,
-  playerScore: number,
-  confusionActivated: boolean
-): boolean {
-  return bladoScore === 3 && playerScore < 3 && !confusionActivated;
-}
+
 
 // Evalúa la respuesta del jugador
 export function evaluatePlayerResponse(

@@ -8,7 +8,8 @@ interface ScoreBoardProps {
 
 export default function ScoreBoard({ playerName, playerScore, bladoScore }: ScoreBoardProps) {
   return (
-    <div className="w-full flex items-center justify-between border-2 border-crimson/50 bg-[#0a0a0a] p-4 shadow-[0_0_20px_rgba(220,38,38,0.2)]">
+    <div className="w-full flex items-center justify-between border-2 border-crimson/50 bg-[#0a0a0a] p-4 shadow-[0_0_20px_rgba(220,38,38,0.2)] relative">
+      <div className="absolute top-1 left-0 w-full text-center text-[10px] text-gray-500 tracking-[0.3em]">DUELOS GANADOS</div>
       {/* Jugador */}
       <div className="flex flex-col items-center flex-1">
         <h2 className="text-gray-400 text-xs uppercase tracking-widest mb-1">{playerName}</h2>
