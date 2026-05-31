@@ -74,21 +74,32 @@ function shuffle<T>(array: T[]): T[] {
 // Construye las opciones de respuesta para un insulto.
 export function buildResponseOptions(
   insult: DuelInsult,
+  allInsults: DuelInsult[],
   playerKnowledge: PlayerKnowledge,
 ): ResponseOption[] {
-  const options: ResponseOption[] = insult.wrongResponses.map((text, i) => ({
-    id: `wrong-${i}`,
-    text,
-    isCorrect: false
-  }));
+  const options: ResponseOption[] = [];
+  
+  // Obtenemos todas las respuestas correctas de otros insultos
+  const otherResponses = allInsults
+    .filter(i => i.id !== insult.id)
+    .map(i => i.correctResponse);
+    
+  const shuffledOther = shuffle(otherResponses);
 
-  // Si el jugador ya desbloqueó esta respuesta, la mezclamos entre las opciones
   if (playerKnowledge.unlockedResponses.includes(insult.id)) {
+    // Si ya la conoce: 1 correcta y 2 distractoras
     options.push({
       id: 'correct',
       text: insult.correctResponse,
       isCorrect: true
     });
+    options.push({ id: 'wrong-1', text: shuffledOther[0], isCorrect: false });
+    options.push({ id: 'wrong-2', text: shuffledOther[1], isCorrect: false });
+  } else {
+    // Si NO la conoce: 3 distractoras (el jugador está obligado a fallar)
+    options.push({ id: 'wrong-1', text: shuffledOther[0], isCorrect: false });
+    options.push({ id: 'wrong-2', text: shuffledOther[1], isCorrect: false });
+    options.push({ id: 'wrong-3', text: shuffledOther[2], isCorrect: false });
   }
 
   return shuffle(options);

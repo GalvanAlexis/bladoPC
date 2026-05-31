@@ -57,7 +57,7 @@ export default function DuelArena({ playerAvatar, onFinishDuel }: DuelArenaProps
     // Blado atacó, el jugador aprende el insulto
     setKnowledge(prev => onBladoAttacked(insult.id, prev));
     
-    setResponseOptions(buildResponseOptions(insult, knowledge));
+    setResponseOptions(buildResponseOptions(insult, INSULTS, knowledge));
     setSelectedOptionId(null);
     setPhase('BLADO_ATTACKING');
   };
