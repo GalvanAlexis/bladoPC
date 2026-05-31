@@ -69,7 +69,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ ok: true });
   } catch (error) {
-    if (error?.code === 'ECONNREFUSED' || error?.code === 'P1001') {
+    if ((error as any)?.code === 'ECONNREFUSED' || (error as any)?.code === 'P1001') {
       console.warn('[Analytics] Skipped tracking visitor: DB connection refused');
     } else {
       console.error('[Analytics] Error tracking visitor:', error);
