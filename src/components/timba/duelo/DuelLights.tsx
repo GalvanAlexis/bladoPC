@@ -32,7 +32,11 @@ export default function DuelLights({ playerScore, bladoScore }: DuelLightsProps)
 
       {/* Luz central (4to punto de Blado) */}
       <div 
-        className="w-4 h-4 rounded-full border-2 transition-all duration-300 bg-crimson border-crimson shadow-[0_0_10px_rgba(220,38,38,0.8)] scale-110"
+        className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
+          bladoScore >= 4 
+            ? 'bg-crimson border-crimson shadow-[0_0_10px_rgba(220,38,38,0.8)] scale-110' 
+            : 'bg-transparent border-gray-600'
+        }`}
       />
 
       <div className="w-px h-6 bg-gray-700 mx-2" />
