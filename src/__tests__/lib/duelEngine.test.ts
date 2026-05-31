@@ -50,27 +50,27 @@ describe('duelEngine', () => {
       const correct = evaluatePlayerResponse(insult.id, insult.correctResponse, INSULTS);
       expect(correct.correct).toBe(true);
 
-      const wrong = evaluatePlayerResponse(insult.id, insult.wrongResponses[0], INSULTS);
+      const wrong = evaluatePlayerResponse(insult.id, 'Cualquier otra respuesta incorrecta', INSULTS);
       expect(wrong.correct).toBe(false);
     });
   });
 
   describe('buildResponseOptions', () => {
-    it('debe devolver 3 opciones si la respuesta está bloqueada', () => {
+    it('debe devolver 3 opciones si la respuesta está bloqueada (ninguna correcta)', () => {
       const insult = INSULTS[0];
-      const options = buildResponseOptions(insult, initialKnowledge);
+      const options = buildResponseOptions(insult, INSULTS, initialKnowledge);
       
       expect(options).toHaveLength(3);
       expect(options.some(o => o.isCorrect)).toBe(false);
     });
 
-    it('debe devolver 4 opciones si la respuesta está desbloqueada', () => {
+    it('debe devolver 3 opciones si la respuesta está desbloqueada (incluyendo la correcta)', () => {
       const insult = INSULTS[0];
       const knowledge = onPlayerWitnessedBladoResponse(insult.id, initialKnowledge);
       
-      const options = buildResponseOptions(insult, knowledge);
+      const options = buildResponseOptions(insult, INSULTS, knowledge);
       
-      expect(options).toHaveLength(4);
+      expect(options).toHaveLength(3);
       expect(options.some(o => o.isCorrect)).toBe(true);
     });
   });

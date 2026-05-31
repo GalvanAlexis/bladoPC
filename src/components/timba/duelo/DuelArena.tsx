@@ -57,7 +57,7 @@ export default function DuelArena({ playerAvatar, onFinishDuel }: DuelArenaProps
     // Blado atacó, el jugador aprende el insulto
     setKnowledge(prev => onBladoAttacked(insult.id, prev));
     
-    setResponseOptions(buildResponseOptions(insult, knowledge));
+    setResponseOptions(buildResponseOptions(insult, INSULTS, knowledge));
     setSelectedOptionId(null);
     setPhase('BLADO_ATTACKING');
   };
@@ -257,7 +257,7 @@ export default function DuelArena({ playerAvatar, onFinishDuel }: DuelArenaProps
                   speaker="blado" 
                   text={
                     shouldBladoConfuse(bladoScore, playerScore, confusionActivated) 
-                      ? activeInsult.wrongResponses[0] 
+                      ? (INSULTS.find(i => i.id !== activeInsult.id)?.correctResponse || "Me has dejado sin palabras...")
                       : activeInsult.correctResponse
                   } 
                 />
