@@ -34,7 +34,6 @@ const YEAR2_CONTENT = `
 `;
 
 const TRACKING_FILE = '01_año_1.md';
-const TRACKING_FILE_2 = '02_año_2.md';
 
 function setupFsMocks(content = YEAR1_CONTENT, files = [TRACKING_FILE]) {
   const mockedFs = jest.mocked(fs);

@@ -3,7 +3,7 @@
  * Cubre: flujo de diálogos, apertura de SkillTree, modal CV, cierre de diálogo
  */
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GameEngine from '@/components/GameEngine';
 import { AppContext } from '@/lib/AppContext';

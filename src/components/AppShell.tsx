@@ -17,6 +17,7 @@ export default function AppShell({ children }: AppShellProps) {
     // ISS-023: Mostrar aviso de privacidad solo en la primera visita
     const seen = localStorage.getItem('blado_privacy_seen');
     if (!seen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowPrivacyNotice(true);
       localStorage.setItem('blado_privacy_seen', '1');
       const timer = setTimeout(() => setShowPrivacyNotice(false), 6000);

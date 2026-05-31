@@ -25,6 +25,7 @@ export default function AvatarCreator({ onComplete, onCancel }: AvatarCreatorPro
     // Cargar config existente si la hay
     const state = getAvatarState();
     if (state.avatar) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setConfig(state.avatar);
     }
   }, []);

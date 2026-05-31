@@ -5,7 +5,7 @@
  * Botones: Intro (replay), Timba (próximamente), Cebar Mate (próximamente)
  */
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 interface NavbarProps {
   scene: 'cave' | 'library';
@@ -13,6 +13,7 @@ interface NavbarProps {
   onToggleSidebar: () => void;
   sidebarOpen: boolean;
 }
+
 
 const NAV_BUTTONS = [
   {
@@ -37,6 +38,7 @@ const NAV_BUTTONS = [
 
 export default function Navbar({ scene, onReplayIntro, onToggleSidebar, sidebarOpen }: NavbarProps) {
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleClick = (id: string) => {
     if (id === 'intro') onReplayIntro();
@@ -101,9 +103,19 @@ export default function Navbar({ scene, onReplayIntro, onToggleSidebar, sidebarO
           </div>
         </div>
 
-        {/* ─── Derecha: indicador de escena ─── */}
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] uppercase tracking-widest text-gray-600 font-mono hidden sm:inline">
+        {/* ─── Derecha: indicador de escena y Volver ─── */}
+        <div className="flex items-center gap-4">
+          {pathname !== '/' && (
+            <button
+              onClick={() => router.push('/')}
+              className="text-[10px] sm:text-xs uppercase border border-gray-700 px-2 sm:px-3 py-1 rounded hover:bg-gray-800 transition-colors text-gray-300 font-bold"
+            >
+              Volver al inicio
+            </button>
+          )}
+          
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] uppercase tracking-widest text-gray-600 font-mono hidden sm:inline">
             {scene === 'cave' ? 'Cueva de Blado' : 'Biblioteca Arcana'}
           </span>
           <div
@@ -115,6 +127,7 @@ export default function Navbar({ scene, onReplayIntro, onToggleSidebar, sidebarO
                 : '0 0 8px rgba(147,51,234,0.8)',
             }}
           />
+          </div>
         </div>
 
       </div>

@@ -9,7 +9,14 @@ export async function getGithubProjectsContext(): Promise<string> {
       return "El portal a GitHub está bloqueado temporalmente.";
     }
     
-    const repos = await res.json() as any[];
+    const repos = await res.json() as {
+      fork: boolean;
+      name: string;
+      description: string | null;
+      language: string | null;
+      topics?: string[];
+      html_url: string;
+    }[];
     
     // Filtrar repositorios forks para enfocarnos en los propios
     const reposInfo = repos

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { getAvatarState, hasCreatedAvatar, updatePlayerStats } from '@/lib/duelStorage';
-import { PlayerKnowledge } from '@/lib/duelEngine';
 import AvatarCreator from '@/components/timba/duelo/AvatarCreator';
 import DuelArena from '@/components/timba/duelo/DuelArena';
 import DuelResult from '@/components/timba/duelo/DuelResult';
@@ -18,6 +17,7 @@ export default function DueloGolpesBajosPage() {
 
   // Evitar hidratación mismatch
   const [mounted, setMounted] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), []);
 
   if (!mounted) return <div className="min-h-screen bg-black" />;
@@ -30,7 +30,7 @@ export default function DueloGolpesBajosPage() {
     }
   };
 
-  const handleFinishDuel = (playerScore: number, bladoScore: number, finalKnowledge: PlayerKnowledge) => {
+  const handleFinishDuel = (playerScore: number, bladoScore: number) => {
     setDuelResult({ player: playerScore, blado: bladoScore });
     updatePlayerStats(playerScore);
     setScreen('RESULT'); // Fase 3, por ahora mostraremos un placeholder si no existe
@@ -52,7 +52,7 @@ export default function DueloGolpesBajosPage() {
             </button>
             <h2 className="text-xl font-bold text-crimson mb-4 uppercase tracking-widest text-center">¿Abandonar el Duelo?</h2>
             <p className="text-gray-300 text-center mb-8">
-              "¿Quieres abandonar el duelo? mejor ve al psicologo y dile que estas estresado... jeje"
+              &quot;¿Quieres abandonar el duelo? mejor ve al psicologo y dile que estas estresado... jeje&quot;
             </p>
             <div className="flex justify-center space-x-4">
               <Link href="/timba" className="px-6 py-2 bg-crimson text-white hover:bg-red-700 font-bold uppercase transition-colors">
