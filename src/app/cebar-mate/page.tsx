@@ -27,6 +27,7 @@ export default function CebarMatePage() {
     }
     
     // Bienvenida
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMessages([{ role: 'assistant', content: "¡Pase, mortal! El agua ya está a 80 grados y la yerba despolvada. Siéntese... ¿De qué charlamos mientras cebamos?" }]);
   }, []);
 
@@ -65,7 +66,7 @@ export default function CebarMatePage() {
       const data = await res.json();
       const reply = data.reply || "Se me lavó el mate, no sé qué decirte.";
       setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
-    } catch (error) {
+    } catch {
       setMessages(prev => [...prev, { role: 'assistant', content: "Maldición, el agua hirvió y quemé la yerba. (Error de conexión)." }]);
     } finally {
       setIsLoading(false);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 interface DuelTimerProps {
   seconds: number;
@@ -12,16 +12,15 @@ export default function DuelTimer({ seconds, onTimeout, isActive }: DuelTimerPro
 
   useEffect(() => {
     if (!isActive) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTimeLeft(seconds);
       return;
     }
 
-    // Timer para el número visible
     const interval = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
           clearInterval(interval);
-          onTimeout();
           return 0;
         }
         return prev - 1;
@@ -29,7 +28,13 @@ export default function DuelTimer({ seconds, onTimeout, isActive }: DuelTimerPro
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isActive, seconds, onTimeout]);
+  }, [isActive, seconds]);
+
+  useEffect(() => {
+    if (isActive && timeLeft === 0) {
+      onTimeout();
+    }
+  }, [isActive, timeLeft, onTimeout]);
 
   // Colores según el tiempo
   let barColor = 'bg-toxic';

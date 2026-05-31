@@ -8,7 +8,7 @@
  */
 import React, { useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAppContext } from "@/lib/AppContext";
+
 
 interface CavernIntroProps {
   onComplete: () => void;
@@ -43,6 +43,8 @@ function generateEmbers(count: number) {
     duration: Math.random() * 4 + 3, // 3–7s por ciclo
     delay: Math.random() * 6, // delay inicial
     color: Math.random() > 0.5 ? "#cc3300" : "#ff6600",
+    targetY: -(Math.random() * 300 + 150),
+    targetX: (Math.random() - 0.5) * 40,
   }));
 }
 
@@ -51,7 +53,6 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
   const onCompleteRef = useRef(onComplete);
   const onSkipRef = useRef(onSkip);
   const embers = useMemo(() => generateEmbers(40), []);
-  const { animationsEnabled } = useAppContext();
 
   // Mantener refs actualizados sin re-crear efectos
   useEffect(() => {
@@ -70,7 +71,18 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
 
   useEffect(() => {
     const timer = setTimeout(() => finish("complete"), DURATION_MS);
-    return () => clearTimeout(timer);
+    
+    const handleInteraction = () => finish("skip");
+    window.addEventListener("keydown", handleInteraction);
+    window.addEventListener("click", handleInteraction);
+    window.addEventListener("touchstart", handleInteraction);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("keydown", handleInteraction);
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("touchstart", handleInteraction);
+    };
   }, []);
 
   return (
@@ -96,9 +108,9 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
               boxShadow: `0 0 ${ember.size * 2}px ${ember.color}`,
             }}
             animate={{
-              y: [0, -(Math.random() * 300 + 150)],
+              y: [0, ember.targetY],
               opacity: [0, 0.8, 0.6, 0],
-              x: [(Math.random() - 0.5) * 40],
+              x: [ember.targetX],
             }}
             transition={{
               duration: ember.duration,
@@ -112,12 +124,12 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
         {/* Vignette inferior */}
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent pointer-events-none z-10" />
 
-        {/* Texto scrolleando — translateY puro, sin perspectiva 3D */}
-        <div className="absolute inset-0 flex items-end justify-center overflow-hidden">
+        {/* Texto scrolleando — y: 100vh a -100% */}
+        <div className="absolute inset-0 flex items-start justify-center overflow-hidden">
           <motion.div
             initial={{ y: "100vh", opacity: 0 }}
             animate={{
-              y: "-75%",
+              y: "-100%",
               opacity: [0, 1, 1, 0],
             }}
             transition={{
@@ -145,17 +157,6 @@ export default function CavernIntro({ onComplete, onSkip }: CavernIntroProps) {
           </motion.div>
         </div>
 
-        {/* Botón omitir */}
-        <button
-          onClick={() => finish("skip")}
-          className="fixed bottom-8 right-8 z-[110] px-5 py-2 rounded
-            bg-black/70 border border-red-900/50 text-red-800
-            hover:text-red-500 hover:border-red-700
-            text-xs font-mono uppercase tracking-widest
-            transition-all duration-300"
-        >
-          Omitir
-        </button>
       </motion.div>
     </AnimatePresence>
   );

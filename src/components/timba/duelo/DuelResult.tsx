@@ -24,9 +24,9 @@ export default function DuelResult({ playerScore, bladoScore, onRematch, onViewT
       </div>
 
       <p className="text-red-100 text-center italic mb-8 max-w-lg leading-relaxed text-lg bg-crimson/10 p-4 border border-crimson/30">
-        "{isWinner 
+        &quot;{isWinner 
           ? "¡Imposible! Esto debe ser un bug en la matrix..." 
-          : "Jeje... buen duelo, mortal. ¿Ya quieres irte con mamá? Intenta de nuevo... seguro aprendiste cosas nuevas."}"
+          : "Jeje... buen duelo, mortal. ¿Ya quieres irte con mamá? Intenta de nuevo... seguro aprendiste cosas nuevas."}&quot;
       </p>
 
       <div className="flex flex-col sm:flex-row gap-4 w-full px-8">

@@ -161,17 +161,13 @@ export default function GameEngine({
     setMessages([]);
   }, []);
 
-  const handleNavigate = useCallback((key: string) => {
-    setCurrentKey(key as DialogueKey);
-    setMessages([]);
-    setDialogVisible(true);
-  }, []);
-
   // BUG-02: Usamos useRef como snapshot buffer para evitar stale closure.
   // handleFreeQuestion nunca depende del estado messages directamente,
   // lo que estabiliza su referencia y evita re-renders innecesarios en DialogBox.
   const messagesRef = React.useRef<Message[]>(messages);
-  messagesRef.current = messages;
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
 
   // ISS-021: sessionId persistido en localStorage para vincular mensajes a una sesión
   const sessionIdRef = useRef<string>("");
@@ -235,7 +231,7 @@ export default function GameEngine({
     } finally {
       setIsLoading(false);
     }
-  }, []); // referencia estable — no depende de messages
+  }, [allowFreeQuestion]); // referencia estable — depende de allowFreeQuestion
 
   // The text shown in the box: if there's an AI reply, show it. Otherwise, show scripted text.
   const lastMessage = messages[messages.length - 1];

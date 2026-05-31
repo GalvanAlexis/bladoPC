@@ -23,7 +23,7 @@ export default function InsultBubble({ text, speaker }: InsultBubbleProps) {
             : 'bg-[#0a1a0a] border-toxic text-green-100 shadow-[0_0_15px_rgba(57,255,20,0.2)] mr-auto'
         }`}
       >
-        <p className="leading-relaxed">"{text}"</p>
+        <p className="leading-relaxed">&quot;{text}&quot;</p>
         
         {/* Piquito del globo de diálogo */}
         <div 

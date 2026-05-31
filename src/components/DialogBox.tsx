@@ -23,6 +23,7 @@ export default function DialogBox({ speakerName, text, choices, onAskQuestion, i
 
   // Typewriter effect — BUG-01: limpiar texto previo antes de arrancar nuevo intervalo
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDisplayedText(''); // evita glitch visual con texto anterior
     let i = 0;
     const interval = setInterval(() => {

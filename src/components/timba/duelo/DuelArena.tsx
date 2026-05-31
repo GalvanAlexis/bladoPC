@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   PlayerKnowledge, 
   ResponseOption, 
   selectBladoInsult, 
   buildResponseOptions, 
-  evaluatePlayerResponse, 
   shouldBladoConfuse, 
   onBladoAttacked, 
   onPlayerWitnessedBladoResponse 
@@ -47,11 +46,7 @@ export default function DuelArena({ playerAvatar, onFinishDuel }: DuelArenaProps
   const [responseOptions, setResponseOptions] = useState<ResponseOption[]>([]);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
 
-  // Iniciar la primera ronda
-  useEffect(() => {
-    startBladoTurn();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // El useEffect inicializador se movió abajo
 
   const startBladoTurn = () => {
     setCurrentAttacker('blado');
@@ -157,6 +152,13 @@ export default function DuelArena({ playerAvatar, onFinishDuel }: DuelArenaProps
     }
   };
 
+  // Iniciar la primera ronda
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    startBladoTurn();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col h-full relative z-10 font-mono text-white p-4 pb-12">
       <ScoreBoard 
@@ -186,7 +188,7 @@ export default function DuelArena({ playerAvatar, onFinishDuel }: DuelArenaProps
                         onClick={() => handlePlayerAttackSelection(id)}
                         className="w-full text-left p-2 border border-gray-800 hover:border-toxic hover:text-toxic hover:bg-toxic/10 text-sm transition-colors"
                       >
-                        "{ins.attacker}"
+                        &quot;{ins.attacker}&quot;
                       </button>
                     );
                   })}

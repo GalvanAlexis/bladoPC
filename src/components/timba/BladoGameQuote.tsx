@@ -9,8 +9,8 @@ interface BladoGameQuoteProps {
 
 export default function BladoGameQuote({ quote }: BladoGameQuoteProps) {
   const [displayedText, setDisplayedText] = useState('');
-  
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDisplayedText('');
     let i = 0;
     const interval = setInterval(() => {

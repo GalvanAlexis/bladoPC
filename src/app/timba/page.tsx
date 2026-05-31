@@ -10,7 +10,7 @@ import { GAMES } from '@/lib/games';
 export default function TimbaHubPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scene, setScene] = useState<'cave'|'library'>('cave');
+  const scene = 'cave';
 
   return (
     <main className="relative w-screen h-screen overflow-hidden font-mono select-none bg-[#050505]">

@@ -30,6 +30,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
     if (sessionStorage.getItem('blado_intro_seen') === 'true') {
       setShowIntro(false);
