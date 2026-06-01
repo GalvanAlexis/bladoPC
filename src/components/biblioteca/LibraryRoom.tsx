@@ -6,10 +6,13 @@ import LibraryUnit from './LibraryUnit';
 import LibraryShelf from './LibraryShelf';
 import BookViewer from './BookViewer';
 import { useLibraryData } from '@/hooks/useLibraryData';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { BookData, YearData } from '@/lib/libraryTypes';
 
 export default function LibraryRoom() {
   const { data: libraryData, loading, error } = useLibraryData();
+  const isMobile = useIsMobile(768);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [selectedLibraryId, setSelectedLibraryId] = useState<string | null>(null);
   const [selectedBook, setSelectedBook] = useState<{ book: BookData, year: YearData } | null>(null);
   const [particles, setParticles] = useState<{ id: number; dx: number; dy: number; duration: number; delay: number; left: number; top: number }[]>([]);
@@ -101,23 +104,92 @@ export default function LibraryRoom() {
                 <div className="text-red-500 text-xl font-cinzel mt-20">Error al leer los registros: {error}</div>
               )}
 
-              {!loading && !error && libraryData?.carreras.map((career, i) => (
-                <motion.div
-                  key={career.id}
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.15 + 0.2, type: 'spring', stiffness: 100 }}
-                >
-                  <LibraryUnit 
-                    id={career.id}
-                    name={career.name}
-                    color={career.color}
-                    icon={career.icon}
-                    yearsCount={career.years.length}
-                    onClick={() => setSelectedLibraryId(career.id)} 
-                  />
-                </motion.div>
-              ))}
+              {!loading && !error && libraryData && (
+                isMobile ? (
+                  <div className="relative w-full h-[400px] flex items-center justify-center overflow-hidden mt-10">
+                    <motion.div
+                      className="w-full h-full relative"
+                      drag="x"
+                      dragConstraints={{ left: 0, right: 0 }}
+                      dragElastic={0.2}
+                      onDragEnd={(_, info) => {
+                        const len = libraryData.carreras.length;
+                        if (info.offset.x < -40 && activeIndex < len - 1) setActiveIndex(i => i + 1);
+                        else if (info.offset.x > 40 && activeIndex > 0) setActiveIndex(i => i - 1);
+                      }}
+                    >
+                      {libraryData.carreras.map((career, i) => {
+                        const offset = i - activeIndex;
+                        const scale = offset === 0 ? 1 : 0.7;
+                        // Use string percentage for x to handle different screen sizes safely
+                        const x = offset === 0 ? '-50%' : (offset > 0 ? '20%' : '-120%');
+                        const rotateY = offset === 0 ? 0 : (offset > 0 ? -25 : 25);
+                        const opacity = Math.abs(offset) <= 1 ? (offset === 0 ? 1 : 0.45) : 0;
+                        const zIndex = 10 - Math.abs(offset);
+
+                        return (
+                          <motion.div
+                            key={career.id}
+                            className="absolute top-10 left-1/2"
+                            initial={false}
+                            animate={{ x, scale, rotateY, opacity, zIndex }}
+                            transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                            style={{ perspective: 1200 }}
+                          >
+                            <div className={offset === 0 ? 'pointer-events-auto' : 'pointer-events-none'}>
+                              <LibraryUnit 
+                                id={career.id}
+                                name={career.name}
+                                color={career.color}
+                                icon={career.icon}
+                                yearsCount={career.years.length}
+                                onClick={() => offset === 0 ? setSelectedLibraryId(career.id) : setActiveIndex(i)} 
+                                isActive={offset === 0}
+                              />
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </motion.div>
+
+                    {/* Dots paginadores */}
+                    <div className="absolute bottom-2 left-0 w-full flex justify-center items-center gap-4 z-20">
+                      {libraryData.carreras.map((career, i) => (
+                        <button
+                          key={`dot-${career.id}`}
+                          onClick={() => setActiveIndex(i)}
+                          className="w-3 h-3 rounded-full transition-all duration-300 shadow-[0_0_0_currentColor]"
+                          style={{
+                            backgroundColor: i === activeIndex ? career.color : '#4a4040',
+                            color: career.color, // For the currentColor in box-shadow
+                            animation: i === activeIndex ? 'dot-pulse 2s infinite' : 'none',
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 w-full mt-10">
+                    {libraryData.carreras.map((career, i) => (
+                      <motion.div
+                        key={career.id}
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.15 + 0.2, type: 'spring', stiffness: 100 }}
+                      >
+                        <LibraryUnit 
+                          id={career.id}
+                          name={career.name}
+                          color={career.color}
+                          icon={career.icon}
+                          yearsCount={career.years.length}
+                          onClick={() => setSelectedLibraryId(career.id)} 
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
+                )
+              )}
             </motion.div>
           )}
         </AnimatePresence>
