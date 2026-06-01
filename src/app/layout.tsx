@@ -15,12 +15,14 @@ const geistMono = Geist_Mono({
 const cinzel = Cinzel({
   variable: "--font-cinzel",
   subsets: ["latin"],
+  preload: false,
 });
 
 const crimsonText = Crimson_Text({
   weight: ["400", "600", "700"],
   variable: "--font-crimson",
   subsets: ["latin"],
+  preload: false,
 });
 
 export const metadata: Metadata = {
