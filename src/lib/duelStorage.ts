@@ -37,7 +37,7 @@ export function getAvatarState(): PersistedAvatarState {
   return DEFAULT_STATE;
 }
 
-export function saveAvatarState(state: PersistedAvatarState): void {
+function saveAvatarState(state: PersistedAvatarState): void {
   if (typeof window !== 'undefined') {
     localStorage.setItem(AVATAR_STORAGE_KEY, JSON.stringify(state));
   }

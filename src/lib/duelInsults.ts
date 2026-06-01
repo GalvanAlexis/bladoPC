@@ -1,4 +1,4 @@
-export type InsultCategory = 
+type InsultCategory = 
   | 'inteligencia' 
   | 'coraje' 
   | 'habilidad' 

@@ -13,15 +13,11 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@dagrejs/dagre": "^3.0.0",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
-    "@xyflow/react": "^12.10.2",
     "framer-motion": "^12.38.0",
-    "gray-matter": "^4.0.3",
     "groq-sdk": "^1.1.2",
     "highlight.js": "^11.11.1",
-    "lucide-react": "^1.14.0",
     "next": "16.2.6",
     "pg": "^8.20.0",
     "react": "19.2.4",
@@ -36,7 +32,6 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
-    "@types/dagre": "^0.7.54",
     "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/pg": "^8.20.0",
@@ -48,7 +43,6 @@
     "jest-environment-jsdom": "^30.4.1",
     "prisma": "^7.8.0",
     "tailwindcss": "^4",
-    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }
