@@ -1,6 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { CAREERS } from './constants';
+import { LibraryData, CarreraData, YearData, BookData, TopicEntry, BookColorFamily, BookStatus, BOOK_COLOR_PALETTES } from './libraryTypes';
+
+import path from 'path';
+import { CAREERS } from './constants';
 
 export type SkillStatus = 'locked' | 'progress' | 'completed';
 export type SkillType = 'materia' | 'tecnologia' | 'proyecto';
@@ -271,3 +275,260 @@ export function getFilosofiaContextString(maxChars = 8000): string {
   }
   return result;
 }
+
+const MISCELANEA_DIR_BASE = path.join(process.cwd(), 'content', 'Miscelanea');
+
+function generateSlug(text: string): string {
+  return text.toLowerCase()
+    .replace(/[áäâà]/g, 'a')
+    .replace(/[éëêè]/g, 'e')
+    .replace(/[íïîì]/g, 'i')
+    .replace(/[óöôò]/g, 'o')
+    .replace(/[úüûù]/g, 'u')
+    .replace(/[ñ]/g, 'n')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function parseTopicsFromMd(filePath: string): { topics: TopicEntry[], hasContent: boolean } {
+  if (!fs.existsSync(filePath)) return { topics: [], hasContent: false };
+  
+  const content = fs.readFileSync(filePath, 'utf8');
+  const lines = content.split('\n');
+  const topics: TopicEntry[] = [];
+  
+  let currentTopic: TopicEntry | null = null;
+  let charCount = 0;
+  let fileHasContent = false;
+  
+  for (const line of lines) {
+    const trimmed = line.trim();
+    const isH2 = trimmed.startsWith('## ');
+    const isH3 = trimmed.startsWith('### ');
+    
+    if (isH2 || isH3) {
+      if (currentTopic) {
+        currentTopic.charCount = charCount;
+        currentTopic.hasContent = charCount > 50; // threshold
+        if (currentTopic.hasContent) fileHasContent = true;
+        topics.push(currentTopic);
+      }
+      
+      const title = trimmed.replace(/^#+\s/, '');
+      currentTopic = {
+        id: generateSlug(title),
+        title,
+        level: isH2 ? 2 : 3,
+        hasContent: false,
+        charCount: 0
+      };
+      charCount = 0;
+    } else if (currentTopic && trimmed !== '') {
+      charCount += trimmed.length;
+    }
+  }
+  
+  if (currentTopic) {
+    currentTopic.charCount = charCount;
+    currentTopic.hasContent = charCount > 50;
+    if (currentTopic.hasContent) fileHasContent = true;
+    topics.push(currentTopic);
+  }
+  
+  return { topics, hasContent: fileHasContent };
+}
+
+function findMateriaFile(careerDir: string, year: number, slug: string): string | null {
+  const materiasDir = path.join(careerDir, `año ${year}`, 'Materias');
+  if (!fs.existsSync(materiasDir)) return null;
+  
+  const files = fs.readdirSync(materiasDir);
+  for (const file of files) {
+    if (!file.endsWith('.md')) continue;
+    const cleanName = file.replace(/^\d+_/, '').replace('.md', '');
+    if (generateSlug(cleanName) === slug) {
+      return path.join(materiasDir, file);
+    }
+  }
+  return null;
+}
+
+export function getLibraryData(): LibraryData {
+  const carrerasData: CarreraData[] = [];
+  
+  const CARRERAS_CONFIG: Record<string, { shortName: string, icon: string, family: BookColorFamily }> = {
+    '1 Ing Sistemas': { shortName: 'Ing. Sistemas', icon: '💻', family: 'indigo' },
+    '2 Ing Datos': { shortName: 'Ing. Datos', icon: '📊', family: 'violet' },
+    '3 Lic IA': { shortName: 'Lic. IA', icon: '🧠', family: 'emerald' },
+  };
+
+  for (const career of CAREERS) {
+    const careerDir = path.join(CONTENT_DIR_BASE, career);
+    const trackingFiles = findAllTrackingFiles(careerDir);
+    const config = CARRERAS_CONFIG[career];
+    
+    const years: YearData[] = [];
+    
+    for (const filePath of trackingFiles) {
+      const year = extractYear(path.basename(filePath));
+      const content = fs.readFileSync(filePath, 'utf8');
+      
+      // Extraer titulo de año del primer H1
+      const titleMatch = content.match(/^#\s+(.+)$/m);
+      const title = titleMatch ? titleMatch[1] : `Año ${year}`;
+      
+      const materias: BookData[] = [];
+      const lines = content.split('\n');
+      let inMaterias = false;
+      let colorIdx = 0;
+      
+      for (const line of lines) {
+        if (line.startsWith('## Materias')) {
+          inMaterias = true;
+          continue;
+        }
+        if (inMaterias && line.startsWith('## ')) {
+          inMaterias = false; // Cambio de seccion
+          break;
+        }
+        
+        if (inMaterias) {
+          const match = line.match(/-\s\[([ xX\/])\]\s(.+)/);
+          if (match) {
+            const statusStr = match[1];
+            const fullName = match[2].trim();
+            const name = fullName.split(':')[0].trim();
+            const slug = generateSlug(name);
+            const status = parseStatus(statusStr);
+            
+            const topicsFilePath = findMateriaFile(careerDir, year, slug);
+            const { topics, hasContent } = topicsFilePath ? parseTopicsFromMd(topicsFilePath) : { topics: [], hasContent: false };
+            
+            materias.push({
+              slug,
+              name,
+              fullName,
+              status,
+              colorIndex: colorIdx % 8,
+              hasContent,
+              topicsFilePath,
+              topics
+            });
+            colorIdx++;
+          }
+        }
+      }
+      
+      years.push({ year, title, materias });
+    }
+    
+    years.sort((a, b) => a.year - b.year);
+    
+    carrerasData.push({
+      id: career,
+      slug: generateSlug(career),
+      name: career.replace(/^\d\s/, ''),
+      shortName: config.shortName,
+      color: BOOK_COLOR_PALETTES[config.family][0],
+      colorFamily: config.family,
+      icon: config.icon,
+      years
+    });
+  }
+  
+  // Agregar Miscelanea
+  const miscelaneaBooks: BookData[] = [];
+  let miscColorIdx = 0;
+  
+  // Filtrar y leer libros de filosofia
+  if (fs.existsSync(FILOSOFIA_DIR_BASE)) {
+    const files = fs.readdirSync(FILOSOFIA_DIR_BASE);
+    for (const file of files) {
+      if (file.endsWith('.md')) {
+        const filePath = path.join(FILOSOFIA_DIR_BASE, file);
+        const name = file.replace(/^\d+-/, '').replace('.md', '').replace(/-/g, ' ');
+        const cleanName = name.charAt(0).toUpperCase() + name.slice(1);
+        const slug = generateSlug(cleanName);
+        const { topics, hasContent } = parseTopicsFromMd(filePath);
+        
+        miscelaneaBooks.push({
+          slug,
+          name: cleanName,
+          fullName: `Filosofía: ${cleanName}`,
+          status: 'completed',
+          colorIndex: miscColorIdx % 8,
+          hasContent,
+          topicsFilePath: filePath,
+          topics
+        });
+        miscColorIdx++;
+      }
+    }
+  }
+
+  if (fs.existsSync(MISCELANEA_DIR_BASE)) {
+    const files = fs.readdirSync(MISCELANEA_DIR_BASE);
+    for (const file of files) {
+      if (file.endsWith('.md')) {
+        const filePath = path.join(MISCELANEA_DIR_BASE, file);
+        const name = file.replace(/^\d+_/, '').replace('.md', '').replace(/-/g, ' ');
+        const cleanName = name.charAt(0).toUpperCase() + name.slice(1);
+        const slug = generateSlug(cleanName);
+        const { topics, hasContent } = parseTopicsFromMd(filePath);
+        
+        miscelaneaBooks.push({
+          slug,
+          name: cleanName,
+          fullName: cleanName,
+          status: 'completed',
+          colorIndex: miscColorIdx % 8,
+          hasContent,
+          topicsFilePath: filePath,
+          topics
+        });
+        miscColorIdx++;
+      }
+    }
+  }
+
+  carrerasData.push({
+    id: '4 Miscelanea',
+    slug: 'miscelanea',
+    name: 'Miscelánea',
+    shortName: 'Misc.',
+    color: BOOK_COLOR_PALETTES['amber'][0],
+    colorFamily: 'amber',
+    icon: '🔮',
+    years: [
+      {
+        year: 0,
+        title: 'Grimorio Abierto',
+        materias: miscelaneaBooks
+      }
+    ]
+  });
+
+  return { carreras: carrerasData };
+}
+
+export function getTopicContent(careerId: string, year: number | null, slug: string): { markdown: string, title: string } | null {
+  const library = getLibraryData();
+  const career = library.carreras.find(c => c.id === careerId || c.slug === careerId);
+  if (!career) return null;
+
+  let book: BookData | undefined;
+  if (year !== null && year !== 0) {
+    const yearData = career.years.find(y => y.year === year);
+    if (!yearData) return null;
+    book = yearData.materias.find(m => m.slug === slug);
+  } else {
+    // Buscar en el unico anio para miscelanea (year = 0)
+    book = career.years[0]?.materias.find(m => m.slug === slug);
+  }
+
+  if (!book || !book.topicsFilePath) return null;
+
+  const content = fs.readFileSync(book.topicsFilePath, 'utf8');
+  return { markdown: content, title: book.fullName };
+}
+
