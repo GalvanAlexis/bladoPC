@@ -203,7 +203,7 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
         <div className="flex-1 flex flex-col w-full mt-1 md:mt-2 relative justify-end min-h-0">
           
           {/* Zona de Diálogo (burbujas) */}
-          <div className="w-full mb-2 flex flex-col justify-end flex-1 px-2 md:px-8">
+          <div className="w-full mb-2 flex flex-col justify-end min-h-[80px] md:min-h-[120px] shrink-0 px-2 md:px-8">
             {activeInsult && currentAttacker === 'player' && (
               <div className="self-start mb-2 animate-in fade-in slide-in-from-left-4 duration-300">
                 <InsultBubble speaker="player" text={activeInsult.attacker} />
@@ -224,7 +224,7 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
           </div>
 
           {/* Zona de Controles (opciones, timer) */}
-          <div className="w-full relative shrink-0 min-h-[160px] max-h-[220px] h-[160px] md:h-[220px]">
+          <div className="w-full relative flex-1 min-h-[160px]">
             {phase === 'PLAYER_ATTACKING' && (
               <div className="absolute inset-0 bg-[#0a0a0a] border border-toxic p-3 md:p-5 overflow-y-auto shadow-[0_0_15px_rgba(57,255,20,0.2)] scrollbar-thin scrollbar-thumb-toxic/50 scrollbar-track-transparent">
                 <h3 className="text-toxic text-xs md:text-sm uppercase mb-3 font-bold sticky top-0 bg-[#0a0a0a] pb-2 z-10">Selecciona tu ataque:</h3>
