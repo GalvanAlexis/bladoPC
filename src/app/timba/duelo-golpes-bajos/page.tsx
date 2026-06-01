@@ -61,7 +61,7 @@ export default function DueloGolpesBajosPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white font-mono overflow-hidden flex flex-col relative select-none">
+    <main className="h-screen bg-[#050505] text-white font-mono overflow-hidden flex flex-col relative select-none">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_20%,_black_100%)] pointer-events-none z-0" />
       
       {/* Diálogo de abandono */}
