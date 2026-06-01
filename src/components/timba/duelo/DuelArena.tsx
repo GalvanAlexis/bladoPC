@@ -180,25 +180,54 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
   return (
     <>
       {showRotatePrompt && <RotatePrompt onDismiss={() => setShowRotatePrompt(false)} />}
-      <div className="w-full max-w-5xl mx-auto flex flex-col h-full relative z-10 font-mono text-white p-4 pb-12">
-      <ScoreBoard 
-        playerName={playerAvatar.name} 
-        playerScore={sessionCounts.player} 
-        bladoScore={sessionCounts.blado} 
-      />
-      <DuelLights playerScore={playerScore} bladoScore={bladoScore} />
+      <div className="w-full max-w-4xl mx-auto flex flex-col h-full relative z-10 font-mono text-white p-2 md:p-4 pb-4 md:pb-8 overflow-hidden">
+        <ScoreBoard 
+          playerName={playerAvatar.name} 
+          playerScore={sessionCounts.player} 
+          bladoScore={sessionCounts.blado} 
+        />
+        <DuelLights playerScore={playerScore} bladoScore={bladoScore} />
 
-      <div className="flex-1 flex flex-col md:flex-row mt-8 gap-8 relative">
-        {/* Lado Jugador */}
-        <div className="flex-1 flex flex-col justify-end">
-          <div className="mb-4">
-            <AvatarRenderer config={playerAvatar} size={150} className="mx-auto md:mx-0" />
+        {/* Fila de Avatares compartida */}
+        <div className="flex justify-between items-center w-full mt-4 md:mt-8 px-4 md:px-16">
+          <div className={`transition-all duration-300 ${currentAttacker === 'player' ? 'scale-110 drop-shadow-[0_0_15px_rgba(57,255,20,0.5)]' : 'opacity-50'}`}>
+            <AvatarRenderer config={playerAvatar} size={isMobile ? 100 : 150} />
           </div>
+          <div className="text-xl md:text-3xl font-bold text-gray-800 tracking-widest px-2">VS</div>
+          <div className={`transition-all duration-300 ${currentAttacker === 'blado' ? 'scale-110 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]' : 'opacity-50'}`}>
+            <BladoPortrait size={isMobile ? 100 : 150} />
+          </div>
+        </div>
+
+        {/* Contenedor principal de Diálogos y Controles */}
+        <div className="flex-1 flex flex-col w-full mt-4 md:mt-8 relative justify-end">
           
-          <div className="h-48 md:h-64 relative">
+          {/* Zona de Diálogo (burbujas) */}
+          <div className="w-full mb-4 flex flex-col justify-end min-h-[70px] md:min-h-[90px] px-2 md:px-8">
+            {activeInsult && currentAttacker === 'player' && (
+              <div className="self-start mb-2 animate-in fade-in slide-in-from-left-4 duration-300">
+                <InsultBubble speaker="player" text={activeInsult.attacker} />
+              </div>
+            )}
+            
+            {activeInsult && currentAttacker === 'blado' && (
+              <div className="self-end mb-2 animate-in fade-in slide-in-from-right-4 duration-300">
+                <InsultBubble speaker="blado" text={activeInsult.attacker} />
+              </div>
+            )}
+
+            {phase === 'BLADO_RESPONDING' && activeInsult && (
+              <div className="self-end mb-2 animate-in fade-in slide-in-from-right-4 duration-300">
+                <InsultBubble speaker="blado" text={activeInsult.correctResponse} />
+              </div>
+            )}
+          </div>
+
+          {/* Zona de Controles (opciones, timer) */}
+          <div className="w-full relative h-[220px] md:h-[250px] shrink-0">
             {phase === 'PLAYER_ATTACKING' && (
-              <div className="absolute bottom-0 w-full bg-[#0a0a0a] border border-toxic p-4 overflow-y-auto h-full shadow-[0_0_15px_rgba(57,255,20,0.2)]">
-                <h3 className="text-toxic text-xs uppercase mb-3 font-bold">Selecciona tu ataque:</h3>
+              <div className="absolute inset-0 bg-[#0a0a0a] border border-toxic p-3 md:p-5 overflow-y-auto shadow-[0_0_15px_rgba(57,255,20,0.2)] scrollbar-thin scrollbar-thumb-toxic/50 scrollbar-track-transparent">
+                <h3 className="text-toxic text-xs md:text-sm uppercase mb-3 font-bold sticky top-0 bg-[#0a0a0a] pb-2 z-10">Selecciona tu ataque:</h3>
                 <div className="space-y-2">
                   {knowledge.knownInsults.map(id => {
                     const ins = INSULTS.find(i => i.id === id);
@@ -207,7 +236,7 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
                       <button
                         key={id}
                         onClick={() => handlePlayerAttackSelection(id)}
-                        className="w-full text-left p-2 border border-gray-800 hover:border-toxic hover:text-toxic hover:bg-toxic/10 text-sm transition-colors"
+                        className="w-full text-left p-2 border border-gray-800 hover:border-toxic hover:text-toxic hover:bg-toxic/10 text-xs md:text-sm transition-colors"
                       >
                         &quot;{ins.attacker}&quot;
                       </button>
@@ -216,21 +245,15 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
                 </div>
               </div>
             )}
-            
-            {activeInsult && currentAttacker === 'player' && (
-              <div className="absolute bottom-4 left-0">
-                <InsultBubble speaker="player" text={activeInsult.attacker} />
-              </div>
-            )}
 
             {phase === 'BLADO_ATTACKING' && (
-              <div className="absolute bottom-0 w-full">
+              <div className="absolute inset-0 flex flex-col justify-end">
                 <DuelTimer 
                   seconds={15} 
                   isActive={true} 
                   onTimeout={handleTimeout} 
                 />
-                <div className="mt-4">
+                <div className="mt-2 md:mt-4 h-[180px] md:h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600">
                   <ResponseOptions 
                     options={responseOptions}
                     disabled={false}
@@ -241,46 +264,23 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
                 </div>
               </div>
             )}
-            
+
             {phase === 'EVALUATING' && currentAttacker === 'blado' && (
-              <div className="absolute bottom-0 w-full">
-                <ResponseOptions 
-                  options={responseOptions}
-                  disabled={true}
-                  selectedId={selectedOptionId}
-                  showFeedback={true}
-                  onSelect={() => {}}
-                />
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Lado Blado */}
-        <div className="flex-1 flex flex-col justify-end items-end">
-          <div className="mb-4">
-            <BladoPortrait size={150} />
-          </div>
-          
-          <div className="h-48 md:h-64 relative w-full flex justify-end">
-            {activeInsult && currentAttacker === 'blado' && (
-              <div className="absolute bottom-4 right-0">
-                <InsultBubble speaker="blado" text={activeInsult.attacker} />
-              </div>
-            )}
-
-            {phase === 'BLADO_RESPONDING' && activeInsult && (
-              <div className="absolute bottom-4 right-0">
-                <InsultBubble 
-                  speaker="blado" 
-                  text={activeInsult.correctResponse} 
-                />
+              <div className="absolute inset-0 flex flex-col justify-end">
+                <div className="mt-2 md:mt-4 h-[180px] md:h-[200px] overflow-y-auto">
+                  <ResponseOptions 
+                    options={responseOptions}
+                    disabled={true}
+                    selectedId={selectedOptionId}
+                    showFeedback={true}
+                    onSelect={() => {}}
+                  />
+                </div>
               </div>
             )}
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 }
