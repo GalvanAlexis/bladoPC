@@ -68,9 +68,12 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ ok: true });
-  } catch (error) {
-    if ((error as any)?.code === 'ECONNREFUSED' || (error as any)?.code === 'P1001') {
-      console.warn('[Analytics] Skipped tracking visitor: DB connection refused');
+  } catch (error: unknown) {
+    if (typeof error === 'object' && error !== null && 'code' in error) {
+      const code = (error as { code: string }).code;
+      if (code === 'ECONNREFUSED' || code === 'P1001') {
+        console.warn('[Analytics] Skipped tracking visitor: DB connection refused');
+      }
     } else {
       console.error('[Analytics] Error tracking visitor:', error);
     }

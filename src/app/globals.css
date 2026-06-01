@@ -48,3 +48,44 @@ body {
 .dialog-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #ff4444;
 }
+
+/* --- Biblioteca Magica RPG --- */
+@keyframes flicker {
+  0%   { box-shadow: 0 0 15px 8px #ff6b1a80; opacity: 1; }
+  25%  { box-shadow: 0 0 20px 12px #ffaa4480; opacity: 0.95; }
+  50%  { box-shadow: 0 0 12px 6px #ff6b1a60; opacity: 0.9; }
+  75%  { box-shadow: 0 0 18px 10px #ff8c2a70; opacity: 0.97; }
+  100% { box-shadow: 0 0 15px 8px #ff6b1a80; opacity: 1; }
+}
+
+@keyframes float-dust {
+  0%   { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+  20%  { opacity: 0.4; }
+  80%  { opacity: 0.2; }
+  100% { transform: translate(var(--dx), var(--dy)) rotate(360deg); opacity: 0; }
+}
+
+@keyframes glow-pulse {
+  0%   { box-shadow: 0 0 8px 2px var(--book-color); }
+  50%  { box-shadow: 0 0 20px 8px var(--book-color); }
+  100% { box-shadow: 0 0 8px 2px var(--book-color); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.bg-wood-floor {
+  background-color: #1a0f08;
+  background-image: repeating-linear-gradient(45deg, #1f120a 25%, transparent 25%, transparent 75%, #1f120a 75%, #1f120a), repeating-linear-gradient(45deg, #1f120a 25%, #1a0f08 25%, #1a0f08 75%, #1f120a 75%, #1f120a);
+  background-position: 0 0, 10px 10px;
+  background-size: 20px 20px;
+}
+
+.text-cinzel {
+  font-family: 'Cinzel', serif;
+}
+.text-crimson {
+  font-family: 'Crimson Text', serif;
+}

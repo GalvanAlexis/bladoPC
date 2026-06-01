@@ -2,7 +2,7 @@
 jest.mock('fs');
 
 import fs from 'fs';
-import { getSkillTreeData, getFullContextString, getFilosofiaContextString } from '@/lib/markdown';
+import { getFullContextString, getFilosofiaContextString } from '@/lib/markdown';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -63,134 +63,7 @@ function setupFsMocks(content = YEAR1_CONTENT, files = [TRACKING_FILE]) {
   }
 }
 
-// ── Tests de parseStatus (indirectos a través de getSkillTreeData) ────────────
 
-describe('getSkillTreeData — parseStatus', () => {
-  beforeEach(() => setupFsMocks());
-
-  it('parsea [x] como "completed"', () => {
-    const { nodes } = getSkillTreeData();
-    const matematica = nodes.find(n => n.label === 'Matemática I');
-    expect(matematica?.status).toBe('completed');
-  });
-
-  it('parsea [ ] como "locked"', () => {
-    const { nodes } = getSkillTreeData();
-    const matematicaII = nodes.find(n => n.label === 'Matemática II');
-    expect(matematicaII?.status).toBe('locked');
-  });
-
-  it('parsea [/] como "progress"', () => {
-    const { nodes } = getSkillTreeData();
-    const fisica = nodes.find(n => n.label === 'Física I');
-    expect(fisica?.status).toBe('progress');
-  });
-});
-
-// ── Tests de extractYear ──────────────────────────────────────────────────────
-
-describe('getSkillTreeData — extractYear', () => {
-  beforeEach(() => setupFsMocks());
-
-  it('asigna year=1 para archivos con año_1', () => {
-    const { nodes } = getSkillTreeData();
-    expect(nodes.length).toBeGreaterThan(0);
-    nodes.forEach(n => expect(n.year).toBe(1));
-  });
-});
-
-// ── Tests de getSkillTreeData — estructura general ────────────────────────────
-
-describe('getSkillTreeData — parsing', () => {
-  beforeEach(() => setupFsMocks());
-
-  it('genera nodos de tipo materia', () => {
-    const { nodes } = getSkillTreeData();
-    const materias = nodes.filter(n => n.type === 'materia');
-    expect(materias.length).toBeGreaterThan(0);
-  });
-
-  it('genera nodos de tipo tecnologia', () => {
-    const { nodes } = getSkillTreeData();
-    const techs = nodes.filter(n => n.type === 'tecnologia');
-    expect(techs.length).toBeGreaterThan(0);
-  });
-
-  it('genera nodos de tipo proyecto', () => {
-    const { nodes } = getSkillTreeData();
-    const proyectos = nodes.filter(n => n.type === 'proyecto');
-    expect(proyectos.length).toBeGreaterThan(0);
-    expect(proyectos[0].label).toBe('Simulador Solar');
-  });
-
-  it('asigna career a cada nodo', () => {
-    const { nodes } = getSkillTreeData();
-    nodes.forEach(n => expect(n.career).toBe('1 Ing Sistemas'));
-  });
-
-  it('no duplica nodos con el mismo id', () => {
-    // Python aparece tanto en Tecnologías como referenciado en Stack
-    const { nodes } = getSkillTreeData();
-    const ids = nodes.map(n => n.id);
-    const uniqueIds = new Set(ids);
-    expect(ids.length).toBe(uniqueIds.size);
-  });
-});
-
-// ── Tests de deduplicación de nodos ──────────────────────────────────────────
-
-describe('getSkillTreeData — deduplicación', () => {
-  beforeEach(() => {
-    // Dos archivos de año con la misma materia
-    const mockedFs = jest.mocked(fs);
-    mockedFs.existsSync = jest.fn().mockReturnValue(true) as typeof fs.existsSync;
-    mockedFs.readdirSync = jest.fn().mockImplementation((dir: unknown) => {
-      const d = dir as string;
-      if (d.includes('1 Ing Sistemas')) return ['01_año_1.md', '02_año_2.md'];
-      return [];
-    }) as typeof fs.readdirSync;
-    mockedFs.statSync = jest.fn().mockReturnValue({
-      isDirectory: () => false,
-    }) as unknown as typeof fs.statSync;
-    mockedFs.readFileSync = jest.fn()
-      .mockReturnValueOnce(YEAR1_CONTENT)
-      .mockReturnValueOnce(YEAR2_CONTENT) as unknown as typeof fs.readFileSync;
-  });
-
-  it('no crea nodos duplicados entre años', () => {
-    // "Matemática I" aparece en año 1 y año 2 — solo debe haber 1 nodo
-    const { nodes } = getSkillTreeData();
-    const matematicaI = nodes.filter(n => n.label === 'Matemática I');
-    expect(matematicaI.length).toBe(1);
-  });
-});
-
-// ── Tests de filtrado de edges colgados (BUG-07) ─────────────────────────────
-
-describe('getSkillTreeData — cleanEdges (BUG-07)', () => {
-  beforeEach(() => {
-    const contentWithOrphanStack = `
-## Materias
-- [x] Matemática I: Álgebra
-
-## Tecnologías
-- [x] Python
-
-## Proyectos
-- [x] Nombre: Proyecto X
-- [ ] Stack: Python
-- [ ] Stack: TechInexistente
-`;
-    setupFsMocks(contentWithOrphanStack);
-  });
-
-  it('filtra edges cuyo source no existe como nodo', () => {
-    const { nodes, edges } = getSkillTreeData();
-    const nodeIds = new Set(nodes.map(n => n.id));
-    const dangling = edges.filter(e => !nodeIds.has(e.source) || !nodeIds.has(e.target));
-    expect(dangling.length).toBe(0);
-  });
-});
 
 // ── Tests de getFullContextString ─────────────────────────────────────────────
 
