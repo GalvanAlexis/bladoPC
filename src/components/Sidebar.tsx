@@ -6,6 +6,7 @@
  */
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { useAppContext } from '@/lib/AppContext';
 
 interface SidebarProps {
@@ -14,7 +15,8 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
-  const { particlesEnabled, animationsEnabled, setParticlesEnabled, setAnimationsEnabled } = useAppContext();
+  const router = useRouter();
+  const { particlesEnabled, animationsEnabled, setParticlesEnabled, setAnimationsEnabled, replayIntro } = useAppContext();
 
   return (
     <AnimatePresence>
@@ -53,6 +55,42 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   ✕
                 </button>
               </div>
+
+              {/* ─── Navegación (Solo Mobile) ─── */}
+              <section className="sm:hidden">
+                <h3 className="text-[10px] uppercase tracking-widest text-gray-700 mb-3 font-mono">
+                  Navegación
+                </h3>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => { onClose(); router.push('/'); }}
+                    className="text-left px-3 py-2 rounded text-sm text-gray-500 hover:text-toxic hover:bg-gray-800/40 transition-colors font-mono"
+                  >
+                    Volver al inicio
+                  </button>
+                  <button
+                    onClick={() => { onClose(); replayIntro(); }}
+                    className="text-left px-3 py-2 rounded text-sm text-gray-500 hover:text-toxic hover:bg-gray-800/40 transition-colors font-mono"
+                  >
+                    Intro
+                  </button>
+                  <button
+                    onClick={() => { onClose(); router.push('/timba'); }}
+                    className="text-left px-3 py-2 rounded text-sm text-gray-500 hover:text-toxic hover:bg-gray-800/40 transition-colors font-mono"
+                  >
+                    Timba
+                  </button>
+                  <button
+                    onClick={() => { onClose(); router.push('/cebar-mate'); }}
+                    className="text-left px-3 py-2 rounded text-sm text-gray-500 hover:text-toxic hover:bg-gray-800/40 transition-colors font-mono"
+                  >
+                    Cebar Mate
+                  </button>
+                </div>
+              </section>
+
+              {/* Divisor */}
+              <div className="border-t border-gray-800/60 sm:hidden" />
 
               {/* ─── Ajustes Visuales ─── */}
               <section>

@@ -16,6 +16,12 @@ jest.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
 }));
 
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+  }),
+}));
+
 function renderSidebar(
   isOpen: boolean,
   overrides: Partial<React.ContextType<typeof AppContext>> = {}
