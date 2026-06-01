@@ -82,7 +82,7 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (phase === 'BLADO_RESPONDING' || phase === 'EVALUATING') {
+      if (phase === 'BLADO_RESPONDING') {
         advanceTurn();
       }
     };
@@ -116,6 +116,13 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
     // El jugador no respondió a tiempo
     setSelectedOptionId(null);
     setPhase('EVALUATING');
+    setTimeout(() => {
+      setBladoScore(prev => {
+        const newScore = prev + 1;
+        checkWinCondition(playerScore, newScore);
+        return newScore;
+      });
+    }, 1500);
   };
 
   const handlePlayerResponseSelection = (option: ResponseOption) => {
@@ -123,6 +130,22 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
     
     setSelectedOptionId(option.id);
     setPhase('EVALUATING');
+    
+    setTimeout(() => {
+      if (option.isCorrect) {
+        setPlayerScore(prev => {
+          const newScore = prev + 1;
+          checkWinCondition(newScore, bladoScore);
+          return newScore;
+        });
+      } else {
+        setBladoScore(prev => {
+          const newScore = prev + 1;
+          checkWinCondition(playerScore, newScore);
+          return newScore;
+        });
+      }
+    }, 1500);
   };
 
   const handlePlayerAttackSelection = (insultId: string) => {
@@ -142,30 +165,6 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
         checkWinCondition(playerScore, newScore);
         return newScore;
       });
-    } else if (phase === 'EVALUATING') {
-      if (selectedOptionId) {
-        const option = responseOptions.find(o => o.id === selectedOptionId);
-        if (option?.isCorrect) {
-          setPlayerScore(prev => {
-            const newScore = prev + 1;
-            checkWinCondition(newScore, bladoScore);
-            return newScore;
-          });
-        } else {
-          setBladoScore(prev => {
-            const newScore = prev + 1;
-            checkWinCondition(playerScore, newScore);
-            return newScore;
-          });
-        }
-      } else {
-        // No respondió a tiempo
-        setBladoScore(prev => {
-          const newScore = prev + 1;
-          checkWinCondition(playerScore, newScore);
-          return newScore;
-        });
-      }
     }
   };
 
@@ -193,7 +192,7 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
 
   return (
     <>
-      {(phase === 'BLADO_RESPONDING' || phase === 'EVALUATING') && (
+      {phase === 'BLADO_RESPONDING' && (
         <div 
           className="fixed inset-0 z-50 cursor-pointer" 
           onClick={advanceTurn}
