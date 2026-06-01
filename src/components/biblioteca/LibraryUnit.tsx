@@ -9,9 +9,10 @@ interface LibraryUnitProps {
   yearsCount: number;
   onClick?: () => void;
   selected?: boolean;
+  isActive?: boolean;
 }
 
-export default function LibraryUnit({ id, name, color, icon, yearsCount, onClick, selected }: LibraryUnitProps) {
+export default function LibraryUnit({ id, name, color, icon, yearsCount, onClick, selected, isActive }: LibraryUnitProps) {
   return (
     <motion.div 
       className={`relative w-48 h-80 flex flex-col cursor-pointer select-none group transition-all duration-300 ${selected ? 'z-50' : 'z-10'}`}
@@ -27,8 +28,10 @@ export default function LibraryUnit({ id, name, color, icon, yearsCount, onClick
         className="relative flex-1 bg-[#2d1b0e] border-t-8 border-l-8 border-r-8 border-b-8 border-[#3d2415] rounded-t-xl overflow-hidden shadow-2xl transition-all"
         style={{ 
           boxShadow: `inset 0 0 40px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.5)`,
-          borderColor: color ? `color-mix(in srgb, ${color} 30%, #3d2415)` : undefined
-        }}
+          borderColor: color ? `color-mix(in srgb, ${color} 30%, #3d2415)` : undefined,
+          '--career-color': color,
+          animation: isActive ? 'carousel-glow-active 3s infinite' : 'none'
+        } as React.CSSProperties}
       >
         {/* Adorno superior central */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-8 bg-[#1a0f08] border-b-4 border-l-4 border-r-4 border-[#3d2415] rounded-b-full flex items-center justify-center z-20">

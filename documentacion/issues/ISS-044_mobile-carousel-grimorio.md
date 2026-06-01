@@ -1,6 +1,6 @@
 # ISS-044: Carrusel Mágico Mobile — Coverflow del Grimorio
 
-**Estado:** En progreso  
+**Estado:** Completado  
 **Branch de implementación:** `feature/ISS-044-mobile-carousel`  
 **Tipo:** Feature / UX Mobile  
 **Prioridad:** Alta  
