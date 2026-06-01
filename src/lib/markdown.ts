@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { CAREERS } from './constants';
-import { LibraryData, CarreraData, YearData, BookData, TopicEntry, BookColorFamily, BOOK_COLOR_PALETTES } from './libraryTypes';
+import { LibraryData, CarreraData, YearData, BookData, TopicEntry, BookColorFamily, BOOK_COLOR_PALETTES, BookStatus } from './libraryTypes';
 
 // Removed SkillNode, SkillEdge as they are replaced by libraryTypes.ts
 
@@ -12,7 +12,7 @@ const CONTENT_DIR_BASE = path.join(process.cwd(), 'content', 'Carreras');
 /**
  * Parsea el texto del estado de un checkbox markdown
  */
-function parseStatus(checkStr: string): SkillStatus {
+function parseStatus(checkStr: string): BookStatus {
   if (checkStr === 'x' || checkStr === 'X') return 'completed';
   if (checkStr === '/') return 'progress';
   return 'locked';
