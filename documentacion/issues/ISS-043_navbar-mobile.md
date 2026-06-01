@@ -1,6 +1,6 @@
 # ISS-043: Navbar no visible en Mobile
 
-**Estado:** En progreso
+**Estado:** Completado
 **Branch de implementación:** `feature/ISS-043-navbar-mobile`
 **Tipo:** Bugfix / Responsive Design
 
