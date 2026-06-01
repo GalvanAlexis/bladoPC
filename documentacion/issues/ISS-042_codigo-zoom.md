@@ -1,6 +1,6 @@
 # ISS-042: Ajuste de Bloques de Código y Zoom Dinámico
 
-**Estado:** En progreso
+**Estado:** Completado
 **Branch de implementación:** `feature/ISS-042-codigo-zoom`
 **Tipo:** Bugfix / Mejora UX
 
