@@ -104,14 +104,8 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
   const handleTimeout = () => {
     if (phase !== 'BLADO_ATTACKING') return;
     // El jugador no respondió a tiempo
+    setSelectedOptionId(null);
     setPhase('EVALUATING');
-    setTimeout(() => {
-      setBladoScore(prev => {
-        const newScore = prev + 1;
-        checkWinCondition(playerScore, newScore);
-        return newScore;
-      });
-    }, 1500);
   };
 
   const handlePlayerResponseSelection = (option: ResponseOption) => {
@@ -119,22 +113,6 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
     
     setSelectedOptionId(option.id);
     setPhase('EVALUATING');
-    
-    setTimeout(() => {
-      if (option.isCorrect) {
-        setPlayerScore(prev => {
-          const newScore = prev + 1;
-          checkWinCondition(newScore, bladoScore);
-          return newScore;
-        });
-      } else {
-        setBladoScore(prev => {
-          const newScore = prev + 1;
-          checkWinCondition(playerScore, newScore);
-          return newScore;
-        });
-      }
-    }, 1500);
   };
 
   const handlePlayerAttackSelection = (insultId: string) => {
@@ -143,16 +121,42 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
 
     setActiveInsult(insult);
     setPhase('BLADO_RESPONDING');
-    
-    setTimeout(() => {
+  };
+
+  const advanceTurn = () => {
+    if (phase === 'BLADO_RESPONDING') {
       // Blado es invencible y SIEMPRE responde bien
-      setKnowledge(prev => onPlayerWitnessedBladoResponse(insult.id, prev));
+      setKnowledge(prev => onPlayerWitnessedBladoResponse(activeInsult!.id, prev));
       setBladoScore(prev => {
         const newScore = prev + 1;
         checkWinCondition(playerScore, newScore);
         return newScore;
       });
-    }, 2500);
+    } else if (phase === 'EVALUATING') {
+      if (selectedOptionId) {
+        const option = responseOptions.find(o => o.id === selectedOptionId);
+        if (option?.isCorrect) {
+          setPlayerScore(prev => {
+            const newScore = prev + 1;
+            checkWinCondition(newScore, bladoScore);
+            return newScore;
+          });
+        } else {
+          setBladoScore(prev => {
+            const newScore = prev + 1;
+            checkWinCondition(playerScore, newScore);
+            return newScore;
+          });
+        }
+      } else {
+        // No respondió a tiempo
+        setBladoScore(prev => {
+          const newScore = prev + 1;
+          checkWinCondition(playerScore, newScore);
+          return newScore;
+        });
+      }
+    }
   };
 
   const checkWinCondition = (newPlayerScore: number, newBladoScore: number) => {
@@ -267,9 +271,20 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
               </div>
             )}
 
+            {phase === 'BLADO_RESPONDING' && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <button 
+                  onClick={advanceTurn}
+                  className="bg-transparent border border-gray-600 text-gray-400 hover:text-white hover:border-white px-8 py-3 uppercase tracking-widest text-sm md:text-base transition-all animate-pulse"
+                >
+                  Continuar
+                </button>
+              </div>
+            )}
+
             {phase === 'EVALUATING' && currentAttacker === 'blado' && (
               <div className="absolute inset-0 flex flex-col justify-end">
-                <div className="mt-2 md:mt-4 flex-1 overflow-y-auto">
+                <div className="mt-2 md:mt-4 flex-1 overflow-y-auto pb-16">
                   <ResponseOptions 
                     options={responseOptions}
                     disabled={true}
@@ -277,6 +292,14 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
                     showFeedback={true}
                     onSelect={() => {}}
                   />
+                </div>
+                <div className="absolute bottom-0 left-0 w-full p-2 bg-[#0a0a0a] border-t border-gray-800 flex justify-center">
+                  <button 
+                    onClick={advanceTurn}
+                    className="w-full md:w-auto bg-transparent border border-gray-600 text-gray-400 hover:text-white hover:border-white px-8 py-2 uppercase tracking-widest text-sm transition-all"
+                  >
+                    Continuar
+                  </button>
                 </div>
               </div>
             )}
