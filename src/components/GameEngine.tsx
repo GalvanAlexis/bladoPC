@@ -4,7 +4,7 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import VisualNovelScene from "@/components/VisualNovelScene";
 import DialogBox, { Choice } from "@/components/DialogBox";
-import SkillTreeViewer from "@/components/SkillTreeViewer";
+import LibraryRoom from "@/components/biblioteca/LibraryRoom";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import ReadmeModal from "@/components/ReadmeModal";
@@ -281,21 +281,7 @@ export default function GameEngine({
       {/* Skill Tree Grimoire (overlay) */}
       <AnimatePresence>
         {showSkillTree && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="absolute inset-2 sm:inset-4 md:inset-8 z-30 rounded-xl overflow-hidden border-2 border-toxic shadow-[0_0_50px_rgba(57,255,20,0.3)]"
-          >
-            <SkillTreeViewer
-              initialNodes={initialNodes}
-              initialEdges={initialEdges}
-              selectedCareer={selectedCareer}
-              selectedYear={selectedYear}
-              onCareerChange={setSelectedCareer}
-              onYearChange={setSelectedYear}
-            />
-          </motion.div>
+          <LibraryRoom />
         )}
       </AnimatePresence>
 
