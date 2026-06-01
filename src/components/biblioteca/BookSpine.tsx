@@ -12,6 +12,7 @@ export default function BookSpine({ book, career, onClick }: BookSpineProps) {
   const isLocked = book.status === 'locked';
   const isCompleted = book.status === 'completed';
   const isProgress = book.status === 'progress';
+  const isInteractable = book.topicsFilePath !== null;
 
   // Extraer un color base para el glow del estado completed/progress
   const baseColor = career.color; 
@@ -22,12 +23,14 @@ export default function BookSpine({ book, career, onClick }: BookSpineProps) {
 
   return (
     <motion.div
-      onClick={isLocked ? undefined : onClick}
-      whileHover={isLocked ? {} : { y: -10, scale: 1.05 }}
-      title={isLocked ? `Bloqueado: ${book.fullName}` : book.fullName}
-      className={`relative w-10 h-32 rounded-sm cursor-${isLocked ? 'not-allowed' : 'pointer'} flex items-center justify-center transition-all z-20 group`}
+      onClick={isInteractable ? onClick : undefined}
+      whileHover={isInteractable ? { y: -10, scale: 1.05 } : {}}
+      title={isInteractable ? `${book.fullName}${isLocked ? ' (planificado)' : ''}` : `Sin contenido: ${book.fullName}`}
+      className={`relative w-10 h-32 rounded-sm cursor-${isInteractable ? 'pointer' : 'not-allowed'} flex items-center justify-center transition-all z-20 group`}
       style={{
-        backgroundColor: isLocked ? '#2a2a2a' : bookColor,
+        backgroundColor: isLocked 
+          ? (isInteractable ? `color-mix(in srgb, #2a2a2a 80%, ${baseColor})` : '#2a2a2a')
+          : bookColor,
         border: '1px solid rgba(0,0,0,0.5)',
         '--book-color': baseColor,
       } as React.CSSProperties}

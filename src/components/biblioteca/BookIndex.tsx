@@ -28,7 +28,7 @@ export default function BookIndex({ book, activeTopicId, onTopicSelect }: BookIn
             book.status === 'progress' ? 'bg-[#eab308]/20 text-[#eab308]' :
             'bg-gray-600/30 text-gray-400'
           }`}>
-            {book.status === 'completed' ? 'Completado' : book.status === 'progress' ? 'En progreso' : 'Bloqueado'}
+            {book.status === 'completed' ? 'Completado' : book.status === 'progress' ? 'En progreso' : (book.hasContent ? '📋 Planificado' : 'Bloqueado')}
           </span>
           <span className="text-[#d4c3a3]">{progressPercent}% completado</span>
         </div>
