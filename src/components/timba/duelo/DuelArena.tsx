@@ -80,6 +80,16 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
     };
   }, [isMobile]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (phase === 'BLADO_RESPONDING' || phase === 'EVALUATING') {
+        advanceTurn();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [phase, activeInsult, selectedOptionId, responseOptions, playerScore, bladoScore, knowledge]);
+
   const startBladoTurn = () => {
     setCurrentAttacker('blado');
     const insult = selectBladoInsult(INSULTS, usedInsults, knowledge);
@@ -183,6 +193,13 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
 
   return (
     <>
+      {(phase === 'BLADO_RESPONDING' || phase === 'EVALUATING') && (
+        <div 
+          className="fixed inset-0 z-50 cursor-pointer" 
+          onClick={advanceTurn}
+          aria-label="Toca cualquier parte para continuar"
+        />
+      )}
       {showRotatePrompt && <RotatePrompt onDismiss={() => setShowRotatePrompt(false)} />}
       <div className="w-full max-w-4xl mx-auto flex flex-col h-full relative z-10 font-mono text-white p-1 md:p-2 pb-2 md:pb-4 overflow-hidden">
         <DuelLights playerScore={playerScore} bladoScore={bladoScore} />
@@ -271,20 +288,9 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
               </div>
             )}
 
-            {phase === 'BLADO_RESPONDING' && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <button 
-                  onClick={advanceTurn}
-                  className="bg-transparent border border-gray-600 text-gray-400 hover:text-white hover:border-white px-8 py-3 uppercase tracking-widest text-sm md:text-base transition-all animate-pulse"
-                >
-                  Continuar
-                </button>
-              </div>
-            )}
-
             {phase === 'EVALUATING' && currentAttacker === 'blado' && (
               <div className="absolute inset-0 flex flex-col justify-end">
-                <div className="mt-2 md:mt-4 flex-1 overflow-y-auto pb-16">
+                <div className="mt-2 md:mt-4 flex-1 overflow-y-auto pb-8">
                   <ResponseOptions 
                     options={responseOptions}
                     disabled={true}
@@ -292,14 +298,6 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
                     showFeedback={true}
                     onSelect={() => {}}
                   />
-                </div>
-                <div className="absolute bottom-0 left-0 w-full p-2 bg-[#0a0a0a] border-t border-gray-800 flex justify-center">
-                  <button 
-                    onClick={advanceTurn}
-                    className="w-full md:w-auto bg-transparent border border-gray-600 text-gray-400 hover:text-white hover:border-white px-8 py-2 uppercase tracking-widest text-sm transition-all"
-                  >
-                    Continuar
-                  </button>
                 </div>
               </div>
             )}
