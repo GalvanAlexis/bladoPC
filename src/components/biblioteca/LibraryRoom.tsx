@@ -3,18 +3,17 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import LibraryUnit from './LibraryUnit';
-
-// Mock temporal hasta la fase 3
-const MOCK_LIBRARIES = [
-  { id: '1 Ing Sistemas', name: 'Ingeniería en Sistemas', color: '#3b82f6', icon: '💻', yearsCount: 6 },
-  { id: '2 Ing Datos', name: 'Ingeniería de Datos', color: '#9333ea', icon: '📊', yearsCount: 6 },
-  { id: '3 Lic IA', name: 'Licenciatura en IA', color: '#22c55e', icon: '🧠', yearsCount: 6 },
-  { id: '4 Miscelanea', name: 'Miscelánea', color: '#d97706', icon: '🔮', yearsCount: 4 },
-];
+import LibraryShelf from './LibraryShelf';
+import { useLibraryData } from '@/hooks/useLibraryData';
+import { BookData } from '@/lib/libraryTypes';
 
 export default function LibraryRoom() {
-  const [selectedLibrary, setSelectedLibrary] = useState<string | null>(null);
+  const { data: libraryData, loading, error } = useLibraryData();
+  const [selectedLibraryId, setSelectedLibraryId] = useState<string | null>(null);
   const [particles, setParticles] = useState<{ id: number; dx: number; dy: number; duration: number; delay: number }[]>([]);
+
+  // Encontrar la carrera seleccionada de los datos reales
+  const selectedCareer = libraryData?.carreras.find(c => c.id === selectedLibraryId);
 
   // Generar partículas solo en el cliente
   useEffect(() => {
@@ -73,7 +72,7 @@ export default function LibraryRoom() {
         
         {/* Nivel 1: La Sala (Las Bibliotecas) */}
         <AnimatePresence>
-          {!selectedLibrary && (
+          {!selectedLibraryId && (
             <motion.div 
               className="flex flex-wrap items-center justify-center gap-8 md:gap-16 px-4 py-12"
               initial={{ opacity: 0, scale: 0.9 }}
@@ -90,16 +89,27 @@ export default function LibraryRoom() {
                 </p>
               </div>
 
-              {MOCK_LIBRARIES.map((lib, i) => (
+              {loading && (
+                <div className="text-[#e8d5b0] text-xl font-cinzel mt-20">Desempolvando tomos antiguos...</div>
+              )}
+              {error && (
+                <div className="text-red-500 text-xl font-cinzel mt-20">Error al leer los registros: {error}</div>
+              )}
+
+              {!loading && !error && libraryData?.carreras.map((career, i) => (
                 <motion.div
-                  key={lib.id}
+                  key={career.id}
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.15 + 0.2, type: 'spring', stiffness: 100 }}
                 >
                   <LibraryUnit 
-                    {...lib} 
-                    onClick={() => setSelectedLibrary(lib.id)} 
+                    id={career.id}
+                    name={career.name}
+                    color={career.color}
+                    icon={career.icon}
+                    yearsCount={career.years.length}
+                    onClick={() => setSelectedLibraryId(career.id)} 
                   />
                 </motion.div>
               ))}
@@ -109,36 +119,48 @@ export default function LibraryRoom() {
 
         {/* Nivel 2: Biblioteca Expandida (Fase 3 Placeholder) */}
         <AnimatePresence>
-          {selectedLibrary && (
+          {selectedLibraryId && selectedCareer && (
             <motion.div 
-              className="absolute inset-4 md:inset-10 bg-[#16213e] border-2 border-[#e8d5b0]/30 rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col"
+              className="absolute inset-4 md:inset-10 bg-[#16213e] border-2 border-[#e8d5b0]/30 rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col z-30"
               initial={{ opacity: 0, scale: 0.8, y: 50 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: 50 }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              layoutId={`library-${selectedLibrary}`}
+              layoutId={`library-${selectedLibraryId}`}
             >
-              <div className="w-full p-4 border-b border-[#e8d5b0]/20 flex items-center justify-between bg-[#0f172a]">
-                <h2 className="text-cinzel text-2xl text-[#e8d5b0] font-bold">
-                  {MOCK_LIBRARIES.find(l => l.id === selectedLibrary)?.name}
+              <div className="w-full p-4 border-b border-[#e8d5b0]/20 flex items-center justify-between bg-[#0f172a] shadow-lg z-40 relative">
+                <h2 className="text-cinzel text-2xl text-[#e8d5b0] font-bold drop-shadow-md">
+                  {selectedCareer.name}
                 </h2>
                 <button 
-                  onClick={() => setSelectedLibrary(null)}
-                  className="px-4 py-2 border border-[#e8d5b0]/50 text-[#e8d5b0] rounded font-cinzel hover:bg-[#e8d5b0]/10 transition-colors"
+                  onClick={() => setSelectedLibraryId(null)}
+                  className="px-4 py-2 border border-[#e8d5b0]/50 text-[#e8d5b0] rounded font-cinzel hover:bg-[#e8d5b0]/10 transition-colors shadow-sm"
                 >
                   ← Volver a la Sala
                 </button>
               </div>
               
-              <div className="flex-1 flex items-center justify-center bg-wood-floor relative">
+              <div className="flex-1 overflow-y-auto bg-wood-floor relative dialog-scrollbar pt-8 pb-20">
                 {/* Glow radial de la carrera */}
                 <div 
-                  className="absolute inset-0 opacity-20 pointer-events-none"
-                  style={{ background: `radial-gradient(circle at center, ${MOCK_LIBRARIES.find(l => l.id === selectedLibrary)?.color} 0%, transparent 60%)` }}
+                  className="absolute inset-0 opacity-20 pointer-events-none mix-blend-screen"
+                  style={{ background: `radial-gradient(circle at center, ${selectedCareer.color} 0%, transparent 60%)` }}
                 />
-                <p className="text-crimson text-2xl text-gray-400 italic">
-                  (El contenido de los estantes se cargará en la Fase 3)
-                </p>
+                
+                {/* Estantes renderizados */}
+                <div className="relative z-10 flex flex-col items-center">
+                  {selectedCareer.years.map(year => (
+                    <LibraryShelf 
+                      key={year.year} 
+                      year={year} 
+                      career={selectedCareer} 
+                      onBookClick={(book) => {
+                        console.log("Clic en libro:", book.slug);
+                        // TODO: Implementar visor en Fase 4
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
             </motion.div>
           )}
