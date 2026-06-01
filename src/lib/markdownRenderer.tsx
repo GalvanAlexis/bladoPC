@@ -28,8 +28,9 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
           ),
           code: ({ inline, className, children, ...props }: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & { inline?: boolean }) => {
             const match = /language-(\w+)/.exec(className || '');
-            return !inline && match ? (
-              <code className={`${className} text-sm font-mono block p-4 bg-[#1a1a2e] rounded-md overflow-x-auto my-4 shadow-inner`} {...props}>
+            const isMultiLine = String(children).includes('\n');
+            return (!inline && match) || isMultiLine ? (
+              <code className={`${className || ''} text-sm font-mono block p-4 bg-[#1a1a2e] rounded-md overflow-x-auto whitespace-pre my-4 shadow-inner`} {...props}>
                 {children}
               </code>
             ) : (
