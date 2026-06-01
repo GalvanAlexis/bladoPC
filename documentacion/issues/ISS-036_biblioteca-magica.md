@@ -1,6 +1,6 @@
 # ISS-036: La Biblioteca Mágica — Grimorio de Habilidades RPG
 
-**Estado:** Planificado  
+**Estado:** Completado
 **Branch de implementación:** `feature/ISS-036-biblioteca-magica`  
 **Tipo:** Minijuego / Feature — Portafolio  
 **Ruta:** Overlay desde el diálogo de Blado → opción "Abrir el Grimorio"  
