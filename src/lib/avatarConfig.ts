@@ -5,8 +5,12 @@ export type FaceFeature = 'cicatriz' | 'parche' | 'anteojos' | 'tatuaje' | 'ning
 export type Expression = 'serio' | 'sonriente' | 'intimidante';
 export type Outfit = 'pirata' | 'espartano' | 'vikingo' | 'rockero' | 'caballero' | 'ninja' | 'samurai' | 'gaucho' | 'lord';
 
+export type WarriorClass = 'vikingo' | 'ninja' | 'pirata' | 'caballero' | 'samurai' | 'gaucho';
+
 export interface AvatarConfig {
   name: string;
+  warriorClass?: WarriorClass; // Nuevo campo opcional para la v2
+  // Mantenemos estos para retrocompatibilidad con avatares viejos guardados
   skinTone: SkinTone;
   hairStyle: HairStyle;
   hairColor: HairColor;
@@ -15,33 +19,38 @@ export interface AvatarConfig {
   outfit: Outfit;
 }
 
-export const SKIN_TONES: SkinTone[] = ['light', 'medium', 'dark', 'green', 'blue', 'red'];
-export const HAIR_STYLES: HairStyle[] = ['rapado', 'largo', 'rulos', 'mohawk', 'gorra', 'cola', 'despeinado', 'ninguno'];
-export const HAIR_COLORS: HairColor[] = ['rubio', 'negro', 'pelirrojo', 'azul', 'verde', 'rosa', 'blanco', 'castaño', 'gris', 'violeta'];
-export const FACE_FEATURES: FaceFeature[] = ['cicatriz', 'parche', 'anteojos', 'tatuaje', 'ninguno'];
-export const EXPRESSIONS: Expression[] = ['serio', 'sonriente', 'intimidante'];
-export const OUTFITS: Outfit[] = ['pirata', 'espartano', 'vikingo', 'rockero', 'caballero', 'ninja', 'samurai', 'gaucho', 'lord'];
+export const WARRIOR_CLASSES: Record<WarriorClass, Omit<AvatarConfig, 'name' | 'warriorClass'>> = {
+  vikingo: { skinTone: 'light', hairStyle: 'rapado', hairColor: 'rubio', faceFeature: 'cicatriz', expression: 'intimidante', outfit: 'vikingo' },
+  ninja: { skinTone: 'medium', hairStyle: 'ninguno', hairColor: 'negro', faceFeature: 'ninguno', expression: 'serio', outfit: 'ninja' },
+  pirata: { skinTone: 'dark', hairStyle: 'largo', hairColor: 'pelirrojo', faceFeature: 'parche', expression: 'sonriente', outfit: 'pirata' },
+  caballero: { skinTone: 'medium', hairStyle: 'rapado', hairColor: 'negro', faceFeature: 'ninguno', expression: 'serio', outfit: 'caballero' },
+  samurai: { skinTone: 'light', hairStyle: 'cola', hairColor: 'negro', faceFeature: 'ninguno', expression: 'intimidante', outfit: 'samurai' },
+  gaucho: { skinTone: 'medium', hairStyle: 'largo', hairColor: 'castaño', faceFeature: 'ninguno', expression: 'sonriente', outfit: 'gaucho' }
+};
+
+export const WARRIOR_EMOJIS: Record<WarriorClass, string> = {
+  vikingo: '⚔️',
+  ninja: '🥷',
+  pirata: '🏴‍☠️',
+  caballero: '🛡️',
+  samurai: '⛩️',
+  gaucho: '🌵'
+};
 
 export const DEFAULT_AVATAR: AvatarConfig = {
   name: 'Mortal',
-  skinTone: 'medium',
-  hairStyle: 'despeinado',
-  hairColor: 'negro',
-  faceFeature: 'ninguno',
-  expression: 'serio',
-  outfit: 'pirata',
+  warriorClass: 'vikingo',
+  ...WARRIOR_CLASSES.vikingo
 };
 
-// DiceBear pixel-art genera el avatar en base al seed. 
-// Concatenamos las propiedades para asegurar un avatar único y determinista.
 export function buildAvatarUrl(config: AvatarConfig): string {
+  // En v2 (si configuró una clase o si se proveen las variables viejas)
+  // Siempre construimos el seed de la misma forma para compatibilidad
   const seedString = `${config.skinTone}-${config.hairStyle}-${config.hairColor}-${config.faceFeature}-${config.expression}-${config.outfit}`;
-  // Usamos el estilo pixel-art y le pasamos el seed. 
-  // Agregamos un background color oscuro por defecto para que pegue con el theme RPG oscuro.
   const baseUrl = "https://api.dicebear.com/10.x/pixel-art/svg";
   const params = new URLSearchParams({
     seed: seedString,
-    backgroundColor: "0a0a0a", // Oscuro RPG
+    backgroundColor: "0a0a0a",
   });
   return `${baseUrl}?${params.toString()}`;
 }

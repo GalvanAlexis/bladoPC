@@ -15,6 +15,9 @@ import DuelTimer from './DuelTimer';
 import InsultBubble from './InsultBubble';
 import ResponseOptions from './ResponseOptions';
 import AvatarRenderer from './AvatarRenderer';
+import BladoPortrait from './BladoPortrait';
+import RotatePrompt from './RotatePrompt';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface DuelArenaProps {
   playerAvatar: AvatarConfig;
@@ -43,8 +46,39 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
   const [activeInsult, setActiveInsult] = useState<DuelInsult | null>(null);
   const [responseOptions, setResponseOptions] = useState<ResponseOption[]>([]);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+  
+  const [showRotatePrompt, setShowRotatePrompt] = useState(false);
+  const isMobile = useIsMobile();
 
-  // El useEffect inicializador se movió abajo
+  useEffect(() => {
+    if (isMobile && typeof screen !== 'undefined') {
+      try {
+        const orientation = screen.orientation as any;
+        if (orientation && orientation.lock) {
+          orientation.lock('landscape').catch(() => {
+            setShowRotatePrompt(true);
+          });
+        } else {
+          // Fallback para iOS o browsers que no soportan la API
+          const isPortrait = window.innerHeight > window.innerWidth;
+          if (isPortrait) setShowRotatePrompt(true);
+        }
+      } catch (e) {
+        setShowRotatePrompt(true);
+      }
+    }
+    
+    return () => {
+      if (typeof screen !== 'undefined') {
+        const orientation = screen.orientation as any;
+        if (orientation && orientation.unlock) {
+          try {
+            orientation.unlock();
+          } catch (e) {}
+        }
+      }
+    };
+  }, [isMobile]);
 
   const startBladoTurn = () => {
     setCurrentAttacker('blado');
@@ -144,7 +178,9 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
   }, []);
 
   return (
-    <div className="w-full max-w-5xl mx-auto flex flex-col h-full relative z-10 font-mono text-white p-4 pb-12">
+    <>
+      {showRotatePrompt && <RotatePrompt onDismiss={() => setShowRotatePrompt(false)} />}
+      <div className="w-full max-w-5xl mx-auto flex flex-col h-full relative z-10 font-mono text-white p-4 pb-12">
       <ScoreBoard 
         playerName={playerAvatar.name} 
         playerScore={sessionCounts.player} 
@@ -223,10 +259,7 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
         {/* Lado Blado */}
         <div className="flex-1 flex flex-col justify-end items-end">
           <div className="mb-4">
-            {/* Placeholder para Blado, en v2 se podría animar */}
-            <div className="w-[150px] h-[150px] border-4 border-crimson bg-[#110000] flex items-center justify-center shadow-[0_0_20px_rgba(220,38,38,0.5)]">
-              <span className="text-5xl">😈</span>
-            </div>
+            <BladoPortrait size={150} />
           </div>
           
           <div className="h-48 md:h-64 relative w-full flex justify-end">
@@ -248,5 +281,6 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
         </div>
       </div>
     </div>
+    </>
   );
 }
