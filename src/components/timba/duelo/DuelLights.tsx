@@ -12,7 +12,7 @@ export default function DuelLights({ playerScore, bladoScore }: DuelLightsProps)
   // 4, 5, 6 -> Blado
 
   return (
-    <div className="flex justify-center items-center gap-2 mt-4 mb-2">
+    <div className="flex justify-center items-center gap-2 mt-1 mb-1">
       {/* Luces del jugador */}
       {[1, 2, 3].map((threshold, idx) => {
         const isLit = playerScore >= threshold;
