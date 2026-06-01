@@ -103,7 +103,7 @@ export default function DueloGolpesBajosPage() {
         </div>
       )}
 
-      <div className="flex-1 flex items-center justify-center relative z-10 w-full h-full overflow-hidden">
+      <div className={`flex-1 flex flex-col relative z-10 w-full h-full overflow-hidden ${screen !== 'ARENA' ? 'items-center justify-center' : ''}`}>
         {screen === 'START_SCREEN' && (
           <div className="flex flex-col items-center justify-center text-center max-w-2xl px-4">
             <h1 className="text-4xl md:text-6xl font-bold text-crimson mb-6 uppercase tracking-[0.2em] drop-shadow-[0_0_15px_rgba(220,38,38,0.8)]">
