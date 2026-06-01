@@ -1,6 +1,6 @@
 # ISS-041: Libros planificados clickeables
 
-**Estado:** En progreso
+**Estado:** Completado
 **Branch de implementación:** `feature/ISS-041-libros-planificados`
 **Tipo:** Bugfix / Mejora UX
 
