@@ -24,9 +24,9 @@ jest.mock('@/components/VisualNovelScene', () =>
   }
 );
 
-jest.mock('@/components/SkillTreeViewer', () =>
-  function MockSkillTreeViewer() {
-    return <div data-testid="skill-tree-viewer">SkillTree</div>;
+jest.mock('@/components/biblioteca/LibraryRoom', () =>
+  function MockLibraryRoom() {
+    return <div data-testid="library-room">LibraryRoom</div>;
   }
 );
 
@@ -161,18 +161,18 @@ describe('GameEngine — navegación entre diálogos', () => {
   });
 });
 
-describe('GameEngine — Grimorio (SkillTree)', () => {
-  it('el SkillTreeViewer no se muestra inicialmente', () => {
+describe('GameEngine — Grimorio (LibraryRoom)', () => {
+  it('el LibraryRoom no se muestra inicialmente', () => {
     renderGameEngine();
-    expect(screen.queryByTestId('skill-tree-viewer')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('library-room')).not.toBeInTheDocument();
   });
 
-  it('navegar a skills y abrir el Grimorio muestra el SkillTreeViewer', async () => {
+  it('navegar a skills y abrir el Grimorio muestra el LibraryRoom', async () => {
     renderGameEngine();
     await openDialog();
     await userEvent.click(screen.getByText('Mostrame tus habilidades'));
     await userEvent.click(screen.getByText('Abrir el Grimorio de Habilidades'));
-    expect(screen.getByTestId('skill-tree-viewer')).toBeInTheDocument();
+    expect(screen.getByTestId('library-room')).toBeInTheDocument();
   });
 });
 

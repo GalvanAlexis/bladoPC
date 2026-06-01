@@ -4,12 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import LibraryUnit from './LibraryUnit';
 import LibraryShelf from './LibraryShelf';
+import BookViewer from './BookViewer';
 import { useLibraryData } from '@/hooks/useLibraryData';
-import { BookData } from '@/lib/libraryTypes';
+import { BookData, YearData } from '@/lib/libraryTypes';
 
 export default function LibraryRoom() {
   const { data: libraryData, loading, error } = useLibraryData();
   const [selectedLibraryId, setSelectedLibraryId] = useState<string | null>(null);
+  const [selectedBook, setSelectedBook] = useState<{ book: BookData, year: YearData } | null>(null);
   const [particles, setParticles] = useState<{ id: number; dx: number; dy: number; duration: number; delay: number }[]>([]);
 
   // Encontrar la carrera seleccionada de los datos reales
@@ -155,13 +157,24 @@ export default function LibraryRoom() {
                       year={year} 
                       career={selectedCareer} 
                       onBookClick={(book) => {
-                        console.log("Clic en libro:", book.slug);
-                        // TODO: Implementar visor en Fase 4
+                        setSelectedBook({ book, year });
                       }}
                     />
                   ))}
                 </div>
               </div>
+
+              {/* Nivel 3: El Libro Abierto (Visor) */}
+              <AnimatePresence>
+                {selectedBook && (
+                  <BookViewer 
+                    book={selectedBook.book}
+                    career={selectedCareer}
+                    year={selectedBook.year}
+                    onClose={() => setSelectedBook(null)}
+                  />
+                )}
+              </AnimatePresence>
             </motion.div>
           )}
         </AnimatePresence>

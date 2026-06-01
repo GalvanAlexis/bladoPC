@@ -5,3 +5,12 @@ import '@testing-library/jest-dom';
 if (typeof globalThis.structuredClone === 'undefined') {
   globalThis.structuredClone = <T>(obj: T): T => JSON.parse(JSON.stringify(obj));
 }
+
+// Mockear dependencias ESM de react-markdown para los tests
+jest.mock('react-markdown', () => {
+  return function MockReactMarkdown({ children }: any) {
+    return `<div>{children}</div>`;
+  };
+});
+jest.mock('remark-gfm', () => jest.fn());
+jest.mock('rehype-highlight', () => jest.fn());
