@@ -181,21 +181,23 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
     <>
       {showRotatePrompt && <RotatePrompt onDismiss={() => setShowRotatePrompt(false)} />}
       <div className="w-full max-w-4xl mx-auto flex flex-col h-full relative z-10 font-mono text-white p-1 md:p-2 pb-2 md:pb-4 overflow-hidden">
-        <ScoreBoard 
-          playerName={playerAvatar.name} 
-          playerScore={sessionCounts.player} 
-          bladoScore={sessionCounts.blado} 
-        />
         <DuelLights playerScore={playerScore} bladoScore={bladoScore} />
 
         {/* Fila de Avatares compartida */}
-        <div className="flex justify-between items-center w-full mt-1 md:mt-2 px-4 md:px-16 shrink-0">
+        <div className="flex justify-between items-end w-full mt-1 md:mt-2 px-4 md:px-16 shrink-0">
           <div className={`transition-all duration-300 ${currentAttacker === 'player' ? 'scale-110 drop-shadow-[0_0_15px_rgba(57,255,20,0.5)]' : 'opacity-50'}`}>
             <AvatarRenderer config={playerAvatar} size={isMobile ? 100 : 120} />
           </div>
-          <div className="text-xl md:text-3xl font-bold text-gray-800 tracking-widest px-2">VS</div>
-          <div className={`transition-all duration-300 ${currentAttacker === 'blado' ? 'scale-110 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]' : 'opacity-50'}`}>
-            <BladoPortrait size={isMobile ? 100 : 120} />
+          <div className="text-xl md:text-3xl font-bold text-gray-800 tracking-widest px-2 pb-8">VS</div>
+          <div className="flex flex-col items-end">
+            <ScoreBoard 
+              playerName={playerAvatar.name} 
+              playerScore={sessionCounts.player} 
+              bladoScore={sessionCounts.blado} 
+            />
+            <div className={`transition-all duration-300 mt-2 ${currentAttacker === 'blado' ? 'scale-110 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]' : 'opacity-50'}`}>
+              <BladoPortrait size={isMobile ? 100 : 120} />
+            </div>
           </div>
         </div>
 
