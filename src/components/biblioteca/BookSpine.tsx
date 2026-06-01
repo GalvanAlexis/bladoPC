@@ -18,7 +18,6 @@ export default function BookSpine({ book, career, onClick }: BookSpineProps) {
   
   // Color del libro usando colorIndex y los colores predefinidos según CSS o inline
   // Para simplificar, usaremos inline styles simulando variaciones
-  const colorIndexOffset = book.colorIndex * 15;
   const bookColor = `color-mix(in srgb, ${baseColor} ${70 + (book.colorIndex % 4) * 10}%, black)`;
 
   return (

@@ -15,8 +15,12 @@ export function useLibraryData() {
         }
         const json = await res.json();
         setData(json);
-      } catch (err: any) {
-        setError(err.message || 'Error desconocido');
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('Error desconocido');
+        }
       } finally {
         setLoading(false);
       }

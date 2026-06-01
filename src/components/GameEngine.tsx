@@ -9,7 +9,6 @@ import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import ReadmeModal from "@/components/ReadmeModal";
 import { useAppContext } from "@/lib/AppContext";
-import { SkillNode, SkillEdge } from "@/lib/markdown";
 
 // --- Types -------------------------------------------------------------------
 
@@ -21,10 +20,7 @@ interface Message {
   content: string;
 }
 
-interface GameEngineProps {
-  initialNodes: SkillNode[];
-  initialEdges: SkillEdge[];
-}
+
 
 // --- Dialogue Tree ------------------------------------------------------------
 
@@ -118,18 +114,13 @@ const CHOICE_LABELS: Record<string, string> = {
 
 // --- Component ----------------------------------------------------------------
 
-export default function GameEngine({
-  initialNodes,
-  initialEdges,
-}: GameEngineProps) {
+export default function GameEngine() {
   const { replayIntro } = useAppContext();
   const [currentKey, setCurrentKey] = useState<DialogueKey>("intro");
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedCareer, setSelectedCareer] = useState<string>("Todos");
-  const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [showCVModal, setShowCVModal] = useState(false);
 
   const current = DIALOGUES[currentKey];

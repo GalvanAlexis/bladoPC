@@ -8,7 +8,7 @@ if (typeof globalThis.structuredClone === 'undefined') {
 
 // Mockear dependencias ESM de react-markdown para los tests
 jest.mock('react-markdown', () => {
-  return function MockReactMarkdown({ children }: any) {
+  return function MockReactMarkdown({ children }: { children: React.ReactNode }) {
     return `<div>{children}</div>`;
   };
 });

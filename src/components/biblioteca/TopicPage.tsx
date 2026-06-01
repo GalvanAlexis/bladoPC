@@ -31,8 +31,12 @@ export default function TopicPage({ careerId, year, bookSlug, activeTopicId }: T
         }
         const data = await res.json();
         setContent(data.markdown);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('Error desconocido');
+        }
       } finally {
         setLoading(false);
       }

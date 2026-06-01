@@ -12,7 +12,7 @@ export default function LibraryRoom() {
   const { data: libraryData, loading, error } = useLibraryData();
   const [selectedLibraryId, setSelectedLibraryId] = useState<string | null>(null);
   const [selectedBook, setSelectedBook] = useState<{ book: BookData, year: YearData } | null>(null);
-  const [particles, setParticles] = useState<{ id: number; dx: number; dy: number; duration: number; delay: number }[]>([]);
+  const [particles, setParticles] = useState<{ id: number; dx: number; dy: number; duration: number; delay: number; left: number; top: number }[]>([]);
 
   // Encontrar la carrera seleccionada de los datos reales
   const selectedCareer = libraryData?.carreras.find(c => c.id === selectedLibraryId);
@@ -22,10 +22,13 @@ export default function LibraryRoom() {
     const pts = Array.from({ length: 15 }).map((_, i) => ({
       id: i,
       dx: (Math.random() - 0.5) * 200,
-      dy: (Math.random() - 0.5) * -300,
-      duration: 6 + Math.random() * 6,
-      delay: Math.random() * 5
+      dy: (Math.random() - 0.5) * 200,
+      duration: Math.random() * 5 + 5,
+      delay: Math.random() * 5,
+      left: 10 + Math.random() * 80,
+      top: 50 + Math.random() * 40
     }));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setParticles(pts);
   }, []);
 
@@ -51,8 +54,8 @@ export default function LibraryRoom() {
             key={p.id}
             className="absolute w-1 h-1 bg-[#e8d5b0] rounded-full blur-[1px]"
             style={{
-              left: `${10 + Math.random() * 80}%`,
-              top: `${50 + Math.random() * 40}%`,
+              left: `${p.left}%`,
+              top: `${p.top}%`,
               '--dx': `${p.dx}px`,
               '--dy': `${p.dy}px`,
               animation: `float-dust ${p.duration}s infinite ease-in-out ${p.delay}s`

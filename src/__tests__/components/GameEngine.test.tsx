@@ -7,7 +7,6 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GameEngine from '@/components/GameEngine';
 import { AppContext } from '@/lib/AppContext';
-import type { SkillNode, SkillEdge } from '@/lib/markdown';
 
 // ── Mocks de componentes externos complejos ───────────────────────────────────
 
@@ -80,10 +79,7 @@ jest.mock('@/components/DialogBox', () => {
 
 // ── Datos de prueba mínimos ───────────────────────────────────────────────────
 
-const mockNodes: SkillNode[] = [
-  { id: 'node-1', label: 'Python', type: 'tecnologia', status: 'completed', career: '1 Ing Sistemas', year: 1 },
-];
-const mockEdges: SkillEdge[] = [];
+
 
 // ── Contexto mock ─────────────────────────────────────────────────────────────
 
@@ -98,7 +94,7 @@ const mockContext: React.ContextType<typeof AppContext> = {
 function renderGameEngine() {
   render(
     <AppContext.Provider value={mockContext}>
-      <GameEngine initialNodes={mockNodes} initialEdges={mockEdges} />
+      <GameEngine />
     </AppContext.Provider>
   );
 }

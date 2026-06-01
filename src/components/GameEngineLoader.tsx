@@ -8,18 +8,12 @@
  */
 import dynamic from 'next/dynamic';
 import BladoAvatar from '@/components/BladoAvatar';
-import { SkillNode, SkillEdge } from '@/lib/markdown';
 
 const GameEngine = dynamic(() => import('@/components/GameEngine'), {
   loading: () => <BladoAvatar message="Invocando el Grimorio..." />,
   ssr: false,
 });
 
-interface GameEngineLoaderProps {
-  initialNodes: SkillNode[];
-  initialEdges: SkillEdge[];
-}
-
-export default function GameEngineLoader({ initialNodes, initialEdges }: GameEngineLoaderProps) {
-  return <GameEngine initialNodes={initialNodes} initialEdges={initialEdges} />;
+export default function GameEngineLoader() {
+  return <GameEngine />;
 }
