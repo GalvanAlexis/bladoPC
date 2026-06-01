@@ -205,7 +205,7 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
         <div className="flex-1 flex flex-col w-full mt-1 md:mt-2 relative justify-end min-h-0">
           
           {/* Zona de Diálogo (burbujas) */}
-          <div className="w-full mb-2 flex flex-col justify-end min-h-[80px] md:min-h-[120px] shrink-0 px-2 md:px-8">
+          <div className="w-full mb-2 flex flex-col justify-end shrink-0 px-2 md:px-8">
             {activeInsult && currentAttacker === 'player' && (
               <div className="self-start mb-2 animate-in fade-in slide-in-from-left-4 duration-300">
                 <InsultBubble speaker="player" text={activeInsult.attacker} />
