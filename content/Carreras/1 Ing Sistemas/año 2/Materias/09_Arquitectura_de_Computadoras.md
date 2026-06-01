@@ -184,15 +184,16 @@ Un programa en C se divide en segmentos cuando se ejecuta:
 ```text
 Dirección Alta (0xFFFFFFFF)
       ┌───────────────────┐
-      │    Stack        │ (Crece hacia abajo)
-      │      ▼           │
-      │                  │
-      │      ▲           │
-      │    Heap         │ (Crece hacia arriba)
+      │       Stack       │ (Crece hacia abajo)
+      │         ▼         │
+      │                   │
+      │         ▲         │
+      │       Heap        │ (Crece hacia arriba)
       ├───────────────────┤
-      │      BSS         │
-      │      Data        │
-      │      Text        │ (Código)
+      │       BSS         │
+      │       Data        │
+      │       Text        │ (Código)
+      └───────────────────┘
 Dirección Baja (0x00000000)
 ```
 
@@ -223,21 +224,22 @@ int main() {
 
 ```text
       ┌─────────────────────────────────────────┐
-      │         Computadora             │
-      ├────────────────┬────────────────┤
-      │    CPU          │      RAM       │
-      │ ┌──────────┐ │   ┌──────────┐│
-      │ │  ALU     │ │   │  Datos   ││
-      │ │ Control │ │   │  Código  ││
-      │ │ Registros│ │   │  Pila    ││
-      │ └──────────┘ │   └──────────┘│
-      ├────────────────┼────────────────┤
-      │            Bus del Sistema      │
-      └────────────────┬────────────────┘
-                   │
-      ┌────────▼─────────┐
-      │  Disco Duro      │ (Almacenamiento)
-      └──────────────────┘
+      │               Computadora               │
+      ├────────────────────┬────────────────────┤
+      │        CPU         │        RAM         │
+      │  ┌──────────────┐  │  ┌──────────────┐  │
+      │  │ ALU          │  │  │ Datos        │  │
+      │  │ Control      │  │  │ Código       │  │
+      │  │ Registros    │  │  │ Pila         │  │
+      │  └──────────────┘  │  └──────────────┘  │
+      ├────────────────────┴────────────────────┤
+      │            Bus del Sistema              │
+      └────────────────────┬────────────────────┘
+                           │
+                 ┌─────────▼────────┐
+                 │    Disco Duro    │
+                 │ (Almacenamiento) │
+                 └──────────────────┘
 ```
 
 ---
