@@ -82,7 +82,7 @@ export default function LibraryRoom() {
         <AnimatePresence>
           {!selectedLibraryId && (
             <motion.div 
-              className="flex flex-wrap items-center justify-center gap-8 md:gap-16 px-4 py-12"
+              className="relative w-full h-full flex flex-col items-center justify-center pt-24 pb-4"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 1.1 }}
