@@ -17,7 +17,7 @@ export default function InsultBubble({ text, speaker }: InsultBubbleProps) {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         transition={{ duration: 0.3, type: 'spring' }}
-        className={`relative max-w-lg p-4 font-mono text-sm md:text-base border-2 ${
+        className={`relative max-w-lg p-3 md:p-4 font-mono text-sm md:text-base border-2 ${
           isBlado 
             ? 'bg-[#1a0a0a] border-crimson text-red-100 shadow-[0_0_15px_rgba(220,38,38,0.2)] ml-auto' 
             : 'bg-[#0a1a0a] border-toxic text-green-100 shadow-[0_0_15px_rgba(57,255,20,0.2)] mr-auto'
