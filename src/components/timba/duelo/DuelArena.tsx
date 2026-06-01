@@ -189,21 +189,21 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
         <DuelLights playerScore={playerScore} bladoScore={bladoScore} />
 
         {/* Fila de Avatares compartida */}
-        <div className="flex justify-between items-center w-full mt-4 md:mt-8 px-4 md:px-16">
+        <div className="flex justify-between items-center w-full mt-2 md:mt-4 px-4 md:px-16 shrink-0">
           <div className={`transition-all duration-300 ${currentAttacker === 'player' ? 'scale-110 drop-shadow-[0_0_15px_rgba(57,255,20,0.5)]' : 'opacity-50'}`}>
-            <AvatarRenderer config={playerAvatar} size={isMobile ? 100 : 150} />
+            <AvatarRenderer config={playerAvatar} size={isMobile ? 100 : 120} />
           </div>
           <div className="text-xl md:text-3xl font-bold text-gray-800 tracking-widest px-2">VS</div>
           <div className={`transition-all duration-300 ${currentAttacker === 'blado' ? 'scale-110 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]' : 'opacity-50'}`}>
-            <BladoPortrait size={isMobile ? 100 : 150} />
+            <BladoPortrait size={isMobile ? 100 : 120} />
           </div>
         </div>
 
         {/* Contenedor principal de Diálogos y Controles */}
-        <div className="flex-1 flex flex-col w-full mt-4 md:mt-8 relative justify-end">
+        <div className="flex-1 flex flex-col w-full mt-2 md:mt-4 relative justify-end min-h-0">
           
           {/* Zona de Diálogo (burbujas) */}
-          <div className="w-full mb-4 flex flex-col justify-end min-h-[70px] md:min-h-[90px] px-2 md:px-8">
+          <div className="w-full mb-2 flex flex-col justify-end min-h-[60px] md:min-h-[80px] px-2 md:px-8 shrink-0">
             {activeInsult && currentAttacker === 'player' && (
               <div className="self-start mb-2 animate-in fade-in slide-in-from-left-4 duration-300">
                 <InsultBubble speaker="player" text={activeInsult.attacker} />
@@ -224,7 +224,7 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
           </div>
 
           {/* Zona de Controles (opciones, timer) */}
-          <div className="w-full relative h-[220px] md:h-[250px] shrink-0">
+          <div className="w-full relative flex-1 min-h-[160px] max-h-[220px]">
             {phase === 'PLAYER_ATTACKING' && (
               <div className="absolute inset-0 bg-[#0a0a0a] border border-toxic p-3 md:p-5 overflow-y-auto shadow-[0_0_15px_rgba(57,255,20,0.2)] scrollbar-thin scrollbar-thumb-toxic/50 scrollbar-track-transparent">
                 <h3 className="text-toxic text-xs md:text-sm uppercase mb-3 font-bold sticky top-0 bg-[#0a0a0a] pb-2 z-10">Selecciona tu ataque:</h3>
@@ -253,7 +253,7 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
                   isActive={true} 
                   onTimeout={handleTimeout} 
                 />
-                <div className="mt-2 md:mt-4 h-[180px] md:h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600">
+                <div className="mt-2 md:mt-4 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600">
                   <ResponseOptions 
                     options={responseOptions}
                     disabled={false}
@@ -267,7 +267,7 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
 
             {phase === 'EVALUATING' && currentAttacker === 'blado' && (
               <div className="absolute inset-0 flex flex-col justify-end">
-                <div className="mt-2 md:mt-4 h-[180px] md:h-[200px] overflow-y-auto">
+                <div className="mt-2 md:mt-4 flex-1 overflow-y-auto">
                   <ResponseOptions 
                     options={responseOptions}
                     disabled={true}
