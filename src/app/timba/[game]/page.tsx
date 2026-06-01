@@ -2,8 +2,9 @@ import React from 'react';
 import Link from 'next/link';
 import { GAMES } from '@/lib/games';
 
-export default function GamePage({ params }: { params: { game: string } }) {
-  const game = GAMES.find(g => g.id === params.game);
+export default async function GamePage({ params }: { params: Promise<{ game: string }> }) {
+  const resolvedParams = await params;
+  const game = GAMES.find(g => g.id === resolvedParams.game);
 
   if (!game || !game.available) {
     return (

@@ -6,13 +6,8 @@ interface DuelLightsProps {
 }
 
 export default function DuelLights({ playerScore, bladoScore }: DuelLightsProps) {
-  // Array de 7 elementos: [0, 1, 2, 3, 4, 5, 6]
-  // 0, 1, 2 -> Jugador
-  // 3 -> Central (Siempre rojo fijo para Blado, simbolizando su imbatibilidad)
-  // 4, 5, 6 -> Blado
-
   return (
-    <div className="flex justify-center items-center gap-2 mt-1 mb-1">
+    <div className="flex justify-center items-center gap-2 mt-1 mb-1 relative z-20">
       {/* Luces del jugador */}
       {[1, 2, 3].map((threshold, idx) => {
         const isLit = playerScore >= threshold;
@@ -21,25 +16,37 @@ export default function DuelLights({ playerScore, bladoScore }: DuelLightsProps)
             key={`player-light-${idx}`}
             className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
               isLit 
-                ? 'bg-white border-white shadow-[0_0_10px_rgba(255,255,255,0.8)] scale-110' 
-                : 'bg-transparent border-gray-600'
+                ? 'duel-light-toxic scale-110' 
+                : 'bg-transparent border-gray-800'
             }`}
           />
         );
       })}
 
-      <div className="w-px h-6 bg-gray-700 mx-2" />
+      {/* Separador con gradiente oklch */}
+      <div 
+        className="w-px h-6 mx-2" 
+        style={{
+          background: 'linear-gradient(to bottom, transparent, oklch(0.85 0.3 145 / 0.5) 50%, transparent)'
+        }}
+      />
 
       {/* Luz central (4to punto de Blado) */}
       <div 
         className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
           bladoScore >= 4 
-            ? 'bg-crimson border-crimson shadow-[0_0_10px_rgba(220,38,38,0.8)] scale-110' 
-            : 'bg-transparent border-gray-600'
+            ? 'duel-light-crimson scale-110' 
+            : 'bg-transparent border-gray-800'
         }`}
       />
 
-      <div className="w-px h-6 bg-gray-700 mx-2" />
+      {/* Separador con gradiente oklch */}
+      <div 
+        className="w-px h-6 mx-2" 
+        style={{
+          background: 'linear-gradient(to bottom, transparent, oklch(0.55 0.25 25 / 0.5) 50%, transparent)'
+        }}
+      />
 
       {/* Luces de Blado */}
       {[1, 2, 3].map((threshold, idx) => {
@@ -49,8 +56,8 @@ export default function DuelLights({ playerScore, bladoScore }: DuelLightsProps)
             key={`blado-light-${idx}`}
             className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
               isLit 
-                ? 'bg-crimson border-crimson shadow-[0_0_10px_rgba(220,38,38,0.8)] scale-110' 
-                : 'bg-transparent border-gray-600'
+                ? 'duel-light-crimson scale-110' 
+                : 'bg-transparent border-gray-800'
             }`}
           />
         );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ResponseOption } from '@/lib/duelEngine';
 
 interface ResponseOptionsProps {
@@ -9,49 +9,112 @@ interface ResponseOptionsProps {
   showFeedback: boolean;
 }
 
-export default function ResponseOptions({ 
-  options, 
-  onSelect, 
-  disabled, 
-  selectedId, 
-  showFeedback 
+export default function ResponseOptions({
+  options,
+  onSelect,
+  disabled,
+  selectedId,
+  showFeedback,
 }: ResponseOptionsProps) {
   return (
-    <div className="w-full flex flex-col space-y-3">
+    <div className="w-full flex flex-col space-y-2.5">
       {options.map((opt, index) => {
         const isSelected = selectedId === opt.id;
-        
-        let buttonStyle = "border-gray-800 text-gray-400 bg-[#0a0a0a] hover:border-toxic hover:text-toxic hover:bg-toxic/5";
-        
-        if (showFeedback && isSelected) {
-          if (opt.isCorrect) {
-            buttonStyle = "border-toxic text-toxic bg-toxic/20 shadow-[0_0_15px_rgba(57,255,20,0.5)] animate-pulse";
-          } else {
-            buttonStyle = "border-crimson text-crimson bg-crimson/20 shadow-[0_0_15px_rgba(220,38,38,0.5)] animate-pulse";
-          }
-        } else if (showFeedback && opt.isCorrect) {
-          // Si mostró feedback y el jugador se equivocó, NO revelamos la correcta visualmente 
-          // a menos que queramos ayudarlo. Según el spec: 
-          // "sin revelar cuál era la correcta si estaba bloqueada".
-          // Así que no hacemos nada especial aquí para la correcta no seleccionada.
-        }
+        const isCorrectFeedback = showFeedback && isSelected && opt.isCorrect;
+        const isWrongFeedback = showFeedback && isSelected && !opt.isCorrect;
 
         return (
-          <button
+          <OptionButton
             key={opt.id}
+            option={opt}
+            index={index}
+            isSelected={isSelected}
+            isCorrectFeedback={isCorrectFeedback}
+            isWrongFeedback={isWrongFeedback}
+            showFeedback={showFeedback}
             disabled={disabled}
-            onClick={() => onSelect(opt)}
-            className={`w-full text-left p-4 font-mono text-sm transition-all border-2 ${buttonStyle} ${
-              disabled && !isSelected ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-          >
-            <span className="font-bold mr-2 text-xs opacity-50">
-              {String.fromCharCode(65 + index)})
-            </span>
-            {opt.text}
-          </button>
+            onSelect={onSelect}
+          />
         );
       })}
     </div>
+  );
+}
+
+interface OptionButtonProps {
+  option: ResponseOption;
+  index: number;
+  isSelected: boolean;
+  isCorrectFeedback: boolean;
+  isWrongFeedback: boolean;
+  showFeedback: boolean;
+  disabled: boolean;
+  onSelect: (option: ResponseOption) => void;
+}
+
+function OptionButton({
+  option,
+  index,
+  isSelected,
+  isCorrectFeedback,
+  isWrongFeedback,
+  showFeedback,
+  disabled,
+  onSelect,
+}: OptionButtonProps) {
+  const ref = useRef<HTMLButtonElement>(null);
+
+  // Fuerza re-aplicación de animación cuando cambia el feedback
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (isCorrectFeedback || isWrongFeedback) {
+      el.classList.remove('response-option--correct', 'response-option--wrong');
+      // Trigger reflow para reiniciar la animación
+      void el.offsetWidth;
+      if (isCorrectFeedback) el.classList.add('response-option--correct');
+      if (isWrongFeedback) el.classList.add('response-option--wrong');
+    }
+  }, [isCorrectFeedback, isWrongFeedback]);
+
+  let baseStyle =
+    'border-gray-800 text-gray-400 bg-[#0a0a0a]';
+  let hoverStyle =
+    'hover:border-toxic hover:text-toxic hover:bg-[oklch(0.85_0.3_145_/_0.06)] hover:shadow-[0_0_12px_oklch(0.85_0.3_145_/_0.25)]';
+
+  if (isCorrectFeedback) {
+    baseStyle =
+      'border-toxic text-toxic bg-[oklch(0.85_0.3_145_/_0.12)] shadow-[0_0_20px_oklch(0.85_0.3_145_/_0.6),inset_0_0_20px_oklch(0.85_0.3_145_/_0.08)]';
+    hoverStyle = '';
+  } else if (isWrongFeedback) {
+    baseStyle =
+      'border-crimson text-crimson bg-[oklch(0.55_0.25_25_/_0.12)] shadow-[0_0_20px_oklch(0.55_0.25_25_/_0.6),inset_0_0_20px_oklch(0.55_0.25_25_/_0.08)]';
+    hoverStyle = '';
+  }
+
+  return (
+    <button
+      ref={ref}
+      disabled={disabled}
+      onClick={() => onSelect(option)}
+      className={`response-option w-full text-left p-3 md:p-4 font-mono text-sm border-2 transition-all duration-200 ${baseStyle} ${hoverStyle} ${
+        disabled && !isSelected ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'
+      }`}
+      style={{ '--option-index': index } as React.CSSProperties}
+    >
+      {/* Badge de letra arcade */}
+      <span
+        className={`inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold mr-2 border align-middle ${
+          isCorrectFeedback
+            ? 'border-toxic text-toxic bg-toxic/10'
+            : isWrongFeedback
+            ? 'border-crimson text-crimson bg-crimson/10'
+            : 'border-gray-700 text-gray-500'
+        }`}
+      >
+        {String.fromCharCode(65 + index)}
+      </span>
+      {option.text}
+    </button>
   );
 }

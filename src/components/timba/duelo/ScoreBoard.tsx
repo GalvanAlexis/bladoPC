@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface ScoreBoardProps {
   playerName: string;
@@ -7,12 +7,57 @@ interface ScoreBoardProps {
 }
 
 export default function ScoreBoard({ playerName, playerScore, bladoScore }: ScoreBoardProps) {
+  const pScoreRef = useRef(playerScore);
+  const bScoreRef = useRef(bladoScore);
+
+  const pChanged = playerScore !== pScoreRef.current;
+  const bChanged = bladoScore !== bScoreRef.current;
+
+  useEffect(() => {
+    pScoreRef.current = playerScore;
+    bScoreRef.current = bladoScore;
+  }, [playerScore, bladoScore]);
+
   return (
-    <div className="text-[10px] md:text-xs font-mono tracking-widest text-gray-400 z-50 bg-[#0a0a0a]/90 px-3 py-1 border border-gray-800 rounded shadow-md">
-      <span className="text-white uppercase">{playerName}</span>{' '}
-      <span className="text-toxic">{playerScore}</span> /{' '}
-      <span className="text-crimson font-bold">{bladoScore}</span>{' '}
-      <span className="text-crimson font-bold uppercase">Blado</span>
+    <div 
+      className="text-xs md:text-sm font-mono tracking-widest text-gray-300 z-50 px-4 py-2 flex items-center gap-3 relative shadow-2xl"
+      style={{
+        background: 'linear-gradient(135deg, rgba(10,10,10,0.95), rgba(5,5,5,0.98))',
+        borderImage: 'linear-gradient(to right, oklch(0.85 0.3 145), oklch(0.55 0.25 25)) 1',
+        borderWidth: '2px',
+        borderStyle: 'solid',
+        backdropFilter: 'blur(4px)'
+      }}
+    >
+      <span 
+        className="uppercase font-bold" 
+        style={{ color: 'oklch(0.85 0.3 145)', textShadow: '0 0 8px oklch(0.85 0.3 145 / 0.5)' }}
+      >
+        {playerName}
+      </span>
+      
+      <span 
+        key={`p-${playerScore}`}
+        className={`text-white font-bold text-lg inline-block ${pChanged ? 'score-value-pop' : ''}`}
+      >
+        {playerScore}
+      </span> 
+      
+      <span className="text-gray-600 font-bold mx-1">/</span>
+      
+      <span 
+        key={`b-${bladoScore}`}
+        className={`text-white font-bold text-lg inline-block ${bChanged ? 'score-value-pop' : ''}`}
+      >
+        {bladoScore}
+      </span> 
+      
+      <span 
+        className="uppercase font-bold" 
+        style={{ color: 'oklch(0.55 0.25 25)', textShadow: '0 0 8px oklch(0.55 0.25 25 / 0.5)' }}
+      >
+        Blado
+      </span>
     </div>
   );
 }
