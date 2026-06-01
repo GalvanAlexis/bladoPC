@@ -12,6 +12,7 @@ export default function TopicPage({ careerId, year, bookSlug, activeTopicId }: T
   const [content, setContent] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [zoomLevel, setZoomLevel] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Cargar el documento markdown completo al montar
@@ -81,6 +82,25 @@ export default function TopicPage({ careerId, year, bookSlug, activeTopicId }: T
     }
   }, [activeTopicId, content, loading]);
 
+  // Soporte de zoom con Ctrl + Rueda
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleNativeWheel = (e: WheelEvent) => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        setZoomLevel(prev => {
+          const newZoom = prev + (e.deltaY < 0 ? 0.1 : -0.1);
+          return Math.min(Math.max(newZoom, 0.5), 2.5);
+        });
+      }
+    };
+
+    container.addEventListener('wheel', handleNativeWheel, { passive: false });
+    return () => container.removeEventListener('wheel', handleNativeWheel);
+  }, []);
+
   if (loading) {
     return (
       <div className="w-full h-full flex items-center justify-center bg-[#1a0f08]">
@@ -108,7 +128,11 @@ export default function TopicPage({ careerId, year, bookSlug, activeTopicId }: T
   }
 
   return (
-    <div className="w-full h-full bg-[#1a0f08] overflow-y-auto dialog-scrollbar relative px-6 md:px-12 py-8" ref={containerRef}>
+    <div 
+      className="w-full h-full bg-[#1a0f08] overflow-y-auto dialog-scrollbar relative px-6 md:px-12 py-8" 
+      ref={containerRef}
+      style={{ zoom: zoomLevel } as React.CSSProperties}
+    >
       <MarkdownRenderer content={content} />
       
       <div className="mt-16 pt-8 border-t border-[#8b7355]/20 text-center">
