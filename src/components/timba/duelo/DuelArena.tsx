@@ -192,6 +192,15 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
 
   return (
     <>
+      {/* Fondo cinemático general */}
+      <div 
+        className="fixed inset-0 z-0 pointer-events-none" 
+        style={{
+          background: 'radial-gradient(circle at center, #0a0a0a 0%, #000000 100%)',
+          boxShadow: 'inset 0 0 150px rgba(220, 38, 38, 0.1)'
+        }}
+      />
+      
       {phase === 'BLADO_RESPONDING' && (
         <div 
           className="fixed inset-0 z-50 cursor-pointer" 
@@ -199,24 +208,34 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
           aria-label="Toca cualquier parte para continuar"
         />
       )}
+      
       {showRotatePrompt && <RotatePrompt onDismiss={() => setShowRotatePrompt(false)} />}
+      
       <div className="w-full max-w-4xl mx-auto flex flex-col h-full relative z-10 font-mono text-white p-1 md:p-2 pb-2 md:pb-4 overflow-hidden">
         <DuelLights playerScore={playerScore} bladoScore={bladoScore} />
 
         {/* Fila de Avatares compartida */}
         <div className="flex justify-between items-end w-full mt-1 md:mt-2 px-4 md:px-16 shrink-0">
-          <div className={`transition-all duration-300 ${currentAttacker === 'player' ? 'scale-110 drop-shadow-[0_0_15px_rgba(57,255,20,0.5)]' : 'opacity-50'}`}>
+          <div 
+            className={`transition-all duration-300 ${currentAttacker === 'player' ? 'scale-110 z-20' : 'opacity-60 scale-95'}`}
+            style={{ filter: currentAttacker === 'player' ? 'drop-shadow(0 0 30px oklch(0.85 0.3 145 / 0.4))' : 'none' }}
+          >
             <AvatarRenderer config={playerAvatar} size={isMobile ? 100 : 120} />
           </div>
-          <div className="text-xl md:text-3xl font-bold text-gray-800 tracking-widest px-2 pb-8">VS</div>
+          
+          <div className="text-2xl md:text-4xl font-bold vs-text tracking-widest px-2 pb-8">VS</div>
+          
           <div className="flex flex-col items-end">
             <ScoreBoard 
               playerName={playerAvatar.name} 
               playerScore={sessionCounts.player} 
               bladoScore={sessionCounts.blado} 
             />
-            <div className={`transition-all duration-300 mt-2 ${currentAttacker === 'blado' ? 'scale-110 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]' : 'opacity-50'}`}>
-              <BladoPortrait size={isMobile ? 100 : 120} />
+            <div 
+              className={`transition-all duration-300 mt-3 ${currentAttacker === 'blado' ? 'scale-110 z-20' : 'opacity-60 scale-95'}`}
+              style={{ filter: currentAttacker === 'blado' ? 'drop-shadow(0 0 30px oklch(0.55 0.25 25 / 0.5))' : 'none' }}
+            >
+              <BladoPortrait size={isMobile ? 100 : 120} isActive={currentAttacker === 'blado'} />
             </div>
           </div>
         </div>
@@ -225,21 +244,21 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
         <div className="flex-1 flex flex-col w-full mt-1 md:mt-2 relative justify-end min-h-0">
           
           {/* Zona de Diálogo (burbujas) */}
-          <div className="w-full mb-2 flex flex-col justify-end shrink-0 px-2 md:px-8">
+          <div className="w-full mb-3 flex flex-col justify-end shrink-0 px-2 md:px-8">
             {activeInsult && currentAttacker === 'player' && (
-              <div className="self-start mb-2 animate-in fade-in slide-in-from-left-4 duration-300">
+              <div className="self-start mb-2">
                 <InsultBubble speaker="player" text={activeInsult.attacker} />
               </div>
             )}
             
             {activeInsult && currentAttacker === 'blado' && (
-              <div className="self-end mb-2 animate-in fade-in slide-in-from-right-4 duration-300">
+              <div className="self-end mb-2">
                 <InsultBubble speaker="blado" text={activeInsult.attacker} />
               </div>
             )}
 
             {phase === 'BLADO_RESPONDING' && activeInsult && (
-              <div className="self-end mb-2 animate-in fade-in slide-in-from-right-4 duration-300">
+              <div className="self-end mb-2">
                 <InsultBubble speaker="blado" text={activeInsult.correctResponse} />
               </div>
             )}
@@ -248,8 +267,11 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
           {/* Zona de Controles (opciones, timer) */}
           <div className="w-full relative flex-1 min-h-[160px]">
             {phase === 'PLAYER_ATTACKING' && (
-              <div className="absolute inset-0 bg-[#0a0a0a] border border-toxic p-3 md:p-5 overflow-y-auto shadow-[0_0_15px_rgba(57,255,20,0.2)] scrollbar-thin scrollbar-thumb-toxic/50 scrollbar-track-transparent">
-                <h3 className="text-toxic text-xs md:text-sm uppercase mb-3 font-bold sticky top-0 bg-[#0a0a0a] pb-2 z-10">Selecciona tu ataque:</h3>
+              <div className="absolute inset-0 bg-[#0a0a0a] border-2 border-solid attack-panel-border p-3 md:p-5 overflow-y-auto shadow-2xl scrollbar-thin scrollbar-thumb-toxic/50 scrollbar-track-transparent">
+                <h3 className="text-toxic text-xs md:text-sm uppercase mb-4 font-bold sticky top-0 bg-[#0a0a0a] pb-2 z-10 tracking-wider">
+                  <span className="animate-pulse mr-2">▶</span>
+                  Selecciona tu ataque:
+                </h3>
                 <div className="space-y-2">
                   {knowledge.knownInsults.map(id => {
                     const ins = INSULTS.find(i => i.id === id);
@@ -258,7 +280,7 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
                       <button
                         key={id}
                         onClick={() => handlePlayerAttackSelection(id)}
-                        className="w-full text-left p-2 border border-gray-800 hover:border-toxic hover:text-toxic hover:bg-toxic/10 text-xs md:text-sm transition-colors"
+                        className="w-full text-left p-3 border border-gray-800 hover:border-toxic hover:text-toxic hover:bg-[oklch(0.85_0.3_145_/_0.1)] hover:shadow-[0_0_15px_oklch(0.85_0.3_145_/_0.2)] text-xs md:text-sm transition-all duration-200"
                       >
                         &quot;{ins.attacker}&quot;
                       </button>
@@ -275,7 +297,7 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
                   isActive={true} 
                   onTimeout={handleTimeout} 
                 />
-                <div className="mt-2 md:mt-4 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600">
+                <div className="mt-3 md:mt-5 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600">
                   <ResponseOptions 
                     options={responseOptions}
                     disabled={false}
@@ -289,7 +311,7 @@ export default function DuelArena({ playerAvatar, initialKnowledge, sessionCount
 
             {phase === 'EVALUATING' && currentAttacker === 'blado' && (
               <div className="absolute inset-0 flex flex-col justify-end">
-                <div className="mt-2 md:mt-4 flex-1 overflow-y-auto pb-8">
+                <div className="mt-3 md:mt-5 flex-1 overflow-y-auto pb-8">
                   <ResponseOptions 
                     options={responseOptions}
                     disabled={true}

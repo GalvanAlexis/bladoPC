@@ -99,3 +99,259 @@ body {
   0%, 100% { box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 0 20px 5px var(--career-color); }
   50%       { box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 0 35px 12px var(--career-color); }
 }
+
+/* =====================================================
+   DUELO GOLPES BAJOS — Premium Visual ISS-047
+   Técnica: CSS nativo @starting-style, @keyframes,
+   color-mix(in oklch), prefers-reduced-motion
+   ===================================================== */
+
+/* --- Burbuja de insulto (InsultBubble) --- */
+@keyframes bubble-in-blado {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.94);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes bubble-in-player {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.94);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.bubble-blado {
+  animation: bubble-in-blado 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.bubble-player {
+  animation: bubble-in-player 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* --- Opciones de respuesta (ResponseOptions) --- */
+@keyframes option-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shake-wrong {
+  0%, 100% { transform: translateX(0); }
+  15%       { transform: translateX(-7px); }
+  30%       { transform: translateX(6px); }
+  45%       { transform: translateX(-5px); }
+  60%       { transform: translateX(4px); }
+  75%       { transform: translateX(-3px); }
+}
+
+@keyframes pop-correct {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+.response-option {
+  animation: option-in 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation-delay: calc(var(--option-index, 0) * 55ms);
+}
+
+.response-option--correct {
+  animation: pop-correct 0.4s ease-out both;
+}
+
+.response-option--wrong {
+  animation: shake-wrong 0.45s ease-out both;
+}
+
+/* --- Luces del duelo (DuelLights) --- */
+@keyframes light-on {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-glow-toxic {
+  0%, 100% {
+    box-shadow:
+      0 0 6px 1px oklch(0.85 0.3 145 / 0.7),
+      0 0 14px 4px oklch(0.85 0.3 145 / 0.4),
+      0 0 28px 8px oklch(0.85 0.3 145 / 0.15);
+  }
+  50% {
+    box-shadow:
+      0 0 8px 2px oklch(0.85 0.3 145 / 0.9),
+      0 0 20px 6px oklch(0.85 0.3 145 / 0.55),
+      0 0 40px 12px oklch(0.85 0.3 145 / 0.25);
+  }
+}
+
+@keyframes pulse-glow-crimson {
+  0%, 100% {
+    box-shadow:
+      0 0 6px 1px oklch(0.55 0.25 25 / 0.8),
+      0 0 14px 4px oklch(0.55 0.25 25 / 0.45),
+      0 0 28px 8px oklch(0.55 0.25 25 / 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 8px 2px oklch(0.55 0.25 25 / 1),
+      0 0 20px 6px oklch(0.55 0.25 25 / 0.6),
+      0 0 40px 12px oklch(0.55 0.25 25 / 0.3);
+  }
+}
+
+.duel-light-toxic {
+  background-color: oklch(0.85 0.3 145);
+  border-color: oklch(0.85 0.3 145);
+  animation: light-on 0.25s ease-out both, pulse-glow-toxic 1.6s ease-in-out infinite;
+}
+
+.duel-light-crimson {
+  background-color: oklch(0.55 0.25 25);
+  border-color: oklch(0.55 0.25 25);
+  animation: light-on 0.25s ease-out both, pulse-glow-crimson 1.4s ease-in-out infinite;
+}
+
+/* --- Portrait de Blado (BladoPortrait) --- */
+@keyframes border-pulse-crimson {
+  0%, 100% {
+    box-shadow:
+      0 0 8px 2px oklch(0.55 0.25 25 / 0.5),
+      0 0 20px 6px oklch(0.55 0.25 25 / 0.25),
+      inset 0 0 20px rgba(0, 0, 0, 0.8);
+  }
+  50% {
+    box-shadow:
+      0 0 16px 4px oklch(0.55 0.25 25 / 0.9),
+      0 0 40px 12px oklch(0.55 0.25 25 / 0.45),
+      inset 0 0 20px rgba(0, 0, 0, 0.8);
+  }
+}
+
+.blado-portrait-active {
+  animation: border-pulse-crimson 0.8s ease-in-out infinite;
+}
+
+/* --- Timer del duelo (DuelTimer) --- */
+@keyframes timer-bar-deplete {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+
+@keyframes countdown-tick {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.25); }
+  60%  { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+@keyframes timer-urgent-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+.timer-bar {
+  animation: timer-bar-deplete var(--timer-duration, 15s) linear both;
+}
+
+.timer-tick {
+  animation: countdown-tick 1s ease-out both;
+}
+
+.timer-urgent {
+  animation: timer-urgent-pulse 0.5s ease-in-out infinite;
+}
+
+/* --- Marcador (ScoreBoard) --- */
+@keyframes score-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.5); }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+.score-value-pop {
+  animation: score-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* --- Arena: VS text shimmer --- */
+@keyframes vs-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.vs-text {
+  background: linear-gradient(
+    90deg in oklch,
+    oklch(0.55 0.25 25) 0%,
+    oklch(0.75 0.28 145) 40%,
+    oklch(0.55 0.25 25) 60%,
+    oklch(0.75 0.28 145) 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: vs-shimmer 3s linear infinite;
+}
+
+/* --- Panel de ataque: borde neon rotante --- */
+@keyframes border-neon-rotate {
+  0%   { border-color: oklch(0.75 0.28 145); box-shadow: 0 0 12px oklch(0.75 0.28 145 / 0.4); }
+  33%  { border-color: oklch(0.65 0.28 290); box-shadow: 0 0 12px oklch(0.65 0.28 290 / 0.4); }
+  66%  { border-color: oklch(0.55 0.25 25);  box-shadow: 0 0 12px oklch(0.55 0.25 25 / 0.4); }
+  100% { border-color: oklch(0.75 0.28 145); box-shadow: 0 0 12px oklch(0.75 0.28 145 / 0.4); }
+}
+
+.attack-panel-border {
+  animation: border-neon-rotate 4s linear infinite;
+}
+
+/* --- prefers-reduced-motion: silenciar todas las animaciones del duelo --- */
+@media (prefers-reduced-motion: reduce) {
+  .bubble-blado,
+  .bubble-player,
+  .response-option,
+  .response-option--correct,
+  .response-option--wrong,
+  .duel-light-toxic,
+  .duel-light-crimson,
+  .blado-portrait-active,
+  .timer-bar,
+  .timer-tick,
+  .timer-urgent,
+  .score-value-pop,
+  .vs-text,
+  .attack-panel-border {
+    animation: none !important;
+    transition: none !important;
+  }
+  .vs-text {
+    background: none;
+    -webkit-text-fill-color: #dc2626;
+    color: #dc2626;
+  }
+}
