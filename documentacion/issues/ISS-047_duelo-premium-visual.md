@@ -1,6 +1,6 @@
 # ISS-047: Visual Premium "Duelo Golpes Bajos" — Efecto WOW
 
-**Estado:** En progreso  
+**Estado:** Completado  
 **Branch:** `feature/ISS-047-duelo-premium-visual`  
 **Tipo:** Visual / UX / Polish  
 **Prioridad:** Alta  
@@ -112,17 +112,17 @@ La burbuja de Blado entra desde arriba-derecha con scale y blur. La del jugador 
 
 ## Criterios de Aceptación
 
-- [ ] `InsultBubble` no importa Framer Motion — usa CSS nativo `@starting-style`
-- [ ] `ResponseOptions` tiene stagger de entrada y feedback correcto/incorrecto con animaciones distintas
-- [ ] `DuelLights` pulsan con glow multi-capa al encenderse
-- [ ] `BladoPortrait` borde pulsa cuando es el turno de Blado
-- [ ] `DuelTimer` cambia de color/intensidad progresivamente según el tiempo restante
-- [ ] `ScoreBoard` aplica `score-pop` al cambiar el puntaje
-- [ ] `DuelArena` tiene fondo con viñeta crimson, VS text con gradiente, panel con border neón
-- [ ] `prefers-reduced-motion` respetado en todas las animaciones CSS
-- [ ] 59 tests pasan sin modificaciones
-- [ ] Build sin errores TypeScript
-- [ ] PR mergeado a master → deploy Vercel
+- [x] `InsultBubble` no importa Framer Motion — usa CSS nativo `@starting-style`
+- [x] `ResponseOptions` tiene stagger de entrada y feedback correcto/incorrecto con animaciones distintas
+- [x] `DuelLights` pulsan con glow multi-capa al encenderse
+- [x] `BladoPortrait` borde pulsa cuando es el turno de Blado
+- [x] `DuelTimer` cambia de color/intensidad progresivamente según el tiempo restante
+- [x] `ScoreBoard` aplica `score-pop` al cambiar el puntaje
+- [x] `DuelArena` tiene fondo con viñeta crimson, VS text con gradiente, panel con border neón
+- [x] `prefers-reduced-motion` respetado en todas las animaciones CSS
+- [x] 59 tests pasan sin modificaciones
+- [x] Build sin errores TypeScript
+- [x] PR mergeado a master → deploy Vercel
 
 ---
 
