@@ -19,10 +19,10 @@ const ABOUT_CHAPTERS = [
   {
     id: 'aido',
     icon: '🏢',
-    title: 'AIDO & Emprendedurismo',
+    title: 'AIDO & Desarrollo a Medida',
     desc: 'Co-fundador y desarrollador principal en AIDO Agencia.',
     details: 'Lidero el desarrollo de software a medida, construyendo plataformas e-learning completas, integraciones avanzadas y aplicaciones SaaS para clientes. Mi rol exige diseñar la arquitectura de sistemas complejos, gestionar proyectos end-to-end y mantener una actualización constante en ecosistemas modernos.',
-    tags: ['Emprendimiento', 'Liderazgo Técnico', 'SaaS', 'Arquitectura'],
+    tags: ['Negocios', 'Liderazgo Técnico', 'SaaS', 'Arquitectura'],
   },
   {
     id: 'formacion',
