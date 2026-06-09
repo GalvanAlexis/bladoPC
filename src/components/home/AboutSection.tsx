@@ -1,32 +1,50 @@
+"use client";
+
 /**
- * AboutSection — ISS-049
- * Sección biográfica: quién es, dónde está, qué estudia, AIDO, stack.
+ * AboutSection — ISS-052
+ * Sección biográfica interactiva: 3 capítulos (Perfil, Empresa, Formación).
  */
-import React from 'react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const TECH_STACK = [
-  'Next.js', 'React', 'TypeScript', 'Node.js',
-  'Python', 'Pandas', 'Scikit-Learn',
-  'PostgreSQL', 'Supabase', 'Prisma',
-  'Git', 'Docker',
-];
-
-const FACTS = [
-  { label: 'Ubicación', value: 'Chascomús, Buenos Aires, Argentina' },
-  { label: 'Formación',  value: 'ISFDyT 57 — Ciencia de Datos e IA · Ing. Sistemas (autodidacta)' },
-  { label: 'Empresa',    value: 'AIDO — Co-fundador y desarrollador principal' },
-  { label: 'Enfoque',    value: 'Full-Stack Web · Machine Learning · Software a medida' },
+const ABOUT_CHAPTERS = [
+  {
+    id: 'perfil',
+    icon: '⚡',
+    title: 'El Perfil Técnico',
+    desc: 'Desarrollador Full-Stack y Data Scientist con un enfoque pragmático orientado a resolver problemas.',
+    details: 'Mi visión combina el entendimiento profundo del hardware con el desarrollo de software escalable. Como apasionado de la tecnología, busco crear soluciones robustas desde la infraestructura hasta la interfaz final, integrando la Inteligencia Artificial como herramienta potenciadora real, no como un simple parche.',
+    tags: ['Full-Stack', 'Data Science', 'Problem Solving', 'Pragmatismo'],
+  },
+  {
+    id: 'aido',
+    icon: '🏢',
+    title: 'AIDO & Emprendedurismo',
+    desc: 'Co-fundador y desarrollador principal en AIDO Agencia.',
+    details: 'Lidero el desarrollo de software a medida, construyendo plataformas e-learning completas, integraciones avanzadas y aplicaciones SaaS para clientes. Mi rol exige diseñar la arquitectura de sistemas complejos, gestionar proyectos end-to-end y mantener una actualización constante en ecosistemas modernos.',
+    tags: ['Emprendimiento', 'Liderazgo Técnico', 'SaaS', 'Arquitectura'],
+  },
+  {
+    id: 'formacion',
+    icon: '🎓',
+    title: 'Formación y Camino',
+    desc: 'De Técnico de PC a Ingeniero de Sistemas autodidacta.',
+    details: 'Mi formación comenzó como Técnico de Reparación de PC, lo que me dio las bases absolutas sobre hardware y sistemas operativos. Actualmente curso la Tecnicatura en Ciencia de Datos e IA en el ISFDyT 57, a la par que estudio Ingeniería de Sistemas de manera completamente autodidacta (siguiendo el currículum de OSSU Computer Science), abarcando estructuras de datos, algoritmos, y fundamentos matemáticos.',
+    tags: ['Técnico de PC', 'ISFDyT 57', 'Ing. de Sistemas', 'OSSU', 'Autodidacta'],
+  },
 ];
 
 export default function AboutSection() {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
   return (
     <section
       id="about"
       aria-label="Sobre mí"
       className="section-padding section-lazy"
+      style={{ position: 'relative' }}
     >
       <div className="section-container">
-
         <div className="section-divider reveal" />
         <p
           className="reveal"
@@ -39,7 +57,7 @@ export default function AboutSection() {
             marginBottom: '12px',
           }}
         >
-          Sobre mí
+          Biografía
         </p>
         <h2
           className="reveal"
@@ -50,88 +68,225 @@ export default function AboutSection() {
             marginBottom: '48px',
           }}
         >
-          Desarrollador con foco en impacto real
+          Sobre mí
         </h2>
 
-        {/* Grid: bio + stack */}
+        {/* Cards grid */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
-            gap: '48px',
-            alignItems: 'start',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+            gap: '20px',
           }}
         >
-          {/* Facts */}
-          <div className="reveal" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {FACTS.map((f) => (
-              <div
-                key={f.label}
+          {ABOUT_CHAPTERS.map((chapter) => (
+            <motion.article
+              key={chapter.id}
+              layoutId={`about-card-${chapter.id}`}
+              onClick={() => setSelectedId(chapter.id)}
+              className="skill-card reveal"
+              style={{ cursor: 'pointer', background: 'var(--surface)' }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              {/* Icono */}
+              <motion.div
+                layoutId={`about-icon-${chapter.id}`}
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: '100px 1fr',
-                  gap: '16px',
-                  alignItems: 'start',
-                  paddingBottom: '20px',
-                  borderBottom: '1px solid var(--border-subtle)',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '8px',
+                  background: 'var(--surface-2)',
+                  border: '1px solid var(--border-subtle)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '18px',
+                  color: 'var(--foreground)',
+                  marginBottom: '16px',
+                  userSelect: 'none',
+                }}
+                aria-hidden="true"
+              >
+                {chapter.icon}
+              </motion.div>
+
+              <motion.h3
+                layoutId={`about-title-${chapter.id}`}
+                style={{
+                  fontSize: '18px',
+                  fontWeight: 600,
+                  color: 'var(--foreground)',
+                  marginBottom: '10px',
+                  letterSpacing: '-0.01em',
                 }}
               >
-                <span
-                  style={{
-                    fontSize: '11px',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    color: 'var(--muted)',
-                    fontWeight: 500,
-                    paddingTop: '2px',
-                  }}
-                >
-                  {f.label}
-                </span>
-                <span style={{ fontSize: '14px', color: 'var(--foreground-2)', lineHeight: 1.6 }}>
-                  {f.value}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {/* Stack + párrafo */}
-          <div className="reveal" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <p style={{ fontSize: '15px', color: 'var(--foreground-2)', lineHeight: 1.8 }}>
-              Me apasiona construir soluciones que van desde aplicaciones web modernas hasta sistemas
-              de análisis de datos y machine learning. En AIDO llevamos esas soluciones a clientes reales.
-            </p>
-            <p style={{ fontSize: '15px', color: 'var(--foreground-2)', lineHeight: 1.8 }}>
-              Este portfolio refleja mi proceso de aprendizaje continuo: cada proyecto, cada materia
-              y cada tecnología tiene su lugar en el{' '}
-              <a href="#skills" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>
-                árbol de habilidades
-              </a>
-              .
-            </p>
-
-            {/* Tech badges */}
-            <div>
-              <p
+                {chapter.title}
+              </motion.h3>
+              
+              <motion.p
+                layoutId={`about-desc-${chapter.id}`}
                 style={{
-                  fontSize: '11px',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  color: 'var(--muted)',
-                  marginBottom: '12px',
+                  fontSize: '13px',
+                  color: 'var(--muted-light)',
+                  lineHeight: 1.7,
+                  marginBottom: '16px',
                 }}
               >
-                Stack principal
-              </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {TECH_STACK.map((t) => (
-                  <span key={t} className="tech-badge">{t}</span>
+                {chapter.desc}
+              </motion.p>
+
+              {/* Tags */}
+              <motion.div layoutId={`about-tags-${chapter.id}`} style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                {chapter.tags.map((tag) => (
+                  <span key={tag} className="tech-badge" style={{ fontSize: '10px', padding: '2px 8px' }}>
+                    {tag}
+                  </span>
                 ))}
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            </motion.article>
+          ))}
         </div>
       </div>
+
+      {/* Expanded Modal */}
+      <AnimatePresence>
+        {selectedId && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedId(null)}
+              style={{
+                position: 'fixed',
+                inset: 0,
+                background: 'rgba(0, 0, 0, 0.7)',
+                backdropFilter: 'blur(4px)',
+                zIndex: 100,
+              }}
+            />
+            {ABOUT_CHAPTERS.map(chapter => chapter.id === selectedId && (
+              <div
+                key={`modal-about-${chapter.id}`}
+                style={{
+                  position: 'fixed',
+                  inset: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  zIndex: 101,
+                  padding: '20px',
+                  pointerEvents: 'none',
+                }}
+              >
+                <motion.article
+                  layoutId={`about-card-${chapter.id}`}
+                  style={{
+                    background: 'var(--background)',
+                    border: '1px solid var(--border)',
+                    borderTop: '2px solid var(--accent)',
+                    borderRadius: '12px',
+                    padding: '32px',
+                    width: '100%',
+                    maxWidth: '500px',
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
+                    pointerEvents: 'auto',
+                    position: 'relative',
+                  }}
+                >
+                  <button
+                    onClick={() => setSelectedId(null)}
+                    style={{
+                      position: 'absolute',
+                      top: '16px',
+                      right: '16px',
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'var(--muted)',
+                      cursor: 'pointer',
+                      padding: '8px',
+                      fontSize: '14px',
+                    }}
+                  >
+                    ✕
+                  </button>
+
+                  <motion.div
+                    layoutId={`about-icon-${chapter.id}`}
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: '8px',
+                      background: 'var(--surface)',
+                      border: '1px solid var(--border)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '24px',
+                      color: 'var(--foreground)',
+                      marginBottom: '20px',
+                    }}
+                  >
+                    {chapter.icon}
+                  </motion.div>
+
+                  <motion.h3
+                    layoutId={`about-title-${chapter.id}`}
+                    style={{
+                      fontSize: '24px',
+                      fontWeight: 700,
+                      color: 'var(--foreground)',
+                      marginBottom: '12px',
+                      letterSpacing: '-0.02em',
+                    }}
+                  >
+                    {chapter.title}
+                  </motion.h3>
+
+                  <motion.p
+                    layoutId={`about-desc-${chapter.id}`}
+                    style={{
+                      fontSize: '14px',
+                      color: 'var(--muted-light)',
+                      lineHeight: 1.6,
+                      marginBottom: '24px',
+                      fontWeight: 500,
+                    }}
+                  >
+                    {chapter.desc}
+                  </motion.p>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    style={{
+                      background: 'var(--surface)',
+                      padding: '20px',
+                      borderRadius: '8px',
+                      marginBottom: '24px',
+                      border: '1px solid var(--border-subtle)',
+                    }}
+                  >
+                    <p style={{ fontSize: '14px', color: 'var(--foreground-2)', lineHeight: 1.8 }}>
+                      {chapter.details}
+                    </p>
+                  </motion.div>
+
+                  <motion.div layoutId={`about-tags-${chapter.id}`} style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {chapter.tags.map((tag) => (
+                      <span key={tag} className="tech-badge" style={{ fontSize: '12px', padding: '4px 10px' }}>
+                        {tag}
+                      </span>
+                    ))}
+                  </motion.div>
+                </motion.article>
+              </div>
+            ))}
+          </>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
