@@ -9,10 +9,9 @@ import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import HeroSection from '@/components/home/HeroSection';
+import ServicesSection from '@/components/home/ServicesSection';
 import AboutSection from '@/components/home/AboutSection';
 import SkillsSection from '@/components/home/SkillsSection';
-import ProjectsSection from '@/components/home/ProjectsSection';
-import AssistantSection from '@/components/home/AssistantSection';
 
 export default function HomeLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -37,10 +36,9 @@ export default function HomeLayout() {
         }}
       >
         <HeroSection />
+        <ServicesSection />
         <AboutSection />
         <SkillsSection />
-        <ProjectsSection />
-        <AssistantSection />
 
         {/* Footer mínimo */}
         <footer
