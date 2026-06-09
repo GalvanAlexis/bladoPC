@@ -1,132 +1,132 @@
 "use client";
 
 /**
- * Navbar — ISS-019
- * Botones: Intro (replay), Timba (próximamente), Cebar Mate (próximamente)
+ * Navbar — ISS-048 Rebranding Portfolio Blado
+ * Clean, corporativo, negro/rojo. Sin referencias RPG.
  */
 import React from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 
 interface NavbarProps {
-  scene: 'cave' | 'library';
-  onReplayIntro: () => void;
   onToggleSidebar: () => void;
   sidebarOpen: boolean;
 }
 
-
-const NAV_BUTTONS = [
-  {
-    id: 'intro',
-    label: 'Intro',
-    available: true,
-    title: 'Reproducir presentación',
-  },
-  {
-    id: 'timba',
-    label: 'Timba',
-    available: true,
-    title: 'Ir a la Timba',
-  },
-  {
-    id: 'cebar-mate',
-    label: 'Cebar Mate',
-    available: true,
-    title: 'Ir a Cebar Mate',
-  },
+const NAV_LINKS = [
+  { id: 'hero',      label: 'Inicio',      path: '/#hero' },
+  { id: 'skills',    label: 'Habilidades', path: '/#skills' },
+  { id: 'projects',  label: 'Proyectos',   path: '/#projects' },
+  { id: 'assistant', label: 'Asistente',   path: '/#assistant' },
 ];
 
-export default function Navbar({ scene, onReplayIntro, onToggleSidebar, sidebarOpen }: NavbarProps) {
+export default function Navbar({ onToggleSidebar, sidebarOpen }: NavbarProps) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleClick = (id: string) => {
-    if (id === 'intro') onReplayIntro();
-    if (id === 'timba') router.push('/timba');
-    if (id === 'cebar-mate') router.push('/cebar-mate');
-  };
-
   return (
-    <nav className="fixed top-0 left-0 right-0 h-14 z-50 bg-black/75 backdrop-blur-sm border-b border-crimson/30 shadow-[0_0_20px_rgba(220,38,38,0.15)]">
-      <div className="h-full px-4 flex items-center justify-between">
+    <nav
+      className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center"
+      style={{
+        background: 'rgba(5,5,5,0.85)',
+        backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid var(--border)',
+      }}
+    >
+      <div className="h-full w-full px-4 sm:px-6 flex items-center justify-between">
 
-        {/* ─── Izquierda: hamburger + logo + nav buttons ─── */}
+        {/* ─── Izquierda: hamburger + logo ─── */}
         <div className="flex items-center gap-4">
 
           {/* Hamburger */}
           <button
+            id="sidebar-toggle"
             onClick={onToggleSidebar}
-            className="text-gray-500 hover:text-toxic transition-colors p-1 rounded"
+            className="text-gray-500 hover:text-gray-300 transition-colors p-1 rounded"
             title={sidebarOpen ? 'Cerrar panel' : 'Abrir panel'}
             aria-label="Toggle sidebar"
+            aria-expanded={sidebarOpen}
           >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
               <line x1="3" y1="5" x2="17" y2="5" />
               <line x1="3" y1="10" x2="17" y2="10" />
               <line x1="3" y1="15" x2="17" y2="15" />
             </svg>
           </button>
 
-          {/* Logo */}
-          <span className="text-crimson font-bold text-sm uppercase tracking-widest font-mono hidden sm:inline select-none">
-            Blado_Cavern
-          </span>
+          {/* Logotipo */}
+          <a
+            href="/"
+            className="flex items-center gap-2 group"
+            style={{ textDecoration: 'none' }}
+          >
+            <span
+              className="text-sm font-semibold tracking-tight select-none transition-colors group-hover:opacity-80"
+              style={{ color: 'var(--foreground)' }}
+            >
+              Portfolio
+              <span style={{ color: 'var(--accent)' }}> Blado</span>
+            </span>
+          </a>
 
           {/* Separador */}
-          <span className="text-gray-800 hidden sm:inline">|</span>
+          <div
+            className="hidden sm:block h-4 w-px"
+            style={{ background: 'var(--border)' }}
+          />
 
-          {/* Nav buttons */}
+          {/* Nav links — desktop */}
           <div className="hidden sm:flex items-center gap-1">
-            {NAV_BUTTONS.map((btn) => (
-              <button
-                key={btn.id}
-                onClick={() => handleClick(btn.id)}
-                disabled={!btn.available}
-                title={btn.title}
-                className={`
-                  px-3 py-1.5 rounded text-xs font-mono uppercase tracking-wider
-                  transition-all duration-200 border
-                  ${btn.available
-                    ? 'text-gray-400 border-transparent hover:text-toxic hover:border-toxic/40 hover:bg-toxic/5'
-                    : 'text-gray-700 border-transparent cursor-not-allowed opacity-50'
-                  }
-                `}
-              >
-                {btn.label}
-                {!btn.available && (
-                  <span className="ml-1 text-[10px] text-gray-700 normal-case tracking-normal">
-                    ✦
-                  </span>
-                )}
-              </button>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const isActive = pathname === link.path;
+              return (
+                <button
+                  key={link.id}
+                  onClick={() => router.push(link.path)}
+                  className="px-3 py-1.5 rounded text-xs font-medium tracking-wide transition-all duration-150"
+                  style={{
+                    color: isActive ? 'var(--foreground)' : 'var(--muted)',
+                    background: isActive ? 'var(--surface-2)' : 'transparent',
+                    border: isActive
+                      ? '1px solid var(--border)'
+                      : '1px solid transparent',
+                  }}
+                  onMouseEnter={e => {
+                    if (!isActive) {
+                      (e.currentTarget as HTMLButtonElement).style.color = 'var(--foreground)';
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (!isActive) {
+                      (e.currentTarget as HTMLButtonElement).style.color = 'var(--muted)';
+                    }
+                  }}
+                >
+                  {link.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* ─── Derecha: indicador de escena y Volver ─── */}
+        {/* ─── Derecha: status dot + volver ─── */}
         <div className="flex items-center gap-4">
           {pathname !== '/' && (
             <button
               onClick={() => router.push('/')}
-              className="text-[10px] sm:text-xs uppercase border border-gray-700 px-2 sm:px-3 py-1 rounded hover:bg-gray-800 transition-colors text-gray-300 font-bold"
+              className="text-xs transition-colors hidden sm:block"
+              style={{ color: 'var(--muted)' }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--foreground)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
             >
-              Volver al inicio
+              ← Volver
             </button>
           )}
-          
+
           <div className="flex items-center gap-2">
-            <span className="text-[11px] uppercase tracking-widest text-gray-600 font-mono hidden sm:inline">
-            {scene === 'cave' ? 'Cueva de Blado' : 'Biblioteca Arcana'}
-          </span>
-          <div
-            className="w-2 h-2 rounded-full"
-            style={{
-              backgroundColor: scene === 'cave' ? '#dc2626' : '#9333ea',
-              boxShadow: scene === 'cave'
-                ? '0 0 8px rgba(220,38,38,0.8)'
-                : '0 0 8px rgba(147,51,234,0.8)',
-            }}
-          />
+            <span className="text-xs hidden sm:inline" style={{ color: 'var(--muted)' }}>
+              Online
+            </span>
+            <span className="status-dot" aria-hidden="true" />
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import CavernIntro from '@/components/CavernIntro';
+import PortfolioIntro from '@/components/PortfolioIntro';
 
 interface AppContextValue {
   replayIntro: () => void;
@@ -43,18 +43,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const replayIntro = useCallback(() => {
-    sessionStorage.setItem('blado_intro_seen', 'false'); // Opcional, pero para consistencia
+    sessionStorage.setItem('blado_intro_seen', 'false');
     setShowIntro(true);
   }, []);
 
-  // Evita hydration mismatch y parpadeos bruscos
   if (!isMounted) {
-    return <div className="min-h-screen bg-[#050505]" />;
+    return <div style={{ minHeight: '100vh', background: '#050505' }} />;
   }
 
   if (showIntro) {
     return (
-      <CavernIntro
+      <PortfolioIntro
         onComplete={handleFinish}
         onSkip={handleFinish}
       />

@@ -10,7 +10,7 @@ import dynamic from 'next/dynamic';
 import BladoAvatar from '@/components/BladoAvatar';
 
 const GameEngine = dynamic(() => import('@/components/GameEngine'), {
-  loading: () => <BladoAvatar message="Invocando el Grimorio..." />,
+  loading: () => <BladoAvatar message="Cargando portfolio..." />,
   ssr: false,
 });
 

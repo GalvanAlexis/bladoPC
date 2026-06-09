@@ -1,98 +1,74 @@
 "use client";
 
+/**
+ * GameEngine — ISS-048 Rebranding Portfolio Blado
+ * Core del portfolio interactivo. Texto profesional, sin RPG.
+ * Usa PortfolioScene, PortfolioIntro, DialogBox, Navbar, Sidebar.
+ */
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import VisualNovelScene from "@/components/VisualNovelScene";
+import { AnimatePresence, motion } from "framer-motion";
+import PortfolioScene from "@/components/PortfolioScene";
 import DialogBox, { Choice } from "@/components/DialogBox";
 import LibraryRoom from "@/components/biblioteca/LibraryRoom";
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
 import ReadmeModal from "@/components/ReadmeModal";
 import { useAppContext } from "@/lib/AppContext";
 
 // --- Types -------------------------------------------------------------------
-
-type Scene = "cave" | "library";
-type BladoPose = "base" | "phone";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
 }
 
-
-
 // --- Dialogue Tree ------------------------------------------------------------
 
 const DIALOGUES = {
   intro: {
-    text: "Bienvenido, mortal! Soy Blado, esta es mi caverna. A que has venido?",
-    scene: "cave" as Scene,
-    pose: "base" as BladoPose,
+    text: "Hola! Soy Blado, el asistente de este portfolio. ¿Qué querés conocer de Alexis?",
     choices: ["whoAmI", "skills", "projects", "knowledge", "cv"],
   },
   whoAmI: {
-    text: "Soy Alexis Galvan! Me dicen Blado. Estudio Ciencia de Datos e IA en ISFDyT 57 Chascomus. Tambien estudio Ingenieria de Sistemas de forma autodidacta.",
-    scene: "cave" as Scene,
-    pose: "base" as BladoPose,
+    text: "Soy Alexis Galván, más conocido como Blado. Desarrollador Full-Stack y cofundador de AIDO. Estudio Ciencia de Datos e IA en ISFDyT 57, Chascomús. También estudio Ingeniería de Sistemas de forma autodidacta.",
     choices: ["skills", "projects", "knowledge", "cv", "back"],
   },
   skills: {
-    text: "Mis habilidades... - frota sus manos maliciosamente - ...Quieres ver el arbol completo de poder? Invoco el Grimorio? jeje",
-    scene: "cave" as Scene,
-    pose: "base" as BladoPose,
+    text: "Las habilidades de Alexis van desde desarrollo web full-stack hasta ciencia de datos e IA. ¿Querés ver el árbol de habilidades completo?",
     choices: ["openSkillTree", "projects", "knowledge", "cv", "back"],
   },
   projects: {
-    text: "Proyectos! Esas son las batallas reales. InmoVoz (buscador de propiedades con NLP), sistemas de autenticacion, dashboards de analisis... Cada uno, una cicatriz de aprendizaje.",
-    scene: "cave" as Scene,
-    pose: "phone" as BladoPose,
+    text: "Los proyectos incluyen InmoVoz (buscador de propiedades con NLP), sistemas de autenticación, dashboards de análisis, y este portfolio. Cada uno representa un desafío técnico real.",
     choices: ["knowledge", "skills", "cv", "back"],
   },
   knowledge: {
-    text: "Conocimiento teorico? Para eso... debemos ir a mi Biblioteca. abre un portal de fuego",
-    scene: "library" as Scene,
-    pose: "base" as BladoPose,
+    text: "El conocimiento teórico está organizado en un Skill Tree interactivo. Podés explorar materias, tecnologías y conceptos organizados por carrera y año.",
     choices: ["askTheory", "askProjects", "cv", "back"],
   },
   askTheory: {
-    text: "Bien, mortal. Me interrogas? Jejeje. Preguntame y yo buscaré entre mis libros. Te respondere con honestidad... o casi.",
-    scene: "library" as Scene,
-    pose: "phone" as BladoPose,
+    text: "Preguntame sobre cualquier aspecto académico o tecnológico y buscaré la mejor respuesta.",
     choices: ["back"],
     allowFreeQuestion: "theory",
   },
   askProjects: {
-    text: "Mis proyectos? Espero hayas leido mi Github antes de venir a molest... Preguntarme sobre mi experiencia. Como sea, aqui tienes algunos",
-    scene: "library" as Scene,
-    pose: "phone" as BladoPose,
+    text: "¿Querés saber más sobre algún proyecto en particular? Podés preguntar sobre el stack, las decisiones técnicas o los resultados.",
     choices: ["back"],
     allowFreeQuestion: "projects",
   },
   cv: {
-    text: "Mi CV? Claro, mortal. Aqui tienes el grimorio de mi experiencia profesional... saca un pergamino en llamas. Todo lo que he hecho y lo que puedo hacer esta ahi.",
-    scene: "library" as Scene,
-    pose: "phone" as BladoPose,
+    text: "Acá podés ver el CV completo de Alexis con toda su experiencia profesional, formación académica y proyectos destacados.",
     choices: ["back"],
     showCV: true,
   },
   back: {
-    text: "Como gustes. bosteza demoniacamente. Que mas deseas saber sobre mis conocimientos?",
-    scene: "cave" as Scene,
-    pose: "base" as BladoPose,
+    text: "¿Qué más querés saber sobre el portfolio de Alexis?",
     choices: ["whoAmI", "skills", "projects", "knowledge", "cv"],
   },
   openSkillTree: {
-    text: "El Grimorio! Aqui veras cada habilidad que he conquistado... los nodos verdes brillan con poder, los rojos aun luchan por ser dominados.",
-    scene: "cave" as Scene,
-    pose: "base" as BladoPose,
+    text: "Este es el árbol de habilidades. Los nodos muestran el estado de dominio de cada tecnología y materia.",
     choices: ["closeSkillTree", "back"],
     showSkillTree: true,
   },
   closeSkillTree: {
-    text: "Bien, cerramos el Grimorio. Que mas te interesa?",
-    scene: "cave" as Scene,
-    pose: "base" as BladoPose,
+    text: "¿Qué más querés explorar?",
     choices: ["whoAmI", "skills", "projects", "knowledge", "cv"],
   },
 } as const;
@@ -100,16 +76,16 @@ const DIALOGUES = {
 type DialogueKey = keyof typeof DIALOGUES;
 
 const CHOICE_LABELS: Record<string, string> = {
-  whoAmI: "Quien eres?",
-  skills: "Mostrame tus habilidades",
-  projects: "Contame sobre tus proyectos",
-  knowledge: "Quiero ver tu conocimiento teorico",
-  cv: "Ver tu CV / Experiencia",
-  openSkillTree: "Abrir el Grimorio de Habilidades",
-  closeSkillTree: "Cerrar el Grimorio",
-  askTheory: "Preguntar sobre teoria y materias",
-  askProjects: "Preguntar sobre proyectos especificos",
-  back: "Volver",
+  whoAmI:         "¿Quién es Alexis?",
+  skills:         "Ver sus habilidades",
+  projects:       "Conocer sus proyectos",
+  knowledge:      "Explorar conocimiento académico",
+  cv:             "Ver CV / Experiencia",
+  openSkillTree:  "Abrir árbol de habilidades",
+  closeSkillTree: "Cerrar árbol",
+  askTheory:      "Preguntar sobre teoría y materias",
+  askProjects:    "Preguntar sobre proyectos",
+  back:           "Volver al menú",
 };
 
 // --- Component ----------------------------------------------------------------
@@ -120,28 +96,20 @@ export default function GameEngine() {
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showCVModal, setShowCVModal] = useState(false);
 
   const current = DIALOGUES[currentKey];
-  const scene: Scene = current.scene;
-  const bladoPose: BladoPose = current.pose;
   const showSkillTree = "showSkillTree" in current && current.showSkillTree;
-  const allowFreeQuestion =
-    "allowFreeQuestion" in current && current.allowFreeQuestion;
+  const allowFreeQuestion = "allowFreeQuestion" in current && current.allowFreeQuestion;
 
-  const choices: Choice[] = (current.choices as readonly string[]).map(
-    (key) => ({
-      label: CHOICE_LABELS[key] ?? key,
-      action: () => {
-        setCurrentKey(key as DialogueKey);
-        setMessages([]);
-        if (key === "cv") {
-          setShowCVModal(true);
-        }
-      },
-    }),
-  );
+  const choices: Choice[] = (current.choices as readonly string[]).map((key) => ({
+    label: CHOICE_LABELS[key] ?? key,
+    action: () => {
+      setCurrentKey(key as DialogueKey);
+      setMessages([]);
+      if (key === "cv") setShowCVModal(true);
+    },
+  }));
 
   const handleBladoClick = useCallback(() => {
     setDialogVisible(true);
@@ -152,15 +120,9 @@ export default function GameEngine() {
     setMessages([]);
   }, []);
 
-  // BUG-02: Usamos useRef como snapshot buffer para evitar stale closure.
-  // handleFreeQuestion nunca depende del estado messages directamente,
-  // lo que estabiliza su referencia y evita re-renders innecesarios en DialogBox.
-  const messagesRef = React.useRef<Message[]>(messages);
-  useEffect(() => {
-    messagesRef.current = messages;
-  }, [messages]);
+  const messagesRef = useRef<Message[]>(messages);
+  useEffect(() => { messagesRef.current = messages; }, [messages]);
 
-  // ISS-021: sessionId persistido en localStorage para vincular mensajes a una sesión
   const sessionIdRef = useRef<string>("");
   useEffect(() => {
     const stored = localStorage.getItem("blado_session_id");
@@ -175,8 +137,6 @@ export default function GameEngine() {
 
   const handleFreeQuestion = useCallback(async (question: string) => {
     setIsLoading(true);
-
-    // Capturamos el snapshot del estado actual sin depender de messages en closure
     const snapshot: Message[] = [
       ...messagesRef.current,
       { role: "user", content: question },
@@ -184,116 +144,77 @@ export default function GameEngine() {
     setMessages(snapshot);
 
     try {
-      const topic = typeof allowFreeQuestion === 'string' ? allowFreeQuestion : 'theory';
+      const topic = typeof allowFreeQuestion === "string" ? allowFreeQuestion : "theory";
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: snapshot,
           sessionId: sessionIdRef.current,
-          topic: topic,
+          topic,
         }),
       });
 
-      // BUG-03: Validar res.ok antes de parsear para no ignorar errores HTTP
       if (!res.ok) {
-        const errData = (await res.json().catch(() => ({}))) as {
-          error?: string;
-        };
+        const errData = (await res.json().catch(() => ({}))) as { error?: string };
         throw new Error(errData.error ?? `HTTP ${res.status}`);
       }
 
       const data = (await res.json()) as { reply?: string };
-      const reply =
-        data.reply ??
-        "Los portales de conocimiento estan bloqueados... (error al contactar a mi cerebro de fuego)";
-
+      const reply = data.reply ?? "No pude procesar la respuesta en este momento. Intentá de nuevo.";
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch (err) {
       console.error("Chat API error:", err);
       setMessages((prev) => [
         ...prev,
-        {
-          role: "assistant",
-          content:
-            "Mis conexiones al inframundo fallaron. Intenta de nuevo, mortal.",
-        },
+        { role: "assistant", content: "Hubo un problema al conectar con el sistema. Intentá de nuevo." },
       ]);
     } finally {
       setIsLoading(false);
     }
-  }, [allowFreeQuestion]); // referencia estable — depende de allowFreeQuestion
+  }, [allowFreeQuestion]);
 
-  // The text shown in the box: if there's an AI reply, show it. Otherwise, show scripted text.
   const lastMessage = messages[messages.length - 1];
   const displayText =
     lastMessage?.role === "assistant"
       ? lastMessage.content
       : isLoading
-        ? "Consultando el grimorio... llamas en los ojos"
+        ? "Procesando tu pregunta..."
         : current.text;
 
   const displayChoices: Choice[] =
     lastMessage?.role === "assistant" || isLoading
-      ? [
-          {
-            label: "Volver al menu",
-            action: () => {
-              setMessages([]);
-            },
-          },
-        ]
+      ? [{ label: "Volver al menú", action: () => setMessages([]) }]
       : choices;
 
   return (
-    <main className="relative w-screen h-screen overflow-hidden font-mono select-none">
-      {/* Navbar */}
-      <Navbar
-        scene={scene}
-        onReplayIntro={replayIntro}
-        onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
-        sidebarOpen={sidebarOpen}
-      />
+    <div className="relative w-full h-full overflow-hidden select-none">
 
-      {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-
-      {/* 2D Scene + Blado Sprite */}
-      <VisualNovelScene
-        scene={scene}
-        bladoPose={bladoPose}
+      {/* Scene */}
+      <PortfolioScene
         dialogVisible={dialogVisible}
         onBladoClick={handleBladoClick}
       />
 
-      {/* Atmospheric vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_40%,_black_100%)] pointer-events-none z-10" />
-
-      {/* Skill Tree Grimoire (overlay) */}
+      {/* Skill Tree overlay */}
       <AnimatePresence>
-        {showSkillTree && (
-          <LibraryRoom />
-        )}
+        {showSkillTree && <LibraryRoom />}
       </AnimatePresence>
 
-      {/* Readme CV Modal */}
+      {/* CV Modal */}
       <ReadmeModal isOpen={showCVModal} onClose={() => setShowCVModal(false)} />
 
       {/* Dialog Box */}
       <AnimatePresence>
         {dialogVisible && (
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            exit={{ opacity: 0, y: 40 }}
+            transition={{ type: "spring", damping: 28, stiffness: 300 }}
           >
             <DialogBox
-              key={
-                currentKey +
-                "-" +
-                (lastMessage?.role === "assistant" ? "ai" : "")
-              }
+              key={currentKey + "-" + (lastMessage?.role === "assistant" ? "ai" : "")}
               speakerName="Blado"
               text={displayText}
               choices={displayChoices}
@@ -304,6 +225,6 @@ export default function GameEngine() {
           </motion.div>
         )}
       </AnimatePresence>
-    </main>
+    </div>
   );
 }
