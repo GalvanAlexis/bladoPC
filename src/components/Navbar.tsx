@@ -13,9 +13,10 @@ interface NavbarProps {
 }
 
 const NAV_LINKS = [
-  { id: 'intro',     label: 'Inicio',    path: '/' },
-  { id: 'timba',     label: 'Showcase',  path: '/timba' },
-  { id: 'cebar-mate',label: 'Contacto',  path: '/cebar-mate' },
+  { id: 'hero',      label: 'Inicio',      path: '/#hero' },
+  { id: 'skills',    label: 'Habilidades', path: '/#skills' },
+  { id: 'projects',  label: 'Proyectos',   path: '/#projects' },
+  { id: 'assistant', label: 'Asistente',   path: '/#assistant' },
 ];
 
 export default function Navbar({ onToggleSidebar, sidebarOpen }: NavbarProps) {

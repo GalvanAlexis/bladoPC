@@ -10,8 +10,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import PortfolioScene from "@/components/PortfolioScene";
 import DialogBox, { Choice } from "@/components/DialogBox";
 import LibraryRoom from "@/components/biblioteca/LibraryRoom";
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
 import ReadmeModal from "@/components/ReadmeModal";
 import { useAppContext } from "@/lib/AppContext";
 
@@ -98,7 +96,6 @@ export default function GameEngine() {
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showCVModal, setShowCVModal] = useState(false);
 
   const current = DIALOGUES[currentKey];
@@ -191,16 +188,7 @@ export default function GameEngine() {
       : choices;
 
   return (
-    <main className="relative w-screen h-screen overflow-hidden select-none">
-
-      {/* Navbar */}
-      <Navbar
-        onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
-        sidebarOpen={sidebarOpen}
-      />
-
-      {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+    <div className="relative w-full h-full overflow-hidden select-none">
 
       {/* Scene */}
       <PortfolioScene
@@ -237,6 +225,6 @@ export default function GameEngine() {
           </motion.div>
         )}
       </AnimatePresence>
-    </main>
+    </div>
   );
 }
