@@ -17,8 +17,8 @@ jest.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
 }));
 
-jest.mock('@/components/VisualNovelScene', () =>
-  function MockVisualNovelScene({ onBladoClick }: { onBladoClick: () => void }) {
+jest.mock('@/components/PortfolioScene', () =>
+  function MockPortfolioScene({ onBladoClick }: { onBladoClick: () => void }) {
     return <button data-testid="blado-sprite" onClick={onBladoClick}>Blado</button>;
   }
 );
@@ -128,31 +128,31 @@ describe('GameEngine — diálogo inicial', () => {
   it('el diálogo inicial contiene texto de bienvenida', async () => {
     renderGameEngine();
     await openDialog();
-    expect(screen.getByTestId('dialog-text').textContent).toContain('Bienvenido');
+    expect(screen.getByTestId('dialog-text').textContent).toContain('Hola');
   });
 });
 
 describe('GameEngine — navegación entre diálogos', () => {
-  it('clickear "Quien eres?" cambia el diálogo a whoAmI', async () => {
+  it('clickear "¿Quién es Alexis?" cambia el diálogo a whoAmI', async () => {
     renderGameEngine();
     await openDialog();
-    await userEvent.click(screen.getByText('Quien eres?'));
-    expect(screen.getByTestId('dialog-text').textContent).toContain('Alexis Galvan');
+    await userEvent.click(screen.getByText('¿Quién es Alexis?'));
+    expect(screen.getByTestId('dialog-text').textContent).toContain('Alexis Galván');
   });
 
-  it('clickear "Volver" regresa al diálogo de vuelta (back)', async () => {
+  it('clickear "Volver al menú" regresa al diálogo de vuelta (back)', async () => {
     renderGameEngine();
     await openDialog();
-    await userEvent.click(screen.getByText('Quien eres?'));
-    await userEvent.click(screen.getByText('Volver'));
+    await userEvent.click(screen.getByText('¿Quién es Alexis?'));
+    await userEvent.click(screen.getByText('Volver al menú'));
     // El nodo 'back' tiene su propio texto de transición
-    expect(screen.getByTestId('dialog-text').textContent).toContain('Como gustes');
+    expect(screen.getByTestId('dialog-text').textContent).toContain('¿Qué más');
   });
 
-  it('navegar a "Mostrame tus habilidades" muestra el texto de skills', async () => {
+  it('navegar a "Ver sus habilidades" muestra el texto de skills', async () => {
     renderGameEngine();
     await openDialog();
-    await userEvent.click(screen.getByText('Mostrame tus habilidades'));
+    await userEvent.click(screen.getByText('Ver sus habilidades'));
     expect(screen.getByTestId('dialog-text').textContent).toContain('habilidades');
   });
 });
@@ -163,11 +163,11 @@ describe('GameEngine — Grimorio (LibraryRoom)', () => {
     expect(screen.queryByTestId('library-room')).not.toBeInTheDocument();
   });
 
-  it('navegar a skills y abrir el Grimorio muestra el LibraryRoom', async () => {
+  it('navegar a skills y abrir el Árbol de Habilidades muestra el LibraryRoom', async () => {
     renderGameEngine();
     await openDialog();
-    await userEvent.click(screen.getByText('Mostrame tus habilidades'));
-    await userEvent.click(screen.getByText('Abrir el Grimorio de Habilidades'));
+    await userEvent.click(screen.getByText('Ver sus habilidades'));
+    await userEvent.click(screen.getByText('Abrir árbol de habilidades'));
     expect(screen.getByTestId('library-room')).toBeInTheDocument();
   });
 });
@@ -178,17 +178,17 @@ describe('GameEngine — modal CV', () => {
     expect(screen.queryByTestId('readme-modal')).not.toBeInTheDocument();
   });
 
-  it('clickear "Ver tu CV" abre el ReadmeModal', async () => {
+  it('clickear "Ver CV" abre el ReadmeModal', async () => {
     renderGameEngine();
     await openDialog();
-    await userEvent.click(screen.getByText('Ver tu CV / Experiencia'));
+    await userEvent.click(screen.getByText('Ver CV / Experiencia'));
     expect(screen.getByTestId('readme-modal')).toBeInTheDocument();
   });
 
   it('cerrar el ReadmeModal lo oculta', async () => {
     renderGameEngine();
     await openDialog();
-    await userEvent.click(screen.getByText('Ver tu CV / Experiencia'));
+    await userEvent.click(screen.getByText('Ver CV / Experiencia'));
     await userEvent.click(screen.getByText('Cerrar CV'));
     expect(screen.queryByTestId('readme-modal')).not.toBeInTheDocument();
   });

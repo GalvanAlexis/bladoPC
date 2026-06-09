@@ -7,9 +7,9 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AppProvider, useAppContext } from '@/lib/AppContext';
 
-// ── Mock de CavernIntro para no depender de framer-motion ────────────────────
-jest.mock('@/components/CavernIntro', () =>
-  function MockCavernIntro({ onSkip }: { onSkip: () => void }) {
+// ── Mock de PortfolioIntro para no depender de animaciones CSS ────────────────────
+jest.mock('@/components/PortfolioIntro', () =>
+  function MockPortfolioIntro({ onSkip }: { onSkip: () => void }) {
     return (
       <div data-testid="cavern-intro">
         <button onClick={onSkip}>Omitir Intro</button>
@@ -54,7 +54,7 @@ beforeEach(() => {
 });
 
 describe('AppContext — valores iniciales', () => {
-  it('muestra el CavernIntro al inicio', async () => {
+  it('muestra el PortfolioIntro al inicio', async () => {
     renderWithProvider();
     expect(await screen.findByTestId('cavern-intro')).toBeInTheDocument();
   });
@@ -104,7 +104,7 @@ describe('AppContext — toggles de preferencias visuales', () => {
 });
 
 describe('AppContext — replayIntro', () => {
-  it('replayIntro vuelve a mostrar el CavernIntro', async () => {
+  it('replayIntro vuelve a mostrar el PortfolioIntro', async () => {
     renderWithProvider();
     await skipIntro();
     // Ya no hay intro visible

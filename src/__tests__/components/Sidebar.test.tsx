@@ -8,14 +8,6 @@ import userEvent from '@testing-library/user-event';
 import Sidebar from '@/components/Sidebar';
 import { AppContext } from '@/lib/AppContext';
 
-jest.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, ...p }: React.PropsWithChildren<Record<string, unknown>>) => <div {...p}>{children}</div>,
-    aside: ({ children, ...p }: React.PropsWithChildren<Record<string, unknown>>) => <aside {...p}>{children}</aside>,
-  },
-  AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
-}));
-
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: jest.fn(),
@@ -44,14 +36,18 @@ function renderSidebar(
 }
 
 describe('Sidebar — visibilidad', () => {
-  it('no renderiza el panel cuando isOpen=false', () => {
+  it('no renderiza el panel visualmente cuando isOpen=false', () => {
     renderSidebar(false);
-    expect(screen.queryByText('⚙ Opciones')).not.toBeInTheDocument();
+    // El panel usa CSS transform para ocultar, no unmount.
+    // Verificamos que el panel aside está en el DOM pero no visible (transform).
+    const panel = screen.getByRole('complementary', { name: 'Panel de navegación' });
+    expect(panel).toHaveStyle({ transform: 'translateX(-260px)' });
   });
 
-  it('renderiza el panel cuando isOpen=true', () => {
+  it('muestra el panel de navegación cuando isOpen=true', () => {
     renderSidebar(true);
-    expect(screen.getByText('⚙ Opciones')).toBeInTheDocument();
+    const panel = screen.getByRole('complementary', { name: 'Panel de navegación' });
+    expect(panel).toHaveStyle({ transform: 'translateX(0)' });
   });
 });
 
@@ -63,30 +59,16 @@ describe('Sidebar — cerrar', () => {
   });
 });
 
-describe('Sidebar — toggle Partículas', () => {
-  it('llama setParticlesEnabled con false cuando están activas', async () => {
-    const { setParticlesEnabled } = renderSidebar(true, { particlesEnabled: true });
-    await userEvent.click(screen.getAllByRole('switch')[0]);
-    expect(setParticlesEnabled).toHaveBeenCalledWith(false);
-  });
-
-  it('llama setParticlesEnabled con true cuando están inactivas', async () => {
-    const { setParticlesEnabled } = renderSidebar(true, { particlesEnabled: false });
-    await userEvent.click(screen.getAllByRole('switch')[0]);
-    expect(setParticlesEnabled).toHaveBeenCalledWith(true);
-  });
-});
-
 describe('Sidebar — toggle Animaciones', () => {
   it('llama setAnimationsEnabled con false cuando están activas', async () => {
     const { setAnimationsEnabled } = renderSidebar(true, { animationsEnabled: true });
-    await userEvent.click(screen.getAllByRole('switch')[1]);
+    await userEvent.click(screen.getAllByRole('switch')[0]);
     expect(setAnimationsEnabled).toHaveBeenCalledWith(false);
   });
 
   it('llama setAnimationsEnabled con true cuando están inactivas', async () => {
     const { setAnimationsEnabled } = renderSidebar(true, { animationsEnabled: false });
-    await userEvent.click(screen.getAllByRole('switch')[1]);
+    await userEvent.click(screen.getAllByRole('switch')[0]);
     expect(setAnimationsEnabled).toHaveBeenCalledWith(true);
   });
 });
@@ -101,6 +83,6 @@ describe('Sidebar — link GitHub', () => {
 
   it('muestra la versión de la app', () => {
     renderSidebar(true);
-    expect(screen.getByText(/v0\.1\.0/)).toBeInTheDocument();
+    expect(screen.getByText(/v1\.0\.0/)).toBeInTheDocument();
   });
 });
