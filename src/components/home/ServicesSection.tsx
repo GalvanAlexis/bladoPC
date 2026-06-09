@@ -60,9 +60,40 @@ export default function ServicesSection() {
       id="servicios"
       aria-label="Servicios"
       className="section-padding section-lazy"
-      style={{ background: 'var(--surface-2)', position: 'relative' }}
+      style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#050505' }}
     >
-      <div className="section-container">
+      {/* Video Background */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 0,
+        }}
+      >
+        <video
+          src="/video/Mind-explosion.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: 0.35,
+          }}
+        />
+        {/* Overlay gradient para mezclar suavemente */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(to bottom, var(--background) 0%, transparent 15%, transparent 85%, var(--background) 100%), radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.7) 100%)',
+          }}
+        />
+      </div>
+
+      <div className="section-container" style={{ position: 'relative', zIndex: 1 }}>
         <div className="section-divider reveal" />
         <p
           className="reveal"
