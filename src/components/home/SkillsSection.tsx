@@ -7,32 +7,25 @@ import React from 'react';
 
 const SKILL_AREAS = [
   {
-    id: 'webdev',
+    id: 'fullstack',
     icon: '⬡',
-    title: 'Full-Stack Web',
-    desc: 'Aplicaciones web modernas de punta a punta. Desde UI interactivas hasta APIs robustas y bases de datos.',
-    tags: ['Next.js', 'React', 'TypeScript', 'Node.js', 'REST', 'SSR'],
+    title: 'Full-Stack & Mobile',
+    desc: 'Aplicaciones web modernas y multiplataforma. Interfaces de alto rendimiento con los mejores frameworks.',
+    tags: ['Next.js', 'React', 'Expo', 'NestJS', 'HTMX', 'Tailwind CSS'],
   },
   {
-    id: 'data',
+    id: 'backend',
+    icon: '▣',
+    title: 'Arquitectura Backend',
+    desc: 'APIs robustas, microservicios y bases de datos eficientes para sistemas escalables.',
+    tags: ['Go (Gin)', 'Python (Django)', 'PostgreSQL', 'Redis', 'SQLite', 'Node.js'],
+  },
+  {
+    id: 'ai-data',
     icon: '◈',
     title: 'IA & Data Science',
-    desc: 'Análisis de datos, modelos de machine learning y sistemas con procesamiento de lenguaje natural.',
-    tags: ['Python', 'Pandas', 'Scikit-Learn', 'NLP', 'Numpy'],
-  },
-  {
-    id: 'db',
-    icon: '▣',
-    title: 'Bases de Datos',
-    desc: 'Diseño de esquemas, migraciones, optimización de queries y seguridad a nivel de fila (RLS).',
-    tags: ['PostgreSQL', 'Supabase', 'Prisma', 'SQL', 'Indexing'],
-  },
-  {
-    id: 'devops',
-    icon: '⬡',
-    title: 'DevOps & Tooling',
-    desc: 'Flujos de CI/CD, containerización, control de versiones y calidad de código.',
-    tags: ['Git', 'GitHub Actions', 'Docker', 'Jest', 'ESLint'],
+    desc: 'Análisis de datos, NLP y creación de agentes autónomos potenciados por LLMs y Machine Learning.',
+    tags: ['Streamlit', 'spaCy', 'Gemini API', 'AI Agents', 'Pandas'],
   },
 ];
 
@@ -82,7 +75,7 @@ export default function SkillsSection() {
             Áreas de expertise
           </h2>
           <a
-            href="#assistant"
+            href="/biblioteca"
             className="btn-secondary reveal"
             style={{ fontSize: '13px', padding: '8px 16px' }}
           >
