@@ -15,8 +15,6 @@ export default function TimbaHubPage() {
   return (
     <main className="relative w-screen h-screen overflow-hidden font-mono select-none bg-[#050505]">
       <Navbar
-        scene={scene}
-        onReplayIntro={() => {}}
         onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
         sidebarOpen={sidebarOpen}
       />
