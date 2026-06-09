@@ -1,8 +1,3 @@
-/**
- * HeroSection — ISS-049
- * Primera sección del home. Full viewport, impacto inmediato.
- * Nombre, alias, tagline, CTAs scroll-suave al asistente / habilidades.
- */
 import React from 'react';
 
 export default function HeroSection() {
@@ -18,47 +13,39 @@ export default function HeroSection() {
         overflow: 'hidden',
       }}
     >
-      {/* ── Fondo: grid + glow ── */}
-      <div
-        aria-hidden="true"
+      {/* ── Fondo: Video Meme ── */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: `
-            linear-gradient(var(--border-subtle) 1px, transparent 1px),
-            linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px)
-          `,
-          backgroundSize: '40px 40px',
-          opacity: 0.3,
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          bottom: '-120px',
-          right: '-80px',
-          width: '600px',
-          height: '600px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)',
-          pointerEvents: 'none',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: 0,
           opacity: 0.6,
         }}
-      />
+      >
+        <source src="/video/bad-day.mp4" type="video/mp4" />
+      </video>
+      
+      {/* ── Overlay oscuro para legibilidad ── */}
       <div
         aria-hidden="true"
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(ellipse 80% 60% at 50% 50%, transparent 40%, rgba(5,5,5,0.9) 100%)',
+          background: 'radial-gradient(ellipse at center, rgba(5,5,5,0.7) 0%, rgba(5,5,5,0.95) 100%)',
           pointerEvents: 'none',
+          zIndex: 1,
         }}
       />
 
       {/* ── Contenido ── */}
-      <div className="section-container" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="section-container" style={{ position: 'relative', zIndex: 2 }}>
 
         {/* Label superior */}
         <p
@@ -73,10 +60,10 @@ export default function HeroSection() {
             animationDelay: '0.1s',
           }}
         >
-          Full-Stack Developer · IA & Data Science · Chascomús, Argentina
+          Soporte IT · Soluciones Digitales · Ciencia de Datos
         </p>
 
-        {/* Nombre */}
+        {/* Headline */}
         <h1
           className="animate-fade-in"
           style={{
@@ -85,43 +72,27 @@ export default function HeroSection() {
             letterSpacing: '-0.03em',
             lineHeight: 1.05,
             color: 'var(--foreground)',
-            margin: '0 0 4px',
+            margin: '0 0 16px',
             animationDelay: '0.15s',
           }}
         >
-          Alexis Galván
+          ¿La PC no anda bien?
         </h1>
 
-        {/* Alias */}
+        {/* Tagline / Sub-headline */}
         <p
           className="animate-fade-in"
           style={{
-            fontSize: 'clamp(18px, 3vw, 36px)',
-            fontWeight: 600,
-            letterSpacing: '-0.02em',
-            color: 'var(--accent)',
-            margin: '0 0 32px',
-            animationDelay: '0.2s',
-          }}
-        >
-          Blado
-        </p>
-
-        {/* Tagline */}
-        <p
-          className="animate-fade-in"
-          style={{
-            fontSize: 'clamp(15px, 1.6vw, 18px)',
+            fontSize: 'clamp(18px, 2vw, 24px)',
             color: 'var(--foreground-2)',
-            maxWidth: '520px',
-            lineHeight: 1.7,
+            maxWidth: '600px',
+            lineHeight: 1.5,
             margin: '0 0 48px',
             animationDelay: '0.25s',
           }}
         >
-          Construyo software que resuelve problemas reales. Co-fundador de{' '}
-          <span style={{ color: 'var(--foreground)', fontWeight: 600 }}>AIDO</span>.
-          Estudiante de Ciencia de Datos e Ingeniería de Sistemas.
+          Contactá con Blado para una solución <span style={{ color: 'var(--accent)', fontWeight: 600 }}>sin vueltas</span>.
+          Dejá de pelear con la tecnología y empezá a aprovecharla.
         </p>
 
         {/* CTAs */}
@@ -134,17 +105,14 @@ export default function HeroSection() {
             animationDelay: '0.35s',
           }}
         >
-          <a href="#assistant" className="btn-primary">
-            Hablar con Blado
+          <a href="#servicios" className="btn-primary">
+            Ver servicios
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M8 2v12M2 8l6 6 6-6" />
             </svg>
           </a>
-          <a href="#skills" className="btn-secondary">
-            Ver habilidades
-          </a>
-          <a href="#projects" className="btn-secondary">
-            Proyectos
+          <a href="#assistant" className="btn-secondary">
+            Hablar con Blado
           </a>
         </div>
 

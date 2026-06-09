@@ -14,6 +14,7 @@ interface NavbarProps {
 
 const NAV_LINKS = [
   { id: 'hero',      label: 'Inicio',      path: '/#hero' },
+  { id: 'servicios', label: 'Servicios',   path: '/#servicios' },
   { id: 'skills',    label: 'Habilidades', path: '/#skills' },
   { id: 'projects',  label: 'Proyectos',   path: '/#projects' },
   { id: 'assistant', label: 'Asistente',   path: '/#assistant' },
