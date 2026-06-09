@@ -6,6 +6,8 @@ import Link from 'next/link';
 interface Message {
   role: 'user' | 'assistant';
   content: string;
+  whatsappReady?: boolean;
+  whatsappMessage?: string | null;
 }
 
 export default function CebarMatePage() {
@@ -26,9 +28,12 @@ export default function CebarMatePage() {
       sessionIdRef.current = newId;
     }
     
-    // Bienvenida
+    // Bienvenida corporativa
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMessages([{ role: 'assistant', content: "¡Pase, mortal! El agua ya está a 80 grados y la yerba despolvada. Siéntese... ¿De qué charlamos mientras cebamos?" }]);
+    setMessages([{ 
+      role: 'assistant', 
+      content: "¡Hola! Soy Blado, el asistente virtual de Alexis. Cuéntame, ¿qué problema tienes o en qué proyecto necesitas ayuda?" 
+    }]);
   }, []);
 
   useEffect(() => {
@@ -55,7 +60,7 @@ export default function CebarMatePage() {
         body: JSON.stringify({
           messages: snapshot,
           sessionId: sessionIdRef.current,
-          topic: 'mate', // Tópico para cebar mates
+          topic: 'mate', // Mantenemos la key para el prompt de contacto
         }),
       });
 
@@ -64,33 +69,42 @@ export default function CebarMatePage() {
       }
 
       const data = await res.json();
-      const reply = data.reply || "Se me lavó el mate, no sé qué decirte.";
-      setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
+      const reply = data.reply || "Hubo un error de comunicación.";
+      setMessages(prev => [
+        ...prev, 
+        { 
+          role: 'assistant', 
+          content: reply, 
+          whatsappReady: data.whatsappReady, 
+          whatsappMessage: data.whatsappMessage 
+        }
+      ]);
     } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: "Maldición, el agua hirvió y quemé la yerba. (Error de conexión)." }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: "Hubo un error de conexión. Por favor, intenta de nuevo." }]);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#050505] font-mono text-gray-200">
+    <div className="min-h-screen flex flex-col" style={{ background: 'var(--background)', color: 'var(--foreground)' }}>
       {/* Header */}
-      <header className="h-14 border-b border-toxic/30 bg-black/50 flex items-center px-4 justify-between sticky top-0 z-10">
+      <header className="h-14 border-b flex items-center px-4 justify-between sticky top-0 z-10" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-toxic/20 flex items-center justify-center border border-toxic shadow-[0_0_10px_rgba(57,255,20,0.5)] text-xl">
-            🧉
+          <div className="w-8 h-8 rounded-full flex items-center justify-center border text-xl" style={{ background: 'var(--surface-2)', borderColor: 'var(--border)' }}>
+            👋
           </div>
           <div>
-            <h1 className="text-toxic font-bold uppercase tracking-widest text-sm">Ronda de Mates</h1>
-            <p className="text-[10px] text-gray-500">con Blado</p>
+            <h1 className="font-bold uppercase tracking-wider text-sm" style={{ color: 'var(--foreground)' }}>Asistente Virtual</h1>
+            <p className="text-[10px]" style={{ color: 'var(--muted)' }}>Conecta con Alexis</p>
           </div>
         </div>
         <Link 
           href="/"
-          className="text-xs uppercase border border-gray-700 px-3 py-1 rounded hover:bg-gray-800 transition-colors"
+          className="text-xs uppercase border px-3 py-1 rounded transition-colors"
+          style={{ borderColor: 'var(--border)', color: 'var(--foreground-2)' }}
         >
-          Volver
+          Volver al Home
         </Link>
       </header>
 
@@ -101,41 +115,64 @@ export default function CebarMatePage() {
       >
         {messages.map((m, i) => (
           <div key={i} className={`flex w-full ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div 
-              className={`max-w-[80%] p-3 rounded-lg text-sm md:text-base leading-relaxed ${
-                m.role === 'user' 
-                  ? 'bg-toxic text-black rounded-tr-none' 
-                  : 'bg-[#111] border border-toxic/30 rounded-tl-none shadow-[0_0_15px_rgba(57,255,20,0.1)] text-gray-300'
-              }`}
-            >
-              {m.content}
+            <div className="flex flex-col gap-2 max-w-[85%] md:max-w-[75%]">
+              <div 
+                className={`p-3.5 rounded-xl text-sm md:text-base leading-relaxed ${
+                  m.role === 'user' 
+                    ? 'rounded-tr-none' 
+                    : 'rounded-tl-none border'
+                }`}
+                style={m.role === 'user' 
+                  ? { background: 'var(--accent)', color: 'var(--accent-foreground)' } 
+                  : { background: 'var(--surface-2)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
+              >
+                {m.content}
+              </div>
+              
+              {/* WhatsApp Button si el LLM lo habilita */}
+              {m.whatsappReady && m.whatsappMessage && (
+                <a 
+                  href={`https://wa.me/5492241567142?text=${encodeURIComponent(m.whatsappMessage)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="self-start inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-transform hover:scale-105"
+                  style={{ background: '#25D366', color: '#fff', boxShadow: '0 4px 12px rgba(37,211,102,0.2)' }}
+                >
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+                  </svg>
+                  Enviar mensaje a WhatsApp
+                </a>
+              )}
             </div>
           </div>
         ))}
         {isLoading && (
           <div className="flex w-full justify-start">
-            <div className="bg-[#111] border border-toxic/30 p-3 rounded-lg rounded-tl-none text-sm text-gray-500 animate-pulse">
-              Cebando...
+            <div className="p-3.5 rounded-xl rounded-tl-none border text-sm animate-pulse" style={{ background: 'var(--surface-2)', borderColor: 'var(--border)', color: 'var(--muted)' }}>
+              Escribiendo...
             </div>
           </div>
         )}
       </main>
 
       {/* Input Area */}
-      <footer className="p-4 border-t border-toxic/20 bg-[#0a0a0a]">
+      <footer className="p-4 border-t" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
         <form onSubmit={handleSubmit} className="max-w-3xl mx-auto flex gap-2">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={isLoading}
-            placeholder="Pregunta o comenta algo..."
-            className="flex-1 bg-black border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-toxic focus:ring-1 focus:ring-toxic disabled:opacity-50 transition-all"
+            placeholder="Escribe tu mensaje aquí..."
+            className="flex-1 border rounded-lg px-4 py-3 focus:outline-none transition-all"
+            style={{ background: 'var(--background)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
           />
           <button 
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="bg-toxic text-black px-6 rounded-lg font-bold uppercase tracking-wider hover:bg-[#32e012] disabled:opacity-50 transition-colors"
+            className="px-6 rounded-lg font-bold transition-opacity disabled:opacity-50"
+            style={{ background: 'var(--foreground)', color: 'var(--background)' }}
           >
             Enviar
           </button>
