@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -126,7 +127,17 @@ export default function CebarMatePage() {
                   ? { background: 'var(--accent)', color: 'var(--accent-foreground)' } 
                   : { background: 'var(--surface-2)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
               >
-                {m.content}
+                {m.role === 'user' ? (
+                  m.content
+                ) : (
+                  <ReactMarkdown
+                    components={{
+                      a: ({node, ...props}) => <a {...props} target="_blank" rel="noopener noreferrer" className="underline font-medium hover:opacity-80 transition-opacity" style={{ color: '#00a8ff' }} />
+                    }}
+                  >
+                    {m.content}
+                  </ReactMarkdown>
+                )}
               </div>
               
               {/* WhatsApp Button si el LLM lo habilita */}
