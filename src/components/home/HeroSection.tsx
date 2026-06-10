@@ -111,7 +111,7 @@ export default function HeroSection() {
               <path d="M8 2v12M2 8l6 6 6-6" />
             </svg>
           </a>
-          <Link href="/cebar-mate" className="btn-secondary">
+          <Link href="/chat" className="btn-secondary">
             Hablar con Blado
           </Link>
         </div>

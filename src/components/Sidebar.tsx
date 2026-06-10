@@ -15,7 +15,7 @@ interface SidebarProps {
 
 const NAV_ITEMS = [
   { label: 'Inicio',    path: '/' },
-  { label: 'Chat Assistant',  path: '/cebar-mate' },
+  { label: 'Chat Assistant',  path: '/chat' },
 ];
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
