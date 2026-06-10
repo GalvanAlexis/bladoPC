@@ -16,8 +16,15 @@ export default function CebarMatePage() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   
   const sessionIdRef = useRef<string>('');
+
+  useEffect(() => {
+    if (!isLoading && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     const stored = localStorage.getItem('blado_session_id');
@@ -88,7 +95,7 @@ export default function CebarMatePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'var(--background)', color: 'var(--foreground)' }}>
+    <div className="h-[100dvh] flex flex-col overflow-hidden" style={{ background: 'var(--background)', color: 'var(--foreground)' }}>
       {/* Header */}
       <header className="h-14 border-b flex items-center px-4 justify-between sticky top-0 z-10" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
         <div className="flex items-center gap-3">
@@ -171,6 +178,7 @@ export default function CebarMatePage() {
       <footer className="p-4 border-t" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
         <form onSubmit={handleSubmit} className="max-w-3xl mx-auto flex gap-2">
           <input
+            ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
