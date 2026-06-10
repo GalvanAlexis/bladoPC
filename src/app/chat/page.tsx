@@ -139,7 +139,13 @@ export default function CebarMatePage() {
                 ) : (
                   <ReactMarkdown
                     components={{
-                      a: ({node, ...props}) => <a {...props} target="_blank" rel="noopener noreferrer" className="underline font-medium hover:opacity-80 transition-opacity" style={{ color: '#00a8ff' }} />
+                      a: ({node, ...props}) => <a {...props} target="_blank" rel="noopener noreferrer" className="underline font-medium hover:opacity-80 transition-opacity" style={{ color: '#00a8ff' }} />,
+                      p: ({node, ...props}) => <p {...props} className="mb-4 last:mb-0 leading-relaxed" />,
+                      h1: ({node, ...props}) => <h1 {...props} className="text-xl md:text-2xl font-bold mb-4 mt-6 first:mt-0 border-b border-white/10 pb-2" />,
+                      h2: ({node, ...props}) => <h2 {...props} className="text-lg md:text-xl font-semibold mb-3 mt-6 text-dorado/90" />,
+                      h3: ({node, ...props}) => <h3 {...props} className="text-base font-bold mb-2 mt-4 underline" />,
+                      ul: ({node, ...props}) => <ul {...props} className="list-disc pl-5 mb-4 space-y-1" />,
+                      ol: ({node, ...props}) => <ol {...props} className="list-decimal pl-5 mb-4 space-y-1" />
                     }}
                   >
                     {m.content}
