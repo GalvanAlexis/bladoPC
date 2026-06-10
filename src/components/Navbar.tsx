@@ -13,9 +13,6 @@ interface NavbarProps {
 }
 
 const NAV_LINKS = [
-  { id: 'hero',       label: 'Inicio',      path: '/#hero' },
-  { id: 'servicios',  label: 'Servicios',   path: '/#servicios' },
-  { id: 'skills',     label: 'Habilidades', path: '/#skills' },
   { id: 'timba',      label: 'Timba',       path: '/timba' },
   { id: 'biblioteca', label: 'Biblioteca',  path: '/biblioteca' },
 ];
@@ -71,12 +68,12 @@ export default function Navbar({ onToggleSidebar, sidebarOpen }: NavbarProps) {
 
           {/* Separador */}
           <div
-            className="hidden sm:block h-4 w-px"
+            className="block h-4 w-px"
             style={{ background: 'var(--border)' }}
           />
 
-          {/* Nav links — desktop */}
-          <div className="hidden sm:flex items-center gap-1">
+          {/* Nav links */}
+          <div className="flex items-center gap-1">
             {NAV_LINKS.map((link) => {
               const isActive = pathname === link.path;
               return (
