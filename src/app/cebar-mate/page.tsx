@@ -32,7 +32,7 @@ export default function CebarMatePage() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMessages([{ 
       role: 'assistant', 
-      content: "¡Hola! Soy Blado, el asistente virtual de Alexis. Cuéntame, ¿qué problema tienes o en qué proyecto necesitas ayuda?" 
+      content: "¡Hola! Soy el asistente virtual Blado. Cuéntame, ¿qué problema tienes o en qué te puedo ayudar hoy?" 
     }]);
   }, []);
 
@@ -96,7 +96,7 @@ export default function CebarMatePage() {
           </div>
           <div>
             <h1 className="font-bold uppercase tracking-wider text-sm" style={{ color: 'var(--foreground)' }}>Asistente Virtual</h1>
-            <p className="text-[10px]" style={{ color: 'var(--muted)' }}>Conecta con Alexis</p>
+            <p className="text-[10px]" style={{ color: 'var(--muted)' }}>Conecta con Blado</p>
           </div>
         </div>
         <Link 
