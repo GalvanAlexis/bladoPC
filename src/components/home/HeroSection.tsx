@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Link from 'next/link';
 export default function HeroSection() {
   return (
     <section
@@ -111,9 +111,9 @@ export default function HeroSection() {
               <path d="M8 2v12M2 8l6 6 6-6" />
             </svg>
           </a>
-          <a href="#assistant" className="btn-secondary">
+          <Link href="/chat" className="btn-secondary">
             Hablar con Blado
-          </a>
+          </Link>
         </div>
 
         {/* Scroll hint */}

@@ -19,7 +19,6 @@ function renderSidebar(
   overrides: Partial<React.ContextType<typeof AppContext>> = {}
 ) {
   const ctx = {
-    replayIntro: jest.fn(),
     particlesEnabled: true,
     animationsEnabled: true,
     setParticlesEnabled: jest.fn(),

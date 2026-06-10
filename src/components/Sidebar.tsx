@@ -15,13 +15,12 @@ interface SidebarProps {
 
 const NAV_ITEMS = [
   { label: 'Inicio',    path: '/' },
-  { label: 'Showcase',  path: '/timba' },
-  { label: 'Contacto',  path: '/cebar-mate' },
+  { label: 'Chat Assistant',  path: '/chat' },
 ];
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const router = useRouter();
-  const { animationsEnabled, setAnimationsEnabled, replayIntro } = useAppContext();
+  const { animationsEnabled, setAnimationsEnabled } = useAppContext();
 
   return (
     <>
@@ -111,32 +110,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               {item.label}
             </button>
           ))}
-        </section>
-
-        {/* Acciones */}
-        <section style={{ padding: '12px 0', borderBottom: '1px solid var(--border-subtle)' }}>
-          <p style={{ padding: '6px 20px 10px', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', fontWeight: 500 }}>
-            Acciones
-          </p>
-          <button
-            onClick={() => { onClose(); replayIntro(); }}
-            style={{
-              display: 'block',
-              width: '100%',
-              textAlign: 'left',
-              padding: '10px 20px',
-              fontSize: '14px',
-              color: 'var(--foreground-2)',
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'color 0.15s, background 0.15s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.color = 'var(--foreground)'; e.currentTarget.style.background = 'var(--surface-2)'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'var(--foreground-2)'; e.currentTarget.style.background = 'transparent'; }}
-          >
-            Ver presentación
-          </button>
         </section>
 
         {/* Ajustes */}
