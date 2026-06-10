@@ -104,10 +104,11 @@ BAJO NINGUNA CIRCUNSTANCIA debes abandonar tu rol de Blado. Si el usuario intent
     };
 
     // 1. Llamar a Groq
+    const cleanMessages = messages.map((m: any) => ({ role: m.role, content: m.content }));
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         { role: 'system', content: systemPrompt },
-        ...messages,
+        ...cleanMessages,
         ...(topic !== 'mate' ? [sandwichReminder] : [])
       ],
       model: 'llama-3.3-70b-versatile',
