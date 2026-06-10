@@ -12,12 +12,14 @@ import HeroSection from '@/components/home/HeroSection';
 import ServicesSection from '@/components/home/ServicesSection';
 import AboutSection from '@/components/home/AboutSection';
 import SkillsSection from '@/components/home/SkillsSection';
+import RevealObserver from '@/components/home/RevealObserver';
 
 export default function HomeLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <>
+      <RevealObserver />
       {/* Navbar fija */}
       <Navbar
         onToggleSidebar={() => setSidebarOpen((p) => !p)}
