@@ -284,7 +284,6 @@ export function getLibraryData(): LibraryData {
               status,
               colorIndex: colorIdx % 8,
               hasContent,
-              topicsFilePath,
               topics
             });
             colorIdx++;
@@ -327,11 +326,10 @@ export function getLibraryData(): LibraryData {
         miscelaneaBooks.push({
           slug,
           name: cleanName,
-          fullName: `Filosofía: ${cleanName}`,
+          fullName: `Filosofia: ${cleanName}`,
           status: 'completed',
           colorIndex: miscColorIdx % 8,
           hasContent,
-          topicsFilePath: filePath,
           topics
         });
         miscColorIdx++;
@@ -356,7 +354,6 @@ export function getLibraryData(): LibraryData {
           status: 'completed',
           colorIndex: miscColorIdx % 8,
           hasContent,
-          topicsFilePath: filePath,
           topics
         });
         miscColorIdx++;
@@ -384,24 +381,64 @@ export function getLibraryData(): LibraryData {
   return { carreras: carrerasData };
 }
 
+function findFilosofiaFileBySlug(slug: string): string | null {
+  if (!fs.existsSync(FILOSOFIA_DIR_BASE)) return null;
+  const files = fs.readdirSync(FILOSOFIA_DIR_BASE);
+  for (const file of files) {
+    if (file.endsWith('.md')) {
+      const cleanName = file.replace(/^\d+-/, '').replace('.md', '').replace(/-/g, ' ');
+      const name = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+      if (generateSlug(name) === slug) {
+        return path.join(FILOSOFIA_DIR_BASE, file);
+      }
+    }
+  }
+  return null;
+}
+
+function findMiscelaneaFileBySlug(slug: string): string | null {
+  if (!fs.existsSync(MISCELANEA_DIR_BASE)) return null;
+  const files = fs.readdirSync(MISCELANEA_DIR_BASE);
+  for (const file of files) {
+    if (file.endsWith('.md')) {
+      const name = file.replace(/^\d+_/, '').replace('.md', '').replace(/-/g, ' ');
+      const cleanName = name.charAt(0).toUpperCase() + name.slice(1);
+      if (generateSlug(cleanName) === slug) {
+        return path.join(MISCELANEA_DIR_BASE, file);
+      }
+    }
+  }
+  return null;
+}
+
 export function getTopicContent(careerId: string, year: number | null, slug: string): { markdown: string, title: string } | null {
   const library = getLibraryData();
   const career = library.carreras.find(c => c.id === careerId || c.slug === careerId);
   if (!career) return null;
 
+  let filePath: string | null = null;
   let book: BookData | undefined;
+
   if (year !== null && year !== 0) {
     const yearData = career.years.find(y => y.year === year);
     if (!yearData) return null;
     book = yearData.materias.find(m => m.slug === slug);
+    if (!book) return null;
+    const careerDir = path.join(CONTENT_DIR_BASE, careerId.startsWith('4') ? '4 Miscelanea' : careerId);
+    filePath = findMateriaFile(careerDir, year, slug);
   } else {
-    // Buscar en el unico anio para miscelanea (year = 0)
     book = career.years[0]?.materias.find(m => m.slug === slug);
+    if (!book) return null;
+    if (careerId === '4 Miscelanea' || careerId === 'miscelanea') {
+      filePath = findFilosofiaFileBySlug(slug) || findMiscelaneaFileBySlug(slug);
+    } else {
+      filePath = findFilosofiaFileBySlug(slug) || findMiscelaneaFileBySlug(slug);
+    }
   }
 
-  if (!book || !book.topicsFilePath) return null;
+  if (!filePath || !fs.existsSync(filePath)) return null;
 
-  const content = fs.readFileSync(book.topicsFilePath, 'utf8');
+  const content = fs.readFileSync(filePath, 'utf8');
   return { markdown: content, title: book.fullName };
 }
 

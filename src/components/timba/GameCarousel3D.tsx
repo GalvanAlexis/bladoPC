@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { GameEntry } from '@/lib/games';
 import GameCard3D from './GameCard3D';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface GameCarousel3DProps {
   games: GameEntry[];
@@ -11,14 +12,7 @@ interface GameCarousel3DProps {
 }
 
 export default function GameCarousel3D({ games, selectedIndex, onSelect }: GameCarousel3DProps) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
+import { WHATSAPP_NUMBER } from '@/lib/constants';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -122,7 +123,7 @@ export default function CebarMatePage() {
         className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 max-w-3xl mx-auto w-full custom-scrollbar"
       >
         {messages.map((m, i) => (
-          <div key={i} className={`flex w-full ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+          <div key={`msg-${i}-${m.role}`} className={`flex w-full ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className="flex flex-col gap-2 max-w-[85%] md:max-w-[75%]">
               <div 
                 className={`p-3.5 rounded-xl text-sm md:text-base leading-relaxed ${
@@ -156,7 +157,7 @@ export default function CebarMatePage() {
               {/* WhatsApp Button si el LLM lo habilita */}
               {m.whatsappReady && m.whatsappMessage && (
                 <a 
-                  href={`https://wa.me/5492241567142?text=${encodeURIComponent(m.whatsappMessage)}`}
+                  href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(m.whatsappMessage)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="self-start inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-transform hover:scale-105"

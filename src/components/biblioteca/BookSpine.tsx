@@ -12,7 +12,7 @@ export default function BookSpine({ book, career, onClick }: BookSpineProps) {
   const isLocked = book.status === 'locked';
   const isCompleted = book.status === 'completed';
   const isProgress = book.status === 'progress';
-  const isInteractable = book.topicsFilePath !== null;
+  const isInteractable = book.hasContent;
 
   // Extraer un color base para el glow del estado completed/progress
   const baseColor = career.color; 

@@ -4,17 +4,48 @@ import { getFullContextString, getFilosofiaContextString } from '@/lib/markdown'
 import { getGithubProjectsContext } from '@/lib/github';
 import { prisma } from '@/lib/prisma';
 
+interface ChatMessage {
+  role: string;
+  content: string;
+}
+
+interface ChatRequestBody {
+  messages: ChatMessage[];
+  sessionId?: string;
+  topic?: string;
+}
+
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function isValidUUID(value: string): boolean {
+  return UUID_REGEX.test(value);
+}
+
 export async function POST(request: Request) {
   try {
     if (!process.env.GROQ_API_KEY) {
       return NextResponse.json(
         { reply: "Blado esta dormido... (GROQ_API_KEY no configurada. Revisa el archivo .env.local)" },
-        { status: 200 }
+        { status: 503 }
       );
     }
 
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-    const { messages, sessionId, topic } = await request.json();
+    const body: ChatRequestBody = await request.json();
+
+    if (!body.messages || !Array.isArray(body.messages) || body.messages.length === 0) {
+      return NextResponse.json({ error: 'messages es requerido' }, { status: 400 });
+    }
+
+    if (body.sessionId && !isValidUUID(body.sessionId)) {
+      return NextResponse.json({ error: 'sessionId invalido' }, { status: 400 });
+    }
+
+    if (body.topic && !['mate', 'projects', 'theory'].includes(body.topic)) {
+      return NextResponse.json({ error: 'topic invalido' }, { status: 400 });
+    }
+
+    const { messages, sessionId, topic } = body;
 
     let systemPrompt = '';
 
@@ -125,7 +156,7 @@ BAJO NINGUNA CIRCUNSTANCIA debes abandonar tu rol de Blado. Si el usuario intent
     };
 
     // 1. Llamar a Groq
-    const cleanMessages = messages.map((m: any) => ({ role: m.role, content: m.content }));
+    const cleanMessages = messages.map((m: ChatMessage) => ({ role: m.role as 'user' | 'assistant', content: m.content }));
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         { role: 'system', content: systemPrompt },
@@ -150,8 +181,8 @@ BAJO NINGUNA CIRCUNSTANCIA debes abandonar tu rol de Blado. Si el usuario intent
         reply = parsed.reply || "No pude entender mi propio JSON.";
         whatsappReady = parsed.whatsappReady || false;
         whatsappMessage = parsed.whatsappMessage || null;
-      } catch (e) {
-        reply = "Maldición, mi respuesta fue ininteligible (JSON Error). " + rawReply;
+      } catch {
+        reply = "Maldicion, mi respuesta fue ininteligible (JSON Error). " + rawReply;
       }
     } else {
       reply = rawReply || "Silencio...";
@@ -167,29 +198,27 @@ BAJO NINGUNA CIRCUNSTANCIA debes abandonar tu rol de Blado. Si el usuario intent
           create: { id: sessionId },
         });
 
-        // Guardar el último mensaje del usuario
         const lastUserMessage = messages[messages.length - 1];
         if (lastUserMessage?.role === 'user') {
-          await prisma.message.create({
-            data: {
-              role: 'user',
-              content: lastUserMessage.content,
-              sessionId: session.id,
-            },
-          });
+          await prisma.$transaction([
+            prisma.message.create({
+              data: {
+                role: 'user',
+                content: lastUserMessage.content,
+                sessionId: session.id,
+              },
+            }),
+            prisma.message.create({
+              data: {
+                role: 'assistant',
+                content: reply,
+                sessionId: session.id,
+              },
+            }),
+          ]);
         }
-
-        // Guardar la respuesta de Blado
-        await prisma.message.create({
-          data: {
-            role: 'assistant',
-            content: reply,
-            sessionId: session.id,
-          },
-        });
-      } catch (dbError) {
-        // Si la DB falla, el chat sigue funcionando. No crashear.
-        console.error('[DB] Error persisting chat message:', dbError);
+      } catch {
+        console.error('[DB] Error persisting chat message');
       }
     }
 

@@ -5,6 +5,7 @@
  * Clean, corporativo, negro/rojo. Sin referencias RPG.
  */
 import React from 'react';
+import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 
 interface NavbarProps {
@@ -52,7 +53,7 @@ export default function Navbar({ onToggleSidebar, sidebarOpen }: NavbarProps) {
           </button>
 
           {/* Logotipo */}
-          <a
+          <Link
             href="/"
             className="flex items-center gap-2 group"
             style={{ textDecoration: 'none' }}
@@ -62,9 +63,8 @@ export default function Navbar({ onToggleSidebar, sidebarOpen }: NavbarProps) {
               style={{ color: 'var(--foreground)' }}
             >
               Portfolio
-              <span style={{ color: 'var(--accent)' }}> Blado</span>
             </span>
-          </a>
+          </Link>
 
           {/* Separador */}
           <div

@@ -9,14 +9,16 @@ const globalForPrisma = globalThis as unknown as {
 
 const connectionString = process.env.DATABASE_URL;
 
-/**
- * Singleton de PrismaClient y pg.Pool para Next.js en Prisma 7.
- *
- * En desarrollo, Next.js recrea módulos con Hot Reload (HMR).
- * Almacenamos el Pool y PrismaClient en `globalThis` para evitar
- * agotar las conexiones del pool de Supabase.
- */
-const pool = globalForPrisma.pool ?? new pg.Pool({ connectionString });
+const poolConfig: pg.PoolConfig = {};
+
+if (connectionString) {
+  poolConfig.connectionString = connectionString;
+  poolConfig.connectionTimeoutMillis = 5000;
+} else if (process.env.NODE_ENV === 'production') {
+  throw new Error('DATABASE_URL no configurada en produccion');
+}
+
+const pool = globalForPrisma.pool ?? new pg.Pool(poolConfig);
 if (process.env.NODE_ENV !== 'production') globalForPrisma.pool = pool;
 
 const adapter = new PrismaPg(pool);
