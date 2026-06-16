@@ -86,27 +86,7 @@ export default function AboutSection() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              {/* Icono */}
-              <motion.div
-                layoutId={`about-icon-${chapter.id}`}
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '8px',
-                  background: 'var(--surface-2)',
-                  border: '1px solid var(--border-subtle)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '18px',
-                  color: 'var(--foreground)',
-                  marginBottom: '16px',
-                  userSelect: 'none',
-                }}
-                aria-hidden="true"
-              >
-                {chapter.icon}
-              </motion.div>
+
 
               <motion.h3
                 layoutId={`about-title-${chapter.id}`}
@@ -209,24 +189,7 @@ export default function AboutSection() {
                     ✕
                   </button>
 
-                  <motion.div
-                    layoutId={`about-icon-${chapter.id}`}
-                    style={{
-                      width: '48px',
-                      height: '48px',
-                      borderRadius: '8px',
-                      background: 'var(--surface)',
-                      border: '1px solid var(--border)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '24px',
-                      color: 'var(--foreground)',
-                      marginBottom: '20px',
-                    }}
-                  >
-                    {chapter.icon}
-                  </motion.div>
+
 
                   <motion.h3
                     layoutId={`about-title-${chapter.id}`}
