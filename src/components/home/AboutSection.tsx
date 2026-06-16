@@ -10,7 +10,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 const ABOUT_CHAPTERS = [
   {
     id: 'perfil',
-    icon: '⚡',
     title: 'El Perfil Técnico',
     desc: 'Desarrollador Full-Stack y Data Scientist con un enfoque pragmático orientado a resolver problemas.',
     details: 'Mi visión combina el entendimiento profundo del hardware con el desarrollo de software escalable. Como apasionado de la tecnología, busco crear soluciones robustas desde la infraestructura hasta la interfaz final, integrando la Inteligencia Artificial como herramienta potenciadora real, no como un simple parche.',
@@ -18,7 +17,6 @@ const ABOUT_CHAPTERS = [
   },
   {
     id: 'aido',
-    icon: '🏢',
     title: 'AIDO & Desarrollo a Medida',
     desc: 'Co-fundador y desarrollador principal en AIDO Agencia.',
     details: 'Lidero el desarrollo de software a medida, construyendo plataformas e-learning completas, integraciones avanzadas y aplicaciones SaaS para clientes. Mi rol exige diseñar la arquitectura de sistemas complejos, gestionar proyectos end-to-end y mantener una actualización constante en ecosistemas modernos.',
@@ -26,7 +24,6 @@ const ABOUT_CHAPTERS = [
   },
   {
     id: 'formacion',
-    icon: '🎓',
     title: 'Formación y Camino',
     desc: 'De Técnico de PC a Ingeniero de Sistemas autodidacta.',
     details: 'Mi formación comenzó como Técnico de Reparación de PC, lo que me dio las bases absolutas sobre hardware y sistemas operativos. Actualmente curso la Tecnicatura en Ciencia de Datos e IA en el ISFDyT 57, a la par que estudio Ingeniería de Sistemas de manera completamente autodidacta (siguiendo el currículum de OSSU Computer Science), abarcando estructuras de datos, algoritmos, y fundamentos matemáticos.',
