@@ -5,14 +5,14 @@ name: CI — Tests
 on:
   pull_request:
     branches:
-      - main
+      - master
   push:
     branches:
-      - main
+      - master
 
 jobs:
   test:
-    name: 🧪 Jest — Unit & Integration Tests
+    name: Jest - Unit & Integration Tests
     runs-on: ubuntu-latest
 
     steps:
