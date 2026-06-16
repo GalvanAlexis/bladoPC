@@ -78,20 +78,22 @@ export function buildResponseOptions(
     
   const shuffledOther = shuffle(otherResponses);
 
+  const getDistractor = (index: number): string => {
+    return index < shuffledOther.length ? shuffledOther[index] : 'Ninguna de las anteriores';
+  };
+
   if (playerKnowledge.unlockedResponses.includes(insult.id)) {
-    // Si ya la conoce: 1 correcta y 2 distractoras
     options.push({
       id: 'correct',
       text: insult.correctResponse,
       isCorrect: true
     });
-    options.push({ id: 'wrong-1', text: shuffledOther[0], isCorrect: false });
-    options.push({ id: 'wrong-2', text: shuffledOther[1], isCorrect: false });
+    options.push({ id: 'wrong-1', text: getDistractor(0), isCorrect: false });
+    options.push({ id: 'wrong-2', text: getDistractor(1), isCorrect: false });
   } else {
-    // Si NO la conoce: 3 distractoras (el jugador está obligado a fallar)
-    options.push({ id: 'wrong-1', text: shuffledOther[0], isCorrect: false });
-    options.push({ id: 'wrong-2', text: shuffledOther[1], isCorrect: false });
-    options.push({ id: 'wrong-3', text: shuffledOther[2], isCorrect: false });
+    options.push({ id: 'wrong-1', text: getDistractor(0), isCorrect: false });
+    options.push({ id: 'wrong-2', text: getDistractor(1), isCorrect: false });
+    options.push({ id: 'wrong-3', text: getDistractor(2), isCorrect: false });
   }
 
   return shuffle(options);

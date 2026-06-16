@@ -1,6 +1,6 @@
 # 📋 ISSUES — Portfolio Blado
 
-> Sistema de tracking de issues para el proyecto **Portfolio Blado** (anteriormente Blado_Cavern).
+> Sistema de tracking de issues para el proyecto **Portfolio Blado**.
 
 ---
 
@@ -16,7 +16,7 @@
 
 | ID | Título | Fecha cierre |
 |---|---|---|
-| ISS-057 | Limpieza Legacy de "Blado Cavern" | 2026-06-10 |
+| ISS-057 | Limpieza de rastros del nombre anterior | 2026-06-10 |
 | ISS-056 | Modo Intelectual del LLM | 2026-06-09 |
 | ISS-055 | Perfil ideológico y ajuste de Persona LLM | 2026-06-09 |
 | ISS-054 | Máquina de estado WhatsApp y Rebranding Chat | 2026-06-09 |
@@ -38,7 +38,7 @@
 
 ```
 [FASE 1-3 — MVP & Legacy ✅]
-  -- COMPLETADA (Era Blado Cavern) --
+  -- COMPLETADA --
 
 [FASE 4 — Data Layer ✅]
   ISS-020 Prisma + Supabase setup

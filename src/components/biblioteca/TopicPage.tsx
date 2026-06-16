@@ -131,7 +131,7 @@ export default function TopicPage({ careerId, year, bookSlug, activeTopicId }: T
     <div 
       className="w-full h-full bg-[#1a0f08] overflow-y-auto dialog-scrollbar relative px-6 md:px-12 py-8" 
       ref={containerRef}
-      style={{ zoom: zoomLevel } as React.CSSProperties}
+      style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top left', width: `${100 / zoomLevel}%`, height: `${100 / zoomLevel}%` } as React.CSSProperties}
     >
       <MarkdownRenderer content={content} />
       

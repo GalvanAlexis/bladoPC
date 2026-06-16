@@ -24,7 +24,7 @@ documentacion/
 
 1. 💼 **Secciones Narrativas**: Home scrollable con Hero, Servicios (AIDO), About, Skills y Proyectos.
 2. 🤖 **Asistente Virtual (Blado)**: IA impulsada por Groq (LLaMA) configurada con límites estrictos de soporte técnico y personalidad estoico/tecno-optimista, capaz de derivar leads directo a WhatsApp.
-3. 🎮 **Módulos Interactivos (Legacy)**: Incorpora minijuegos (`/timba`) y un Árbol de Habilidades/Progreso (`/biblioteca`) heredados de la era de "Blado Cavern", accesibles desde el menú.
+3. 🎮 **Módulos Interactivos (Legacy)**: Incorpora minijuegos (`/timba`) y un Árbol de Habilidades/Progreso (`/biblioteca`) heredados de iteraciones anteriores, accesibles desde el menú.
 4. 📈 **Analíticas y Persistencia**: Historial de chat persistido en PostgreSQL (Supabase) y tracking de visitas anónimo.
 
 ---

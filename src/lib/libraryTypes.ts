@@ -23,14 +23,13 @@ export interface YearData {
 }
 
 export interface BookData {
-  slug: string;         
-  name: string;         
-  fullName: string;     
+  slug: string;
+  name: string;
+  fullName: string;
   status: BookStatus;
-  colorIndex: number;   
-  hasContent: boolean;  
-  topicsFilePath: string | null;  
-  topics: TopicEntry[]; 
+  colorIndex: number;
+  hasContent: boolean;
+  topics: TopicEntry[];
 }
 
 export interface TopicEntry {

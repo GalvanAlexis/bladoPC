@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface ScoreBoardProps {
   playerName: string;
@@ -7,16 +7,24 @@ interface ScoreBoardProps {
 }
 
 export default function ScoreBoard({ playerName, playerScore, bladoScore }: ScoreBoardProps) {
-  const pScoreRef = useRef(playerScore);
-  const bScoreRef = useRef(bladoScore);
-
-  const pChanged = playerScore !== pScoreRef.current;
-  const bChanged = bladoScore !== bScoreRef.current;
+  const [pChanged, setPChanged] = useState(false);
+  const [bChanged, setBChanged] = useState(false);
 
   useEffect(() => {
-    pScoreRef.current = playerScore;
-    bScoreRef.current = bladoScore;
-  }, [playerScore, bladoScore]);
+    const timer = setTimeout(() => {
+      setPChanged(true);
+      setTimeout(() => setPChanged(false), 300);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [playerScore]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setBChanged(true);
+      setTimeout(() => setBChanged(false), 300);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [bladoScore]);
 
   return (
     <div 
