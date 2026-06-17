@@ -11,16 +11,9 @@ const ABOUT_CHAPTERS = [
   {
     id: 'perfil',
     title: 'El Perfil Técnico',
-    desc: 'Desarrollador Full-Stack y Data Scientist con un enfoque pragmático orientado a resolver problemas.',
-    details: 'Mi visión combina el entendimiento profundo del hardware con el desarrollo de software escalable. Como apasionado de la tecnología, busco crear soluciones robustas desde la infraestructura hasta la interfaz final, integrando la Inteligencia Artificial como herramienta potenciadora real, no como un simple parche.',
-    tags: ['Full-Stack', 'Data Science', 'Problem Solving', 'Pragmatismo'],
-  },
-  {
-    id: 'aido',
-    title: 'AIDO & Desarrollo a Medida',
-    desc: 'Co-fundador y desarrollador principal en AIDO Agencia.',
-    details: 'Lidero el desarrollo de software a medida, construyendo plataformas e-learning completas, integraciones avanzadas y aplicaciones SaaS para clientes. Mi rol exige diseñar la arquitectura de sistemas complejos, gestionar proyectos end-to-end y mantener una actualización constante en ecosistemas modernos.',
-    tags: ['Negocios', 'Liderazgo Técnico', 'SaaS', 'Arquitectura'],
+    desc: 'Desarrollador Full-Stack, Data Scientist y lider técnico en desarrollo de software a medida.',
+    details: 'Mi visión combina el entendimiento profundo del hardware con el desarrollo de software escalable. Lidero proyectos de software a medida —plataformas e-learning, integraciones avanzadas, aplicaciones SaaS— diseñando arquitecturas de sistemas complejos y gestionando proyectos end-to-end. Integro la Inteligencia Artificial como herramienta potenciadora real, no como un simple parche.',
+    tags: ['Full-Stack', 'Data Science', 'SaaS', 'Arquitectura', 'Liderazgo Técnico'],
   },
   {
     id: 'formacion',
