@@ -23,6 +23,7 @@ const SERVICES = [
       </svg>
     ),
     tags: ['PC de Escritorio', 'Optimización SO', 'Diagnóstico Avanzado', 'Recambio de Componentes'],
+    localOnly: true,
   },
   {
     id: 'software',
@@ -106,12 +107,7 @@ export default function ServicesSection() {
             marginBottom: '12px',
           }}
         >
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
-            Servicios IT
-            <span style={{ fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent)', border: '1px solid var(--accent)', borderRadius: '4px', padding: '2px 8px', fontWeight: 600 }}>
-              Exclusivo Chascomus
-            </span>
-          </span>
+          Servicios IT
         </p>
         <h2
           className="reveal"
@@ -178,9 +174,18 @@ export default function ServicesSection() {
                   fontWeight: 700,
                   color: 'var(--foreground)',
                   margin: '0 0 4px 0',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  flexWrap: 'wrap',
                 }}
               >
                 {srv.title}
+                {srv.localOnly && (
+                  <span style={{ fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent)', border: '1px solid var(--accent)', borderRadius: '4px', padding: '2px 8px', fontWeight: 600 }}>
+                    Exclusivo Chascomus
+                  </span>
+                )}
               </motion.h3>
               
               <motion.p
@@ -298,9 +303,18 @@ export default function ServicesSection() {
                       fontWeight: 700,
                       color: 'var(--foreground)',
                       margin: '0 0 6px 0',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      flexWrap: 'wrap',
                     }}
                   >
                     {srv.title}
+                    {srv.localOnly && (
+                      <span style={{ fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent)', border: '1px solid var(--accent)', borderRadius: '4px', padding: '3px 10px', fontWeight: 600 }}>
+                        Exclusivo Chascomus
+                      </span>
+                    )}
                   </motion.h3>
 
                   <motion.p
