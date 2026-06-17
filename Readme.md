@@ -1,6 +1,6 @@
 # Portfolio Blado — Alexis Galván
 
-Portfolio profesional y moderno de **Alexis Galván**, desarrollador Full-Stack, estudiante de Ciencia de Datos e IA, y co-fundador de AIDO Agencia.
+Portfolio profesional y moderno de **Alexis Galván**, desarrollador Full-Stack y estudiante de Ciencia de Datos e IA.
 Incluye un Asistente Virtual Inteligente (Blado) diseñado para brindar diagnóstico técnico y derivar presupuestos vía WhatsApp.
 
 ---
