@@ -8,6 +8,7 @@
 
 | ID | Título | Prioridad | Etiquetas |
 |---|---|---|---|
+| [ISS-061](./issues/ISS-061_servicios-catalogo.md) | Catalogo completo de servicios web/SaaS/software | 🟡 Media | `feature`, `frontend` |
 | [ISS-060](./issues/ISS-060_servicios-chascomus.md) | Exclusividad Chascomus y pagina servicios | 🟡 Media | `feature`, `frontend` |
 | [ISS-016](./issues/ISS-016_vercel-deploy.md) | Deploy a Vercel | 🟢 Baja | `devops`, `deploy` |
 
