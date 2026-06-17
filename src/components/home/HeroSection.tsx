@@ -118,7 +118,7 @@ export default function HeroSection() {
             animationDelay: "0.35s",
           }}
         >
-          <a href="#servicios" className="btn-primary">
+          <Link href="/servicios" className="btn-primary">
             Ver servicios
             <svg
               width="14"
@@ -133,7 +133,7 @@ export default function HeroSection() {
             >
               <path d="M8 2v12M2 8l6 6 6-6" />
             </svg>
-          </a>
+          </Link>
           <Link href="/chat" className="btn-secondary">
             Hablar con Blado
           </Link>
