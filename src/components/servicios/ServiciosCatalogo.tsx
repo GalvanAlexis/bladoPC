@@ -110,15 +110,42 @@ const CATALOGO = [
   {
     id: 'automations',
     order: 9,
-    title: 'Automatizaciones / Bots',
+    title: 'Automatizaciones / Bots con IA',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
       </svg>
     ),
-    description: 'Scripts y robots que eliminan tareas manuales: bots de WhatsApp/Telegram, scraping de datos, carga masiva, integracion entre sistemas via APIs. Recupera horas de trabajo repetitivo.',
+    description: 'Scripts y robots con inteligencia artificial que eliminan tareas manuales y repetitivas. Automatizamos procesos usando IA generativa, bots y APIs para que tu negocio funcione solo.',
     persona: 'PyMEs con procesos manuales repetitivos, areas de operaciones, logistica.',
     complexity: 'media',
+    examples: [
+      {
+        title: 'Atencion al cliente con IA 24/7',
+        desc: 'Un bot que responde consultas frecuentes, deriva casos complejos y agenda turnos automaticamente usando tu base de conocimiento.',
+        benefit: 'Tus clientes reciben respuesta al instante sin importar la hora. El equipo de soporte se enfoca solo en casos complejos. Menos esperas, mas ventas.',
+      },
+      {
+        title: 'Extraccion inteligente de datos',
+        desc: 'Lee facturas, comprobantes, PDFs y contratos, y los convierte automaticamente en datos estructurados para tu sistema.',
+        benefit: 'Adios a tipear datos a mano. Eliminas errores de carga, aceleras procesos contables y tu equipo administrativo trabaja en minutos lo que antes tomaba horas.',
+      },
+      {
+        title: 'Generacion automatica de contenido',
+        desc: 'Redacta posts para redes sociales, fichas de producto, newsletters o descripciones usando el tono de tu marca.',
+        benefit: 'Mantenes redes activas y contenido fresco sin tener que escribir cada publicacion. Publicas mas seguido con menos esfuerzo.',
+      },
+      {
+        title: 'Clasificacion y routing de correos',
+        desc: 'Analiza cada email entrante, lo clasifica por tema y lo envia al area correspondiente con una respuesta de acuse automatica.',
+        benefit: 'Ningun correo se pierde en la bandeja de entrada. Cada consulta llega al area correcta al instante. Tu equipo responde mas rapido.',
+      },
+      {
+        title: 'Conciliacion bancaria automatica',
+        desc: 'Conecta tu cuenta bancaria con tu sistema de facturacion. La IA cruza pagos, detecta diferencias y genera el reporte de conciliacion.',
+        benefit: 'El cierre contable que te llevaba un dia entero se hace en minutos. Detectas inconsistencias al instante sin revisar planillas manualmente.',
+      },
+    ],
   },
   {
     id: 'dashboard',
@@ -313,6 +340,47 @@ export default function ServiciosCatalogo() {
             >
               {svc.description}
             </p>
+
+            {'examples' in svc && svc.examples && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '16px',
+                  marginTop: '16px',
+                  padding: '16px',
+                  background: 'var(--surface-2)',
+                  borderRadius: '8px',
+                  border: '1px solid var(--border-subtle)',
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    color: 'var(--muted)',
+                    margin: 0,
+                  }}
+                >
+                  Ejemplos con IA
+                </p>
+                {svc.examples.map((ex, i) => (
+                  <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--foreground)', margin: 0 }}>
+                      {ex.title}
+                    </p>
+                    <p style={{ fontSize: '13px', lineHeight: 1.6, color: 'var(--foreground-2)', margin: 0 }}>
+                      {ex.desc}
+                    </p>
+                    <p style={{ fontSize: '12px', lineHeight: 1.6, color: 'var(--accent)', margin: '2px 0 0 0', fontStyle: 'italic' }}>
+                      {ex.benefit}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
 
             <div
               style={{
