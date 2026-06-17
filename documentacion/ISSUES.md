@@ -8,6 +8,7 @@
 
 | ID | Título | Prioridad | Etiquetas |
 |---|---|---|---|
+| [ISS-063](./issues/ISS-063_servicios-acordion.md) | Accordion colapsable en catalogo de servicios | 🟡 Media | `fix`, `frontend` |
 | [ISS-062](./issues/ISS-062_automatizaciones-ejemplos.md) | Ejemplos de automatizaciones con IA | 🟡 Media | `fix`, `frontend` |
 | [ISS-061](./issues/ISS-061_servicios-catalogo.md) | Catalogo completo de servicios web/SaaS/software | 🟡 Media | `feature`, `frontend` |
 | [ISS-060](./issues/ISS-060_servicios-chascomus.md) | Exclusividad Chascomus y pagina servicios | 🟡 Media | `feature`, `frontend` |
