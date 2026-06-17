@@ -204,7 +204,7 @@ function ComplexityBadge({ level, order }: { level: string; order: number }) {
 export default function ServiciosCatalogo() {
   return (
     <div className="section-container" style={{ paddingTop: 'clamp(80px, 12vh, 140px)', paddingBottom: 'clamp(80px, 12vh, 140px)' }}>
-      <div className="section-divider reveal" />
+      <div className="section-divider" />
       <p
         style={{
           fontSize: '11px',
@@ -250,7 +250,7 @@ export default function ServiciosCatalogo() {
         {CATALOGO.map((svc) => (
           <article
             key={svc.id}
-            className="skill-card reveal"
+            className="skill-card"
             style={{
               display: 'flex',
               flexDirection: 'column',
