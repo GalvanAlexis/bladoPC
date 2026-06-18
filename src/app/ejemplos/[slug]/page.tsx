@@ -79,7 +79,26 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
       {/* ─── Nav ─── */}
       <nav style={styles.nav}>
         <div style={styles.navInner}>
-          <span style={styles.logo}>Lumina</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <a
+              href="/servicios"
+              style={{
+                fontSize: '12px',
+                color: '#a09393',
+                textDecoration: 'none',
+                fontWeight: 500,
+                letterSpacing: '0.02em',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                transition: 'color 0.2s',
+              }}
+              className="lum-back-link"
+            >
+              &larr; Servicios
+            </a>
+            <span style={styles.logo}>Lumina</span>
+          </div>
           <div style={styles.navLinks}>
             <span className="lum-nav-link">Inicio</span>
             <span className="lum-nav-link">Ingredientes</span>

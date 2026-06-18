@@ -386,6 +386,10 @@ h1, h2, h3, h4, h5, h6 {
   color: #8a5252 !important;
 }
 
+.lum-back-link:hover {
+  color: #b87676 !important;
+}
+
 /* ─── prefers-reduced-motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .response-option,
