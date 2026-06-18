@@ -3,7 +3,7 @@
 /**
  * HomeLayout — ISS-049
  * Layout scrollable del home. Ordena las secciones narrativas del portfolio.
- * La Navbar y el Sidebar viven aquí (antes estaban en GameEngine).
+ * La Navbar y el Sidebar viven aquí.
  */
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
@@ -51,9 +51,9 @@ export default function HomeLayout() {
           }}
         >
           <p style={{ fontSize: '12px', color: 'var(--muted)' }}>
-            © 2025 Alexis Galván · Portfolio Blado ·{' '}
+            © {new Date().getFullYear()} Alexis Galván · Portfolio Blado ·{' '}
             <a
-              href="https://github.com/GalvanAlexis/Progresos-Academicos"
+              href="https://github.com/GalvanAlexis/bladoPC"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: 'var(--accent)', textDecoration: 'none' }}

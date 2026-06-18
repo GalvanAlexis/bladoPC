@@ -2,16 +2,12 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 interface AppContextValue {
-  particlesEnabled: boolean;
   animationsEnabled: boolean;
-  setParticlesEnabled: (v: boolean) => void;
   setAnimationsEnabled: (v: boolean) => void;
 }
 
 export const AppContext = createContext<AppContextValue>({
-  particlesEnabled: true,
   animationsEnabled: true,
-  setParticlesEnabled: () => {},
   setAnimationsEnabled: () => {},
 });
 
@@ -21,7 +17,6 @@ export function useAppContext() {
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isMounted, setIsMounted] = useState(false);
-  const [particlesEnabled, setParticlesEnabled] = useState(true);
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
 
   useEffect(() => {
@@ -34,7 +29,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AppContext.Provider value={{ particlesEnabled, animationsEnabled, setParticlesEnabled, setAnimationsEnabled }}>
+    <AppContext.Provider value={{ animationsEnabled, setAnimationsEnabled }}>
       {children}
     </AppContext.Provider>
   );

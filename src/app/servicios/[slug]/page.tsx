@@ -405,7 +405,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
             Contame de tu proyecto y te armo una propuesta sin compromiso.
           </p>
           <a
-            href="https://wa.me/5492494226641"
+            href="https://wa.me/5492241567142"
             target="_blank"
             rel="noopener noreferrer"
             className="cta-button"

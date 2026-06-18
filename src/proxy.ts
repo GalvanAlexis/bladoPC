@@ -4,7 +4,7 @@ import { checkRateLimit, getClientIp, RateLimitConfig } from '@/lib/rateLimit';
 
 const API_RATE_LIMIT: RateLimitConfig = { maxRequests: 30, windowMs: 60000 };
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const response = NextResponse.next();
 
   // Security headers
