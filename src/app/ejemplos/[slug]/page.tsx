@@ -35,10 +35,10 @@ const styles = {
     left: 0,
     right: 0,
     zIndex: 100,
-    background: 'rgba(253,248,245,0.9)',
-    backdropFilter: 'blur(12px)',
-    WebkitBackdropFilter: 'blur(12px)',
-    borderBottom: '1px solid rgba(184,118,118,0.08)',
+    background: 'rgba(253,248,245,0.95)',
+    backdropFilter: 'blur(16px)',
+    WebkitBackdropFilter: 'blur(16px)',
+    borderBottom: '1px solid rgba(184,118,118,0.12)',
   },
   navInner: {
     maxWidth: '1100px',
@@ -81,10 +81,10 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
         <div style={styles.navInner}>
           <span style={styles.logo}>Lumina</span>
           <div style={styles.navLinks}>
-            <span>Inicio</span>
-            <span>Ingredientes</span>
-            <span>Testimonios</span>
-            <span>Contacto</span>
+            <span className="lum-nav-link">Inicio</span>
+            <span className="lum-nav-link">Ingredientes</span>
+            <span className="lum-nav-link">Testimonios</span>
+            <span className="lum-nav-link">Contacto</span>
           </div>
         </div>
       </nav>
@@ -95,21 +95,39 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
           minHeight: '100dvh',
           display: 'flex',
           alignItems: 'center',
-          padding: '100px 24px 60px',
+          padding: '100px 24px 80px',
           maxWidth: '1100px',
           margin: '0 auto',
           gap: 'clamp(32px, 6vw, 80px)',
+          position: 'relative',
         }}
       >
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '80px',
+            height: '3px',
+            borderRadius: '3px',
+            background: 'linear-gradient(90deg, transparent, #b87676, transparent)',
+          }}
+        />
         <div style={{ flex: '1 1 45%', minWidth: '280px' }}>
           <p
             style={{
               fontSize: '11px',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
-              color: '#d4a84b',
-              fontWeight: 600,
+              color: '#b87676',
+              fontWeight: 700,
               margin: '0 0 16px 0',
+              display: 'inline-block',
+              padding: '6px 16px',
+              borderRadius: '50px',
+              background: 'rgba(184,118,118,0.08)',
+              border: '1px solid rgba(184,118,118,0.15)',
             }}
           >
             Nueva formula 2026
@@ -160,17 +178,18 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
               className="lum-btn"
               style={{
                 display: 'inline-block',
-                padding: '14px 36px',
+                padding: '15px 40px',
                 borderRadius: '50px',
-                background: '#b87676',
+                background: 'linear-gradient(135deg, #b87676 0%, #9a5f5f 100%)',
                 color: '#fff',
                 fontSize: '14px',
                 fontWeight: 600,
                 textDecoration: 'none',
-                letterSpacing: '0.02em',
+                letterSpacing: '0.03em',
                 border: 'none',
                 cursor: 'pointer',
-                transition: 'background 0.2s',
+                transition: 'all 0.25s ease',
+                boxShadow: '0 4px 16px rgba(184,118,118,0.35)',
               }}
             >
               Comprar ahora
@@ -180,10 +199,10 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
             style={{
               fontSize: '12px',
               color: '#a09393',
-              margin: '14px 0 0 0',
+              margin: '16px 0 0 0',
             }}
           >
-            Envio gratis a todo Chile · Pagá en hasta 6 cuotas
+            Envio gratis a todo Argentina · Pagá en hasta 6 cuotas
           </p>
         </div>
 
@@ -194,16 +213,28 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            position: 'relative',
           }}
         >
+          <div
+            style={{
+              position: 'absolute',
+              width: 'clamp(240px, 30vw, 380px)',
+              height: 'clamp(240px, 30vw, 380px)',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(184,118,118,0.10) 0%, rgba(184,118,118,0.03) 60%, transparent 70%)',
+              zIndex: 0,
+            }}
+          />
           <div
             style={{
               width: 'clamp(200px, 25vw, 320px)',
               height: 'clamp(300px, 38vw, 460px)',
               borderRadius: '80px 80px 40px 40px',
               overflow: 'hidden',
-              boxShadow: '0 30px 60px rgba(184,118,118,0.25)',
+              boxShadow: '0 30px 60px rgba(184,118,118,0.25), 0 10px 20px rgba(0,0,0,0.06)',
               position: 'relative',
+              zIndex: 1,
             }}
           >
             <img
@@ -227,7 +258,7 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
       <section
         style={{
           padding: 'clamp(60px, 10vh, 100px) 24px',
-          background: '#faf0f0',
+          background: 'linear-gradient(180deg, #f5e6e6 0%, #f0dede 100%)',
         }}
       >
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
@@ -240,7 +271,8 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
               color: '#2d2323',
             }}
           >
-            Por que elegir Lumina
+            Por que elegir{' '}
+            <span style={{ color: '#b87676' }}>Lumina</span>
           </h2>
           <div
             style={{
@@ -260,15 +292,16 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
                 style={{
                   flex: '1 1 260px',
                   textAlign: 'center',
-                  padding: '32px 20px',
-                  borderRadius: '16px',
+                  padding: '40px 24px 36px',
+                  borderRadius: '20px',
                   background: '#fdf8f5',
-                  border: '1px solid rgba(184,118,118,0.1)',
+                  boxShadow: '0 4px 20px rgba(184,118,118,0.10), 0 1px 3px rgba(0,0,0,0.04)',
+                  border: '1px solid rgba(184,118,118,0.08)',
                 }}
               >
-                <div style={{ fontSize: '36px', marginBottom: '16px' }}>{b.icon}</div>
-                <h3 style={{ fontSize: '16px', fontWeight: 600, margin: '0 0 8px 0' }}>{b.title}</h3>
-                <p style={{ fontSize: '13px', lineHeight: 1.6, color: '#6a5a5a', margin: 0 }}>{b.desc}</p>
+                <div style={{ fontSize: '40px', marginBottom: '18px', lineHeight: 1 }}>{b.icon}</div>
+                <h3 style={{ fontSize: '17px', fontWeight: 700, margin: '0 0 10px 0', color: '#2d2323' }}>{b.title}</h3>
+                <p style={{ fontSize: '13px', lineHeight: 1.7, color: '#7a6868', margin: 0 }}>{b.desc}</p>
               </div>
             ))}
           </div>
@@ -276,7 +309,11 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
       </section>
 
       {/* ─── Ingredientes ─── */}
-      <section style={styles.section}>
+      <section style={{
+        ...styles.section,
+        background: 'linear-gradient(180deg, #fdf8f5 0%, #faf3f0 100%)',
+        paddingBottom: 'clamp(80px, 12vh, 120px)',
+      }}>
         <h2
           style={{
             textAlign: 'center',
@@ -291,7 +328,7 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
           style={{
             textAlign: 'center',
             fontSize: '14px',
-            color: '#6a5a5a',
+            color: '#7a6868',
             margin: '0 0 48px 0',
             maxWidth: '500px',
             marginInline: 'auto',
@@ -314,18 +351,20 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
             { name: 'Aloe Vera', desc: 'Calma la irritacion y aporta frescura' },
             { name: 'Colageno Vegetal', desc: 'Mejora la elasticidad y firmeza' },
             { name: 'Aceite de Jojoba', desc: 'Regula la produccion de sebo natural' },
-          ].map((ing) => (
+          ].map((ing, i) => (
             <div
               key={ing.name}
               style={{
-                padding: '20px',
-                borderRadius: '12px',
-                border: '1px solid rgba(184,118,118,0.1)',
+                padding: '24px 20px 20px',
+                borderRadius: '14px',
+                border: '1px solid rgba(184,118,118,0.08)',
                 background: '#fdf8f5',
+                boxShadow: '0 2px 12px rgba(184,118,118,0.06)',
+                borderLeft: `3px solid ${['#b87676', '#d4a84b', '#8faa7a', '#7a9e9e', '#b87676', '#d4a84b'][i]}`,
               }}
             >
-              <h3 style={{ fontSize: '14px', fontWeight: 600, margin: '0 0 6px 0' }}>{ing.name}</h3>
-              <p style={{ fontSize: '12px', color: '#6a5a5a', margin: 0, lineHeight: 1.5 }}>{ing.desc}</p>
+              <h3 style={{ fontSize: '14px', fontWeight: 700, margin: '0 0 8px 0', color: '#2d2323' }}>{ing.name}</h3>
+              <p style={{ fontSize: '12px', color: '#7a6868', margin: 0, lineHeight: 1.6 }}>{ing.desc}</p>
             </div>
           ))}
         </div>
@@ -335,7 +374,7 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
       <section
         style={{
           padding: 'clamp(60px, 10vh, 100px) 24px',
-          background: '#faf0f0',
+          background: 'linear-gradient(180deg, #f0dede 0%, #ebd5d5 100%)',
         }}
       >
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
@@ -344,11 +383,22 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
               textAlign: 'center',
               fontSize: 'clamp(22px, 3.5vw, 34px)',
               fontWeight: 700,
-              margin: '0 0 48px 0',
+              margin: '0 0 12px 0',
+              color: '#2d2323',
             }}
           >
             Lo que dicen nuestras clientas
           </h2>
+          <p
+            style={{
+              textAlign: 'center',
+              fontSize: '14px',
+              color: '#7a6868',
+              margin: '0 0 48px 0',
+            }}
+          >
+            Resultados reales de mujeres como vos
+          </p>
           <div
             style={{
               display: 'flex',
@@ -366,40 +416,52 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
                 key={t.name}
                 style={{
                   flex: '1 1 260px',
-                  padding: '28px 24px',
-                  borderRadius: '16px',
-                  background: '#fdf8f5',
-                  border: '1px solid rgba(184,118,118,0.1)',
+                  padding: '32px 24px 28px',
+                  borderRadius: '20px',
+                  background: 'linear-gradient(135deg, #fdf8f5 0%, #faf0f0 100%)',
+                  boxShadow: '0 4px 24px rgba(184,118,118,0.12), 0 1px 4px rgba(0,0,0,0.04)',
+                  border: '1px solid rgba(184,118,118,0.08)',
                   display: 'flex',
                   flexDirection: 'column',
                 }}
               >
                 <div
                   style={{
-                    width: '48px',
-                    height: '48px',
-                    borderRadius: '50%',
-                    overflow: 'hidden',
-                    marginBottom: '12px',
-                    border: '2px solid rgba(184,118,118,0.15)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    marginBottom: '14px',
                   }}
                 >
-                  <img
-                    src={t.img}
-                    alt={t.name}
-                    loading="lazy"
-                    width="48"
-                    height="48"
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                  />
+                  <div
+                    style={{
+                      width: '44px',
+                      height: '44px',
+                      borderRadius: '50%',
+                      overflow: 'hidden',
+                      border: '2px solid #b87676',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <img
+                      src={t.img}
+                      alt={t.name}
+                      loading="lazy"
+                      width="44"
+                      height="44"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '12px', color: '#d4a84b', letterSpacing: '0.02em' }}>
+                      {'★'.repeat(t.rating)}
+                    </div>
+                    <span style={{ fontSize: '12px', fontWeight: 700, color: '#2d2323' }}>{t.name}</span>
+                  </div>
                 </div>
-                <div style={{ fontSize: '13px', color: '#d4a84b', marginBottom: '12px' }}>
-                  {'★'.repeat(t.rating)}{'☆'.repeat(5 - t.rating)}
-                </div>
-                <p style={{ fontSize: '13px', lineHeight: 1.7, color: '#6a5a5a', margin: '0 0 16px 0', flex: 1, fontStyle: 'italic' }}>
+                <p style={{ fontSize: '13px', lineHeight: 1.8, color: '#6a5a5a', margin: 0, flex: 1, fontStyle: 'italic' }}>
                   &ldquo;{t.text}&rdquo;
                 </p>
-                <span style={{ fontSize: '12px', fontWeight: 600, color: '#b87676' }}>{t.name}</span>
               </div>
             ))}
           </div>
@@ -495,30 +557,40 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
       <footer
         style={{
           borderTop: '1px solid rgba(184,118,118,0.1)',
-          padding: '40px 24px',
+          padding: '48px 24px 40px',
           textAlign: 'center',
+          background: '#faf3f0',
         }}
       >
-        <span style={{ ...styles.logo, display: 'block', marginBottom: '12px' }}>Lumina</span>
-        <p style={{ fontSize: '12px', color: '#a09393', margin: '0 0 12px 0' }}>
-          Cuidado facial natural · Hecho en Chile
+        <span style={{ ...styles.logo, display: 'block', marginBottom: '16px' }}>Lumina</span>
+        <p style={{ fontSize: '13px', color: '#7a6868', margin: '0 0 16px 0', maxWidth: '300px', marginInline: 'auto' }}>
+          Cuidado facial natural · Hecho en Argentina
         </p>
         <div
           style={{
             display: 'flex',
             justifyContent: 'center',
-            gap: '16px',
+            gap: '20px',
             fontSize: '12px',
             color: '#b87676',
-            fontWeight: 500,
+            fontWeight: 600,
           }}
         >
-          <span>Instagram</span>
-          <span>Facebook</span>
-          <span>TikTok</span>
-          <span>WhatsApp</span>
+          <span className="lum-footer-link">Instagram</span>
+          <span className="lum-footer-link">Facebook</span>
+          <span className="lum-footer-link">TikTok</span>
+          <span className="lum-footer-link">WhatsApp</span>
         </div>
-        <p style={{ fontSize: '11px', color: '#c5b5b5', margin: '20px 0 0 0' }}>
+        <div
+          style={{
+            width: '32px',
+            height: '2px',
+            background: 'rgba(184,118,118,0.15)',
+            margin: '20px auto',
+            borderRadius: '2px',
+          }}
+        />
+        <p style={{ fontSize: '11px', color: '#a09393', margin: 0 }}>
           &copy; 2026 Lumina. Todos los derechos reservados.
         </p>
       </footer>
