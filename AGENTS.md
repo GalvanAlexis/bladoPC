@@ -6,7 +6,7 @@
 
 ---
 
-# Progresos-Academicos — Reglas del Agente
+# bladoPC — Reglas del Agente
 
 ## Stack
 Usar el stack más valorado del mercado para cada tarea. Antes de proponer tecnologías, leer el `package.json` y el código existente para determinar qué se está usando actualmente.

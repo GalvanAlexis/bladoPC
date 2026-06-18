@@ -66,4 +66,4 @@ npm run dev
 ## 📬 Contacto
 
 **Alexis Galván** — Desarrollador Full-Stack, Ciencia de Datos e IA.
-Repositorio: `GalvanAlexis/Progresos-Academicos`
+Repositorio: `GalvanAlexis/bladoPC`

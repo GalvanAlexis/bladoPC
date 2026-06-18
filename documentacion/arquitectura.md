@@ -56,7 +56,7 @@
 ## Estructura de Archivos del Proyecto
 
 ```
-Progresos-Academicos/
+bladoPC/
 │
 ├── src/
 │   ├── app/

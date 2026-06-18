@@ -87,7 +87,7 @@ Read the returned guide in full before writing any implementation code.
 
 ---
 
-## Priority Areas for This Project (Progresos-Academicos)
+## Priority Areas for This Project (bladoPC)
 
 Given the current stack (Next.js 16, React 19, Framer Motion, Tailwind CSS 4), prioritize guides in these categories:
 
