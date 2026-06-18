@@ -157,7 +157,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         {/* Footer */}
         <section style={{ marginTop: 'auto', padding: '16px 20px' }}>
           <a
-            href="https://github.com/GalvanAlexis/Progresos-Academicos"
+            href="https://github.com/GalvanAlexis/bladoPC"
             target="_blank"
             rel="noopener noreferrer"
             style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--muted)', textDecoration: 'none', transition: 'color 0.15s' }}

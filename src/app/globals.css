@@ -80,35 +80,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ─── Custom Scrollbar (chat panel) ─── */
-.dialog-scrollbar::-webkit-scrollbar       { width: 4px; }
-.dialog-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.dialog-scrollbar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-.dialog-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-/* ─── React Flow — dark professional ─── */
-.react-flow {
-  background-color: var(--background);
-}
-.react-flow__node {
-  background: var(--surface-2);
-  color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-family: var(--font-sans), sans-serif;
-}
-.react-flow__edge-path {
-  stroke: var(--border);
-}
+.custom-scrollbar::-webkit-scrollbar       { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
 /* ─── Utility ─── */
-.accent          { color: var(--accent); }
-.accent-bg       { background: var(--accent); }
-.accent-border   { border-color: var(--accent); }
 .surface         { background: var(--surface); }
 .surface-2       { background: var(--surface-2); }
-.border-subtle   { border-color: var(--border-subtle); }
-.text-muted      { color: var(--muted); }
-.text-muted-light { color: var(--muted-light); }
 
 /* ─── Red dot indicator ─── */
 .status-dot {
@@ -125,14 +104,6 @@ h1, h2, h3, h4, h5, h6 {
   50%       { opacity: 0.6; box-shadow: 0 0 12px var(--accent-glow); }
 }
 
-/* ─── Intro screen text scroll ─── */
-@keyframes intro-scroll {
-  from { transform: translateY(100vh); opacity: 0; }
-  5%   { opacity: 1; }
-  95%  { opacity: 1; }
-  to   { transform: translateY(-150vh); opacity: 0; }
-}
-
 /* ─── Fade in utility ─── */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(8px); }
@@ -142,19 +113,6 @@ h1, h2, h3, h4, h5, h6 {
 .animate-fade-in {
   animation: fade-in 0.3s ease-out both;
 }
-
-/* ─── Chat panel — response options ─── */
-@keyframes option-in {
-  from { opacity: 0; transform: translateX(-8px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-.response-option {
-  animation: option-in 0.2s ease-out both;
-  animation-delay: calc(var(--option-index, 0) * 50ms);
-}
-
-
 
 /* ─── Home Layout tokens ─── */
 .section-container {
@@ -248,31 +206,6 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--surface-2);
   border: 1px solid var(--border);
   color: var(--muted-light);
-}
-
-/* ─── Project card (Glassmorphism) ─── */
-.project-card {
-  background: rgba(15, 15, 15, 0.4);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 14px;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-  position: relative;
-}
-.project-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
-  pointer-events: none;
-}
-.project-card:hover {
-  border-color: rgba(225, 29, 72, 0.4);
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.6), 0 0 30px var(--accent-glow);
 }
 
 /* ─── CTA button (WOW) ─── */
@@ -416,7 +349,6 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ─── prefers-reduced-motion ─── */
 @media (prefers-reduced-motion: reduce) {
-  .response-option,
   .status-dot,
   .animate-fade-in,
   .reveal,

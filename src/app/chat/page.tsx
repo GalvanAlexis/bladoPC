@@ -12,7 +12,7 @@ interface Message {
   whatsappMessage?: string | null;
 }
 
-export default function CebarMatePage() {
+export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);

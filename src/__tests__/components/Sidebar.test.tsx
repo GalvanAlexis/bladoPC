@@ -76,7 +76,7 @@ describe('Sidebar — link GitHub', () => {
   it('muestra el link al repositorio de GitHub', () => {
     renderSidebar(true);
     const link = screen.getByText('GitHub del proyecto').closest('a');
-    expect(link).toHaveAttribute('href', 'https://github.com/GalvanAlexis/Progresos-Academicos');
+    expect(link).toHaveAttribute('href', 'https://github.com/GalvanAlexis/bladoPC');
     expect(link).toHaveAttribute('target', '_blank');
   });
 
