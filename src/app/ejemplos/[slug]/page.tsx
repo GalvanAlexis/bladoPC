@@ -207,7 +207,7 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
             }}
           >
             <img
-              src="https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=600&q=85&auto=format"
+              src="https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=600&q=80"
               alt="Lumina Serum Facial"
               fetchPriority="high"
               width="320"
