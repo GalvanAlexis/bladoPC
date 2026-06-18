@@ -13,11 +13,6 @@ interface NavbarProps {
   sidebarOpen: boolean;
 }
 
-const NAV_LINKS = [
-  { id: 'timba',      label: 'Timba',       path: '/timba' },
-  { id: 'biblioteca', label: 'Biblioteca',  path: '/biblioteca' },
-];
-
 export default function Navbar({ onToggleSidebar, sidebarOpen }: NavbarProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -65,45 +60,6 @@ export default function Navbar({ onToggleSidebar, sidebarOpen }: NavbarProps) {
               Portfolio
             </span>
           </Link>
-
-          {/* Separador */}
-          <div
-            className="block h-4 w-px"
-            style={{ background: 'var(--border)' }}
-          />
-
-          {/* Nav links */}
-          <div className="flex items-center gap-1">
-            {NAV_LINKS.map((link) => {
-              const isActive = pathname === link.path;
-              return (
-                <button
-                  key={link.id}
-                  onClick={() => router.push(link.path)}
-                  className="px-3 py-1.5 rounded text-xs font-medium tracking-wide transition-all duration-150"
-                  style={{
-                    color: isActive ? 'var(--foreground)' : 'var(--muted)',
-                    background: isActive ? 'var(--surface-2)' : 'transparent',
-                    border: isActive
-                      ? '1px solid var(--border)'
-                      : '1px solid transparent',
-                  }}
-                  onMouseEnter={e => {
-                    if (!isActive) {
-                      (e.currentTarget as HTMLButtonElement).style.color = 'var(--foreground)';
-                    }
-                  }}
-                  onMouseLeave={e => {
-                    if (!isActive) {
-                      (e.currentTarget as HTMLButtonElement).style.color = 'var(--muted)';
-                    }
-                  }}
-                >
-                  {link.label}
-                </button>
-              );
-            })}
-          </div>
         </div>
 
         {/* ─── Derecha: status dot + volver ─── */}
