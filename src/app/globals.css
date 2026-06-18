@@ -353,6 +353,11 @@ h1, h2, h3, h4, h5, h6 {
   to   { width: 100%; opacity: 1; }
 }
 
+/* ─── Service page back link hover ─── */
+.back-link:hover {
+  color: var(--foreground) !important;
+}
+
 /* ─── prefers-reduced-motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .response-option,
