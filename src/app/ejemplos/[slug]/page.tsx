@@ -110,6 +110,7 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
 
       {/* ─── Hero ─── */}
       <section
+        className="lum-hero"
         style={{
           minHeight: '100dvh',
           display: 'flex',
@@ -119,6 +120,7 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
           margin: '0 auto',
           gap: 'clamp(32px, 6vw, 80px)',
           position: 'relative',
+          flexWrap: 'wrap',
         }}
       >
         <div
@@ -246,6 +248,7 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
             }}
           />
           <div
+            className="lum-hero-img-wrap"
             style={{
               width: 'clamp(200px, 25vw, 320px)',
               height: 'clamp(300px, 38vw, 460px)',
