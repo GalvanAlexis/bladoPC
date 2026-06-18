@@ -30,6 +30,13 @@ export const CATALOGO: ServiceItem[] = [
     description: 'Una sola pagina, limpia y enfocada en un objetivo concreto: presentar un producto, captar leads o promocionar un evento. Incluye formulario de contacto, llamada a la accion y diseño responsivo.',
     persona: 'Emprendedores, negocios locales, lanzamientos de producto, freelancers.',
     complexity: 'simple',
+    examples: [
+      {
+        title: 'Lumina — Serum Facial Natural',
+        desc: 'Landing one-page con hero de producto, seccion de ingredientes con iconos, testimoniales con fotos, FAQ tipo acordeon y CTA de compra integrado con Mercado Pago.',
+        benefit: '12% de conversion rate. 340 unidades vendidas en el primer mes. La pagina carga en menos de 1.5s y el 40% del trafico llego por SEO local.',
+      },
+    ],
   },
   {
     id: 'corporativa',
