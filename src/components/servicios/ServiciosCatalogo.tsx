@@ -254,7 +254,7 @@ export default function ServiciosCatalogo() {
                       </div>
 
                       <Link
-                        href={`/servicios/${svc.id}`}
+                        href={svc.ejemploSlug ? `/ejemplos/${svc.ejemploSlug}` : `/servicios/${svc.id}`}
                         className="btn-primary"
                         style={{
                           alignSelf: 'flex-start',
