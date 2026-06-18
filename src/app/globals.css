@@ -363,6 +363,11 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0.85 !important;
 }
 
+/* ─── Lumina product page button hover ─── */
+.lum-btn:hover {
+  background: #a06565 !important;
+}
+
 /* ─── prefers-reduced-motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .response-option,

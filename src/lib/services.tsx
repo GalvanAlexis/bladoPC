@@ -15,6 +15,7 @@ export interface ServiceItem {
   persona: string;
   complexity: 'simple' | 'media' | 'compleja';
   examples?: ServiceExample[];
+  ejemploSlug?: string;
 }
 
 export const CATALOGO: ServiceItem[] = [
@@ -30,6 +31,7 @@ export const CATALOGO: ServiceItem[] = [
     description: 'Una sola pagina, limpia y enfocada en un objetivo concreto: presentar un producto, captar leads o promocionar un evento. Incluye formulario de contacto, llamada a la accion y diseño responsivo.',
     persona: 'Emprendedores, negocios locales, lanzamientos de producto, freelancers.',
     complexity: 'simple',
+    ejemploSlug: 'landing',
     examples: [
       {
         title: 'Lumina — Serum Facial Natural',
