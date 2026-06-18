@@ -390,6 +390,30 @@ h1, h2, h3, h4, h5, h6 {
   color: #b87676 !important;
 }
 
+@media (max-width: 768px) {
+  .lum-hero {
+    min-height: auto !important;
+    padding: 90px 20px 40px !important;
+    gap: 32px !important;
+    justify-content: center;
+  }
+  .lum-hero-img-wrap {
+    width: 180px !important;
+    height: 260px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .lum-hero {
+    padding: 80px 16px 32px !important;
+    gap: 24px !important;
+  }
+  .lum-hero-img-wrap {
+    width: 150px !important;
+    height: 220px !important;
+  }
+}
+
 /* ─── prefers-reduced-motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .response-option,
