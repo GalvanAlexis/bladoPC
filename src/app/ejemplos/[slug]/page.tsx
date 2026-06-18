@@ -201,54 +201,24 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
               width: 'clamp(200px, 25vw, 320px)',
               height: 'clamp(300px, 38vw, 460px)',
               borderRadius: '80px 80px 40px 40px',
-              background: 'linear-gradient(160deg, #f0e4e4 0%, #e8c8c8 40%, #d4a84b 90%, #c9973e 100%)',
+              overflow: 'hidden',
+              boxShadow: '0 30px 60px rgba(184,118,118,0.25)',
               position: 'relative',
-              boxShadow: '0 30px 60px rgba(184,118,118,0.2), inset 0 -20px 40px rgba(0,0,0,0.04)',
             }}
           >
-            <div
+            <img
+              src="https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=600&q=85&auto=format"
+              alt="Lumina Serum Facial"
+              fetchPriority="high"
+              width="320"
+              height="460"
               style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                textAlign: 'center',
-                color: 'rgba(255,255,255,0.7)',
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                display: 'block',
               }}
-            >
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
-              </svg>
-            </div>
-            <div
-              style={{
-                position: 'absolute',
-                top: '16px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                fontSize: '9px',
-                fontWeight: 700,
-                letterSpacing: '0.18em',
-                color: 'rgba(255,255,255,0.5)',
-                textTransform: 'uppercase',
-              }}
-            >
-              LUMINA
-            </div>
-            <div
-              style={{
-                position: 'absolute',
-                bottom: '24px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                display: 'flex',
-                gap: '6px',
-              }}
-            >
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'rgba(255,255,255,0.3)' }} />
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'rgba(255,255,255,0.6)' }} />
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'rgba(255,255,255,0.3)' }} />
-            </div>
+            />
           </div>
         </div>
       </section>
@@ -388,9 +358,9 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
             }}
           >
             {[
-              { name: 'Carolina M.', text: 'Desde que uso Lumina mi piel se ve mas luminosa y las lineas de expresion se notan mucho menos. Lo recomiendo 100%.', rating: 5 },
-              { name: 'Valentina R.', text: 'Habia probado mil serums y ninguno me habia funcionado como este. En dos semanas note la diferencia.', rating: 5 },
-              { name: 'Camila L.', text: 'Me encanta que sea natural y que realmente funcione. La textura es super suave y huele increible.', rating: 5 },
+              { name: 'Carolina M.', text: 'Desde que uso Lumina mi piel se ve mas luminosa y las lineas de expresion se notan mucho menos. Lo recomiendo 100%.', rating: 5, img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&q=80&auto=format' },
+              { name: 'Valentina R.', text: 'Habia probado mil serums y ninguno me habia funcionado como este. En dos semanas note la diferencia.', rating: 5, img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&q=80&auto=format' },
+              { name: 'Camila L.', text: 'Me encanta que sea natural y que realmente funcione. La textura es super suave y huele increible.', rating: 5, img: 'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=120&q=80&auto=format' },
             ].map((t) => (
               <div
                 key={t.name}
@@ -404,6 +374,25 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
                   flexDirection: 'column',
                 }}
               >
+                <div
+                  style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    marginBottom: '12px',
+                    border: '2px solid rgba(184,118,118,0.15)',
+                  }}
+                >
+                  <img
+                    src={t.img}
+                    alt={t.name}
+                    loading="lazy"
+                    width="48"
+                    height="48"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
+                </div>
                 <div style={{ fontSize: '13px', color: '#d4a84b', marginBottom: '12px' }}>
                   {'★'.repeat(t.rating)}{'☆'.repeat(5 - t.rating)}
                 </div>
