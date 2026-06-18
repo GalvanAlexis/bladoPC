@@ -358,6 +358,11 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--foreground) !important;
 }
 
+/* ─── Service page CTA button hover ─── */
+.cta-button:hover {
+  opacity: 0.85 !important;
+}
+
 /* ─── prefers-reduced-motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .response-option,
