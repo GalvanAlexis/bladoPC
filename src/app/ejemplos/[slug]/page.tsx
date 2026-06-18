@@ -358,9 +358,9 @@ export default async function EjemploPage({ params }: { params: Promise<{ slug: 
             }}
           >
             {[
-              { name: 'Carolina M.', text: 'Desde que uso Lumina mi piel se ve mas luminosa y las lineas de expresion se notan mucho menos. Lo recomiendo 100%.', rating: 5, img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&q=80&auto=format' },
-              { name: 'Valentina R.', text: 'Habia probado mil serums y ninguno me habia funcionado como este. En dos semanas note la diferencia.', rating: 5, img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&q=80&auto=format' },
-              { name: 'Camila L.', text: 'Me encanta que sea natural y que realmente funcione. La textura es super suave y huele increible.', rating: 5, img: 'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=120&q=80&auto=format' },
+              { name: 'Carolina M.', text: 'Desde que uso Lumina mi piel se ve mas luminosa y las lineas de expresion se notan mucho menos. Lo recomiendo 100%.', rating: 5, img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&q=80' },
+              { name: 'Valentina R.', text: 'Habia probado mil serums y ninguno me habia funcionado como este. En dos semanas note la diferencia.', rating: 5, img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&q=80' },
+              { name: 'Camila L.', text: 'Me encanta que sea natural y que realmente funcione. La textura es super suave y huele increible.', rating: 5, img: 'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=120&q=80' },
             ].map((t) => (
               <div
                 key={t.name}
