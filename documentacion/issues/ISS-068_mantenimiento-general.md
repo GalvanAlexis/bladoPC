@@ -29,6 +29,12 @@ Auditoria completa del codigo fuente para eliminar codigo muerto, imports sin us
 - [x] `prisma.config.ts` — `import "dotenv/config"` redundante removido
 - [x] `src/components/home/HomeLayout.tsx` — year hardcodeado 2025 -> dinamico
 
+### P3 — PERFORMANCE HOME (agregado ISS-068 ext)
+- [x] `src/components/home/ServicesSection.tsx` — pausar video background al abrir modal (useRef + useEffect)
+- [x] `src/components/home/AboutSection.tsx` — remover `content-visibility: auto` que interferia con layoutId
+- [x] `src/components/home/ServicesSection.tsx` — idem
+- [x] `src/components/home/SkillsSection.tsx` — idem
+
 ## QA
 - `npm test` debe pasar
 - `npm run build` debe compilar sin errores

@@ -28,8 +28,7 @@
 | ISS-052 | Nueva About Section | 2026-06-09 |
 | ISS-049 | HomeLayout y rediseño Landing | 2026-06-09 |
 | ISS-048 | Sidebar rediseño corporativo | 2026-06-09 |
-| [ISS-068](./issues/ISS-068_mantenimiento-general.md) | Mantenimiento general y limpieza de legacy | 2026-06-18 |
-| [ISS-068](./issues/ISS-068_mantenimiento-general.md) | Mantenimiento general y limpieza de legacy | 2026-06-18 |
+| [ISS-068](./issues/ISS-068_mantenimiento-general.md) | Mantenimiento general y limpieza de legacy + optimizacion home | 2026-06-19 |
 | [ISS-059](./issues/ISS-059_hardening-seguridad-calidad.md) | Hardening de seguridad y calidad de codigo | 2026-06-15 |
 | [ISS-024](./issues/ISS-024_filosofia-chat-context.md) | Conectar Carpeta Filosofía con Blado y Chat | 2026-05-18 |
 | [ISS-020](./issues/ISS-020_prisma-supabase-setup.md) | Setup Prisma + Supabase | 2026-05-17 |
