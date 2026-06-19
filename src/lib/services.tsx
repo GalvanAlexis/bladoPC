@@ -73,6 +73,14 @@ export const CATALOGO: ServiceItem[] = [
     description: 'Sistema de gestion de contenido con articulos, categorias, etiquetas, SEO optimizado y busqueda. Permite publicar y editar contenido sin conocimientos tecnicos.',
     persona: 'Creadores de contenido, medios digitales, marcas personales, educadores.',
     complexity: 'simple',
+    ejemploSlug: 'blog',
+    examples: [
+      {
+        title: 'Vortex Magazine — Medio Digital',
+        desc: 'Magazine moderno multi-categoria con homepage curada, pagina de articulo con progreso de lectura, categorias, busqueda y panel de administracion con login y CRUD simulado.',
+        benefit: 'Muestra un CMS realista con todas las funcionalidades esperadas: publicacion, categorizacion, busqueda y panel de gestion. Ideal para creadores de contenido y medios.',
+      },
+    ],
   },
   {
     id: 'ecommerce',

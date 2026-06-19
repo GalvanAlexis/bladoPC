@@ -9,6 +9,10 @@ const EJEMPLOS: Record<string, { title: string; desc: string }> = {
     title: 'M&A — Estudio Contable',
     desc: 'Sitio corporativo multi-seccion para despacho contable con servicios, equipo, blog y captacion de leads.',
   },
+  blog: {
+    title: 'Vortex Magazine',
+    desc: 'Magazine digital multi-categoria con articulos, busqueda y panel de administracion.',
+  },
 };
 
 export function generateStaticParams() {
