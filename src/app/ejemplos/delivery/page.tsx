@@ -30,7 +30,7 @@ const MENU: Item[] = [
   { id: 's007', name: 'Caesar Bowl', desc: 'Lechuga fresca, pollo grillado, croutons, parmesano y aderezo Caesar', price: 3200, category: 'salads', image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400&q=80' },
   { id: 's008', name: 'Bowl Mediterraneo', desc: 'Quinoa, hummus, pepino, tomate cherry, aceitunas y falafel', price: 3600, category: 'salads', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&q=80', badge: 'Vegano' },
   { id: 's009', name: 'Limonada Natural', desc: 'Limonada exprimida con menta y jengibre. Sin azucar anadida', price: 1800, category: 'drinks', image: 'https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=400&q=80' },
-  { id: 's010', name: 'Cerveza Artesanal', desc: 'IPA dorada 473ml. Cerveza local de la casa', price: 2200, category: 'drinks', image: 'https://images.unsplash.com/photo-1608270586620-8d6bc0e6c01e?w=400&q=80' },
+  { id: 's010', name: 'Cerveza Artesanal', desc: 'IPA dorada 473ml. Cerveza local de la casa', price: 2200, category: 'drinks', image: 'https://images.unsplash.com/photo-1566633806327-68e152aaf26d?w=400&q=80' },
   { id: 's011', name: 'Cheesecake de la Casa', desc: 'Cheesecake cremoso con salsa de frutos rojos', price: 2800, category: 'desserts', image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=400&q=80', badge: 'Casero' },
   { id: 's012', name: 'Brownie con Helado', desc: 'Brownie de chocolate belga con helado de crema americana', price: 3200, category: 'desserts', image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&q=80' },
 ];
@@ -157,7 +157,9 @@ export default function DeliveryHome() {
         }
         @media (max-width: 640px) {
           .se-menu-grid { grid-template-columns: 1fr; }
-          .se-cart-dialog { width: 100vw; }
+          .se-cat-scroll { padding-left: 16px; padding-right: 16px; }
+          .se-cat-pill { padding: 6px 14px; font-size: 12px; }
+          .se-cart-dialog { width: calc(100vw - 48px); }
         }
       `}</style>
 
@@ -410,6 +412,12 @@ export default function DeliveryHome() {
       </footer>
 
       {/* ─── Cart Dialog ─── */}
+      {showCart && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 199, background: 'rgba(0,0,0,0.3)' }}
+          onClick={() => setShowCart(false)}
+        />
+      )}
       <dialog open={showCart} className="se-cart-dialog" onClose={() => setShowCart(false)}>
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <div style={{
@@ -506,6 +514,18 @@ export default function DeliveryHome() {
               >
                 Confirmar pedido
               </Link>
+              <button
+                type="button"
+                onClick={() => setShowCart(false)}
+                style={{
+                  width: '100%', textAlign: 'center', padding: '10px', borderRadius: '8px',
+                  border: `1px solid var(--se-border)`, background: 'transparent',
+                  color: 'var(--se-text)', fontSize: '13px', fontWeight: 500,
+                  cursor: 'pointer', marginTop: '8px',
+                }}
+              >
+                Seguir comprando
+              </button>
               <p style={{ fontSize: '11px', color: 'var(--se-text-secondary)', textAlign: 'center', marginTop: '8px' }}>
                 Minimo de compra: ${MIN_ORDER.toLocaleString()}
               </p>
