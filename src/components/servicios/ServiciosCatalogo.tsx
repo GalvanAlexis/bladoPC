@@ -37,6 +37,25 @@ export default function ServiciosCatalogo() {
 
   return (
     <div className="section-container" style={{ paddingTop: 'clamp(80px, 12vh, 140px)', paddingBottom: 'clamp(80px, 12vh, 140px)' }}>
+      <Link
+        href="/"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '6px',
+          fontSize: '13px',
+          color: 'var(--muted)',
+          textDecoration: 'none',
+          marginBottom: '24px',
+          transition: 'color 0.2s ease',
+        }}
+        className="back-link"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Volver al inicio
+      </Link>
       <div className="section-divider" />
       <p
         style={{
