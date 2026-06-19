@@ -58,8 +58,8 @@ const STATUS_COLOR: Record<string, string> = {
 };
 
 export default function AdminPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin@sabor.com');
+  const [password, setPassword] = useState('admin123');
   const [loggedIn, setLoggedIn] = useState(false);
   const [view, setView] = useState<View>('dashboard');
   const [orders, setOrders] = useState(initOrders);
@@ -114,9 +114,15 @@ export default function AdminPage() {
     return (
       <div className="se-admin-login" style={{ fontFamily: 'system-ui, sans-serif', minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fafaf9', padding: '24px' }}>
         <div style={{ width: '360px', maxWidth: '100%' }}>
-          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+                      <div style={{ textAlign: 'center', marginBottom: '32px' }}>
             <div style={{ fontSize: '24px', fontWeight: 800, color: accent }}>Sabor Express</div>
             <div style={{ fontSize: '13px', color: '#78716c', marginTop: '4px' }}>Panel de administracion</div>
+            <a href="/ejemplos/delivery" style={{
+              display: 'inline-block', marginTop: '12px', fontSize: '12px',
+              color: accent, textDecoration: 'none', fontWeight: 500,
+            }}>
+              &larr; Volver a la tienda
+            </a>
           </div>
           <form onSubmit={handleLogin} style={{ background: '#fff', borderRadius: '14px', padding: '28px', border: '1px solid #e7e5e4' }}>
             <div style={{ marginBottom: '16px' }}>
