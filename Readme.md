@@ -29,6 +29,11 @@ Incluye un Asistente Virtual Inteligente (Blado) diseñado para brindar diagnós
 
 ---
 
+---
+
+> **IMPORTANTE:** Este proyecto sigue un workflow OBLIGATORIO para todo cambio de codigo.
+> Leer [`documentacion/README.md`](documentacion/README.md) seccion **Workflow Obligatorio** antes de tocar cualquier archivo.
+
 ## 🚀 Correr localmente
 
 ### Prerrequisitos
