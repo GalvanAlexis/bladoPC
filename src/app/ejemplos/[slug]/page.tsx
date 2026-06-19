@@ -726,13 +726,41 @@ const diferenciales = [
 
 const recursos = [
   {
+    id: 'guia-monotributo',
     titulo: 'Guia completa de Monotributo 2026',
     desc: 'Todo lo que necesitas saber para categorizarte, recategorizarte y pagar menos. Incluye tabla de categorias actualizada.',
+    popoverContent: 'La AFIP actualizo las escalas de monotributo para 2026 con incrementos del 25% promedio. Las categorias mas bajas (A y B) tienen los menores aumentos. Te ayudamos a calcular tu categoria optima para pagar menos impuestos legalmente.',
   },
   {
+    id: 'calendario-julio',
     titulo: 'Calendario impositivo: vencimientos de Julio',
     desc: 'Fechas clave de IVA, Ganancias, Bienes Personales, Sueldos y mas. No te pierdas ningun vencimiento.',
+    popoverContent: 'Julio es el mes con mas vencimientos concentrados del semestre. IVA mensual (dia 18), Ganancias personas juridicas (dia 22), Bienes Personales (dia 25), y liquidacion de sueldos con SAC (dia 5). Descarga el calendario completo en PDF.',
   },
+];
+
+const proceso = [
+  { paso: 1, titulo: 'Consulta inicial gratuita', desc: 'Nos reunimos sin cargo para entender tu negocio, tus necesidades y explicarte como trabajamos. Sin compromiso.' },
+  { paso: 2, titulo: 'Diagnostico y plan', desc: 'Analizamos tu situacion actual, detectamos oportunidades de ahorro y armamos un plan de trabajo con plazos y honorarios claros.' },
+  { paso: 3, titulo: 'Implementacion', desc: 'Ponemos en marcha el plan: registraciones, presentaciones, regularizaciones. Te asignamos un contador responsable.' },
+  { paso: 4, titulo: 'Acompanamiento continuo', desc: 'Seguimiento mensual, consultas por WhatsApp, recordatorios de vencimientos y reunion anual de balance.' },
+];
+
+const timeline = [
+  { year: '2012', event: 'Fundacion del estudio por el CPN Martin Martinez en Chascomus,专注 en monotributistas y emprendedores locales.' },
+  { year: '2015', event: 'Incorporacion de la Cra. Laura Gomez como socia. Abrimos el area de Liquidacion de Sueldos para PyMEs.' },
+  { year: '2018', event: 'Superamos los 150 clientes activos. Incorporamos el area de Sociedades y Constitucion de Empresas.' },
+  { year: '2021', event: 'Lanzamos la plataforma online de documentos. Digitalizamos todos los procesos internos.' },
+  { year: '2024', event: 'Alcanzamos los 350 clientes. Abrimos oficina en Av. Lastra 320 con atencion personalizada.' },
+  { year: '2026', event: 'Seguimos creciendo: +2.000 declaraciones anuales, 98% de retencion y un equipo de 8 profesionales.' },
+];
+
+const faq = [
+  { q: 'Cuanto cuesta una consulta inicial?', a: 'La primera reunion es totalmente gratuita y sin compromiso. Nos conoces, te contamos como trabajamos y si te sentis comodo, ahi recien arrancamos.' },
+  { q: 'Que necesito para empezar a trabajar con ustedes?', a: 'Muy poco: tu CUIT, clave fiscal, y los datos basicos de tu actividad. Nosotros nos encargamos de todo el tramite administrativo.' },
+  { q: 'Toman clientes de otros estudios contables?', a: 'Si, recibimos clientes que vienen de otros estudios. Nos encargamos de la transferencia ordenada de toda la documentacion y registros.' },
+  { q: 'Tienen horarios de atencion fuera del horario de oficina?', a: 'Si. Ademas del horario de oficina (Lun a Vie 9-18), tenes acceso a nuestra plataforma online 24/7 y respondedemos consultas por WhatsApp hasta las 20hs.' },
+  { q: 'Trabajan solo con empresas de Chascomus?', a: 'No. La mayoria de nuestros clientes son de Chascomus y la region, pero tambien tenemos clientes en Capital, La Plata y Mar del Plata. Todo se maneja de forma virtual.' },
 ];
 
 function ctaBtn(extra: React.CSSProperties = {}): React.CSSProperties {
@@ -752,25 +780,94 @@ function ctaBtn(extra: React.CSSProperties = {}): React.CSSProperties {
   };
 }
 
+const sectionIds = ['hero', 'metrics', 'proceso', 'servicios', 'equipo', 'faq', 'contacto'] as const;
+
+const sectionLabels: Record<string, string> = {
+  hero: 'Inicio',
+  metrics: 'Trayectoria',
+  proceso: 'Proceso',
+  servicios: 'Servicios',
+  equipo: 'Equipo',
+  faq: 'FAQ',
+  contacto: 'Contacto',
+};
+
 function ContablePage() {
   return (
     <div style={C.fullPage}>
 
+      <style>{`
+        .ma-sidebar { display: none; }
+        @media (min-width: 1024px) {
+          .ma-sidebar { display: flex !important; }
+          .ma-mobile-cta { display: none !important; }
+          .ma-popover-card { cursor: pointer; }
+          .ma-popover-card:hover { box-shadow: 0 4px 20px rgba(122,26,26,0.10); }
+        }
+        @media (max-width: 768px) {
+          .ma-mobile-cta { display: flex !important; }
+        }
+        .ma-sidebar a.active {
+          color: ${granate} !important;
+          font-weight: 600 !important;
+        }
+        .ma-sidebar a.active::before {
+          content: '';
+          position: absolute;
+          left: -12px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 4px;
+          height: 4px;
+          border-radius: 50%;
+          background: ${granate};
+        }
+        @media (prefers-reduced-motion: no-preference) {
+          .ma-counter { transition: opacity 0.5s ease; }
+          .ma-card-hover { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+          .ma-card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(122,26,26,0.08); }
+          .ma-dialog-open { animation: ma-fade-in 0.2s ease; }
+          @keyframes ma-fade-in { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+        }
+      `}</style>
+
+      {/* ─── Top Bar ─── */}
+      <div
+        style={{
+          background: granateDark,
+          color: 'rgba(255,255,255,0.8)',
+          fontSize: '12px',
+          padding: '6px 24px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '4px 16px',
+        }}
+      >
+        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+          <span>&#9742; (02241) 45-6789</span>
+          <span>&#9993; estudio@mya-contable.com.ar</span>
+        </div>
+        <span>Lun a Vie 9:00 - 18:00</span>
+      </div>
+
       {/* ─── Nav ─── */}
       <nav
+        id="ma-top"
         style={{
-          position: 'fixed',
+          position: 'sticky',
           top: 0,
           left: 0,
           right: 0,
           zIndex: 100,
-          background: 'rgba(245,243,240,0.92)',
+          background: 'rgba(245,243,240,0.95)',
           backdropFilter: 'blur(10px)',
           borderBottom: '1px solid rgba(0,0,0,0.04)',
         }}
       >
-        <div style={{ ...C.container, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '60px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div style={{ ...C.container, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '56px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <a
               href="/servicios"
               style={{
@@ -786,19 +883,56 @@ function ContablePage() {
             >
               &larr; Servicios
             </a>
-            <span style={{ fontSize: '18px', fontWeight: 700, color: granate }}>M&amp;A</span>
+            <span style={{ fontSize: '17px', fontWeight: 700, color: granate, letterSpacing: '-0.01em' }}>M&amp;A</span>
           </div>
-          <div style={{ display: 'flex', gap: '24px', fontSize: '13px', fontWeight: 500, color: textSecondary }}>
-            <span style={{ cursor: 'default' }}>Servicios</span>
-            <span style={{ cursor: 'default' }}>Equipo</span>
-            <span style={{ cursor: 'default' }}>Recursos</span>
-            <span style={{ cursor: 'default' }}>Contacto</span>
+          <div style={{ display: 'flex', gap: '20px', fontSize: '13px', fontWeight: 500, color: textSecondary }}>
+            {sectionIds.slice(1).map((id) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}
+              >
+                {sectionLabels[id]}
+              </a>
+            ))}
           </div>
         </div>
       </nav>
 
+      {/* ─── Sidebar (desktop) ─── */}
+      <aside className="ma-sidebar" style={{
+        position: 'fixed',
+        left: 'clamp(16px, calc((100vw - 1100px) / 2 - 130px), 32px)',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        zIndex: 50,
+        flexDirection: 'column',
+        gap: '20px',
+      }}>
+        {sectionIds.map((id) => (
+          <a
+            key={id}
+            href={`#${id}`}
+            data-sidebar-link={id}
+            style={{
+              fontSize: '12px',
+              color: textSecondary,
+              textDecoration: 'none',
+              fontWeight: 500,
+              position: 'relative',
+              transition: 'color 0.2s',
+              letterSpacing: '0.02em',
+            }}
+          >
+            {sectionLabels[id]}
+          </a>
+        ))}
+      </aside>
+
       {/* ─── Hero ─── */}
       <section
+        id="hero"
+        data-section="hero"
         style={{
           minHeight: '85dvh',
           display: 'flex',
@@ -868,11 +1002,11 @@ function ContablePage() {
             Liquidacion de sueldos, impuestos, contabilidad general y mas.
           </p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="#" style={ctaBtn()}>
+            <a href="#contacto" style={ctaBtn()}>
               Solicitar presupuesto
             </a>
             <a
-              href="#"
+              href="#servicios"
               style={{
                 ...ctaBtn(),
                 background: 'transparent',
@@ -886,18 +1020,20 @@ function ContablePage() {
         </div>
       </section>
 
-      {/* ─── Metrics ─── */}
-      <section style={{ padding: 'clamp(48px, 8vh, 72px) 24px', background: '#fff' }}>
+      {/* ─── Metrics (animated counters) ─── */}
+      <section id="metrics" data-section="metrics" style={{ padding: 'clamp(48px, 8vh, 72px) 24px', background: '#fff' }}>
         <div style={{ ...C.container, display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '32px' }}>
           {[
-            { num: '+12', label: 'anos de experiencia' },
-            { num: '+350', label: 'clientes activos' },
-            { num: '+2.000', label: 'declaraciones anuales' },
-            { num: '98%', label: 'retencion de clientes' },
+            { target: 12, suffix: '+', label: 'anos de experiencia', prefix: '' },
+            { target: 350, suffix: '+', label: 'clientes activos', prefix: '' },
+            { target: 2000, suffix: '+', label: 'declaraciones anuales', prefix: '' },
+            { target: 98, suffix: '%', label: 'retencion de clientes', prefix: '' },
           ].map((m) => (
             <div key={m.label} style={{ textAlign: 'center' }}>
               <div style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, color: granate, lineHeight: 1 }}>
-                {m.num}
+                <span className="ma-counter" data-count-to={m.target} data-count-suffix={m.suffix} data-count-prefix={m.prefix}>
+                  0{m.suffix === '+' ? '+' : '%'}
+                </span>
               </div>
               <div style={{ fontSize: '13px', color: textSecondary, marginTop: '6px' }}>{m.label}</div>
             </div>
@@ -905,20 +1041,160 @@ function ContablePage() {
         </div>
       </section>
 
-      {/* ─── Servicios ─── */}
-      <section style={{ padding: 'clamp(60px, 10vh, 100px) 24px' }}>
+      {/* ─── Proceso ─── */}
+      <section id="proceso" data-section="proceso" style={{
+        padding: 'clamp(60px, 10vh, 100px) 24px',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0, height: '40%',
+          background: bgSection,
+          zIndex: 0,
+          clipPath: 'polygon(0 0, 100% 0, 100% 70%, 0 100%)',
+        }} />
+        <div style={{ ...C.container, position: 'relative', zIndex: 1 }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <p style={{ fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: granate, fontWeight: 700, margin: '0 0 8px 0' }}>
+              Proceso
+            </p>
+            <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 700, margin: '0 0 12px 0', color: textPrimary }}>
+              Como trabajamos
+            </h2>
+            <p style={{ fontSize: '15px', color: textSecondary, maxWidth: '560px', margin: '0 auto', lineHeight: 1.6 }}>
+              Un proceso simple y transparente. Desde la primera consulta hasta el acompanamiento mensual.
+            </p>
+          </div>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '24px',
+          }}>
+            {proceso.map((p) => (
+              <div key={p.paso} className="ma-card-hover" style={{
+                background: '#fff',
+                borderRadius: '10px',
+                padding: '28px',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
+                border: '1px solid rgba(0,0,0,0.04)',
+                position: 'relative',
+              }}>
+                <div style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  background: granate,
+                  color: '#fff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '15px',
+                  fontWeight: 700,
+                  marginBottom: '14px',
+                }}>
+                  {p.paso}
+                </div>
+                <h3 style={{ fontSize: '15px', fontWeight: 600, margin: '0 0 8px 0', color: textPrimary }}>
+                  {p.titulo}
+                </h3>
+                <p style={{ fontSize: '13px', color: textSecondary, lineHeight: 1.6, margin: 0 }}>
+                  {p.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+          {proceso.length > 1 && (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: `repeat(${proceso.length - 1}, 1fr)`,
+              gap: '24px',
+              marginTop: '16px',
+              padding: '0 18px',
+            }}>
+              {Array.from({ length: proceso.length - 1 }).map((_, i) => (
+                <div key={i} style={{
+                  height: '2px',
+                  background: `rgba(122,26,26,0.10)`,
+                  borderRadius: '1px',
+                }} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ─── Timeline ─── */}
+      <section id="historia" data-section="historia" style={{
+        padding: 'clamp(60px, 10vh, 100px) 24px',
+        background: bgSection,
+      }}>
         <div style={C.container}>
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <p
-              style={{
-                fontSize: '11px',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color: granate,
-                fontWeight: 700,
-                margin: '0 0 8px 0',
-              }}
-            >
+            <p style={{ fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: granate, fontWeight: 700, margin: '0 0 8px 0' }}>
+              Historia
+            </p>
+            <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 700, margin: '0 0 12px 0', color: textPrimary }}>
+              Nuestra trayectoria
+            </h2>
+            <p style={{ fontSize: '15px', color: textSecondary, maxWidth: '560px', margin: '0 auto', lineHeight: 1.6 }}>
+              Desde 2012 acompanando el crecimiento de PyMEs y profesionales en Chascomus.
+            </p>
+          </div>
+          <div style={{ position: 'relative', maxWidth: '600px', margin: '0 auto' }}>
+            <div style={{
+              position: 'absolute',
+              left: '11px',
+              top: 0,
+              bottom: 0,
+              width: '2px',
+              background: `rgba(122,26,26,0.12)`,
+              borderRadius: '1px',
+            }} />
+            {timeline.map((t) => (
+              <div key={t.year} style={{
+                display: 'flex',
+                gap: '24px',
+                paddingBottom: '32px',
+                position: 'relative',
+              }}>
+                <div style={{
+                  width: '24px',
+                  height: '24px',
+                  borderRadius: '50%',
+                  background: granate,
+                  border: '3px solid #fff',
+                  boxShadow: '0 0 0 2px rgba(122,26,26,0.15)',
+                  flexShrink: 0,
+                  marginTop: '2px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#fff',
+                  fontSize: '9px',
+                  fontWeight: 700,
+                }}>
+                  {t.year.slice(2)}
+                </div>
+                <div>
+                  <div style={{ fontSize: '14px', fontWeight: 700, color: granate, marginBottom: '4px' }}>
+                    {t.year}
+                  </div>
+                  <p style={{ fontSize: '13px', color: textSecondary, lineHeight: 1.6, margin: 0 }}>
+                    {t.event}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Servicios (zigzag) ─── */}
+      <section id="servicios" data-section="servicios" style={{ padding: 'clamp(60px, 10vh, 100px) 24px' }}>
+        <div style={C.container}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <p style={{ fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: granate, fontWeight: 700, margin: '0 0 8px 0' }}>
               Servicios
             </p>
             <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 700, margin: '0 0 12px 0', color: textPrimary }}>
@@ -928,52 +1204,67 @@ function ContablePage() {
               Desde monotributo hasta sociedades completas. Te acompanamos en cada etapa de tu negocio.
             </p>
           </div>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '20px',
-            }}
-          >
-            {servicios.map((s) => (
-              <div
-                key={s.titulo}
-                style={{
-                  background: '#fff',
-                  borderRadius: '10px',
-                  padding: '28px',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
-                  transition: 'all 0.2s ease',
-                  border: '1px solid rgba(0,0,0,0.04)',
-                }}
-              >
-                <h3 style={{ fontSize: '16px', fontWeight: 600, margin: '0 0 8px 0', color: textPrimary }}>
-                  {s.titulo}
-                </h3>
-                <p style={{ fontSize: '13px', color: textSecondary, lineHeight: 1.6, margin: '0 0 12px 0' }}>
-                  {s.desc}
-                </p>
-                <span
-                  style={{
+          {servicios.map((s, i) => (
+            <div
+              key={s.titulo}
+              className="ma-card-hover"
+              style={{
+                display: 'flex',
+                flexDirection: i % 2 === 0 ? ('row' as const) : ('row-reverse' as const),
+                alignItems: 'center',
+                gap: 'clamp(24px, 4vw, 48px)',
+                marginBottom: i < servicios.length - 1 ? '24px' : 0,
+                background: i % 2 === 0 ? '#fff' : bgSection,
+                borderRadius: '12px',
+                padding: 'clamp(20px, 3vw, 32px)',
+              }}
+            >
+              <div style={{ flex: '1 1 55%' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 600, margin: 0, color: textPrimary }}>
+                    {s.titulo}
+                  </h3>
+                  <span style={{
                     fontSize: '11px',
                     color: granate,
                     fontWeight: 500,
-                    display: 'inline-block',
                     padding: '3px 10px',
                     borderRadius: '50px',
                     background: `rgba(122,26,26,0.06)`,
-                  }}
-                >
-                  {s.publico}
-                </span>
+                    whiteSpace: 'nowrap' as const,
+                  }}>
+                    {s.publico}
+                  </span>
+                </div>
+                <p style={{ fontSize: '13px', color: textSecondary, lineHeight: 1.6, margin: 0 }}>
+                  {s.desc}
+                </p>
+                <div style={{ marginTop: '12px', fontSize: '13px', color: granate, fontWeight: 600 }}>
+                  Desde $15.000/mes
+                </div>
               </div>
-            ))}
-          </div>
+              <div style={{
+                flex: '0 0 80px',
+                height: '80px',
+                borderRadius: '50%',
+                background: `linear-gradient(135deg, ${granate} 0%, ${granateLight} 100%)`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                fontSize: '28px',
+                fontWeight: 300,
+                fontFamily: 'serif',
+              }}>
+                {s.titulo[0]}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* ─── Why Us ─── */}
-      <section style={{ padding: 'clamp(60px, 10vh, 100px) 24px', background: bgSection }}>
+      <section id="por-que" data-section="por-que" style={{ padding: 'clamp(60px, 10vh, 100px) 24px' }}>
         <div style={C.container}>
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
             <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 700, margin: '0 0 12px 0', color: textPrimary }}>
@@ -983,29 +1274,30 @@ function ContablePage() {
               No somos un estudio mas. Estos son los valores que nos diferencian.
             </p>
           </div>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-              gap: '24px',
-            }}
-          >
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '24px',
+          }}>
             {diferenciales.map((d) => (
-              <div key={d.titulo} style={{ textAlign: 'center', padding: '32px 20px' }}>
-                <div
-                  style={{
-                    width: '48px',
-                    height: '48px',
-                    borderRadius: '50%',
-                    background: `rgba(122,26,26,0.08)`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 16px',
-                    fontSize: '20px',
-                    color: granate,
-                  }}
-                >
+              <div key={d.titulo} className="ma-card-hover" style={{
+                textAlign: 'center',
+                padding: '32px 20px',
+                background: bgSection,
+                borderRadius: '10px',
+              }}>
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  background: `rgba(122,26,26,0.08)`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 16px',
+                  fontSize: '20px',
+                  color: granate,
+                }}>
                   &#10003;
                 </div>
                 <h3 style={{ fontSize: '16px', fontWeight: 600, margin: '0 0 8px 0', color: textPrimary }}>
@@ -1021,19 +1313,10 @@ function ContablePage() {
       </section>
 
       {/* ─── Team ─── */}
-      <section style={{ padding: 'clamp(60px, 10vh, 100px) 24px' }}>
+      <section id="equipo" data-section="equipo" style={{ padding: 'clamp(60px, 10vh, 100px) 24px', background: bgSection }}>
         <div style={C.container}>
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <p
-              style={{
-                fontSize: '11px',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color: granate,
-                fontWeight: 700,
-                margin: '0 0 8px 0',
-              }}
-            >
+            <p style={{ fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: granate, fontWeight: 700, margin: '0 0 8px 0' }}>
               Equipo
             </p>
             <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 700, margin: '0 0 12px 0', color: textPrimary }}>
@@ -1043,40 +1326,33 @@ function ContablePage() {
               Detras de cada servicio hay personas comprometidas con tu tranquilidad fiscal.
             </p>
           </div>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-              gap: '24px',
-            }}
-          >
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gap: '24px',
+          }}>
             {equipo.map((m) => (
-              <div
-                key={m.nombre}
-                style={{
-                  background: '#fff',
-                  borderRadius: '10px',
-                  padding: '28px',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
-                  textAlign: 'center',
-                  border: '1px solid rgba(0,0,0,0.04)',
-                }}
-              >
-                <div
-                  style={{
-                    width: '72px',
-                    height: '72px',
-                    borderRadius: '50%',
-                    background: `linear-gradient(135deg, ${granate} 0%, ${granateLight} 100%)`,
-                    margin: '0 auto 16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#fff',
-                    fontSize: '24px',
-                    fontWeight: 600,
-                  }}
-                >
+              <div key={m.nombre} className="ma-card-hover" style={{
+                background: '#fff',
+                borderRadius: '10px',
+                padding: '28px',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
+                textAlign: 'center',
+                border: '1px solid rgba(0,0,0,0.04)',
+              }}>
+                <div style={{
+                  width: '72px',
+                  height: '72px',
+                  borderRadius: '50%',
+                  background: `linear-gradient(135deg, ${granate} 0%, ${granateLight} 100%)`,
+                  margin: '0 auto 16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#fff',
+                  fontSize: '24px',
+                  fontWeight: 600,
+                }}>
                   {m.nombre.split(' ')[1][0]}
                 </div>
                 <h3 style={{ fontSize: '16px', fontWeight: 600, margin: '0 0 2px 0', color: textPrimary }}>
@@ -1094,20 +1370,11 @@ function ContablePage() {
         </div>
       </section>
 
-      {/* ─── Recursos ─── */}
-      <section style={{ padding: 'clamp(60px, 10vh, 100px) 24px', background: bgSection }}>
+      {/* ─── Recursos con popover ─── */}
+      <section id="recursos" data-section="recursos" style={{ padding: 'clamp(60px, 10vh, 100px) 24px' }}>
         <div style={C.container}>
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <p
-              style={{
-                fontSize: '11px',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color: granate,
-                fontWeight: 700,
-                margin: '0 0 8px 0',
-              }}
-            >
+            <p style={{ fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: granate, fontWeight: 700, margin: '0 0 8px 0' }}>
               Recursos
             </p>
             <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 700, margin: '0 0 12px 0', color: textPrimary }}>
@@ -1117,73 +1384,163 @@ function ContablePage() {
               Informacion util para mantenerte al dia con tus obligaciones fiscales.
             </p>
           </div>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '24px',
-            }}
-          >
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '24px',
+          }}>
             {recursos.map((r) => (
-              <div
-                key={r.titulo}
-                style={{
-                  background: '#fff',
-                  borderRadius: '10px',
-                  padding: '28px',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
-                  border: '1px solid rgba(0,0,0,0.04)',
-                }}
-              >
+              <div key={r.titulo}>
                 <div
+                  className="ma-popover-card"
                   style={{
+                    background: '#fff',
+                    borderRadius: '10px',
+                    padding: '28px',
+                    boxShadow: '0 1px 4px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
+                    border: '1px solid rgba(0,0,0,0.04)',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <div style={{
                     width: '36px',
                     height: '4px',
                     borderRadius: '2px',
                     background: granate,
                     marginBottom: '16px',
-                  }}
-                />
-                <h3 style={{ fontSize: '16px', fontWeight: 600, margin: '0 0 8px 0', color: textPrimary }}>
-                  {r.titulo}
-                </h3>
-                <p style={{ fontSize: '13px', color: textSecondary, lineHeight: 1.6, margin: '0 0 16px 0' }}>
-                  {r.desc}
-                </p>
-                <a
-                  href="#"
+                  }} />
+                  <h3 style={{ fontSize: '16px', fontWeight: 600, margin: '0 0 8px 0', color: textPrimary }}>
+                    {r.titulo}
+                  </h3>
+                  <p style={{ fontSize: '13px', color: textSecondary, lineHeight: 1.6, margin: '0 0 16px 0' }}>
+                    {r.desc}
+                  </p>
+                  <button
+                    data-popover={r.id}
+                    style={{
+                      fontSize: '13px',
+                      color: granate,
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: 0,
+                      fontFamily: 'inherit',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                    }}
+                  >
+                    Leer articulo &rarr;
+                  </button>
+                </div>
+                <div
+                  id={r.id}
+                  popover="auto"
                   style={{
-                    fontSize: '13px',
-                    color: granate,
-                    fontWeight: 600,
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
+                    maxWidth: '400px',
+                    padding: '24px',
+                    borderRadius: '10px',
+                    border: `1px solid rgba(122,26,26,0.15)`,
+                    background: '#fff',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.10)',
+                    fontFamily: "'Inter', system-ui, sans-serif",
+                    lineHeight: 1.6,
+                    fontSize: '14px',
+                    color: textPrimary,
                   }}
                 >
-                  Leer articulo &rarr;
-                </a>
+                  <h3 style={{ fontSize: '16px', fontWeight: 600, margin: '0 0 12px 0', color: textPrimary }}>
+                    {r.titulo}
+                  </h3>
+                  <p style={{ margin: '0 0 16px 0', color: textSecondary }}>
+                    {r.popoverContent}
+                  </p>
+                  <button
+                    popoverTarget={r.id}
+                    popoverTargetAction="hide"
+                    style={{
+                      ...ctaBtn({ padding: '8px 20px', fontSize: '12px' }),
+                    }}
+                  >
+                    Cerrar
+                  </button>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* ─── FAQ con acordeon nativo ─── */}
+      <section id="faq" data-section="faq" style={{ padding: 'clamp(60px, 10vh, 100px) 24px', background: bgSection }}>
+        <div style={C.container}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <p style={{ fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: granate, fontWeight: 700, margin: '0 0 8px 0' }}>
+              FAQ
+            </p>
+            <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 700, margin: '0 0 12px 0', color: textPrimary }}>
+              Preguntas frecuentes
+            </h2>
+            <p style={{ fontSize: '15px', color: textSecondary, maxWidth: '560px', margin: '0 auto', lineHeight: 1.6 }}>
+              Las dudas mas comunes que recibimos. Si tenes otra, consultanos sin compromiso.
+            </p>
+          </div>
+          <div style={{ maxWidth: '640px', margin: '0 auto' }}>
+            {faq.map((item) => (
+              <details
+                key={item.q}
+                name="ma-faq"
+                style={{
+                  background: '#fff',
+                  borderRadius: '8px',
+                  marginBottom: '8px',
+                  border: '1px solid rgba(0,0,0,0.04)',
+                  overflow: 'hidden',
+                }}
+              >
+                <summary style={{
+                  padding: '16px 20px',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  color: textPrimary,
+                  cursor: 'pointer',
+                  listStyle: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  userSelect: 'none' as const,
+                }}>
+                  {item.q}
+                  <span style={{
+                    fontSize: '16px',
+                    color: granate,
+                    transition: 'transform 0.2s',
+                    display: 'inline-block',
+                  }}>
+                    +
+                  </span>
+                </summary>
+                <div style={{
+                  padding: '0 20px 16px',
+                  fontSize: '13px',
+                  color: textSecondary,
+                  lineHeight: 1.6,
+                }}>
+                  {item.a}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── Contact ─── */}
-      <section style={{ padding: 'clamp(60px, 10vh, 100px) 24px' }}>
+      <section id="contacto" data-section="contacto" style={{ padding: 'clamp(60px, 10vh, 100px) 24px' }}>
         <div style={{ ...C.container, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '48px' }}>
           <div>
-            <p
-              style={{
-                fontSize: '11px',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color: granate,
-                fontWeight: 700,
-                margin: '0 0 8px 0',
-              }}
-            >
+            <p style={{ fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: granate, fontWeight: 700, margin: '0 0 8px 0' }}>
               Contacto
             </p>
             <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 32px)', fontWeight: 700, margin: '0 0 16px 0', color: textPrimary }}>
@@ -1198,16 +1555,33 @@ function ContablePage() {
               <div><strong style={{ color: textPrimary }}>Email:</strong> estudio@mya-contable.com.ar</div>
               <div><strong style={{ color: textPrimary }}>Horario:</strong> Lun a Vie 9:00 - 18:00</div>
             </div>
+            <div style={{
+              marginTop: '20px',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              border: '1px solid rgba(0,0,0,0.06)',
+              height: '160px',
+              background: bgSection,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '12px',
+              color: textSecondary,
+            }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: granate, marginBottom: '4px' }}>Av. Lastra 320</div>
+                <div>Chascomus, Provincia de Buenos Aires</div>
+                <div style={{ marginTop: '8px', fontSize: '11px', color: granate }}>Ver en Google Maps &rarr;</div>
+              </div>
+            </div>
           </div>
-          <div
-            style={{
-              background: '#fff',
-              borderRadius: '10px',
-              padding: '32px',
-              boxShadow: '0 1px 4px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
-              border: '1px solid rgba(0,0,0,0.04)',
-            }}
-          >
+          <div style={{
+            background: '#fff',
+            borderRadius: '10px',
+            padding: '32px',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
+            border: '1px solid rgba(0,0,0,0.04)',
+          }}>
             <div style={{ marginBottom: '20px' }}>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: textPrimary, marginBottom: '6px' }}>
                 Nombre
@@ -1271,33 +1645,294 @@ function ContablePage() {
         </div>
       </section>
 
-      {/* ─── Footer ─── */}
-      <footer
-        style={{
-          padding: '40px 24px',
-          background: granateDark,
-          color: 'rgba(255,255,255,0.7)',
+      {/* ─── Footer sitemap ─── */}
+      <footer style={{
+        padding: '48px 24px 32px',
+        background: granateDark,
+        color: 'rgba(255,255,255,0.7)',
+        fontSize: '13px',
+      }}>
+        <div style={{
+          ...C.container,
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+          gap: '32px',
+        }}>
+          <div>
+            <div style={{ fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '12px' }}>M&amp;A</div>
+            <p style={{ margin: 0, lineHeight: 1.6, fontSize: '12px' }}>
+              Estudio Contable. Mas de 12 anos de experiencia asesorando a PyMEs y profesionales en Chascomus.
+            </p>
+          </div>
+          <div>
+            <div style={{ fontSize: '12px', fontWeight: 600, color: '#fff', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Servicios</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '12px' }}>
+              <span>Liquidacion de Sueldos</span>
+              <span>Impuestos (IVA, Ganancias)</span>
+              <span>Contabilidad General</span>
+              <span>Monotributo</span>
+              <span>Sociedades y Empresas</span>
+              <span>Auditoria y Balances</span>
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: '12px', fontWeight: 600, color: '#fff', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Contacto</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '12px' }}>
+              <span>Av. Lastra 320, Chascomus</span>
+              <span>(02241) 45-6789</span>
+              <span>estudio@mya-contable.com.ar</span>
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: '12px', fontWeight: 600, color: '#fff', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Horarios</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '12px' }}>
+              <span>Lun a Vie: 9:00 - 18:00</span>
+              <span>Sab: 9:00 - 12:00</span>
+              <span>WhatsApp: hasta 20:00</span>
+            </div>
+          </div>
+        </div>
+        <div style={{
+          ...C.container,
+          marginTop: '32px',
+          paddingTop: '16px',
+          borderTop: '1px solid rgba(255,255,255,0.08)',
           textAlign: 'center',
-          fontSize: '12px',
-        }}
-      >
-        <div style={C.container}>
-          <div style={{ fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>M&amp;A</div>
-          <p style={{ margin: '0 0 16px 0', lineHeight: 1.6 }}>
-            Estudio Contable &mdash; Av. Lastra 320, Chascomus, Provincia de Buenos Aires
-          </p>
-          <div
-            style={{
-              width: '32px',
-              height: '2px',
-              background: 'rgba(255,255,255,0.15)',
-              margin: '0 auto 16px',
-              borderRadius: '2px',
-            }}
-          />
-          <p style={{ margin: 0 }}>&copy; 2026 M&amp;A Estudio Contable. Todos los derechos reservados.</p>
+          fontSize: '11px',
+        }}>
+          &copy; 2026 M&amp;A Estudio Contable. Todos los derechos reservados.
         </div>
       </footer>
+
+      {/* ─── Floating consulta dialog ─── */}
+      <button
+        id="consulta-btn"
+        style={{
+          position: 'fixed',
+          bottom: 'clamp(80px, 10vh, 100px)',
+          right: '24px',
+          zIndex: 200,
+          width: '56px',
+          height: '56px',
+          borderRadius: '50%',
+          background: granate,
+          color: '#fff',
+          border: 'none',
+          cursor: 'pointer',
+          boxShadow: '0 4px 16px rgba(122,26,26,0.35)',
+          fontSize: '22px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'transform 0.2s ease',
+        }}
+        title="Consulta gratis"
+        aria-label="Abrir consulta rapida"
+      >
+        &#9993;
+      </button>
+
+      <dialog
+        id="consulta-dialog"
+        closedby="any"
+        style={{
+          borderRadius: '12px',
+          border: 'none',
+          padding: '32px',
+          maxWidth: '400px',
+          width: 'calc(100% - 48px)',
+          boxShadow: '0 16px 48px rgba(0,0,0,0.15)',
+          fontFamily: "'Inter', system-ui, sans-serif",
+        }}
+      >
+        <form method="dialog">
+          <h2 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 4px 0', color: textPrimary }}>
+            Consulta gratis
+          </h2>
+          <p style={{ fontSize: '13px', color: textSecondary, margin: '0 0 20px 0', lineHeight: 1.5 }}>
+            Dejanos tu consulta y te respondemos en menos de 24h.
+          </p>
+          <div style={{ marginBottom: '16px' }}>
+            <input
+              style={{
+                width: '100%',
+                padding: '10px 14px',
+                borderRadius: '6px',
+                border: '1px solid rgba(0,0,0,0.08)',
+                fontSize: '14px',
+                background: bgWarm,
+                fontFamily: 'inherit',
+                boxSizing: 'border-box',
+              }}
+              placeholder="Nombre"
+              aria-label="Nombre"
+            />
+          </div>
+          <div style={{ marginBottom: '16px' }}>
+            <input
+              style={{
+                width: '100%',
+                padding: '10px 14px',
+                borderRadius: '6px',
+                border: '1px solid rgba(0,0,0,0.08)',
+                fontSize: '14px',
+                background: bgWarm,
+                fontFamily: 'inherit',
+                boxSizing: 'border-box',
+              }}
+              type="tel"
+              placeholder="Telefono"
+              aria-label="Telefono"
+            />
+          </div>
+          <div style={{ marginBottom: '20px' }}>
+            <textarea
+              style={{
+                width: '100%',
+                padding: '10px 14px',
+                borderRadius: '6px',
+                border: '1px solid rgba(0,0,0,0.08)',
+                fontSize: '14px',
+                background: bgWarm,
+                fontFamily: 'inherit',
+                boxSizing: 'border-box',
+                resize: 'vertical',
+                minHeight: '60px',
+              }}
+              placeholder="Tu consulta..."
+              aria-label="Tu consulta"
+            />
+          </div>
+          <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+            <button
+              type="reset"
+              style={{
+                padding: '10px 24px',
+                borderRadius: '6px',
+                border: '1px solid rgba(0,0,0,0.08)',
+                background: '#fff',
+                color: textSecondary,
+                fontSize: '13px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+              }}
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              style={{
+                ...ctaBtn({ padding: '10px 24px', fontSize: '13px' }),
+              }}
+            >
+              Enviar
+            </button>
+          </div>
+        </form>
+      </dialog>
+
+      {/* ─── Sticky Mobile CTA ─── */}
+      <div className="ma-mobile-cta" style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 150,
+        background: '#fff',
+        borderTop: '1px solid rgba(0,0,0,0.06)',
+        padding: '12px 24px',
+        display: 'none',
+        boxShadow: '0 -4px 12px rgba(0,0,0,0.04)',
+      }}>
+        <a href="#contacto" style={{
+          ...ctaBtn({ width: '100%', textAlign: 'center', padding: '12px' }),
+        }}>
+          Solicitar presupuesto gratis
+        </a>
+      </div>
+
+      {/* ─── Script de interactividad ─── */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(function(){
+  'use strict';
+
+  var btn = document.getElementById('consulta-btn');
+  var dialog = document.getElementById('consulta-dialog');
+  if (btn && dialog) {
+    btn.addEventListener('click', function(){ dialog.showModal(); });
+  }
+
+  var popoverBtns = document.querySelectorAll('[data-popover]');
+  popoverBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      var target = document.getElementById(b.getAttribute('data-popover'));
+      if (target && target.togglePopover) target.togglePopover();
+    });
+  });
+
+  var metricsSection = document.getElementById('metrics');
+  var countersAnimated = false;
+  if (metricsSection && !countersAnimated) {
+    var mo = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting && !countersAnimated) {
+          countersAnimated = true;
+          var counters = entry.target.querySelectorAll('[data-count-to]');
+          counters.forEach(function(el){
+            var target = parseInt(el.getAttribute('data-count-to'), 10);
+            var suffix = el.getAttribute('data-count-suffix') || '';
+            var prefix = el.getAttribute('data-count-prefix') || '';
+            var duration = 1500;
+            var start = performance.now();
+            function update(now){
+              var progress = Math.min((now - start) / duration, 1);
+              var eased = 1 - Math.pow(1 - progress, 3);
+              var current = Math.floor(eased * target);
+              el.textContent = prefix + current + suffix;
+              if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+          });
+          mo.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    mo.observe(metricsSection);
+  }
+
+  var sidebarLinks = document.querySelectorAll('[data-sidebar-link]');
+  var sections = document.querySelectorAll('[data-section]');
+  if (sidebarLinks.length && sections.length) {
+    var so = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          sidebarLinks.forEach(function(l){ l.classList.remove('active'); });
+          var active = document.querySelector('[data-sidebar-link="' + entry.target.id + '"]');
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { threshold: 0.25, rootMargin: '-80px 0px -40% 0px' });
+    sections.forEach(function(s){ so.observe(s); });
+  }
+
+  var detailsList = document.querySelectorAll('details[name="ma-faq"] details');
+  detailsList.forEach(function(d){
+    d.addEventListener('toggle', function(){
+      if (d.open) {
+        var icon = d.querySelector('summary span');
+        if (icon) icon.style.transform = 'rotate(45deg)';
+      } else {
+        var icon = d.querySelector('summary span');
+        if (icon) icon.style.transform = 'rotate(0deg)';
+      }
+    });
+  });
+})();`,
+        }}
+      />
+
     </div>
   );
 }
