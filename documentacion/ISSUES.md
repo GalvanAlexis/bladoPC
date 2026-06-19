@@ -8,10 +8,6 @@
 
 | ID | Título | Prioridad | Etiquetas |
 |---|---|---|---|
-| [ISS-063](./issues/ISS-063_servicios-acordion.md) | Accordion colapsable en catalogo de servicios | 🟡 Media | `fix`, `frontend` |
-| [ISS-062](./issues/ISS-062_automatizaciones-ejemplos.md) | Ejemplos de automatizaciones con IA | 🟡 Media | `fix`, `frontend` |
-| [ISS-061](./issues/ISS-061_servicios-catalogo.md) | Catalogo completo de servicios web/SaaS/software | 🟡 Media | `feature`, `frontend` |
-| [ISS-060](./issues/ISS-060_servicios-chascomus.md) | Exclusividad Chascomus y pagina servicios | 🟡 Media | `feature`, `frontend` |
 | [ISS-016](./issues/ISS-016_vercel-deploy.md) | Deploy a Vercel | 🟢 Baja | `devops`, `deploy` |
 
 ---
@@ -29,6 +25,10 @@
 | ISS-049 | HomeLayout y rediseño Landing | 2026-06-09 |
 | ISS-048 | Sidebar rediseño corporativo | 2026-06-09 |
 | [ISS-068](./issues/ISS-068_mantenimiento-general.md) | Mantenimiento general y limpieza de legacy + optimizacion home | 2026-06-19 |
+| [ISS-063](./issues/ISS-063_servicios-acordion.md) | Accordion colapsable en catalogo de servicios | 2026-06-18 |
+| [ISS-062](./issues/ISS-062_automatizaciones-ejemplos.md) | Ejemplos de automatizaciones con IA | 2026-06-18 |
+| [ISS-061](./issues/ISS-061_servicios-catalogo.md) | Catalogo completo de servicios web/SaaS/software | 2026-06-19 |
+| [ISS-060](./issues/ISS-060_servicios-chascomus.md) | Exclusividad Chascomus y pagina servicios | 2026-06-19 |
 | [ISS-059](./issues/ISS-059_hardening-seguridad-calidad.md) | Hardening de seguridad y calidad de codigo | 2026-06-15 |
 | [ISS-024](./issues/ISS-024_filosofia-chat-context.md) | Conectar Carpeta Filosofía con Blado y Chat | 2026-05-18 |
 | [ISS-020](./issues/ISS-020_prisma-supabase-setup.md) | Setup Prisma + Supabase | 2026-05-17 |
