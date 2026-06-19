@@ -13,6 +13,10 @@ const EJEMPLOS: Record<string, { title: string; desc: string }> = {
     title: 'Vortex Magazine',
     desc: 'Magazine digital multi-categoria con articulos, busqueda y panel de administracion.',
   },
+  delivery: {
+    title: 'Sabor Express — Delivery de Comida',
+    desc: 'Plataforma de delivery con menu interactivo, carrito, checkout y panel admin.',
+  },
 };
 
 export function generateStaticParams() {

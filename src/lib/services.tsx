@@ -94,6 +94,14 @@ export const CATALOGO: ServiceItem[] = [
     description: 'Tienda online completa: catalogo de productos, carrito de compras, pasarela de pago, gestion de stock, pedidos y notificaciones. Escalable de pequeño a gran volumen.',
     persona: 'Comercios, marcas, distribuidores, emprendedores de producto.',
     complexity: 'media',
+    ejemploSlug: 'delivery',
+    examples: [
+      {
+        title: 'Sabor Express — Delivery de Comida',
+        desc: 'Plataforma de pedidos de comida rapida con menu por categorias, carrito interactivo, checkout con formulario y panel admin con dashboard de ventas y gestion de pedidos.',
+        benefit: 'Demuestra un e-commerce funcional completo: navegacion de productos, carrito persistente, flujo de compra y administracion. Ideal para comercios gastronomicos y delivery.',
+      },
+    ],
   },
   {
     id: 'pwa',
