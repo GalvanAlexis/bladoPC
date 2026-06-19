@@ -117,12 +117,7 @@ export default function ServicesSection() {
             marginBottom: '12px',
           }}
         >
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
-            Servicios IT
-            <span style={{ fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent)', border: '1px solid var(--accent)', borderRadius: '4px', padding: '2px 8px', fontWeight: 600 }}>
-              Exclusivo Chascomus
-            </span>
-          </span>
+          Servicios IT
         </p>
         <h2
           className="reveal"
