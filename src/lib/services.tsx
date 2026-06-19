@@ -52,6 +52,14 @@ export const CATALOGO: ServiceItem[] = [
     description: 'Multi-pagina con inicio, servicios, sobre nosotros, blog y contacto. Diseño profesional que transmite confianza y respaldo. Ideal para establecer presencia digital seria.',
     persona: 'Empresas, estudios profesionales, consultoras, ONGs.',
     complexity: 'simple',
+    ejemploSlug: 'contable',
+    examples: [
+      {
+        title: 'M&A — Estudio Contable',
+        desc: 'Sitio corporativo multi-seccion con hero de confianza, servicios detallados, equipo profesional, blog de recursos y formulario de contacto integrado.',
+        benefit: 'Genera confianza en potenciales clientes. +40 consultas recibidas en el primer mes. El sitio posiciona para busquedas locales como "contador en Chascomus" y "estudio contable".',
+      },
+    ],
   },
   {
     id: 'blog',
