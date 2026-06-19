@@ -228,7 +228,7 @@ export default function ServiciosCatalogo() {
                               margin: 0,
                             }}
                           >
-                            Ejemplos con IA
+                            Ejemplo web
                           </p>
                           {svc.examples.map((ex, i) => (
                             <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
