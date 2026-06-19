@@ -691,12 +691,12 @@ const equipo = [
   {
     nombre: 'CPN Martin Martinez',
     rol: 'Socio Fundador',
-    bio: 'Contador Publico (UBA). Especialista en Impuestos. +15 anos de experiencia en asesoria impositiva a PyMEs.',
+    bio: 'Contador Publico (UBA). Especialista en Impuestos. +15 años de experiencia en asesoria impositiva a PyMEs.',
   },
   {
     nombre: 'Cra. Laura Gomez',
     rol: 'Socia',
-    bio: 'Contadora Publica (UNLP). Especialista en Liquidacion de Sueldos. +12 anos liderando el area laboral.',
+    bio: 'Contadora Publica (UNLP). Especialista en Liquidacion de Sueldos. +12 años liderando el area laboral.',
   },
   {
     nombre: 'CPN Federico Lopez',
@@ -998,7 +998,7 @@ function ContablePage() {
               marginInline: 'auto',
             }}
           >
-            Mas de 12 anos asesorando a PyMEs, comercios y profesionales en Chascomus y la region.
+            Mas de 12 años asesorando a PyMEs, comercios y profesionales en Chascomus y la region.
             Liquidacion de sueldos, impuestos, contabilidad general y mas.
           </p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -1024,7 +1024,7 @@ function ContablePage() {
       <section id="metrics" data-section="metrics" style={{ padding: 'clamp(48px, 8vh, 72px) 24px', background: '#fff' }}>
         <div style={{ ...C.container, display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '32px' }}>
           {[
-            { target: 12, suffix: '+', label: 'anos de experiencia', prefix: '' },
+            { target: 12, suffix: '+', label: 'años de experiencia', prefix: '' },
             { target: 350, suffix: '+', label: 'clientes activos', prefix: '' },
             { target: 2000, suffix: '+', label: 'declaraciones anuales', prefix: '' },
             { target: 98, suffix: '%', label: 'retencion de clientes', prefix: '' },
@@ -1063,7 +1063,7 @@ function ContablePage() {
               Como trabajamos
             </h2>
             <p style={{ fontSize: '15px', color: textSecondary, maxWidth: '560px', margin: '0 auto', lineHeight: 1.6 }}>
-              Un proceso simple y transparente. Desde la primera consulta hasta el acompanamiento mensual.
+              Un proceso simple y transparente. Desde la primera consulta hasta el acompañamiento mensual.
             </p>
           </div>
           <div style={{
@@ -1138,7 +1138,7 @@ function ContablePage() {
               Nuestra trayectoria
             </h2>
             <p style={{ fontSize: '15px', color: textSecondary, maxWidth: '560px', margin: '0 auto', lineHeight: 1.6 }}>
-              Desde 2012 acompanando el crecimiento de PyMEs y profesionales en Chascomus.
+              Desde 2012 acompañando el crecimiento de PyMEs y profesionales en Chascomus.
             </p>
           </div>
           <div style={{ position: 'relative', maxWidth: '600px', margin: '0 auto' }}>
@@ -1201,7 +1201,7 @@ function ContablePage() {
               Todo lo que tu negocio necesita
             </h2>
             <p style={{ fontSize: '15px', color: textSecondary, maxWidth: '560px', margin: '0 auto', lineHeight: 1.6 }}>
-              Desde monotributo hasta sociedades completas. Te acompanamos en cada etapa de tu negocio.
+              Desde monotributo hasta sociedades completas. Te acompañamos en cada etapa de tu negocio.
             </p>
           </div>
           {servicios.map((s, i) => (
@@ -1661,7 +1661,7 @@ function ContablePage() {
           <div>
             <div style={{ fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '12px' }}>M&amp;A</div>
             <p style={{ margin: 0, lineHeight: 1.6, fontSize: '12px' }}>
-              Estudio Contable. Mas de 12 anos de experiencia asesorando a PyMEs y profesionales en Chascomus.
+              Estudio Contable. Mas de 12 años de experiencia asesorando a PyMEs y profesionales en Chascomus.
             </p>
           </div>
           <div>
