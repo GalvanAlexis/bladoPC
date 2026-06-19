@@ -5,7 +5,7 @@
  * Sección interactiva de servicios orientada a clientes y pymes,
  * con expansión a través de layoutId de framer-motion.
  */
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const SERVICES = [
@@ -55,12 +55,21 @@ const SERVICES = [
 
 export default function ServicesSection() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (selectedId) {
+      videoRef.current?.pause();
+    } else {
+      videoRef.current?.play();
+    }
+  }, [selectedId]);
 
   return (
     <section
       id="servicios"
       aria-label="Servicios"
-      className="section-padding section-lazy"
+      className="section-padding"
       style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#050505' }}
     >
       {/* Video Background */}
@@ -72,6 +81,7 @@ export default function ServicesSection() {
         }}
       >
         <video
+          ref={videoRef}
           src="/video/Mind-explosion.mp4"
           autoPlay
           loop
