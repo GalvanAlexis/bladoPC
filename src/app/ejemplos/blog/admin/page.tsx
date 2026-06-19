@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
 
 const accent = '#4f46e5';
 const accentLight = '#6366f1';
@@ -22,33 +25,16 @@ const stats = [
 ];
 
 export default function VortexAdmin() {
-  return (
-    <div style={{
-      fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
-      background: '#f9fafb', color: '#1a1a2e', minHeight: '100dvh',
-    }}>
-      <style>{`
-        .va-login {
-          min-height: 100dvh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .va-modal {
-          padding: 24px;
-          border-radius: 14px;
-          border: 1px solid #e5e7eb;
-          max-width: 480px;
-          width: 90vw;
-        }
-        .va-modal::backdrop {
-          background: rgba(0,0,0,0.3);
-        }
-      `}</style>
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-      {/* ─── Login Panel ─── */}
-      <div className="va-login">
+  if (!loggedIn) {
+    return (
+      <div style={{
+        fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
+        minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      }}>
         <div style={{
           background: '#fff', borderRadius: '20px', padding: '40px',
           width: 'min(380px, 90vw)', boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
@@ -97,8 +83,8 @@ export default function VortexAdmin() {
               />
             </div>
             <button
-              id="va-login-btn"
               type="button"
+              onClick={() => setLoggedIn(true)}
               style={{
                 width: '100%', padding: '12px', borderRadius: '8px', border: 'none',
                 background: `linear-gradient(135deg, ${accent}, ${accentLight})`,
@@ -117,263 +103,222 @@ export default function VortexAdmin() {
           </p>
         </div>
       </div>
+    );
+  }
 
-      {/* ─── Template for dashboard (shown after login via JS) ─── */}
-      <div id="va-dashboard" style={{ display: 'none' }}>
-        <header style={{
-          background: '#fff', borderBottom: '1px solid #e5e7eb',
-          position: 'sticky', top: 0, zIndex: 100,
+  return (
+    <div style={{
+      fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
+      background: '#f9fafb', color: '#1a1a2e', minHeight: '100dvh',
+    }}>
+      <header style={{
+        background: '#fff', borderBottom: '1px solid #e5e7eb',
+        position: 'sticky', top: 0, zIndex: 100,
+      }}>
+        <div style={{
+          maxWidth: '1100px', margin: '0 auto', padding: '0 24px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          height: '60px',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <Link href="/ejemplos/blog" style={{
+              fontSize: '13px', color: '#6b7280', textDecoration: 'none', fontWeight: 500,
+            }}>
+              &larr; Vortex
+            </Link>
+            <span style={{ fontSize: '17px', fontWeight: 800, color: accent, letterSpacing: '-0.03em' }}>
+              Admin
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setLoggedIn(false)}
+            style={{
+              padding: '8px 16px', borderRadius: '8px', border: '1px solid #e5e7eb',
+              background: '#fff', fontSize: '13px', fontWeight: 500, cursor: 'pointer', color: '#6b7280',
+            }}
+          >
+            Cerrar sesion
+          </button>
+        </div>
+      </header>
+
+      <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px' }}>
+        <h1 style={{ fontSize: '24px', fontWeight: 700, margin: '0 0 24px 0', color: '#1a1a2e' }}>
+          Dashboard
+        </h1>
+
+        <div style={{
+          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+          gap: '16px', marginBottom: '32px',
+        }}>
+          {stats.map((s) => (
+            <div key={s.label} style={{
+              background: '#fff', borderRadius: '12px', padding: '24px', border: '1px solid #e5e7eb',
+            }}>
+              <div style={{ fontSize: '28px', fontWeight: 800, color: s.color, lineHeight: 1 }}>
+                {s.value}
+              </div>
+              <div style={{ fontSize: '13px', color: '#6b7280', marginTop: '4px' }}>
+                {s.label}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{
+          background: '#fff', borderRadius: '12px', border: '1px solid #e5e7eb', overflow: 'hidden',
         }}>
           <div style={{
-            maxWidth: '1100px', margin: '0 auto', padding: '0 24px',
+            padding: '20px 24px', borderBottom: '1px solid #e5e7eb',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            height: '60px',
+            flexWrap: 'wrap', gap: '12px',
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <Link href="/ejemplos/blog" style={{
-                fontSize: '13px', color: '#6b7280', textDecoration: 'none',
-                fontWeight: 500,
-              }}>
-                &larr; Vortex
-              </Link>
-              <span style={{ fontSize: '17px', fontWeight: 800, color: accent, letterSpacing: '-0.03em' }}>
-                Admin
-              </span>
-            </div>
+            <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, color: '#1a1a2e' }}>
+              Posts
+            </h2>
             <button
-              id="va-logout"
+              type="button"
+              onClick={() => setShowModal(true)}
               style={{
-                padding: '8px 16px', borderRadius: '8px', border: '1px solid #e5e7eb',
-                background: '#fff', fontSize: '13px', fontWeight: 500, cursor: 'pointer',
-                color: '#6b7280',
+                padding: '8px 20px', borderRadius: '8px', border: 'none',
+                background: accent, color: '#fff', fontSize: '13px', fontWeight: 600, cursor: 'pointer',
               }}
             >
-              Cerrar sesion
+              + Nuevo post
             </button>
           </div>
-        </header>
 
-        <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 700, margin: '0 0 24px 0', color: '#1a1a2e' }}>
-            Dashboard
-          </h1>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
+                  <th style={{ padding: '12px 20px', textAlign: 'left', fontWeight: 600, color: '#6b7280', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Titulo</th>
+                  <th style={{ padding: '12px 20px', textAlign: 'left', fontWeight: 600, color: '#6b7280', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Categoria</th>
+                  <th style={{ padding: '12px 20px', textAlign: 'left', fontWeight: 600, color: '#6b7280', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Estado</th>
+                  <th style={{ padding: '12px 20px', textAlign: 'left', fontWeight: 600, color: '#6b7280', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Visitas</th>
+                  <th style={{ padding: '12px 20px', textAlign: 'left', fontWeight: 600, color: '#6b7280', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {POSTS_DATA.map((p, i) => (
+                  <tr key={p.id} style={{
+                    borderBottom: '1px solid #f3f4f6', background: i % 2 === 0 ? '#fff' : '#fafafa',
+                  }}>
+                    <td style={{ padding: '12px 20px', fontWeight: 600, color: '#1a1a2e' }}>
+                      <Link href={`/ejemplos/blog/${p.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                        {p.title}
+                      </Link>
+                    </td>
+                    <td style={{ padding: '12px 20px', color: '#6b7280' }}>{p.category}</td>
+                    <td style={{ padding: '12px 20px' }}>
+                      <span style={{
+                        display: 'inline-block', padding: '2px 10px', borderRadius: '50px',
+                        fontSize: '11px', fontWeight: 600,
+                        background: p.status === 'published' ? 'rgba(5,150,105,0.1)' : 'rgba(217,119,6,0.1)',
+                        color: p.status === 'published' ? '#059669' : '#d97706',
+                      }}>
+                        {p.status === 'published' ? 'Publicado' : 'Borrador'}
+                      </span>
+                    </td>
+                    <td style={{ padding: '12px 20px', color: '#6b7280' }}>{p.views.toLocaleString()}</td>
+                    <td style={{ padding: '12px 20px' }}>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <button type="button" onClick={() => setShowModal(true)} style={{
+                          padding: '4px 12px', borderRadius: '6px', border: '1px solid #e5e7eb',
+                          background: '#fff', fontSize: '12px', cursor: 'pointer', color: '#4b5563',
+                        }}>
+                          Editar
+                        </button>
+                        <button type="button" onClick={(e) => {
+                          const row = (e.target as HTMLElement).closest('tr');
+                          if (row && confirm('Eliminar este post?')) row.style.opacity = '0.3';
+                        }} style={{
+                          padding: '4px 12px', borderRadius: '6px', border: '1px solid #fca5a5',
+                          background: '#fef2f2', fontSize: '12px', cursor: 'pointer', color: '#dc2626',
+                        }}>
+                          Eliminar
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
 
-          {/* ─── Stats ─── */}
-          <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: '16px', marginBottom: '32px',
-          }}>
-            {stats.map((s) => (
-              <div key={s.label} style={{
-                background: '#fff', borderRadius: '12px', padding: '24px',
-                border: '1px solid #e5e7eb',
-              }}>
-                <div style={{ fontSize: '28px', fontWeight: 800, color: s.color, lineHeight: 1 }}>
-                  {s.value}
+      {showModal && (
+        <dialog open style={{
+          padding: '24px', borderRadius: '14px', border: '1px solid #e5e7eb',
+          maxWidth: '480px', width: '90vw', position: 'fixed', top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)', zIndex: 200, margin: 0,
+          boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+        }}>
+          <form method="dialog" onSubmit={() => setShowModal(false)}>
+            <h3 style={{ fontSize: '17px', fontWeight: 700, margin: '0 0 20px 0', color: '#1a1a2e' }}>
+              Nuevo post
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '4px' }}>Titulo</label>
+                <input type="text" placeholder="Titulo del articulo" readOnly style={{
+                  width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #e5e7eb',
+                  fontSize: '14px', boxSizing: 'border-box', background: '#f9fafb',
+                }} />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div>
+                  <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '4px' }}>Categoria</label>
+                  <select disabled style={{
+                    width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #e5e7eb',
+                    fontSize: '14px', background: '#f9fafb', color: '#1a1a2e',
+                  }}>
+                    <option>Tecnologia</option>
+                    <option>Cultura</option>
+                    <option>Negocios</option>
+                    <option>Estilo de Vida</option>
+                    <option>Tendencias</option>
+                  </select>
                 </div>
-                <div style={{ fontSize: '13px', color: '#6b7280', marginTop: '4px' }}>
-                  {s.label}
+                <div>
+                  <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '4px' }}>Estado</label>
+                  <select disabled style={{
+                    width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #e5e7eb',
+                    fontSize: '14px', background: '#f9fafb', color: '#1a1a2e',
+                  }}>
+                    <option>Publicado</option>
+                    <option>Borrador</option>
+                  </select>
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* ─── Posts Table ─── */}
-          <div style={{
-            background: '#fff', borderRadius: '12px', border: '1px solid #e5e7eb',
-            overflow: 'hidden',
-          }}>
-            <div style={{
-              padding: '20px 24px', borderBottom: '1px solid #e5e7eb',
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              flexWrap: 'wrap', gap: '12px',
-            }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, color: '#1a1a2e' }}>
-                Posts
-              </h2>
-              <button
-                id="va-new-post"
-                style={{
-                  padding: '8px 20px', borderRadius: '8px', border: 'none',
-                  background: accent, color: '#fff', fontSize: '13px', fontWeight: 600,
-                  cursor: 'pointer',
-                }}
-              >
-                + Nuevo post
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '4px' }}>Contenido</label>
+                <textarea rows={6} placeholder="Escribe el contenido del articulo..." readOnly style={{
+                  width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #e5e7eb',
+                  fontSize: '14px', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit',
+                  background: '#f9fafb',
+                }} />
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '24px' }}>
+              <button type="button" onClick={() => setShowModal(false)} style={{
+                padding: '10px 24px', borderRadius: '8px', border: '1px solid #e5e7eb',
+                background: '#fff', fontSize: '13px', fontWeight: 500, cursor: 'pointer', color: '#6b7280',
+              }}>
+                Cancelar
+              </button>
+              <button type="button" onClick={() => setShowModal(false)} style={{
+                padding: '10px 24px', borderRadius: '8px', border: 'none',
+                background: accent, color: '#fff', fontSize: '13px', fontWeight: 600, cursor: 'pointer',
+              }}>
+                Guardar
               </button>
             </div>
-
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{
-                width: '100%', borderCollapse: 'collapse', fontSize: '13px',
-              }}>
-                <thead>
-                  <tr style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
-                    <th style={{ padding: '12px 20px', textAlign: 'left', fontWeight: 600, color: '#6b7280', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Titulo</th>
-                    <th style={{ padding: '12px 20px', textAlign: 'left', fontWeight: 600, color: '#6b7280', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Categoria</th>
-                    <th style={{ padding: '12px 20px', textAlign: 'left', fontWeight: 600, color: '#6b7280', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Estado</th>
-                    <th style={{ padding: '12px 20px', textAlign: 'left', fontWeight: 600, color: '#6b7280', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Visitas</th>
-                    <th style={{ padding: '12px 20px', textAlign: 'left', fontWeight: 600, color: '#6b7280', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {POSTS_DATA.map((p, i) => (
-                    <tr key={p.id} style={{
-                      borderBottom: '1px solid #f3f4f6',
-                      background: i % 2 === 0 ? '#fff' : '#fafafa',
-                    }}>
-                      <td style={{ padding: '12px 20px', fontWeight: 600, color: '#1a1a2e' }}>
-                        <Link href={`/ejemplos/blog/${p.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
-                          {p.title}
-                        </Link>
-                      </td>
-                      <td style={{ padding: '12px 20px', color: '#6b7280' }}>{p.category}</td>
-                      <td style={{ padding: '12px 20px' }}>
-                        <span style={{
-                          display: 'inline-block', padding: '2px 10px', borderRadius: '50px',
-                          fontSize: '11px', fontWeight: 600,
-                          background: p.status === 'published' ? 'rgba(5,150,105,0.1)' : 'rgba(217,119,6,0.1)',
-                          color: p.status === 'published' ? '#059669' : '#d97706',
-                        }}>
-                          {p.status === 'published' ? 'Publicado' : 'Borrador'}
-                        </span>
-                      </td>
-                      <td style={{ padding: '12px 20px', color: '#6b7280' }}>{p.views.toLocaleString()}</td>
-                      <td style={{ padding: '12px 20px' }}>
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                          <button className="va-edit-btn" data-post={p.id} type="button" style={{
-                            padding: '4px 12px', borderRadius: '6px', border: '1px solid #e5e7eb',
-                            background: '#fff', fontSize: '12px', cursor: 'pointer', color: '#4b5563',
-                          }}>
-                            Editar
-                          </button>
-                          <button className="va-delete-btn" data-post={p.id} type="button" style={{
-                            padding: '4px 12px', borderRadius: '6px', border: '1px solid #fca5a5',
-                            background: '#fef2f2', fontSize: '12px', cursor: 'pointer', color: '#dc2626',
-                          }}>
-                            Eliminar
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </main>
-      </div>
-
-      {/* ─── Create/Edit Modal ─── */}
-      <dialog id="va-post-modal" className="va-modal">
-        <form method="dialog">
-          <h3 style={{ fontSize: '17px', fontWeight: 700, margin: '0 0 20px 0', color: '#1a1a2e' }}>
-            Nuevo post
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <div>
-              <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '4px' }}>Titulo</label>
-              <input type="text" placeholder="Titulo del articulo" readOnly style={{
-                width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #e5e7eb',
-                fontSize: '14px', boxSizing: 'border-box', background: '#f9fafb',
-              }} />
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              <div>
-                <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '4px' }}>Categoria</label>
-                <select disabled style={{
-                  width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #e5e7eb',
-                  fontSize: '14px', background: '#f9fafb', color: '#1a1a2e',
-                }}>
-                  <option>Tecnologia</option>
-                  <option>Cultura</option>
-                  <option>Negocios</option>
-                  <option>Estilo de Vida</option>
-                  <option>Tendencias</option>
-                </select>
-              </div>
-              <div>
-                <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '4px' }}>Estado</label>
-                <select disabled style={{
-                  width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #e5e7eb',
-                  fontSize: '14px', background: '#f9fafb', color: '#1a1a2e',
-                }}>
-                  <option>Publicado</option>
-                  <option>Borrador</option>
-                </select>
-              </div>
-            </div>
-            <div>
-              <label style={{ fontSize: '12px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '4px' }}>Contenido</label>
-              <textarea rows={6} placeholder="Escribe el contenido del articulo..." readOnly style={{
-                width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #e5e7eb',
-                fontSize: '14px', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit',
-                background: '#f9fafb',
-              }} />
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '24px' }}>
-            <button type="submit" style={{
-              padding: '10px 24px', borderRadius: '8px', border: '1px solid #e5e7eb',
-              background: '#fff', fontSize: '13px', fontWeight: 500, cursor: 'pointer', color: '#6b7280',
-            }}>
-              Cancelar
-            </button>
-            <button type="submit" style={{
-              padding: '10px 24px', borderRadius: '8px', border: 'none',
-              background: accent, color: '#fff', fontSize: '13px', fontWeight: 600, cursor: 'pointer',
-            }}>
-              Guardar
-            </button>
-          </div>
-        </form>
-      </dialog>
-
-      <script dangerouslySetInnerHTML={{ __html: `
-        (function() {
-          var loginBtn = document.getElementById('va-login-btn');
-          var logoutBtn = document.getElementById('va-logout');
-          var dashboard = document.getElementById('va-dashboard');
-          var loginPanel = document.querySelector('.va-login');
-          var postModal = document.getElementById('va-post-modal');
-          var newPostBtn = document.getElementById('va-new-post');
-          var editBtns = document.querySelectorAll('.va-edit-btn');
-          var deleteBtns = document.querySelectorAll('.va-delete-btn');
-
-          if (loginBtn) {
-            loginBtn.addEventListener('click', function() {
-              loginPanel.style.display = 'none';
-              dashboard.style.display = 'block';
-            });
-          }
-
-          if (logoutBtn) {
-            logoutBtn.addEventListener('click', function() {
-              loginPanel.style.display = 'flex';
-              dashboard.style.display = 'none';
-            });
-          }
-
-          if (newPostBtn && postModal) {
-            newPostBtn.addEventListener('click', function() { postModal.showModal(); });
-          }
-
-          editBtns.forEach(function(btn) {
-            btn.addEventListener('click', function() {
-              if (postModal) postModal.showModal();
-            });
-          });
-
-          deleteBtns.forEach(function(btn) {
-            btn.addEventListener('click', function() {
-              var row = btn.closest('tr');
-              if (row && confirm('¿Eliminar este post?')) {
-                row.style.opacity = '0.3';
-              }
-            });
-          });
-        })();
-      `}} />
+          </form>
+        </dialog>
+      )}
     </div>
   );
 }

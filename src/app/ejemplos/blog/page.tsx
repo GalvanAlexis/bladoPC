@@ -292,6 +292,24 @@ export default function VortexHome() {
           color: ${VORTEX.accent} !important;
           font-weight: 600;
         }
+        .v-nav-desktop { display: flex; gap: 20px; }
+        .v-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 4px; color: var(--v-text-secondary); }
+        .v-mobile-menu {
+          display: none;
+          position: fixed; top: 60px; left: 0; right: 0;
+          background: var(--v-surface);
+          border-bottom: 1px solid var(--v-border);
+          padding: 16px 24px;
+          z-index: 99;
+          flex-direction: column;
+          gap: 12px;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+        .v-mobile-menu.open { display: flex; }
+        @media (max-width: 768px) {
+          .v-nav-desktop { display: none !important; }
+          .v-hamburger { display: flex !important; }
+        }
       `}</style>
 
       <div className="v-scroll-progress" aria-hidden="true" />
@@ -319,7 +337,7 @@ export default function VortexHome() {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-            <nav style={{ display: 'flex', gap: '20px', fontSize: '13px', fontWeight: 500 }}>
+            <nav className="v-nav-desktop" style={{ fontSize: '13px', fontWeight: 500 }}>
               {CATEGORIES.map((c) => (
                 <span key={c.id} style={{
                   color: 'var(--v-text-secondary)', cursor: 'default',
@@ -364,6 +382,15 @@ export default function VortexHome() {
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
               </svg>
             </button>
+            <button
+              id="v-hamburger"
+              className="v-hamburger"
+              aria-label="Menu de navegacion"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+              </svg>
+            </button>
           </div>
         </div>
       </header>
@@ -395,6 +422,27 @@ export default function VortexHome() {
         <p style={{ fontSize: '13px', color: 'var(--v-text-secondary)', margin: 0 }}>
           Resultados simulados: buscaria entre {POSTS.length} articulos indexados.
         </p>
+      </div>
+
+      {/* ─── Mobile Menu ─── */}
+      <div id="v-mobile-menu" className="v-mobile-menu">
+        {CATEGORIES.map((c) => (
+          <span key={c.id} style={{
+            padding: '8px 0', fontSize: '14px', fontWeight: 500, color: 'var(--v-text)',
+            borderBottom: '1px solid var(--v-border)', cursor: 'default',
+          }}>
+            {c.name}
+          </span>
+        ))}
+        <Link
+          href="/ejemplos/blog/admin"
+          style={{
+            padding: '8px 0', fontSize: '14px', fontWeight: 600, color: VORTEX.accent,
+            textDecoration: 'none', borderBottom: '1px solid var(--v-border)',
+          }}
+        >
+          Login (Admin)
+        </Link>
       </div>
 
       <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px' }}>
@@ -668,6 +716,8 @@ export default function VortexHome() {
         (function() {
           var header = document.getElementById('v-header');
           var toggle = document.getElementById('v-dark-toggle');
+          var hamburger = document.getElementById('v-hamburger');
+          var mobileMenu = document.getElementById('v-mobile-menu');
           var lastScroll = 0;
 
           if (header) {
@@ -698,6 +748,22 @@ export default function VortexHome() {
                 toggle.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
               }
             } catch(e) {}
+          }
+
+          if (hamburger && mobileMenu) {
+            hamburger.addEventListener('click', function() {
+              mobileMenu.classList.toggle('open');
+            });
+            mobileMenu.querySelectorAll('span, a').forEach(function(el) {
+              el.addEventListener('click', function() {
+                mobileMenu.classList.remove('open');
+              });
+            });
+            document.addEventListener('click', function(e) {
+              if (!header.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.classList.remove('open');
+              }
+            });
           }
         })();
       `}} />
