@@ -743,11 +743,11 @@ const proceso = [
   { paso: 1, titulo: 'Consulta inicial gratuita', desc: 'Nos reunimos sin cargo para entender tu negocio, tus necesidades y explicarte como trabajamos. Sin compromiso.' },
   { paso: 2, titulo: 'Diagnostico y plan', desc: 'Analizamos tu situacion actual, detectamos oportunidades de ahorro y armamos un plan de trabajo con plazos y honorarios claros.' },
   { paso: 3, titulo: 'Implementacion', desc: 'Ponemos en marcha el plan: registraciones, presentaciones, regularizaciones. Te asignamos un contador responsable.' },
-  { paso: 4, titulo: 'Acompanamiento continuo', desc: 'Seguimiento mensual, consultas por WhatsApp, recordatorios de vencimientos y reunion anual de balance.' },
+  { paso: 4, titulo: 'Acompañamiento continuo', desc: 'Seguimiento mensual, consultas por WhatsApp, recordatorios de vencimientos y reunion anual de balance.' },
 ];
 
 const timeline = [
-  { year: '2012', event: 'Fundacion del estudio por el CPN Martin Martinez en Chascomus,专注 en monotributistas y emprendedores locales.' },
+  { year: '2012', event: 'Fundacion del estudio por el CPN Martin Martinez en Chascomus, enfocado en monotributistas y emprendedores locales.' },
   { year: '2015', event: 'Incorporacion de la Cra. Laura Gomez como socia. Abrimos el area de Liquidacion de Sueldos para PyMEs.' },
   { year: '2018', event: 'Superamos los 150 clientes activos. Incorporamos el area de Sociedades y Constitucion de Empresas.' },
   { year: '2021', event: 'Lanzamos la plataforma online de documentos. Digitalizamos todos los procesos internos.' },
