@@ -341,6 +341,17 @@ export default function VortexHome() {
                 <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
             </button>
+            <Link
+              href="/ejemplos/blog/admin"
+              style={{
+                fontSize: '12px', fontWeight: 600, color: VORTEX.accent,
+                textDecoration: 'none', padding: '6px 14px', borderRadius: '6px',
+                border: `1px solid ${VORTEX.accentBorder}`,
+                background: VORTEX.accentBg, letterSpacing: '0.02em',
+              }}
+            >
+              Login
+            </Link>
             <button
               id="v-dark-toggle"
               style={{
