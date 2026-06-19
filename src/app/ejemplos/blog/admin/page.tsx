@@ -40,6 +40,12 @@ export default function VortexAdmin() {
           width: 'min(380px, 90vw)', boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
         }}>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+            <Link href="/ejemplos/blog" style={{
+              fontSize: '12px', color: '#6b7280', textDecoration: 'none', fontWeight: 500,
+              display: 'inline-block', marginBottom: '12px',
+            }}>
+              &larr; Volver al blog
+            </Link>
             <span style={{
               fontSize: '24px', fontWeight: 800, color: accent, letterSpacing: '-0.03em',
               display: 'block', marginBottom: '6px',
