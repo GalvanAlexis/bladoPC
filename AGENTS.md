@@ -39,16 +39,20 @@ documentacion/
 - **PRs/Merges:** siempre hacia `master`, requiere tests verdes antes de merge
 - **Issues:** archivos con formato `ISS-XXX_nombre-kebab-case.md` en `documentacion/issues/`
 
-## Workflow Estándar (El Circuito)
-Para cualquier tarea que involucre cambios en el código, el agente DEBE seguir estrictamente este flujo:
-1. **Documentar el Issue:** Crear o actualizar el archivo en `documentacion/issues/ISS-XXX_...md`.
-2. **Crear la Rama:** Hacer checkout a una nueva rama `feature/ISS-XXX-...`.
-3. **Consultar Skills:** Para tareas frontend, ejecutar `npx -y modern-web-guidance@latest search "<tarea>"` ANTES de escribir código. Para tareas de DB/Auth, leer `.agents/skills/supabase/SKILL.md`.
-4. **Implementar:** Escribir el código o solucionar el bug, siguiendo las guías recuperadas.
-5. **Quality Gates:** Ejecutar rigurosamente los tests (`npm test`) y comprobar compilación (`npm run build`). AMBOS deben pasar (verde).
-6. **Commit:** Hacer commit siguiendo la convención semántica indicando el ISS.
-7. **PR, Merge y Deploy:** Hacer push de la rama al remoto (`git push -u origin feature/...`). Luego, crear explícitamente el Pull Request en GitHub usando la CLI (`gh pr create --title "..." --body "..."`). Finalmente, fusionarlo remotamente (`gh pr merge --merge`). Volver a master y actualizar localmente (`git checkout master; git pull`). Todo PR y Merge DEBE reflejarse en el repositorio remoto (origin master) para disparar el CI/CD y el despliegue automático.
-8. **Memoria (Cierre):** Ejecutar `mem_session_summary` (y `mem_save` si es necesario) para registrar la resolución en Engram.
+## Workflow Obligatorio
+
+**LEER `documentacion/README.md` seccion "Workflow Obligatorio" — es la fuente de la verdad.**
+
+Todo cambio de código DEBE seguir este flujo en orden estricto:
+
+1. **Documentar el Issue:** Crear `documentacion/issues/ISS-XXX_nombre.md` ANTES de codificar.
+2. **Crear la Rama:** `git checkout -b feature/ISS-XXX-nombre` o `fix/ISS-XXX-nombre`.
+3. **Consultar Skills:** `modern-web-guidance` para frontend, `supabase` skill para DB.
+4. **Implementar:** Codificar siguiendo las guías.
+5. **Quality Gates:** `npm test && npm run build` — AMBOS deben pasar.
+6. **Commit:** `git commit -m "tipo: descripcion infinitivo ISS-XXX"`.
+7. **PR, Merge y Deploy:** `git push` -> `gh pr create` -> `gh pr merge --merge` -> `git checkout master; git pull`.
+8. **Memoria (Cierre):** `engram_mem_session_summary` + `engram_mem_save` si aplica.
 
 ## Quality Gates por Defecto
 Verificar los scripts del `package.json` del proyecto para determinar los comandos correctos.

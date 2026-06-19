@@ -1,37 +1,134 @@
-# 🔥 Portfolio Blado — Documentación del Proyecto
+# Portfolio Blado — Documentacion del Proyecto
 
-> **Portfolio profesional de Alexis Galván** con un asistente virtual de IA (Blado) integrado para diagnóstico y soporte, además de módulos interactivos.
+> Portfolio profesional de Alexis Galvan con asistente virtual de IA (Blado) integrado.
 
 ---
 
-## 📁 Estructura de esta documentación
+## Workflow Obligatorio
+
+**ESTE WORKFLOW ES DE CUMPLIMIENTO OBLIGATORIO PARA TODA TAREA QUE INVOLUCRE CAMBIOS EN EL CODIGO.** Ningun paso puede saltarse. Si el agente lo incumple, se considera un error grave.
+
+### Paso 1 — Documentar el Issue
+
+Antes de escribir UNA SOLA LINEA de codigo, crear o actualizar el archivo de especificacion en `documentacion/issues/ISS-XXX_nombre-kebab-case.md`.
+
+Formato:
+```markdown
+# ISS-XXX: Titulo descriptivo
+
+## Resumen
+[Una linea clara de que hay que hacer]
+
+## Archivos a modificar
+[lista de archivos]
+
+## Tareas
+- [ ] checklist de lo necesario
+- [ ] checklist de lo necesario
+- [ ] npm test
+- [ ] npm run build
+```
+
+**Regla:** Sin archivo ISS, no se puede empezar a codificar.
+
+### Paso 2 — Crear la Rama
+
+La rama DEBE llamarse `feature/ISS-XXX-nombre-corto` o `fix/ISS-XXX-nombre-corto`.
+
+```bash
+git checkout -b feature/ISS-XXX-nombre-corto
+```
+
+**Regla:** Nunca pushear directo a `master`. Nunca codelear sobre `master`.
+
+### Paso 3 — Consultar Skills (si aplica)
+
+- **Tarea frontend (HTML/CSS/JS de cliente):** ejecutar `npx -y modern-web-guidance@latest search "<descripcion>"` ANTES de escribir codigo. Recuperar la guia completa con `retrieve`.
+- **Tarea de DB/Supabase:** leer `.agents/skills/supabase/SKILL.md`.
+
+### Paso 4 — Implementar
+
+Escribir el codigo siguiendo las guias del paso 3 (si aplica) y las convenciones del proyecto (ver AGENTS.md).
+
+### Paso 5 — Quality Gates
+
+Ejecutar AMBOS:
+
+```bash
+npm test          # Todos los tests deben pasar
+npm run build     # Compilacion exitosa sin errores
+```
+
+**Regla:** Si alguno falla, NO se puede hacer commit. Corregir primero.
+
+### Paso 6 — Commit
+
+```bash
+git add -A
+git commit -m "tipo: descripcion en infinitivo ISS-XXX"
+```
+
+Tipos aceptados: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`.
+
+Ejemplo: `feat: agregar boton volver al inicio en catalogo de servicios`
+
+### Paso 7 — PR, Merge y Deploy
+
+```bash
+git push -u origin feature/ISS-XXX-nombre-corto
+gh pr create --title "tipo: descripcion ISS-XXX" --body "cambios..."
+gh pr merge --merge
+git checkout master
+git pull
+```
+
+**Regla:** Todo cambio debe pasar por PR y ser mergeado. No hay excepciones.
+
+### Paso 8 — Memoria (Engram)
+
+Registrar en Engram:
+
+```
+engram_mem_session_summary (o engram_mem_save)
+```
+
+Esto guarda contexto para sesiones futuras.
+
+### Resumen visual
+
+```
+ISS doc -> branch -> skills -> codigo -> test+build -> commit -> PR -> merge -> engram
+```
+
+---
+
+## Prohibiciones (Zero Tolerance)
+
+- Saltarse la creacion del ISS doc
+- Pushear directo a master
+- Codelear sobre master sin branch
+- No ejecutar tests antes del commit
+- No ejecutar build antes del commit
+- No registrar en Engram al cerrar tarea
+
+---
+
+## Estructura de Archivos
 
 ```
 documentacion/
-├── README.md                    ← Este archivo: visión general del proyecto
-├── arquitectura.md              ← Arquitectura técnica detallada
-├── ISSUES.md                    ← Master list de todos los issues (backlog)
-└── issues/
-    ├── ISS-001_setup-nextjs.md          [CLOSED]
-    ...
+  README.md              <- Este archivo (workflow obligatorio)
+  arquitectura.md        <- Arquitectura tecnica
+  ISSUES.md              <- Backlog de issues
+  issues/
+    ISS-XXX_nombre.md    <- Especificacion de cada issue
 ```
 
 ---
 
-## 🎯 Visión del Proyecto
+## Stack Tecnologico
 
-**Portfolio Blado** es un portfolio profesional interactivo y dinámico que sirve como carta de presentación, herramienta de embudo de ventas y demostración de habilidades técnicas de Alexis Galván.
-
-1. 💼 **Secciones Narrativas**: Home scrollable con Hero, Servicios (AIDO), About, Skills y Proyectos.
-2. 🤖 **Asistente Virtual (Blado)**: IA impulsada por Groq (LLaMA) configurada con límites estrictos de soporte técnico y personalidad estoico/tecno-optimista, capaz de derivar leads directo a WhatsApp.
-3. 🎮 **Módulos Interactivos (Legacy)**: Incorpora minijuegos (`/timba`) y un Árbol de Habilidades/Progreso (`/biblioteca`) heredados de iteraciones anteriores, accesibles desde el menú.
-4. 📈 **Analíticas y Persistencia**: Historial de chat persistido en PostgreSQL (Supabase) y tracking de visitas anónimo.
-
----
-
-## 🏗️ Stack Tecnológico
-
-| Tecnología | Uso |
+| Tecnologia | Uso |
 |---|---|
 | **Next.js 16.2.6** (App Router) | Framework principal |
 | **React 19** | UI Components |
@@ -40,30 +137,10 @@ documentacion/
 | **Framer Motion** | Animaciones y transiciones |
 | **Groq SDK** | IA generativa (LLaMA 3) |
 | **Prisma 7 + Supabase** | Base de datos relacional |
-| **@xyflow/react** | Skill Tree visual (Biblioteca) |
 
 ---
 
-## 🚀 Cómo Arrancar
+## Contacto
 
-```bash
-# 1. Clonar e instalar dependencias
-npm install
-
-# 2. Configurar base de datos y API keys
-cp .env.local.example .env.local
-# Editar .env.local con credenciales de Groq y Supabase
-
-# 3. Migraciones Prisma
-npx prisma migrate dev
-
-# 4. Correr servidor de desarrollo
-npm run dev
-```
-
----
-
-## 📬 Contacto
-
-**Alexis Galván** — Desarrollador Full-Stack, Ciencia de Datos e IA.
+**Alexis Galvan** — Desarrollador Full-Stack, Ciencia de Datos e IA.
 Repositorio: `GalvanAlexis/bladoPC`
