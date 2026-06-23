@@ -1,7 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import AdminLogin from './AdminLogin';
+import AdminDashboard from './AdminDashboard';
 
 const NAV_ITEMS = [
   { label: 'Inicio', href: '#hero' },
@@ -13,6 +16,8 @@ const NAV_ITEMS = [
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showDash, setShowDash] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const close = useCallback(() => setOpen(false), []);
 
@@ -55,6 +60,84 @@ export default function Nav() {
     el?.scrollIntoView({ behavior: 'smooth' });
   }, [close]);
 
+  const handleLoginClick = useCallback(() => {
+    setOpen(false);
+    setShowLogin(true);
+  }, []);
+
+  const handleLoginSuccess = useCallback(() => {
+    setShowLogin(false);
+    setShowDash(true);
+  }, []);
+
+  const panel = open ? (
+    <>
+      <motion.div
+        key="nav-overlay"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={close}
+        style={{
+          position: 'fixed', inset: 0, zIndex: 999998,
+          background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)',
+        }}
+      />
+      <motion.nav
+        key="nav-panel"
+        initial={{ x: '100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: '100%' }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        style={{
+          position: 'fixed', top: 0, right: 0, bottom: 0,
+          width: 'min(75vw, 300px)',
+          zIndex: 999999,
+          background: 'var(--lum-bg)',
+          display: 'flex', flexDirection: 'column',
+          padding: '56px 32px 32px',
+          boxShadow: '-8px 0 32px rgba(0,0,0,0.15)',
+        }}
+      >
+        {NAV_ITEMS.map((item, i) => (
+          <motion.a
+            key={item.label}
+            href={item.href}
+            className="lum-scroll-link lum-mobile-link"
+            onClick={(e) => handleLinkClick(e, item.href)}
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.07, type: 'spring', stiffness: 300, damping: 25 }}
+          >
+            {item.label}
+          </motion.a>
+        ))}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.35 }}
+          style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}
+        >
+          <button
+            className="lum-mobile-admin"
+            onClick={() => { setOpen(false); setShowLogin(true); }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/>
+            </svg>
+            Ingresar
+          </button>
+          <button id="lum-dark-toggle-mobile" className="lum-dark-btn lum-mobile-theme" aria-label="Alternar modo oscuro">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <span>Modo oscuro</span>
+          </button>
+        </motion.div>
+      </motion.nav>
+    </>
+  ) : null;
+
   return (
     <nav ref={navRef} className="lum-nav">
       <div className="lum-nav-inner">
@@ -74,6 +157,12 @@ export default function Nav() {
                 {item.label}
               </a>
             ))}
+            <button className="lum-login-btn" onClick={handleLoginClick} aria-label="Ingresar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/>
+              </svg>
+              <span>Ingresar</span>
+            </button>
             <button id="lum-dark-toggle" className="lum-dark-btn" aria-label="Alternar modo oscuro">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
@@ -90,66 +179,13 @@ export default function Nav() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {open && (
-          <>
-            <motion.div
-              key="nav-overlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={close}
-              style={{
-                position: 'fixed', inset: 0, zIndex: 99,
-                background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)',
-              }}
-            />
-            <motion.nav
-              key="nav-panel"
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              style={{
-                position: 'fixed', top: 0, right: 0, bottom: 0,
-                width: 'min(75vw, 300px)',
-                zIndex: 100,
-                background: 'var(--lum-bg)',
-                display: 'flex', flexDirection: 'column',
-                padding: '56px 32px 32px',
-                boxShadow: '-8px 0 32px rgba(0,0,0,0.15)',
-              }}
-            >
-              {NAV_ITEMS.map((item, i) => (
-                <motion.a
-                  key={item.label}
-                  href={item.href}
-                  className="lum-scroll-link lum-mobile-link"
-                  onClick={(e) => handleLinkClick(e, item.href)}
-                  initial={{ opacity: 0, x: 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.07, type: 'spring', stiffness: 300, damping: 25 }}
-                >
-                  {item.label}
-                </motion.a>
-              ))}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.35 }}
-                style={{ marginTop: 'auto' }}
-              >
-                <button id="lum-dark-toggle-mobile" className="lum-dark-btn lum-mobile-theme" aria-label="Alternar modo oscuro">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                  </svg>
-                  <span>Modo oscuro</span>
-                </button>
-              </motion.div>
-            </motion.nav>
-          </>
-        )}
-      </AnimatePresence>
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>{panel}</AnimatePresence>,
+        document.body
+      )}
+
+      <AdminLogin open={showLogin} onClose={() => setShowLogin(false)} onSuccess={handleLoginSuccess} />
+      <AdminDashboard open={showDash} onClose={() => setShowDash(false)} />
 
       <style>{`
         .lum-nav-desktop { display: flex; align-items: center; gap: 20px; }
@@ -213,6 +249,59 @@ export default function Nav() {
           border-radius: 12px !important;
           padding: 14px 18px !important;
           height: auto !important;
+        }
+        .lum-mobile-admin {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          width: 100%;
+          font-size: 15px;
+          font-weight: 600;
+          border-radius: 12px;
+          padding: 14px 18px;
+          height: auto;
+          background: rgba(184,118,118,0.08);
+          border: 1px solid rgba(184,118,118,0.15);
+          color: var(--lum-text);
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .lum-mobile-admin:hover {
+          background: rgba(184,118,118,0.15);
+        }
+        .lum-login-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 13px;
+          font-weight: 500;
+          color: #6a5a5a;
+          background: none;
+          border: 1px solid rgba(184,118,118,0.15);
+          border-radius: 8px;
+          padding: 6px 12px;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .lum-login-btn:hover {
+          color: var(--lum-primary);
+          border-color: var(--lum-primary);
+          background: rgba(184,118,118,0.05);
+        }
+        .lum-dark .lum-login-btn {
+          color: #a09090;
+        }
+        .lum-dark .lum-login-btn:hover {
+          color: var(--lum-primary);
+          border-color: var(--lum-primary);
+        }
+        .lum-dark .lum-mobile-admin {
+          background: rgba(212,148,148,0.1);
+          border-color: rgba(212,148,148,0.15);
+          color: var(--lum-text);
+        }
+        .lum-dark .lum-mobile-admin:hover {
+          background: rgba(212,148,148,0.18);
         }
         @media (max-width: 768px) {
           .lum-nav-desktop { display: none; }

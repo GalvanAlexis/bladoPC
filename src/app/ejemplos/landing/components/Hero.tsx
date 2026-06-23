@@ -3,13 +3,14 @@
 import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMousePosition } from '../hooks/useMousePosition';
-import Galeria, { GALERIA_IMAGES } from './Galeria';
+import { useAdmin } from '../hooks/useAdmin';
+import { GALERIA_IMAGES } from './Galeria';
+import Galeria from './Galeria';
 import Cart from './Cart';
 
 export const PRODUCT = {
   name: 'Lumina Serum Facial',
   desc: 'Serum facial organico con acido hialuronico, vitamina C y aceite de rosa mosqueta. Hidratacion profunda sin quimicos agresivos.',
-  price: 24990,
   benefits: ['Hidratacion 24h', '100% Natural', 'Antioxidante Potente'],
   ingredients: ['Acido Hialuronico', 'Vitamina C', 'Rosa Mosqueta', 'Aloe Vera', 'Colageno Vegetal', 'Aceite de Jojoba'],
 };
@@ -20,6 +21,7 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const dialogQtyRef = useRef<HTMLInputElement>(null);
   const mouse = useMousePosition(sectionRef);
+  const { mainPrice } = useAdmin();
 
   const rotateX = mouse.isWithin ? (mouse.progressY - 0.5) * -10 : 0;
   const rotateY = mouse.isWithin ? (mouse.progressX - 0.5) * 10 : 0;
@@ -71,7 +73,7 @@ export default function Hero() {
               className="lum-price"
               layoutId="lum-product-price"
             >
-              ${PRODUCT.price.toLocaleString('es-AR')}
+              ${mainPrice.toLocaleString('es-AR')}
             </motion.span>
             <motion.button
               onClick={openDialog}
@@ -174,7 +176,7 @@ export default function Hero() {
                       className="lum-dialog-price"
                       layoutId="lum-product-price"
                     >
-                      $ {PRODUCT.price.toLocaleString('es-AR')}
+                      $ {mainPrice.toLocaleString('es-AR')}
                     </motion.p>
                     <label className="lum-dialog-qty-label">
                       Cantidad

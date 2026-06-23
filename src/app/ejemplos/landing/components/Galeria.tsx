@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { motion } from 'framer-motion';
+import { useAdmin } from '../hooks/useAdmin';
 
 export const GALERIA_IMAGES = [
   { src: 'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=600&q=80', alt: 'Lumina Serum Frontal' },
@@ -20,6 +21,12 @@ export default function Galeria({ rotateX, rotateY }: Props) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const { galleryImages } = useAdmin();
+
+  const images = galleryImages.map((src, i) => ({
+    src,
+    alt: (GALERIA_IMAGES[i] || GALERIA_IMAGES[0]).alt,
+  }));
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -66,7 +73,7 @@ export default function Galeria({ rotateX, rotateY }: Props) {
       />
       <div className="lum-gar-embla" ref={emblaRef}>
         <div className="lum-gar-container">
-          {GALERIA_IMAGES.map((img, i) => (
+          {images.map((img, i) => (
             <div className="lum-gar-slide" key={i}>
               <motion.div
                 className="lum-gar-img-wrap"
@@ -82,6 +89,10 @@ export default function Galeria({ rotateX, rotateY }: Props) {
                   className="lum-gar-img"
                   loading={i === 0 ? 'eager' : 'lazy'}
                   fetchPriority={i === 0 ? 'high' : 'low'}
+                  onError={(e) => {
+                    const el = e.target as HTMLImageElement;
+                    el.style.display = 'none';
+                  }}
                 />
               </motion.div>
             </div>
@@ -105,7 +116,7 @@ export default function Galeria({ rotateX, rotateY }: Props) {
       </button>
 
       <div className="lum-gar-dots">
-        {GALERIA_IMAGES.map((_, i) => (
+        {images.map((_, i) => (
           <button
             key={i}
             className={`lum-gar-dot ${i === selectedIndex ? 'lum-gar-dot-active' : ''}`}
