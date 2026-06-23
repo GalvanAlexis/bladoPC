@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import PresupuestoForm from './PresupuestoForm';
 
 const GRANATE = '#7a1a1a';
 const GRANATE_DARK = '#5a1010';
@@ -100,16 +101,7 @@ export default function Hero({ tagline, desc }: Props) {
           transition={{ delay: 0.45, duration: 0.6 }}
           style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}
         >
-          <a
-            href="#contacto"
-            style={{
-              display: 'inline-block', padding: '14px 36px', borderRadius: 6,
-              background: '#fff', color: GRANATE, fontSize: 14, fontWeight: 600,
-              textDecoration: 'none', border: 'none', cursor: 'pointer',
-            }}
-          >
-            Solicitar presupuesto
-          </a>
+          <PresupuestoForm label="Solicitar presupuesto" />
           <a
             href="#servicios"
             style={{

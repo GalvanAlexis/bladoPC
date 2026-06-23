@@ -1,5 +1,7 @@
 'use client';
 
+import PresupuestoForm from './PresupuestoForm';
+
 const GRANATE = '#7a1a1a';
 const GRANATE_DARK = '#5a1010';
 const BG_WARM = '#f5f3f0';
@@ -254,14 +256,7 @@ export default function Contacto() {
           boxShadow: '0 -4px 12px rgba(0,0,0,0.04)',
         }}
       >
-        <a
-          href="#contacto"
-          style={{
-            ...ctaBtn({ width: '100%', textAlign: 'center', padding: 12 }),
-          }}
-        >
-          Solicitar presupuesto gratis
-        </a>
+        <PresupuestoForm label="Solicitar presupuesto gratis" btnStyle={ctaBtn({ width: '100%', textAlign: 'center', padding: 12 })} />
       </div>
 
       <script
