@@ -43,73 +43,84 @@ export default function Servicios({ servicios }: Props) {
           </p>
         </motion.div>
 
-        {servicios.map((s, i) => (
-          <motion.div
-            key={s.id}
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ delay: i * 0.08, duration: 0.5, ease: 'easeOut' }}
-            style={{
-              display: 'flex',
-              flexDirection: i % 2 === 0 ? 'row' as const : 'row-reverse' as const,
-              alignItems: 'center',
-              gap: 'clamp(24px, 4vw, 48px)',
-              marginBottom: i < servicios.length - 1 ? 24 : 0,
-              background: i % 2 === 0 ? '#fff' : BG_SECTION,
-              borderRadius: 12,
-              padding: 'clamp(20px, 3vw, 32px)',
-              transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-              cursor: 'default',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(122,26,26,0.08)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
-          >
-            <div style={{ flex: '1 1 55%' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-                <h3 style={{ fontSize: 16, fontWeight: 600, margin: 0, color: TEXT_PRIMARY }}>
-                  {s.titulo}
-                </h3>
-                {s.publico && (
-                  <span
-                    style={{
-                      fontSize: 11, color: GRANATE, fontWeight: 500,
-                      padding: '3px 10px', borderRadius: 50,
-                      background: 'rgba(122,26,26,0.06)',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {s.publico}
-                  </span>
+          {servicios.map((s, i) => (
+            <motion.div
+              key={s.id}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ delay: i * 0.08, duration: 0.5, ease: 'easeOut' }}
+              className="con-servicio-card"
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 'clamp(16px, 3vw, 48px)',
+                marginBottom: i < servicios.length - 1 ? 16 : 0,
+                background: i % 2 === 0 ? '#fff' : BG_SECTION,
+                borderRadius: 12,
+                padding: 'clamp(16px, 3vw, 32px)',
+                transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+                cursor: 'default',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(122,26,26,0.08)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+            >
+              <div style={{ flex: '1 1 55%', minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column', gap: 6, marginBottom: 8 }}>
+                  <h3 style={{ fontSize: 16, fontWeight: 600, margin: 0, color: TEXT_PRIMARY }}>
+                    {s.titulo}
+                  </h3>
+                  {s.publico && (
+                    <span
+                      className="con-servicio-tag"
+                      style={{
+                        fontSize: 11, color: GRANATE, fontWeight: 500,
+                        padding: '3px 10px', borderRadius: 50,
+                        background: 'rgba(122,26,26,0.06)',
+                      }}
+                    >
+                      {s.publico}
+                    </span>
+                  )}
+                </div>
+                <p style={{ fontSize: 13, color: TEXT_SEC, lineHeight: 1.6, margin: 0 }}>
+                  {s.desc}
+                </p>
+                {s.precio && (
+                  <div style={{ marginTop: 12, fontSize: 13, color: GRANATE, fontWeight: 600 }}>
+                    {s.precio}
+                  </div>
                 )}
               </div>
-              <p style={{ fontSize: 13, color: TEXT_SEC, lineHeight: 1.6, margin: 0 }}>
-                {s.desc}
-              </p>
-              {s.precio && (
-                <div style={{ marginTop: 12, fontSize: 13, color: GRANATE, fontWeight: 600 }}>
-                  {s.precio}
-                </div>
-              )}
-            </div>
-            <div
-              style={{
-                flex: '0 0 80px',
-                height: 80,
-                borderRadius: '50%',
-                background: `linear-gradient(135deg, ${GRANATE} 0%, ${GRANATE_LIGHT} 100%)`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontSize: 28,
-                fontWeight: 300,
-                fontFamily: 'serif',
-              }}
-            >
-              {s.titulo[0]}
-            </div>
-          </motion.div>
-        ))}
+              <div
+                className="con-servicio-circle"
+                style={{
+                  flex: '0 0 64px',
+                  height: 64,
+                  borderRadius: '50%',
+                  background: `linear-gradient(135deg, ${GRANATE} 0%, ${GRANATE_LIGHT} 100%)`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#fff',
+                  fontSize: 24,
+                  fontWeight: 300,
+                  fontFamily: 'serif',
+                }}
+              >
+                {s.titulo[0]}
+              </div>
+            </motion.div>
+          ))}
+          <style>{`
+            .con-servicio-card { flex-direction: row; }
+            .con-servicio-circle { flex: 0 0 64px; height: 64px; }
+            @media (max-width: 600px) {
+              .con-servicio-card { flex-direction: column !important; text-align: center; }
+              .con-servicio-circle { flex: 0 0 48px !important; width: 48px !important; height: 48px !important; font-size: 18px !important; margin-top: 8px; order: -1; }
+              .con-servicio-tag { white-space: normal !important; }
+            }
+          `}</style>
       </div>
     </section>
   );

@@ -159,7 +159,7 @@ export default function Nav() {
           <span>&#9742; (02241) 45-6789</span>
           <span>&#9993; estudio@mya-contable.com.ar</span>
         </div>
-        <span>Lun a Vie 9:00 - 18:00</span>
+        <span className="con-topbar-hours">Lun a Vie 9:00 - 18:00</span>
       </div>
 
       {/* ─── Nav ─── */}
@@ -202,7 +202,7 @@ export default function Nav() {
           </div>
 
           {/* Desktop links */}
-          <div className="con-nav-desktop" style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 13, fontWeight: 500, color: TEXT_SEC }}>
+          <div className="con-nav-desktop" style={{ alignItems: 'center', gap: 20, fontSize: 13, fontWeight: 500, color: TEXT_SEC }}>
             {NAV_ITEMS.map((item) => (
               <a
                 key={item.label}
@@ -260,6 +260,10 @@ export default function Nav() {
 
       <style>{`
         .con-nav-desktop { display: flex; align-items: center; gap: 20px; }
+        .con-topbar-hours { display: inline; }
+        @media (max-width: 480px) {
+          .con-topbar-hours { display: none; }
+        }
         .con-hamburger {
           display: none;
           background: none; border: none; cursor: pointer;
