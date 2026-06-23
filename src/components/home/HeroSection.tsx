@@ -64,8 +64,7 @@ export default function HeroSection() {
         style={{
           position: 'absolute',
           inset: 0,
-          background:
-            'radial-gradient(ellipse at center, rgba(5,5,5,0.7) 0%, rgba(5,5,5,0.95) 100%)',
+          background: 'var(--hero-overlay-bg)',
           pointerEvents: 'none',
           zIndex: 1,
         }}
@@ -183,7 +182,7 @@ export default function HeroSection() {
               style={{
                 position: 'fixed',
                 inset: 0,
-                background: 'rgba(0,0,0,0.6)',
+                background: 'var(--overlay-bg-light)',
                 backdropFilter: 'blur(4px)',
                 zIndex: 100,
               }}

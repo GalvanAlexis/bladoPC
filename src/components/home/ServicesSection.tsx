@@ -99,7 +99,7 @@ export default function ServicesSection() {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(to bottom, var(--background) 0%, transparent 15%, transparent 85%, var(--background) 100%), radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.7) 100%)',
+            background: 'linear-gradient(to bottom, var(--background) 0%, transparent 15%, transparent 85%, var(--background) 100%), var(--services-video-overlay)',
           }}
         />
       </div>
@@ -238,7 +238,7 @@ export default function ServicesSection() {
               style={{
                 position: 'fixed',
                 inset: 0,
-                background: 'rgba(0, 0, 0, 0.7)',
+                background: 'var(--overlay-bg)',
                 backdropFilter: 'blur(4px)',
                 zIndex: 100,
               }}
@@ -267,7 +267,7 @@ export default function ServicesSection() {
                     padding: '32px',
                     width: '100%',
                     maxWidth: '540px',
-                    boxShadow: '0 20px 50px rgba(0,0,0,0.7)',
+                    boxShadow: 'var(--card-shadow-lg)',
                     pointerEvents: 'auto',
                     position: 'relative',
                   }}

@@ -200,7 +200,7 @@ export default function SkillsSection() {
               style={{
                 position: 'fixed',
                 inset: 0,
-                background: 'rgba(0, 0, 0, 0.7)',
+                background: 'var(--overlay-bg)',
                 backdropFilter: 'blur(4px)',
                 zIndex: 100,
               }}
@@ -229,7 +229,7 @@ export default function SkillsSection() {
                     padding: '32px',
                     width: '100%',
                     maxWidth: '500px',
-                    boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+                    boxShadow: 'var(--card-shadow-lg)',
                     pointerEvents: 'auto',
                     position: 'relative',
                   }}

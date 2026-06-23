@@ -70,7 +70,7 @@ export default function Navbar({ onToggleSidebar, sidebarOpen, onAdminClick }: N
       style={{
         background: scrolled
           ? 'var(--background)'
-          : 'linear-gradient(to bottom, var(--background), transparent)',
+          : 'linear-gradient(to bottom, var(--background), var(--nav-bg-to, transparent))',
         borderBottom: scrolled ? '1px solid var(--border)' : '1px solid transparent',
         transition: 'background 0.3s ease, border-color 0.3s ease',
       }}
