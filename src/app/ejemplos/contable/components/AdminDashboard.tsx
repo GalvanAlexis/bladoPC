@@ -28,6 +28,22 @@ type TabKey = (typeof TABS)[number]['key'];
 export default function AdminDashboard({ open, onClose }: Props) {
   const admin = useAdmin();
   const [tab, setTab] = useState<TabKey>('Equipo');
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobile, setMobile] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const check = () => setMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, [open]);
+
+  useEffect(() => {
+    if (!mobile) setMobileOpen(false);
+  }, [mobile]);
+
+  const sidebarW = mobile && !mobileOpen ? 64 : 220;
 
   useEffect(() => {
     if (open) document.body.style.overflow = 'hidden';
@@ -55,34 +71,58 @@ export default function AdminDashboard({ open, onClose }: Props) {
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.25, delay: 0.05 }}
             style={{
-              width: 220, flexShrink: 0,
+              width: sidebarW, flexShrink: 0,
               background: '#1a1a1a',
               display: 'flex', flexDirection: 'column',
               color: '#fff', overflow: 'hidden',
+              transition: 'width 0.2s ease',
             }}
           >
-            <div style={{ padding: '24px 20px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: GRANATE_LIGHT, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 2 }}>
-                M&A Estudio
-              </div>
-              <div style={{ fontSize: 14, fontWeight: 700 }}>Panel de Admin</div>
+            <div style={{
+              padding: mobile && !mobileOpen ? '16px 8px' : '24px 20px 20px',
+              borderBottom: '1px solid rgba(255,255,255,0.06)',
+              display: 'flex', alignItems: 'center', gap: 8,
+            }}>
+              {mobile && (
+                <button type="button" onClick={() => setMobileOpen((o) => !o)}
+                  style={{
+                    background: 'rgba(255,255,255,0.08)', border: 'none', color: '#fff',
+                    width: 28, height: 28, borderRadius: 6, cursor: 'pointer', flexShrink: 0,
+                    fontSize: 14, fontWeight: 700, fontFamily: 'inherit',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}
+                >
+                  {mobileOpen ? '\u2715' : '\u2630'}
+                </button>
+              )}
+              {(!mobile || mobileOpen) && (
+                <div style={{ overflow: 'hidden' }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: GRANATE_LIGHT, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 2 }}>
+                    M&A Estudio
+                  </div>
+                  <div style={{ fontSize: 14, fontWeight: 700 }}>Panel de Admin</div>
+                </div>
+              )}
             </div>
 
-            <nav style={{ flex: 1, padding: '12px 10px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <nav style={{
+              flex: 1, padding: mobile && !mobileOpen ? '8px 4px' : '12px 10px',
+              display: 'flex', flexDirection: 'column', gap: 2,
+            }}>
               {TABS.map((t) => (
                 <button
                   key={t.key}
                   type="button"
-                  onClick={() => setTab(t.key)}
+                  onClick={() => { setTab(t.key); if (mobile) setMobileOpen(false); }}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 12,
-                    padding: '10px 12px', borderRadius: 8,
-                    border: 'none', cursor: 'pointer', fontFamily: 'inherit',
+                    padding: mobile && !mobileOpen ? '10px' : '10px 12px',
+                    borderRadius: 8, border: 'none', cursor: 'pointer', fontFamily: 'inherit',
                     fontSize: 13, fontWeight: tab === t.key ? 600 : 400,
                     background: tab === t.key ? 'rgba(255,255,255,0.1)' : 'transparent',
                     color: tab === t.key ? '#fff' : 'rgba(255,255,255,0.55)',
                     transition: 'background 0.15s, color 0.15s',
-                    textAlign: 'left', width: '100%',
+                    textAlign: 'left', width: '100%', justifyContent: mobile && !mobileOpen ? 'center' : 'flex-start',
                   }}
                   onMouseEnter={(e) => {
                     if (tab !== t.key) e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
@@ -100,38 +140,40 @@ export default function AdminDashboard({ open, onClose }: Props) {
                   }}>
                     {t.icon}
                   </span>
-                  {t.key}
+                  {(!mobile || mobileOpen) && t.key}
                 </button>
               ))}
             </nav>
 
-            <div style={{ padding: '12px 10px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <button
-                type="button"
-                onClick={admin.reset}
-                style={{
-                  padding: '8px 12px', borderRadius: 6,
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  background: 'transparent', color: 'rgba(255,255,255,0.5)',
-                  fontSize: 11, fontWeight: 500, cursor: 'pointer',
-                  fontFamily: 'inherit', textAlign: 'left',
-                }}
-              >
-                Restaurar defaults
-              </button>
-              <button
-                type="button"
-                onClick={onClose}
-                style={{
-                  padding: '8px 12px', borderRadius: 6,
-                  border: 'none', background: GRANATE, color: '#fff',
-                  fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                  fontFamily: 'inherit', textAlign: 'left',
-                }}
-              >
-                Volver al sitio
-              </button>
-            </div>
+            {(!mobile || mobileOpen) && (
+              <div style={{ padding: '12px 10px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <button
+                  type="button"
+                  onClick={admin.reset}
+                  style={{
+                    padding: '8px 12px', borderRadius: 6,
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    background: 'transparent', color: 'rgba(255,255,255,0.5)',
+                    fontSize: 11, fontWeight: 500, cursor: 'pointer',
+                    fontFamily: 'inherit', textAlign: 'left',
+                  }}
+                >
+                  Restaurar defaults
+                </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  style={{
+                    padding: '8px 12px', borderRadius: 6,
+                    border: 'none', background: GRANATE, color: '#fff',
+                    fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                    fontFamily: 'inherit', textAlign: 'left',
+                  }}
+                >
+                  Volver al sitio
+                </button>
+              </div>
+            )}
           </motion.aside>
 
           <motion.div
