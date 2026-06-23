@@ -680,25 +680,50 @@ export default function LuminaPage() {
           margin: 0;
         }
 
-        #lum-toast {
-          position: fixed;
-          bottom: 32px;
-          left: 50%;
-          transform: translateX(-50%);
-          padding: 14px 28px;
-          border-radius: 50px;
-          background: #2d2323;
-          color: #fff;
-          font-size: 14px;
-          font-weight: 500;
-          border: none;
-          box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-          z-index: 200;
-        }
-        .lum-dark #lum-toast {
-          background: #f0e8e5;
-          color: #1a1414;
-        }
+        .lum-cart-layout { display: flex; flex-direction: column; height: 100%; }
+        .lum-cart-header { padding: 20px 24px; border-bottom: 1px solid rgba(184,118,118,0.1); flex-shrink: 0; }
+        .lum-cart-title { margin: 0; font-size: 20px; font-weight: 700; color: var(--lum-text); display: flex; justify-content: space-between; align-items: center; }
+        .lum-cart-close { font-size: 28px; cursor: pointer; color: var(--lum-muted); line-height: 1; }
+        .lum-cart-body { flex: 1; overflow-y: auto; padding: 20px 24px; }
+        .lum-cart-item { display: flex; gap: 14px; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid rgba(184,118,118,0.08); }
+        .lum-cart-item-img-wrap { width: 64px; height: 90px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+        .lum-cart-item-img { width: 100%; height: 100%; object-fit: cover; }
+        .lum-cart-item-info { flex: 1; }
+        .lum-cart-item-name { margin: 0 0 4px; font-weight: 600; font-size: 15px; color: var(--lum-text); }
+        .lum-cart-item-price { margin: 0 0 10px; font-size: 13px; color: var(--lum-muted); }
+        .lum-cart-qty { display: flex; align-items: center; gap: 12px; }
+        .lum-cart-qty-btn { width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(184,118,118,0.2); background: none; color: var(--lum-text); cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+        .lum-cart-qty-btn:hover { background: rgba(184,118,118,0.1); border-color: var(--lum-primary); }
+        .lum-cart-qty span { font-weight: 600; font-size: 15px; min-width: 20px; text-align: center; color: var(--lum-text); }
+        .lum-cart-promo { display: flex; gap: 10px; align-items: flex-start; padding: 12px; background: rgba(184,118,118,0.08); border-radius: 12px; margin-bottom: 14px; }
+        .lum-cart-promo-icon { color: #e8a838; font-size: 18px; flex-shrink: 0; }
+        .lum-cart-promo-title { margin: 0; font-weight: 700; font-size: 13px; color: var(--lum-text); }
+        .lum-cart-promo-desc { margin: 2px 0 0; font-size: 12px; color: var(--lum-primary); font-weight: 600; }
+        .lum-cart-addon { display: flex; gap: 10px; align-items: center; padding: 14px; border: 1px solid rgba(184,118,118,0.12); border-radius: 12px; cursor: pointer; transition: border-color 0.2s; }
+        .lum-cart-addon:hover { border-color: var(--lum-primary); }
+        .lum-cart-checkbox { width: 18px; height: 18px; accent-color: var(--lum-primary); flex-shrink: 0; }
+        .lum-cart-addon-name { margin: 0; font-weight: 600; font-size: 13px; color: var(--lum-text); }
+        .lum-cart-addon-price { margin: 2px 0 0; font-size: 12px; color: var(--lum-muted); }
+        .lum-cart-footer { flex-shrink: 0; padding: 20px 24px; border-top: 1px solid rgba(184,118,118,0.1); }
+        .lum-cart-summary { margin-bottom: 16px; }
+        .lum-cart-row { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; color: var(--lum-muted); }
+        .lum-cart-row-discount { color: #2a8a4a; }
+        .lum-cart-row-total { font-weight: 700; font-size: 17px; color: var(--lum-text); padding-top: 4px; }
+        .lum-cart-divider { height: 1px; background: rgba(184,118,118,0.1); margin: 6px 0; }
+        .lum-cart-checkout { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .lum-cart-footer-note { text-align: center; font-size: 11px; color: var(--lum-muted); margin: 10px 0 0; opacity: 0.7; }
+        .lum-cart-paying, .lum-cart-success { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 40px 32px; text-align: center; }
+        .lum-cart-spinner { width: 40px; height: 40px; border-radius: 50%; border: 3px solid rgba(184,118,118,0.15); border-top-color: var(--lum-primary); animation: lum-spin 0.8s linear infinite; margin-bottom: 20px; }
+        @keyframes lum-spin { to { transform: rotate(360deg); } }
+        .lum-cart-paying p { margin: 0; font-size: 15px; color: var(--lum-text); }
+        .lum-cart-check { width: 56px; height: 56px; border-radius: 50%; background: #2a8a4a; color: #fff; font-size: 28px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        .lum-cart-success-title { margin: 0 0 8px; font-size: 22px; font-weight: 700; color: var(--lum-text); }
+        .lum-cart-success-desc { margin: 0 0 16px; font-size: 14px; color: var(--lum-muted); line-height: 1.6; max-width: 280px; }
+        .lum-cart-success-details { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--lum-muted); margin-bottom: 24px; }
+        .lum-dark .lum-cart-checkbox { accent-color: var(--lum-primary); }
+        .lum-dark .lum-cart-promo { background: rgba(212,148,148,0.1); }
+        .lum-dark .lum-cart-addon { border-color: rgba(212,148,148,0.15); }
+        .lum-dark .lum-cart-addon:hover { border-color: var(--lum-primary); }
       `}</style>
 
       <div className="lum-fullpage">

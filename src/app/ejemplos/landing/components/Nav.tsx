@@ -100,7 +100,7 @@ export default function Nav() {
               exit={{ opacity: 0 }}
               onClick={close}
               style={{
-                position: 'fixed', inset: 0, zIndex: 98,
+                position: 'fixed', inset: 0, zIndex: 99,
                 background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)',
               }}
             />
@@ -113,10 +113,10 @@ export default function Nav() {
               style={{
                 position: 'fixed', top: 0, right: 0, bottom: 0,
                 width: 'min(75vw, 300px)',
-                zIndex: 99,
+                zIndex: 100,
                 background: 'var(--lum-bg)',
                 display: 'flex', flexDirection: 'column',
-                padding: '80px 32px 32px',
+                padding: '56px 32px 32px',
                 boxShadow: '-8px 0 32px rgba(0,0,0,0.15)',
               }}
             >
