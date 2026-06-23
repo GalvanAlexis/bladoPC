@@ -10,8 +10,8 @@ interface Props {
 }
 
 export default function AdminLogin({ open, onClose, onSuccess }: Props) {
-  const [user, setUser] = useState('');
-  const [pass, setPass] = useState('');
+  const [user, setUser] = useState('admin');
+  const [pass, setPass] = useState('admin123');
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {

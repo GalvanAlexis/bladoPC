@@ -367,8 +367,14 @@ export default function LuminaPage() {
         .lum-ingredientes .lum-container { max-width: 1100px; margin: 0 auto; }
         .lum-ing-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          grid-template-columns: repeat(3, 1fr);
           gap: 16px;
+        }
+        @media (max-width: 680px) {
+          .lum-ing-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 400px) {
+          .lum-ing-grid { grid-template-columns: 1fr; }
         }
         .lum-ing-card {
           padding: 0;

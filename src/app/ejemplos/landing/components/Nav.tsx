@@ -184,8 +184,14 @@ export default function Nav() {
         document.body
       )}
 
-      <AdminLogin open={showLogin} onClose={() => setShowLogin(false)} onSuccess={handleLoginSuccess} />
-      <AdminDashboard open={showDash} onClose={() => setShowDash(false)} />
+      {typeof document !== 'undefined' && createPortal(
+        <AdminLogin open={showLogin} onClose={() => setShowLogin(false)} onSuccess={handleLoginSuccess} />,
+        document.body
+      )}
+      {typeof document !== 'undefined' && createPortal(
+        <AdminDashboard open={showDash} onClose={() => setShowDash(false)} />,
+        document.body
+      )}
 
       <style>{`
         .lum-nav-desktop { display: flex; align-items: center; gap: 20px; }
