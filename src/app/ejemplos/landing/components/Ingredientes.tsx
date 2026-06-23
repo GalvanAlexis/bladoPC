@@ -1,6 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const INGREDIENTS = [
   { name: 'Acido Hialuronico', desc: 'Hidratacion profunda y relleno de arrugas', detail: 'El acido hialuronico de triple peso molecular hidrata desde la superficie hasta las capas mas profundas de la piel, reduciendo visiblemente las lineas de expresion y aportando volumen natural.', color: '#b87676', potency: 95 },
@@ -12,6 +13,8 @@ const INGREDIENTS = [
 ];
 
 export default function Ingredientes() {
+  const [selected, setSelected] = useState<string | null>(null);
+
   return (
     <section id="ingredientes" className="lum-section lum-ingredientes">
       <div className="lum-container">
@@ -23,8 +26,7 @@ export default function Ingredientes() {
           {INGREDIENTS.map((ing, i) => (
             <div key={ing.name} className="lum-ing-card" style={{ borderLeftColor: ing.color }}>
               <button
-                popoverTarget={`pop-ing-${ing.name.toLowerCase().replace(/\s+/g, '-')}`}
-                popoverTargetAction="toggle"
+                onClick={() => setSelected(ing.name)}
                 className="lum-ing-btn"
               >
                 <h3 className="lum-ing-name">{ing.name}</h3>
@@ -63,26 +65,83 @@ export default function Ingredientes() {
                   {ing.potency}%
                 </span>
               </button>
-              <div
-                id={`pop-ing-${ing.name.toLowerCase().replace(/\s+/g, '-')}`}
-                popover="auto"
-                className="lum-popover"
-              >
-                <button
-                  popoverTarget={`pop-ing-${ing.name.toLowerCase().replace(/\s+/g, '-')}`}
-                  popoverTargetAction="hide"
-                  className="lum-popover-close"
-                  aria-label="Cerrar"
-                >
-                  &times;
-                </button>
-                <h3 className="lum-popover-title" style={{ color: ing.color }}>{ing.name}</h3>
-                <p className="lum-popover-text">{ing.detail}</p>
-              </div>
             </div>
           ))}
         </div>
       </div>
+
+      <AnimatePresence>
+        {selected && (
+          <>
+            <motion.div
+              key="ing-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelected(null)}
+              style={{
+                position: 'fixed', inset: 0, zIndex: 150,
+                background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)',
+              }}
+            />
+            {(() => {
+              const ing = INGREDIENTS.find(x => x.name === selected);
+              if (!ing) return null;
+              return (
+                <motion.article
+                  key="ing-modal"
+                  initial={{ opacity: 0, scale: 0.85, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.85, y: 20 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                  style={{
+                    position: 'fixed', top: '50%', left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    zIndex: 151,
+                    width: 'min(92vw, 480px)',
+                    background: 'var(--lum-bg)',
+                    borderRadius: 20,
+                    padding: 40,
+                    boxShadow: '0 40px 80px rgba(0,0,0,0.25)',
+                    color: 'var(--lum-text)',
+                    textAlign: 'center',
+                  }}
+                >
+                  <button
+                    onClick={() => setSelected(null)}
+                    style={{
+                      position: 'absolute', top: 16, right: 20,
+                      background: 'none', border: 'none', fontSize: 28,
+                      color: 'var(--lum-muted)', cursor: 'pointer', lineHeight: 1,
+                    }}
+                  >
+                    &times;
+                  </button>
+                  <div
+                    style={{
+                      width: 56, height: 56, borderRadius: '50%',
+                      background: `${ing.color}20`,
+                      margin: '0 auto 16px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}
+                  >
+                    <span style={{ color: ing.color, fontSize: 22, fontWeight: 700 }}>{ing.potency}%</span>
+                  </div>
+                  <h3 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 8px', color: ing.color }}>{ing.name}</h3>
+                  <div
+                    style={{
+                      height: 4, borderRadius: 2, margin: '0 auto 16px',
+                      maxWidth: 200,
+                      background: `linear-gradient(90deg, ${ing.color}, ${ing.color}44)`,
+                    }}
+                  />
+                  <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--lum-muted)', margin: 0 }}>{ing.detail}</p>
+                </motion.article>
+              );
+            })()}
+          </>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

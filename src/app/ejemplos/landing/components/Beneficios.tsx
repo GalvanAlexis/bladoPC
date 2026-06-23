@@ -1,5 +1,8 @@
 'use client';
 
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
 const BENEFITS = [
   {
     icon: '\u{1F4A7}',
@@ -22,6 +25,8 @@ const BENEFITS = [
 ];
 
 export default function Beneficios() {
+  const [selected, setSelected] = useState<string | null>(null);
+
   return (
     <section id="beneficios" className="lum-section lum-beneficios">
       <div className="lum-container">
@@ -36,34 +41,75 @@ export default function Beneficios() {
               style={{ ['--card-delay' as string]: `${i * 0.15}s` }}
             >
               <button
-                popoverTarget={`pop-${b.title.toLowerCase().replace(/\s+/g, '-')}`}
-                popoverTargetAction="toggle"
+                onClick={() => setSelected(b.title)}
                 className="lum-card-btn"
               >
                 <div className="lum-card-icon">{b.icon}</div>
                 <h3 className="lum-card-title">{b.title}</h3>
                 <p className="lum-card-desc">{b.desc}</p>
               </button>
-              <div
-                id={`pop-${b.title.toLowerCase().replace(/\s+/g, '-')}`}
-                popover="auto"
-                className="lum-popover"
-              >
-                <button
-                  popoverTarget={`pop-${b.title.toLowerCase().replace(/\s+/g, '-')}`}
-                  popoverTargetAction="hide"
-                  className="lum-popover-close"
-                  aria-label="Cerrar"
-                >
-                  &times;
-                </button>
-                <h3 className="lum-popover-title">{b.title}</h3>
-                <p className="lum-popover-text">{b.detail}</p>
-              </div>
             </div>
           ))}
         </div>
       </div>
+
+      <AnimatePresence>
+        {selected && (
+          <>
+            <motion.div
+              key="ben-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelected(null)}
+              style={{
+                position: 'fixed', inset: 0, zIndex: 150,
+                background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)',
+              }}
+            />
+            {(() => {
+              const b = BENEFITS.find(x => x.title === selected);
+              if (!b) return null;
+              return (
+                <motion.article
+                  key="ben-modal"
+                  initial={{ opacity: 0, scale: 0.85, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.85, y: 20 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                  style={{
+                    position: 'fixed', top: '50%', left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    zIndex: 151,
+                    width: 'min(92vw, 480px)',
+                    background: 'var(--lum-bg)',
+                    borderRadius: 20,
+                    padding: 40,
+                    boxShadow: '0 40px 80px rgba(0,0,0,0.25)',
+                    color: 'var(--lum-text)',
+                    textAlign: 'center',
+                  }}
+                >
+                  <button
+                    onClick={() => setSelected(null)}
+                    style={{
+                      position: 'absolute', top: 16, right: 20,
+                      background: 'none', border: 'none', fontSize: 28,
+                      color: 'var(--lum-muted)', cursor: 'pointer', lineHeight: 1,
+                    }}
+                  >
+                    &times;
+                  </button>
+                  <div style={{ fontSize: 48, marginBottom: 16 }}>{b.icon}</div>
+                  <h3 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 12px' }}>{b.title}</h3>
+                  <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--lum-muted)', margin: 0 }}>{b.detail}</p>
+                </motion.article>
+              );
+            })()}
+          </>
+        )}
+      </AnimatePresence>
+
       <style>{`
         .lum-card-reveal {
           view-timeline-name: --card;
