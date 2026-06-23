@@ -340,12 +340,12 @@ function ServiciosTab({ admin }: { admin: ReturnType<typeof useAdmin> }) {
   return (
     <CrudList<ServicioItem>
       items={admin.servicios}
-      fields={['titulo', 'desc', 'publico', 'precio']}
+      fields={['titulo', 'desc', 'detalle', 'publico', 'precio']}
       onAdd={admin.addServicio}
       onUpdate={admin.updateServicio}
       onDelete={admin.deleteServicio}
-      newItem={{ titulo: '', desc: '', publico: '', precio: '' }}
-      labels={{ titulo: 'Titulo', desc: 'Descripcion', publico: 'Publico', precio: 'Precio' }}
+      newItem={{ titulo: '', desc: '', detalle: '', publico: '', precio: '' }}
+      labels={{ titulo: 'Titulo', desc: 'Descripcion', detalle: 'Detalle', publico: 'Publico', precio: 'Precio' }}
     />
   );
 }
