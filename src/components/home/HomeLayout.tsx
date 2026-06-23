@@ -7,7 +7,7 @@ import HeroSection from '@/components/home/HeroSection';
 import ServicesSection from '@/components/home/ServicesSection';
 import AboutSection from '@/components/home/AboutSection';
 import SkillsSection from '@/components/home/SkillsSection';
-import StatsSection from '@/components/home/StatsSection';
+import ContactSection from '@/components/home/ContactSection';
 import AdminLogin from '@/components/home/AdminLogin';
 import AdminDashboard from '@/components/home/AdminDashboard';
 import RevealObserver from '@/components/home/RevealObserver';
@@ -59,7 +59,7 @@ export default function HomeLayout() {
         <ServicesSection />
         <AboutSection />
         <SkillsSection />
-        <StatsSection />
+        <ContactSection />
 
         <footer
           style={{
