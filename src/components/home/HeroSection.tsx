@@ -119,6 +119,10 @@ export default function HeroSection() {
             <span style={{ color: 'var(--foreground-2)' }}>
               &iquest;Cansado de tareas repetitivas?
             </span>
+            <br className="hidden sm:block" />
+            <span style={{ color: 'var(--foreground-2)' }}>
+              &iquest;Gestionas todo a mano?
+            </span>
           </motion.h1>
 
           {/* Sub-headline */}
@@ -145,6 +149,7 @@ export default function HeroSection() {
             variants={fadeUp}
             style={{
               display: 'flex',
+              justifyContent: 'center',
               flexWrap: 'wrap',
               gap: '12px',
             }}
