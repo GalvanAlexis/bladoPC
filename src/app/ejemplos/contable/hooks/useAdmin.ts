@@ -76,7 +76,14 @@ function loadState(): ContableAdminState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      return { ...DEFAULTS, ...parsed };
+      const merged = { ...DEFAULTS, ...parsed };
+      if (Array.isArray(parsed.servicios)) {
+        merged.servicios = parsed.servicios.map((s: Partial<ServicioItem>) => {
+          const def = DEFAULTS.servicios.find((d) => d.id === s.id);
+          return { ...def, ...s } as ServicioItem;
+        });
+      }
+      return merged;
     }
   } catch {
     /* ignore */
