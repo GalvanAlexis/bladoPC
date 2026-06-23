@@ -32,10 +32,13 @@ export default function HomeLayout() {
       <Navbar
         onToggleSidebar={() => setSidebarOpen((p) => !p)}
         sidebarOpen={sidebarOpen}
-        onAdminClick={() => setShowAdminLogin(true)}
       />
 
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        onAdminClick={() => setShowAdminLogin(true)}
+      />
 
       <AdminLogin
         isOpen={showAdminLogin}
