@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAdmin, Miembro, ServicioItem, FAQItem, RecursoItem } from '../hooks/useAdmin';
 
@@ -10,187 +10,207 @@ interface Props {
 }
 
 const GRANATE = '#7a1a1a';
+const GRANATE_LIGHT = '#9a2a2a';
 const BG_WARM = '#f5f3f0';
-const BG_SECTION = '#edeae5';
+const TEXT_PRIMARY = '#1a1a1a';
 const TEXT_SEC = '#5a5550';
 
-const TABS = ['Hero', 'Equipo', 'Servicios', 'FAQ', 'Recursos'] as const;
+const TABS = [
+  { key: 'Hero', icon: 'H' },
+  { key: 'Equipo', icon: 'U' },
+  { key: 'Servicios', icon: 'S' },
+  { key: 'FAQ', icon: '?' },
+  { key: 'Recursos', icon: 'R' },
+] as const;
+
+type TabKey = (typeof TABS)[number]['key'];
 
 export default function AdminDashboard({ open, onClose }: Props) {
   const admin = useAdmin();
-  const [tab, setTab] = useState<(typeof TABS)[number]>('Hero');
+  const [tab, setTab] = useState<TabKey>('Hero');
+
+  useEffect(() => {
+    if (open) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
 
   return (
     <AnimatePresence>
       {open && (
-        <>
-          <motion.div
-            key="dash-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
+        <motion.div
+          key="dash"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.15 }}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 300,
+            background: '#fff',
+            display: 'flex', fontFamily: "'Inter', system-ui, sans-serif",
+          }}
+        >
+          {/* --- Sidebar --- */}
+          <motion.aside
+            initial={{ x: -40, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.25, delay: 0.05 }}
             style={{
-              position: 'fixed', inset: 0, zIndex: 300,
-              background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(6px)',
-            }}
-          />
-          <div
-            style={{
-              position: 'fixed', inset: 0, zIndex: 301,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              pointerEvents: 'none',
-              padding: 24,
+              width: 220, flexShrink: 0,
+              background: '#1a1a1a',
+              display: 'flex', flexDirection: 'column',
+              color: '#fff', overflow: 'hidden',
             }}
           >
-            <motion.div
-              key="dash-panel"
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-              style={{
-                pointerEvents: 'auto',
-                width: 'min(95vw, 700px)',
-                maxHeight: '90vh',
-                borderRadius: 16,
-                background: BG_WARM,
-                boxShadow: '0 40px 80px rgba(0,0,0,0.25)',
-                display: 'flex', flexDirection: 'column',
-                overflow: 'hidden',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  padding: '20px 24px 0',
-                }}
-              >
-                <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>Panel de administracion</h2>
+            <div style={{ padding: '24px 20px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: GRANATE_LIGHT, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 2 }}>
+                M&A Estudio
+              </div>
+              <div style={{ fontSize: 14, fontWeight: 700 }}>Panel de Admin</div>
+            </div>
+
+            <nav style={{ flex: 1, padding: '12px 10px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {TABS.map((t) => (
                 <button
+                  key={t.key}
                   type="button"
-                  onClick={onClose}
-                  aria-label="Cerrar"
+                  onClick={() => setTab(t.key)}
                   style={{
-                    background: 'none', border: 'none', fontSize: 24,
-                    color: TEXT_SEC, cursor: 'pointer', lineHeight: 1,
-                    padding: '4px 8px',
+                    display: 'flex', alignItems: 'center', gap: 12,
+                    padding: '10px 12px', borderRadius: 8,
+                    border: 'none', cursor: 'pointer', fontFamily: 'inherit',
+                    fontSize: 13, fontWeight: tab === t.key ? 600 : 400,
+                    background: tab === t.key ? 'rgba(255,255,255,0.1)' : 'transparent',
+                    color: tab === t.key ? '#fff' : 'rgba(255,255,255,0.55)',
+                    transition: 'background 0.15s, color 0.15s',
+                    textAlign: 'left', width: '100%',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (tab !== t.key) e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
+                  }}
+                  onMouseLeave={(e) => {
+                    if (tab !== t.key) e.currentTarget.style.background = 'transparent';
                   }}
                 >
-                  &times;
+                  <span style={{
+                    width: 28, height: 28, borderRadius: 6,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 12, fontWeight: 700, flexShrink: 0,
+                    background: tab === t.key ? GRANATE : 'rgba(255,255,255,0.08)',
+                    color: '#fff',
+                  }}>
+                    {t.icon}
+                  </span>
+                  {t.key}
                 </button>
-              </div>
+              ))}
+            </nav>
 
-              <div
+            <div style={{ padding: '12px 10px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <button
+                type="button"
+                onClick={admin.reset}
                 style={{
-                  display: 'flex', gap: 4, padding: '16px 24px 0',
-                  overflowX: 'auto', flexShrink: 0,
+                  padding: '8px 12px', borderRadius: 6,
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  background: 'transparent', color: 'rgba(255,255,255,0.5)',
+                  fontSize: 11, fontWeight: 500, cursor: 'pointer',
+                  fontFamily: 'inherit', textAlign: 'left',
                 }}
               >
-                {TABS.map((t) => (
-                  <button
-                    key={t}
-                    type="button"
-                    onClick={() => setTab(t)}
-                    style={{
-                      padding: '8px 18px', borderRadius: '8px 8px 0 0',
-                      border: 'none', cursor: 'pointer', fontFamily: 'inherit',
-                      fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap',
-                      background: tab === t ? '#fff' : 'transparent',
-                      color: tab === t ? GRANATE : TEXT_SEC,
-                      boxShadow: tab === t ? '0 -1px 4px rgba(0,0,0,0.04)' : 'none',
-                    }}
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
-
-              <div style={{ flex: 1, overflow: 'auto', padding: 20, background: '#fff', borderRadius: '0 12px 12px 12px' }}>
-                {tab === 'Hero' && <HeroTab admin={admin} />}
-                {tab === 'Equipo' && <EquipoTab admin={admin} />}
-                {tab === 'Servicios' && <ServiciosTab admin={admin} />}
-                {tab === 'FAQ' && <FAQTab admin={admin} />}
-                {tab === 'Recursos' && <RecursosTab admin={admin} />}
-              </div>
-
-              <div
+                Restaurar defaults
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
                 style={{
-                  padding: '12px 20px', borderTop: '1px solid rgba(0,0,0,0.04)',
-                  display: 'flex', justifyContent: 'flex-end', gap: 8, flexShrink: 0,
+                  padding: '8px 12px', borderRadius: 6,
+                  border: 'none', background: GRANATE, color: '#fff',
+                  fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                  fontFamily: 'inherit', textAlign: 'left',
                 }}
               >
-                <button
-                  type="button"
-                  onClick={admin.reset}
-                  style={{
-                    padding: '8px 16px', borderRadius: 6,
-                    border: '1px solid rgba(0,0,0,0.1)',
-                    background: '#fff', color: TEXT_SEC, fontSize: 12,
-                    cursor: 'pointer', fontFamily: 'inherit', fontWeight: 500,
-                  }}
-                >
-                  Restaurar defaults
-                </button>
-                <button
-                  type="button"
-                  onClick={onClose}
-                  style={{
-                    padding: '8px 20px', borderRadius: 6,
-                    border: 'none', background: GRANATE, color: '#fff',
-                    fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
-                  }}
-                >
-                  Cerrar
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        </>
+                Volver al sitio
+              </button>
+            </div>
+          </motion.aside>
+
+          {/* --- Content --- */}
+          <motion.div
+            key={tab}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2 }}
+            style={{ flex: 1, overflow: 'auto', background: BG_WARM, padding: '32px 40px' }}
+          >
+            <div style={{ maxWidth: 800 }}>
+              {tab === 'Hero' && <HeroTab admin={admin} />}
+              {tab === 'Equipo' && <EquipoTab admin={admin} />}
+              {tab === 'Servicios' && <ServiciosTab admin={admin} />}
+              {tab === 'FAQ' && <FAQTab admin={admin} />}
+              {tab === 'Recursos' && <RecursosTab admin={admin} />}
+            </div>
+          </motion.div>
+        </motion.div>
       )}
     </AnimatePresence>
   );
 }
 
-/* ─── Hero Tab ─── */
+/* --- Hero Tab --- */
 function HeroTab({ admin }: { admin: ReturnType<typeof useAdmin> }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <div>
-        <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 4, color: '#1a1a1a' }}>
-          Tagline del Hero
-        </label>
+    <Section title="Hero" desc="Texto principal que se ve arriba de todo.">
+      <Field label="Tagline del Hero">
         <input
           value={admin.heroTagline}
           onChange={(e) => admin.update({ heroTagline: e.target.value })}
-          style={{
-            width: '100%', padding: '10px 14px', borderRadius: 6,
-            border: '1px solid rgba(0,0,0,0.08)', fontSize: 14,
-            background: BG_WARM, fontFamily: 'inherit', boxSizing: 'border-box',
-          }}
+          style={inputStyle}
         />
-      </div>
-      <div>
-        <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 4, color: '#1a1a1a' }}>
-          Descripcion del Hero
-        </label>
+      </Field>
+      <Field label="Descripcion del Hero">
         <textarea
           value={admin.heroDesc}
           onChange={(e) => admin.update({ heroDesc: e.target.value })}
           rows={3}
-          style={{
-            width: '100%', padding: '10px 14px', borderRadius: 6,
-            border: '1px solid rgba(0,0,0,0.08)', fontSize: 14,
-            background: BG_WARM, fontFamily: 'inherit', boxSizing: 'border-box',
-            resize: 'vertical',
-          }}
+          style={{ ...inputStyle, resize: 'vertical' }}
         />
+      </Field>
+    </Section>
+  );
+}
+
+/* --- Section wrapper --- */
+function Section({ title, desc, children }: { title: string; desc?: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <h2 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 4px 0', color: TEXT_PRIMARY }}>{title}</h2>
+      {desc && <p style={{ fontSize: 13, color: TEXT_SEC, margin: '0 0 24px 0' }}>{desc}</p>}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        {children}
       </div>
     </div>
   );
 }
 
-/* ─── Generic CRUD List ─── */
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 6, color: TEXT_PRIMARY }}>
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+const inputStyle: React.CSSProperties = {
+  width: '100%', padding: '10px 14px', borderRadius: 6,
+  border: '1px solid rgba(0,0,0,0.08)', fontSize: 14, fontFamily: 'inherit',
+  background: '#fff', boxSizing: 'border-box',
+};
+
+/* --- Generic CRUD List --- */
 function CrudList<T extends { id: string }>({
   items,
   fields,
@@ -220,58 +240,53 @@ function CrudList<T extends { id: string }>({
         <div
           key={item.id}
           style={{
-            padding: '14px 16px', borderRadius: 8,
-            background: BG_WARM, border: '1px solid rgba(0,0,0,0.04)',
+            padding: '16px 20px', borderRadius: 10,
+            background: '#fff', border: '1px solid rgba(0,0,0,0.04)',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
           }}
         >
           {editing === item.id ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {fields.map((f) => (
                 <div key={String(f)}>
-                  <label style={{ display: 'block', fontSize: 11, fontWeight: 600, marginBottom: 2, color: TEXT_SEC }}>
+                  <label style={{ display: 'block', fontSize: 11, fontWeight: 600, marginBottom: 4, color: TEXT_SEC }}>
                     {fieldLabel(f)}
                   </label>
                   <input
                     value={String((item as any)[f] ?? '')}
                     onChange={(e) => onUpdate(item.id, { [f]: e.target.value } as Partial<T>)}
                     style={{
-                      width: '100%', padding: '8px 12px', borderRadius: 4,
+                      width: '100%', padding: '8px 12px', borderRadius: 6,
                       border: '1px solid rgba(0,0,0,0.08)', fontSize: 13,
-                      background: '#fff', fontFamily: 'inherit', boxSizing: 'border-box',
+                      background: BG_WARM, fontFamily: 'inherit', boxSizing: 'border-box',
                     }}
                   />
                 </div>
               ))}
               <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
-                <button
-                  type="button"
-                  onClick={() => setEditing(null)}
-                  style={{
-                    padding: '6px 14px', borderRadius: 4, border: '1px solid rgba(0,0,0,0.1)',
-                    background: '#fff', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
-                  }}
-                >
+                <button type="button" onClick={() => setEditing(null)}
+                  style={chipBtn}>
                   Cerrar
                 </button>
               </div>
             </div>
           ) : (
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
-              <div style={{ flex: 1, fontSize: 13, lineHeight: 1.5, color: '#1a1a1a' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+              <div style={{ flex: 1, fontSize: 13, lineHeight: 1.6, color: TEXT_PRIMARY }}>
                 {fields.map((f, i) => (
                   <span key={String(f)}>
-                    {i > 0 && <span style={{ color: TEXT_SEC }}> &mdash; </span>}
+                    {i > 0 && <span style={{ color: TEXT_SEC }}> &middot; </span>}
                     <strong>{fieldLabel(f)}:</strong> {String((item as any)[f] ?? '')}
                   </span>
                 ))}
               </div>
               <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
                 <button type="button" onClick={() => setEditing(item.id)}
-                  style={{ padding: '4px 10px', borderRadius: 4, border: 'none', background: 'rgba(122,26,26,0.08)', color: GRANATE, fontSize: 11, cursor: 'pointer', fontFamily: 'inherit', fontWeight: 600 }}>
+                  style={{ ...chipBtn, background: 'rgba(122,26,26,0.08)', color: GRANATE, fontWeight: 600 }}>
                   Editar
                 </button>
                 <button type="button" onClick={() => onDelete(item.id)}
-                  style={{ padding: '4px 10px', borderRadius: 4, border: 'none', background: 'rgba(192,57,43,0.08)', color: '#c0392b', fontSize: 11, cursor: 'pointer', fontFamily: 'inherit', fontWeight: 600 }}>
+                  style={{ ...chipBtn, background: 'rgba(192,57,43,0.08)', color: '#c0392b', fontWeight: 600 }}>
                   Eliminar
                 </button>
               </div>
@@ -281,17 +296,17 @@ function CrudList<T extends { id: string }>({
       ))}
 
       {adding && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: 12, borderRadius: 8, border: '2px dashed rgba(122,26,26,0.2)', background: '#fff' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: 16, borderRadius: 10, border: '2px dashed rgba(122,26,26,0.2)', background: '#fff' }}>
           {fields.map((f) => (
             <div key={String(f)}>
-              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, marginBottom: 2, color: TEXT_SEC }}>
+              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, marginBottom: 4, color: TEXT_SEC }}>
                 {fieldLabel(f)}
               </label>
               <input
                 value={String((draft as any)[f] ?? '')}
                 onChange={(e) => setDraft({ ...draft, [f]: e.target.value } as Omit<T, 'id'>)}
                 style={{
-                  width: '100%', padding: '8px 12px', borderRadius: 4,
+                  width: '100%', padding: '8px 12px', borderRadius: 6,
                   border: '1px solid rgba(0,0,0,0.08)', fontSize: 13,
                   background: BG_WARM, fontFamily: 'inherit', boxSizing: 'border-box',
                 }}
@@ -300,11 +315,11 @@ function CrudList<T extends { id: string }>({
           ))}
           <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
             <button type="button" onClick={() => { setAdding(false); setDraft(newItem); }}
-              style={{ padding: '6px 14px', borderRadius: 4, border: '1px solid rgba(0,0,0,0.1)', background: '#fff', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit' }}>
+              style={chipBtn}>
               Cancelar
             </button>
             <button type="button" onClick={() => { onAdd(draft); setAdding(false); setDraft(newItem); }}
-              style={{ padding: '6px 14px', borderRadius: 4, border: 'none', background: GRANATE, color: '#fff', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit', fontWeight: 600 }}>
+              style={{ ...chipBtn, background: GRANATE, color: '#fff', fontWeight: 600, border: 'none' }}>
               Agregar
             </button>
           </div>
@@ -313,7 +328,11 @@ function CrudList<T extends { id: string }>({
 
       {!adding && (
         <button type="button" onClick={() => setAdding(true)}
-          style={{ padding: '10px', borderRadius: 6, border: '2px dashed rgba(122,26,26,0.15)', background: 'transparent', color: GRANATE, fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>
+          style={{
+            padding: '12px', borderRadius: 8, border: '2px dashed rgba(122,26,26,0.15)',
+            background: 'transparent', color: GRANATE, fontSize: 12, fontWeight: 600,
+            cursor: 'pointer', fontFamily: 'inherit',
+          }}>
           + Agregar nuevo
         </button>
       )}
@@ -321,59 +340,73 @@ function CrudList<T extends { id: string }>({
   );
 }
 
-/* ─── Tab wrappers ─── */
+const chipBtn: React.CSSProperties = {
+  padding: '6px 14px', borderRadius: 6, border: '1px solid rgba(0,0,0,0.1)',
+  background: '#fff', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
+  color: TEXT_SEC,
+};
+
+/* --- Tab wrappers --- */
 function EquipoTab({ admin }: { admin: ReturnType<typeof useAdmin> }) {
   return (
-    <CrudList<Miembro>
-      items={admin.equipo}
-      fields={['nombre', 'rol', 'bio']}
-      onAdd={admin.addMiembro}
-      onUpdate={admin.updateMiembro}
-      onDelete={admin.deleteMiembro}
-      newItem={{ nombre: '', rol: '', bio: '' }}
-      labels={{ nombre: 'Nombre', rol: 'Rol', bio: 'Bio' }}
-    />
+    <Section title="Equipo" desc="Miembros del estudio contable.">
+      <CrudList<Miembro>
+        items={admin.equipo}
+        fields={['nombre', 'rol', 'bio']}
+        onAdd={admin.addMiembro}
+        onUpdate={admin.updateMiembro}
+        onDelete={admin.deleteMiembro}
+        newItem={{ nombre: '', rol: '', bio: '' }}
+        labels={{ nombre: 'Nombre', rol: 'Rol', bio: 'Bio' }}
+      />
+    </Section>
   );
 }
 
 function ServiciosTab({ admin }: { admin: ReturnType<typeof useAdmin> }) {
   return (
-    <CrudList<ServicioItem>
-      items={admin.servicios}
-      fields={['titulo', 'desc', 'detalle', 'publico', 'precio']}
-      onAdd={admin.addServicio}
-      onUpdate={admin.updateServicio}
-      onDelete={admin.deleteServicio}
-      newItem={{ titulo: '', desc: '', detalle: '', publico: '', precio: '' }}
-      labels={{ titulo: 'Titulo', desc: 'Descripcion', detalle: 'Detalle', publico: 'Publico', precio: 'Precio' }}
-    />
+    <Section title="Servicios" desc="Servicios que se muestran en la pagina.">
+      <CrudList<ServicioItem>
+        items={admin.servicios}
+        fields={['titulo', 'desc', 'detalle', 'publico', 'precio']}
+        onAdd={admin.addServicio}
+        onUpdate={admin.updateServicio}
+        onDelete={admin.deleteServicio}
+        newItem={{ titulo: '', desc: '', detalle: '', publico: '', precio: '' }}
+        labels={{ titulo: 'Titulo', desc: 'Descripcion', detalle: 'Detalle', publico: 'Publico', precio: 'Precio' }}
+      />
+    </Section>
   );
 }
 
 function FAQTab({ admin }: { admin: ReturnType<typeof useAdmin> }) {
   return (
-    <CrudList<FAQItem>
-      items={admin.faq}
-      fields={['q', 'a']}
-      onAdd={admin.addFAQ}
-      onUpdate={admin.updateFAQ}
-      onDelete={admin.deleteFAQ}
-      newItem={{ q: '', a: '' }}
-      labels={{ q: 'Pregunta', a: 'Respuesta' }}
-    />
+    <Section title="FAQ" desc="Preguntas frecuentes.">
+      <CrudList<FAQItem>
+        items={admin.faq}
+        fields={['q', 'a']}
+        onAdd={admin.addFAQ}
+        onUpdate={admin.updateFAQ}
+        onDelete={admin.deleteFAQ}
+        newItem={{ q: '', a: '' }}
+        labels={{ q: 'Pregunta', a: 'Respuesta' }}
+      />
+    </Section>
   );
 }
 
 function RecursosTab({ admin }: { admin: ReturnType<typeof useAdmin> }) {
   return (
-    <CrudList<RecursoItem>
-      items={admin.recursos}
-      fields={['titulo', 'desc', 'popoverContent']}
-      onAdd={admin.addRecurso}
-      onUpdate={admin.updateRecurso}
-      onDelete={admin.deleteRecurso}
-      newItem={{ titulo: '', desc: '', popoverContent: '' }}
-      labels={{ titulo: 'Titulo', desc: 'Descripcion', popoverContent: 'Contenido completo' }}
-    />
+    <Section title="Recursos" desc="Recursos y guias descargables.">
+      <CrudList<RecursoItem>
+        items={admin.recursos}
+        fields={['titulo', 'desc', 'popoverContent']}
+        onAdd={admin.addRecurso}
+        onUpdate={admin.updateRecurso}
+        onDelete={admin.deleteRecurso}
+        newItem={{ titulo: '', desc: '', popoverContent: '' }}
+        labels={{ titulo: 'Titulo', desc: 'Descripcion', popoverContent: 'Contenido completo' }}
+      />
+    </Section>
   );
 }
