@@ -1,14 +1,21 @@
 "use client";
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMousePosition } from '@/components/home/hooks/useMousePosition';
+
+const QUESTIONS = [
+  "La PC no anda bien?",
+  "Cansado de tareas repetitivas?",
+  "Gestionas todo a mano?",
+];
 
 export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { progressX, progressY, isWithin } = useMousePosition(containerRef);
   const [showDialog, setShowDialog] = useState(false);
+  const [questionIndex, setQuestionIndex] = useState(0);
 
   const rotateX = isWithin ? (progressY - 0.5) * -8 : 0;
   const rotateY = isWithin ? (progressX - 0.5) * 8 : 0;
@@ -17,6 +24,13 @@ export default function HeroSection() {
     hidden: {},
     visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setQuestionIndex((prev) => (prev + 1) % QUESTIONS.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, []);
 
   const fadeUp = {
     hidden: { opacity: 0, y: 24 },
@@ -105,24 +119,28 @@ export default function HeroSection() {
           <motion.h1
             variants={fadeUp}
             style={{
-              fontSize: 'clamp(40px, 7vw, 88px)',
+              fontSize: 'clamp(32px, 5vw, 60px)',
               fontWeight: 700,
               letterSpacing: '-0.03em',
-              lineHeight: 1.05,
+              lineHeight: 1.15,
               color: 'var(--foreground)',
-              margin: '0 0 16px',
+              margin: '0 0 8px',
               textWrap: 'balance',
+              minHeight: '1.4em',
             }}
           >
-            &iquest;La PC no anda bien?{' '}
-            <br className="hidden sm:block" />
-            <span style={{ color: 'var(--foreground-2)' }}>
-              &iquest;Cansado de tareas repetitivas?
-            </span>
-            <br className="hidden sm:block" />
-            <span style={{ color: 'var(--foreground-2)' }}>
-              &iquest;Gestionas todo a mano?
-            </span>
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={questionIndex}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                style={{ display: 'inline-block' }}
+              >
+                {QUESTIONS[questionIndex]}
+              </motion.span>
+            </AnimatePresence>
           </motion.h1>
 
           {/* Sub-headline */}
