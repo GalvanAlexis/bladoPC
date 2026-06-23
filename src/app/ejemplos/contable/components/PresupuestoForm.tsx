@@ -16,6 +16,9 @@ interface Props {
 export default function PresupuestoForm({ label = 'Solicitar presupuesto', btnStyle }: Props) {
   const [open, setOpen] = useState(false);
   const [state, setState] = useState<'idle' | 'loading' | 'success'>('idle');
+  const [nombre] = useState('Juan Perez');
+  const [contacto] = useState('juan@ejemplo.com');
+  const [mensaje] = useState('Hola, quiero saber mas sobre sus servicios contables para mi negocio.');
 
   useEffect(() => {
     if (open) document.body.style.overflow = 'hidden';
@@ -129,12 +132,14 @@ export default function PresupuestoForm({ label = 'Solicitar presupuesto', btnSt
                     </label>
                     <input
                       required
+                      readOnly
+                      value={nombre}
                       style={{
                         width: '100%', padding: '10px 14px', borderRadius: 6,
                         border: '1px solid rgba(0,0,0,0.08)', fontSize: 14, fontFamily: 'inherit',
-                        background: BG_WARM, boxSizing: 'border-box',
+                        background: '#f0ede8', boxSizing: 'border-box', cursor: 'default',
+                        color: TEXT_PRIMARY,
                       }}
-                      placeholder="Tu nombre"
                     />
                   </div>
                   <div style={{ marginBottom: 16 }}>
@@ -143,12 +148,14 @@ export default function PresupuestoForm({ label = 'Solicitar presupuesto', btnSt
                     </label>
                     <input
                       required
+                      readOnly
+                      value={contacto}
                       style={{
                         width: '100%', padding: '10px 14px', borderRadius: 6,
                         border: '1px solid rgba(0,0,0,0.08)', fontSize: 14, fontFamily: 'inherit',
-                        background: BG_WARM, boxSizing: 'border-box',
+                        background: '#f0ede8', boxSizing: 'border-box', cursor: 'default',
+                        color: TEXT_PRIMARY,
                       }}
-                      placeholder="ejemplo@correo.com"
                     />
                   </div>
                   <div style={{ marginBottom: 24 }}>
@@ -157,13 +164,14 @@ export default function PresupuestoForm({ label = 'Solicitar presupuesto', btnSt
                     </label>
                     <textarea
                       required
+                      readOnly
+                      value={mensaje}
                       style={{
                         width: '100%', padding: '10px 14px', borderRadius: 6,
                         border: '1px solid rgba(0,0,0,0.08)', fontSize: 14, fontFamily: 'inherit',
-                        background: BG_WARM, boxSizing: 'border-box',
-                        resize: 'vertical', minHeight: 80,
+                        background: '#f0ede8', boxSizing: 'border-box', cursor: 'default',
+                        resize: 'vertical', minHeight: 80, color: TEXT_PRIMARY,
                       }}
-                      placeholder="Contame de tu negocio y en que necesitas ayuda..."
                     />
                   </div>
                   <button
