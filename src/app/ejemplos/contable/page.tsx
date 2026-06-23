@@ -39,7 +39,7 @@ export default function ContablePage() {
       <Hero tagline={admin.heroTagline} desc={admin.heroDesc} />
       <Contadores />
       <Proceso />
-      <Timeline />
+      <Timeline historia={admin.historia} />
       <Servicios servicios={admin.servicios} />
       <Diferenciales />
       <Equipo equipo={admin.equipo} />

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAdmin, Miembro, ServicioItem, FAQItem, RecursoItem } from '../hooks/useAdmin';
+import { useAdmin, Miembro, ServicioItem, FAQItem, HistoriaItem } from '../hooks/useAdmin';
 
 interface Props {
   open: boolean;
@@ -16,18 +16,18 @@ const TEXT_PRIMARY = '#1a1a1a';
 const TEXT_SEC = '#5a5550';
 
 const TABS = [
-  { key: 'Hero', icon: 'H' },
   { key: 'Equipo', icon: 'U' },
   { key: 'Servicios', icon: 'S' },
   { key: 'FAQ', icon: '?' },
-  { key: 'Recursos', icon: 'R' },
+  { key: 'Historia', icon: 'T' },
+  { key: 'Metricas', icon: 'M' },
 ] as const;
 
 type TabKey = (typeof TABS)[number]['key'];
 
 export default function AdminDashboard({ open, onClose }: Props) {
   const admin = useAdmin();
-  const [tab, setTab] = useState<TabKey>('Hero');
+  const [tab, setTab] = useState<TabKey>('Equipo');
 
   useEffect(() => {
     if (open) document.body.style.overflow = 'hidden';
@@ -50,7 +50,6 @@ export default function AdminDashboard({ open, onClose }: Props) {
             display: 'flex', fontFamily: "'Inter', system-ui, sans-serif",
           }}
         >
-          {/* --- Sidebar --- */}
           <motion.aside
             initial={{ x: -40, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -135,7 +134,6 @@ export default function AdminDashboard({ open, onClose }: Props) {
             </div>
           </motion.aside>
 
-          {/* --- Content --- */}
           <motion.div
             key={tab}
             initial={{ opacity: 0, x: 20 }}
@@ -144,39 +142,16 @@ export default function AdminDashboard({ open, onClose }: Props) {
             style={{ flex: 1, overflow: 'auto', background: BG_WARM, padding: '32px 40px' }}
           >
             <div style={{ maxWidth: 800 }}>
-              {tab === 'Hero' && <HeroTab admin={admin} />}
               {tab === 'Equipo' && <EquipoTab admin={admin} />}
               {tab === 'Servicios' && <ServiciosTab admin={admin} />}
               {tab === 'FAQ' && <FAQTab admin={admin} />}
-              {tab === 'Recursos' && <RecursosTab admin={admin} />}
+              {tab === 'Historia' && <HistoriaTab admin={admin} />}
+              {tab === 'Metricas' && <MetricasTab />}
             </div>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
-  );
-}
-
-/* --- Hero Tab --- */
-function HeroTab({ admin }: { admin: ReturnType<typeof useAdmin> }) {
-  return (
-    <Section title="Hero" desc="Texto principal que se ve arriba de todo.">
-      <Field label="Tagline del Hero">
-        <input
-          value={admin.heroTagline}
-          onChange={(e) => admin.update({ heroTagline: e.target.value })}
-          style={inputStyle}
-        />
-      </Field>
-      <Field label="Descripcion del Hero">
-        <textarea
-          value={admin.heroDesc}
-          onChange={(e) => admin.update({ heroDesc: e.target.value })}
-          rows={3}
-          style={{ ...inputStyle, resize: 'vertical' }}
-        />
-      </Field>
-    </Section>
   );
 }
 
@@ -193,24 +168,13 @@ function Section({ title, desc, children }: { title: string; desc?: string; chil
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 6, color: TEXT_PRIMARY }}>
-        {label}
-      </label>
-      {children}
-    </div>
-  );
-}
-
 const inputStyle: React.CSSProperties = {
   width: '100%', padding: '10px 14px', borderRadius: 6,
   border: '1px solid rgba(0,0,0,0.08)', fontSize: 14, fontFamily: 'inherit',
   background: '#fff', boxSizing: 'border-box',
 };
 
-/* --- Generic CRUD List --- */
+/* --- Generic CRUD List (add button at top) --- */
 function CrudList<T extends { id: string }>({
   items,
   fields,
@@ -236,6 +200,46 @@ function CrudList<T extends { id: string }>({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {adding ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: 16, borderRadius: 10, border: '2px dashed rgba(122,26,26,0.2)', background: '#fff' }}>
+          {fields.map((f) => (
+            <div key={String(f)}>
+              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, marginBottom: 4, color: TEXT_SEC }}>
+                {fieldLabel(f)}
+              </label>
+              <input
+                value={String((draft as any)[f] ?? '')}
+                onChange={(e) => setDraft({ ...draft, [f]: e.target.value } as Omit<T, 'id'>)}
+                style={{
+                  width: '100%', padding: '8px 12px', borderRadius: 6,
+                  border: '1px solid rgba(0,0,0,0.08)', fontSize: 13,
+                  background: BG_WARM, fontFamily: 'inherit', boxSizing: 'border-box',
+                }}
+              />
+            </div>
+          ))}
+          <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
+            <button type="button" onClick={() => { setAdding(false); setDraft(newItem); }}
+              style={chipBtn}>
+              Cancelar
+            </button>
+            <button type="button" onClick={() => { onAdd(draft); setAdding(false); setDraft(newItem); }}
+              style={{ ...chipBtn, background: GRANATE, color: '#fff', fontWeight: 600, border: 'none' }}>
+              Agregar
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button type="button" onClick={() => setAdding(true)}
+          style={{
+            padding: '12px', borderRadius: 8, border: '2px dashed rgba(122,26,26,0.15)',
+            background: 'transparent', color: GRANATE, fontSize: 12, fontWeight: 600,
+            cursor: 'pointer', fontFamily: 'inherit',
+          }}>
+          + Agregar nuevo
+        </button>
+      )}
+
       {items.map((item) => (
         <div
           key={item.id}
@@ -294,48 +298,6 @@ function CrudList<T extends { id: string }>({
           )}
         </div>
       ))}
-
-      {adding && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: 16, borderRadius: 10, border: '2px dashed rgba(122,26,26,0.2)', background: '#fff' }}>
-          {fields.map((f) => (
-            <div key={String(f)}>
-              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, marginBottom: 4, color: TEXT_SEC }}>
-                {fieldLabel(f)}
-              </label>
-              <input
-                value={String((draft as any)[f] ?? '')}
-                onChange={(e) => setDraft({ ...draft, [f]: e.target.value } as Omit<T, 'id'>)}
-                style={{
-                  width: '100%', padding: '8px 12px', borderRadius: 6,
-                  border: '1px solid rgba(0,0,0,0.08)', fontSize: 13,
-                  background: BG_WARM, fontFamily: 'inherit', boxSizing: 'border-box',
-                }}
-              />
-            </div>
-          ))}
-          <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
-            <button type="button" onClick={() => { setAdding(false); setDraft(newItem); }}
-              style={chipBtn}>
-              Cancelar
-            </button>
-            <button type="button" onClick={() => { onAdd(draft); setAdding(false); setDraft(newItem); }}
-              style={{ ...chipBtn, background: GRANATE, color: '#fff', fontWeight: 600, border: 'none' }}>
-              Agregar
-            </button>
-          </div>
-        </div>
-      )}
-
-      {!adding && (
-        <button type="button" onClick={() => setAdding(true)}
-          style={{
-            padding: '12px', borderRadius: 8, border: '2px dashed rgba(122,26,26,0.15)',
-            background: 'transparent', color: GRANATE, fontSize: 12, fontWeight: 600,
-            cursor: 'pointer', fontFamily: 'inherit',
-          }}>
-          + Agregar nuevo
-        </button>
-      )}
     </div>
   );
 }
@@ -395,18 +357,90 @@ function FAQTab({ admin }: { admin: ReturnType<typeof useAdmin> }) {
   );
 }
 
-function RecursosTab({ admin }: { admin: ReturnType<typeof useAdmin> }) {
+function HistoriaTab({ admin }: { admin: ReturnType<typeof useAdmin> }) {
   return (
-    <Section title="Recursos" desc="Recursos y guias descargables.">
-      <CrudList<RecursoItem>
-        items={admin.recursos}
-        fields={['titulo', 'desc', 'popoverContent']}
-        onAdd={admin.addRecurso}
-        onUpdate={admin.updateRecurso}
-        onDelete={admin.deleteRecurso}
-        newItem={{ titulo: '', desc: '', popoverContent: '' }}
-        labels={{ titulo: 'Titulo', desc: 'Descripcion', popoverContent: 'Contenido completo' }}
+    <Section title="Historia" desc="Eventos de la linea de tiempo.">
+      <CrudList<HistoriaItem>
+        items={admin.historia}
+        fields={['year', 'event']}
+        onAdd={admin.addHistoria}
+        onUpdate={admin.updateHistoria}
+        onDelete={admin.deleteHistoria}
+        newItem={{ year: '', event: '' }}
+        labels={{ year: 'Ano', event: 'Evento' }}
       />
+    </Section>
+  );
+}
+
+/* --- Metricas Tab: simulated charts --- */
+const METRICS = [
+  { label: 'Clientes activos', value: 350, pct: 100, color: GRANATE },
+  { label: 'Declaraciones anuales', value: 2000, pct: 85, color: '#2e7d32' },
+  { label: 'Tasa de retencion', value: '98%', pct: 98, color: '#1565c0' },
+  { label: 'Profesionales en equipo', value: 8, pct: 40, color: '#e65100' },
+];
+
+function MetricasTab() {
+  return (
+    <Section title="Metricas" desc="Indicadores clave del estudio (simulados).">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 20 }}>
+        {METRICS.map((m) => (
+          <div key={m.label} style={{
+            background: '#fff', borderRadius: 10, padding: 24,
+            border: '1px solid rgba(0,0,0,0.04)',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
+          }}>
+            <div style={{ fontSize: 28, fontWeight: 700, color: m.color, marginBottom: 4 }}>
+              {m.value}
+            </div>
+            <div style={{ fontSize: 12, color: TEXT_SEC, marginBottom: 16 }}>
+              {m.label}
+            </div>
+            <div style={{
+              height: 6, borderRadius: 3, background: BG_WARM, overflow: 'hidden',
+            }}>
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${m.pct}%` }}
+                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+                style={{ height: '100%', borderRadius: 3, background: m.color }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ marginTop: 32 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 600, margin: '0 0 16px 0', color: TEXT_PRIMARY }}>
+          Distribucion de servicios
+        </h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {[
+            { label: 'Liquidacion de Sueldos', pct: 35 },
+            { label: 'Impuestos', pct: 25 },
+            { label: 'Contabilidad General', pct: 20 },
+            { label: 'Monotributo', pct: 12 },
+            { label: 'Sociedades', pct: 5 },
+            { label: 'Auditoria', pct: 3 },
+          ].map((d) => (
+            <div key={d.label}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4, color: TEXT_SEC }}>
+                <span>{d.label}</span>
+                <span style={{ fontWeight: 600, color: TEXT_PRIMARY }}>{d.pct}%</span>
+              </div>
+              <div style={{ height: 8, borderRadius: 4, background: BG_WARM, overflow: 'hidden' }}>
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${d.pct}%` }}
+                  transition={{ duration: 0.6, ease: 'easeOut' }}
+                  style={{ height: '100%', borderRadius: 4, background: GRANATE }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </Section>
   );
 }

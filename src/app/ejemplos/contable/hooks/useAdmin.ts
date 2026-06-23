@@ -33,6 +33,12 @@ export interface RecursoItem {
   popoverContent: string;
 }
 
+export interface HistoriaItem {
+  id: string;
+  year: string;
+  event: string;
+}
+
 export interface ContableAdminState {
   heroTagline: string;
   heroDesc: string;
@@ -40,6 +46,7 @@ export interface ContableAdminState {
   servicios: ServicioItem[];
   faq: FAQItem[];
   recursos: RecursoItem[];
+  historia: HistoriaItem[];
 }
 
 const DEFAULTS: ContableAdminState = {
@@ -65,8 +72,16 @@ const DEFAULTS: ContableAdminState = {
     { id: '3', q: 'Toman clientes de otros estudios contables?', a: 'Si, recibimos clientes que vienen de otros estudios. Nos encargamos de la transferencia ordenada de toda la documentacion y registros.' },
   ],
   recursos: [
-    { id: '1', titulo: 'Guia completa de Monotributo 2026', desc: 'Todo lo que necesitas saber para categorizarte, recategorizarte y pagar menos. Incluye tabla de categorias actualizada.', popoverContent: 'La AFIP actualizo las escalas de monotributo para 2026 con incrementos del 25% promedio. Las categorias mas bajas (A y B) tienen los menores aumentos. Te ayudamos a calcular tu categoria optima para pagar menos impuestos legalmente.' },
-    { id: '2', titulo: 'Calendario impositivo: vencimientos de Julio', desc: 'Fechas clave de IVA, Ganancias, Bienes Personales, Sueldos y mas. No te pierdas ningun vencimiento.', popoverContent: 'Julio es el mes con mas vencimientos concentrados del semestre. IVA mensual (dia 18), Ganancias personas juridicas (dia 22), Bienes Personales (dia 25), y liquidacion de sueldos con SAC (dia 5). Descarga el calendario completo en PDF.' },
+    { id: '1', titulo: 'Guia completa de Monotributo 2026', desc: 'Todo lo que necesitas saber para categorizarte, recategorizarte y pagar menos. Incluye tabla de categorias actualizada.', popoverContent: 'https://www.afip.gob.ar/monotributo/' },
+    { id: '2', titulo: 'Calendario impositivo: vencimientos de Julio', desc: 'Fechas clave de IVA, Ganancias, Bienes Personales, Sueldos y mas. No te pierdas ningun vencimiento.', popoverContent: 'https://www.argentina.gob.ar/arca' },
+  ],
+  historia: [
+    { id: '1', year: '2012', event: 'Fundacion del estudio por el CPN Martin Martinez en Chascomus, enfocado en monotributistas y emprendedores locales.' },
+    { id: '2', year: '2015', event: 'Incorporacion de la Cra. Laura Gomez como socia. Abrimos el area de Liquidacion de Sueldos para PyMEs.' },
+    { id: '3', year: '2018', event: 'Superamos los 150 clientes activos. Incorporamos el area de Sociedades y Constitucion de Empresas.' },
+    { id: '4', year: '2021', event: 'Lanzamos la plataforma online de documentos. Digitalizamos todos los procesos internos.' },
+    { id: '5', year: '2024', event: 'Alcanzamos los 350 clientes. Abrimos oficina en Av. Lastra 320 con atencion personalizada.' },
+    { id: '6', year: '2026', event: 'Seguimos creciendo: +2.000 declaraciones anuales, 98% de retencion y un equipo de 8 profesionales.' },
   ],
 };
 
@@ -198,6 +213,28 @@ export function useAdmin() {
     }));
   }, []);
 
+  /* Historia CRUD */
+  const addHistoria = useCallback((h: Omit<HistoriaItem, 'id'>) => {
+    setState((prev) => ({
+      ...prev,
+      historia: [...prev.historia, { ...h, id: String(Date.now()) }],
+    }));
+  }, []);
+
+  const updateHistoria = useCallback((id: string, data: Partial<HistoriaItem>) => {
+    setState((prev) => ({
+      ...prev,
+      historia: prev.historia.map((item) => (item.id === id ? { ...item, ...data } : item)),
+    }));
+  }, []);
+
+  const deleteHistoria = useCallback((id: string) => {
+    setState((prev) => ({
+      ...prev,
+      historia: prev.historia.filter((item) => item.id !== id),
+    }));
+  }, []);
+
   const reset = useCallback(() => {
     setState(DEFAULTS);
   }, []);
@@ -217,6 +254,9 @@ export function useAdmin() {
     addRecurso,
     updateRecurso,
     deleteRecurso,
+    addHistoria,
+    updateHistoria,
+    deleteHistoria,
     reset,
     DEFAULTS,
   };
