@@ -14,6 +14,8 @@ const SKILL_AREAS = [
     title: 'Full-Stack & Mobile',
     desc: 'Aplicaciones web modernas y multiplataforma. Interfaces de alto rendimiento con los mejores frameworks.',
     tags: ['Next.js', 'React', 'Expo', 'NestJS', 'HTMX', 'Tailwind CSS'],
+    potency: 92,
+    color: '#e11d48',
     details: 'Desarrollo de plataformas SaaS completas, aplicaciones móviles con Expo y sistemas e-learning. Dominio de Server-Side Rendering (SSR) y Static Site Generation (SSG) con Next.js, y creación de UIs fluidas con Tailwind CSS y HTMX para experiencias de usuario premium.',
   },
   {
@@ -22,6 +24,8 @@ const SKILL_AREAS = [
     title: 'Arquitectura Backend',
     desc: 'APIs robustas, microservicios y bases de datos eficientes para sistemas escalables.',
     tags: ['Go (Gin)', 'Python (Django)', 'PostgreSQL', 'Redis', 'SQLite', 'Node.js'],
+    potency: 88,
+    color: '#3b82f6',
     details: 'Diseño avanzado de esquemas de bases de datos relacionales, optimización de consultas complejas y migraciones. Construcción de APIs REST ultrarrápidas y concurrentes utilizando Go (Gin) y sistemas completos con Python (Django). Implementación de capas de caché con Redis para máxima performance.',
   },
   {
@@ -30,6 +34,8 @@ const SKILL_AREAS = [
     title: 'IA & Data Science',
     desc: 'Análisis de datos, NLP y creación de agentes autónomos potenciados por LLMs y Machine Learning.',
     tags: ['Streamlit', 'spaCy', 'Gemini API', 'AI Agents', 'Pandas'],
+    potency: 85,
+    color: '#8b5cf6',
     details: 'Implementación de pipelines de Procesamiento de Lenguaje Natural (NLP) usando spaCy y TF-IDF. Desarrollo de sistemas interactivos en Streamlit, y creación de agentes de Inteligencia Artificial autónomos (ej. proyecto Prometheus) integrando directamente la API de Google Gemini para razonamiento complejo.',
   },
 ];
@@ -146,6 +152,28 @@ export default function SkillsSection() {
               >
                 {area.desc}
               </motion.p>
+
+              {/* Potency meter */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                style={{ marginBottom: '14px' }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '4px', color: 'var(--muted)' }}>
+                  <span>Competencia</span>
+                  <span style={{ fontWeight: 600, color: area.color }}>{area.potency}%</span>
+                </div>
+                <div style={{ height: '4px', background: 'var(--surface-2)', borderRadius: '99px', overflow: 'hidden' }}>
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${area.potency}%` }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
+                    style={{ height: '100%', borderRadius: '99px', background: `linear-gradient(90deg, ${area.color}, ${area.color}88)` }}
+                  />
+                </div>
+              </motion.div>
 
               {/* Tags */}
               <motion.div layoutId={`skill-tags-${area.id}`} style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -283,6 +311,27 @@ export default function SkillsSection() {
                     <p style={{ fontSize: '14px', color: 'var(--foreground-2)', lineHeight: 1.7 }}>
                       {area.details}
                     </p>
+                  </motion.div>
+
+                  {/* Potency meter en modal */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    style={{ marginBottom: '20px' }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px', color: 'var(--muted)' }}>
+                      <span>Nivel de competencia</span>
+                      <span style={{ fontWeight: 700, color: area.color }}>{area.potency}%</span>
+                    </div>
+                    <div style={{ height: '6px', background: 'var(--surface-2)', borderRadius: '99px', overflow: 'hidden' }}>
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${area.potency}%` }}
+                        transition={{ duration: 1, ease: 'easeOut', delay: 0.4 }}
+                        style={{ height: '100%', borderRadius: '99px', background: `linear-gradient(90deg, ${area.color}, ${area.color}88)` }}
+                      />
+                    </div>
                   </motion.div>
 
                   <motion.div layoutId={`skill-tags-${area.id}`} style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>

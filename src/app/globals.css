@@ -19,7 +19,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
-:root {
+:root, .blado-dark {
   --background:    #050505;
   --surface:       #0f0f0f;
   --surface-2:     #161616;
@@ -37,6 +37,23 @@
   --accent-glow:   rgba(225, 29, 72, 0.25);
 }
 
+.blado-light {
+  --background:    #fafafa;
+  --surface:       #ffffff;
+  --surface-2:     #f3f4f6;
+  --border:        #e5e7eb;
+  --border-subtle: #eef0f2;
+  --muted:         #9ca3af;
+  --muted-light:   #6b7280;
+  --foreground:    #111827;
+  --foreground-2:  #374151;
+
+  --accent:        #e11d48;
+  --accent-hover:  #be123c;
+  --accent-dim:    rgba(225, 29, 72, 0.08);
+  --accent-glow:   rgba(225, 29, 72, 0.15);
+}
+
 /* ─── Reset & Base ─── */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -44,6 +61,10 @@
 
 html {
   color-scheme: dark;
+}
+
+html.blado-light {
+  color-scheme: light;
 }
 
 body {
@@ -54,6 +75,18 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.skill-card,
+.btn-primary,
+.btn-secondary,
+.tech-badge,
+.lum-btn,
+.lum-nav-link,
+.lum-footer-link,
+.lum-back-link {
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
 }
 
 /* ─── Tipografía ─── */
@@ -192,6 +225,20 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(-4px) scale(1.01);
 }
 
+.blado-light .skill-card {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.blado-light .skill-card::after {
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.8);
+}
+.blado-light .skill-card:hover {
+  background: #ffffff;
+  border-color: var(--accent);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08), 0 0 30px var(--accent-glow);
+}
+
 /* ─── Tech badge ─── */
 .tech-badge {
   display: inline-flex;
@@ -257,6 +304,18 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--foreground);
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.blado-light .btn-secondary {
+  background: rgba(0,0,0,0.02);
+  border: 1px solid var(--border);
+  color: var(--foreground-2);
+}
+.blado-light .btn-secondary:hover {
+  background: rgba(225, 29, 72, 0.04);
+  border-color: var(--accent);
+  color: var(--foreground);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
 }
 
 /* ─── Parallax Background Hero ─── */
@@ -383,6 +442,19 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes lum-progress-grow {
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
+}
+
+/* ─── Parallax decor layers (scroll-driven) ─── */
+@keyframes blado-parallax-drift {
+  from { transform: translateY(0); }
+  to { transform: translateY(40vh); }
+}
+
+@supports (animation-timeline: scroll()) {
+  .blado-parallax-layer {
+    animation: blado-parallax-drift linear both;
+    animation-timeline: scroll(root block);
+  }
 }
 
 /* ─── prefers-reduced-motion ─── */

@@ -20,7 +20,7 @@ const NAV_ITEMS = [
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const router = useRouter();
-  const { animationsEnabled, setAnimationsEnabled } = useAppContext();
+  const { animationsEnabled, setAnimationsEnabled, theme, toggleTheme } = useAppContext();
 
   return (
     <>
@@ -150,6 +150,30 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   boxShadow: animationsEnabled ? '0 0 6px var(--accent-glow)' : 'none',
                 }}
               />
+            </button>
+          </label>
+          <label
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 20px', cursor: 'pointer' }}
+          >
+            <span style={{ fontSize: '14px', color: 'var(--foreground-2)' }}>Tema {theme === 'dark' ? 'oscuro' : 'claro'}</span>
+            <button
+              onClick={toggleTheme}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'var(--muted)',
+                padding: '4px',
+                borderRadius: '6px',
+                transition: 'color 0.2s',
+                display: 'flex',
+                fontSize: '18px',
+                lineHeight: 1,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.color = 'var(--foreground)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'var(--muted)'; }}
+            >
+              {theme === 'dark' ? '\u2600' : '\u263E'}
             </button>
           </label>
         </section>

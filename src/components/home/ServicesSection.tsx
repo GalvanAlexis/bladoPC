@@ -70,7 +70,7 @@ export default function ServicesSection() {
       id="servicios"
       aria-label="Servicios"
       className="section-padding"
-      style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#050505' }}
+      style={{ position: 'relative', overflow: 'hidden', backgroundColor: 'var(--surface)' }}
     >
       {/* Video Background */}
       <div
