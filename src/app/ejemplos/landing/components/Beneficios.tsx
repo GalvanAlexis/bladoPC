@@ -29,8 +29,12 @@ export default function Beneficios() {
           Por que elegir <span className="lum-accent">Lumina</span>
         </h2>
         <div className="lum-card-grid">
-          {BENEFITS.map((b) => (
-            <div key={b.title} className="lum-card">
+          {BENEFITS.map((b, i) => (
+            <div
+              key={b.title}
+              className="lum-card lum-card-reveal"
+              style={{ ['--card-delay' as string]: `${i * 0.15}s` }}
+            >
               <button
                 popoverTarget={`pop-${b.title.toLowerCase().replace(/\s+/g, '-')}`}
                 popoverTargetAction="toggle"
@@ -60,6 +64,50 @@ export default function Beneficios() {
           ))}
         </div>
       </div>
+      <style>{`
+        .lum-card-reveal {
+          view-timeline-name: --card;
+          view-timeline-axis: block;
+          animation: lum-card-entry both;
+          animation-timeline: view(block);
+          animation-range: entry 0% entry 100%;
+        }
+        @media (prefers-reduced-motion: no-preference) {
+          .lum-card {
+            perspective: 800px;
+            transform-style: preserve-3d;
+          }
+          .lum-card:hover {
+            transform: translateY(-6px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+            transition: transform 0.3s ease-out;
+          }
+        }
+        @keyframes lum-card-entry {
+          entry 0% { opacity: 0.1; transform: translateY(40px) scale(0.95); }
+          entry 100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+      `}</style>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `{
+  var cards = document.querySelectorAll('.lum-card');
+  cards.forEach(function(c) {
+    if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    c.addEventListener('mousemove', function(e) {
+      var r = c.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width - 0.5;
+      var y = (e.clientY - r.top) / r.height - 0.5;
+      c.style.setProperty('--tilt-x', (-y * 8) + 'deg');
+      c.style.setProperty('--tilt-y', (x * 8) + 'deg');
+    });
+    c.addEventListener('mouseleave', function() {
+      c.style.setProperty('--tilt-x', '0deg');
+      c.style.setProperty('--tilt-y', '0deg');
+    });
+  });
+}`,
+        }}
+      />
     </section>
   );
 }

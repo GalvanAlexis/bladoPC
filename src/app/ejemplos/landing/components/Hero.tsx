@@ -1,8 +1,10 @@
 'use client';
 
-import { useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useMousePosition } from '../hooks/useMousePosition';
 
-const PRODUCT = {
+export const PRODUCT = {
   name: 'Lumina Serum Facial',
   desc: 'Serum facial organico con acido hialuronico, vitamina C y aceite de rosa mosqueta. Hidratacion profunda sin quimicos agresivos.',
   price: 24990,
@@ -12,83 +14,200 @@ const PRODUCT = {
 };
 
 export default function Hero() {
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [showDialog, setShowDialog] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const toastRef = useRef<HTMLDivElement>(null);
+  const mouse = useMousePosition(sectionRef);
 
-  const openDialog = useCallback(() => {
-    dialogRef.current?.showModal();
-  }, []);
+  const rotateX = mouse.isWithin ? (mouse.progressY - 0.5) * -10 : 0;
+  const rotateY = mouse.isWithin ? (mouse.progressX - 0.5) * 10 : 0;
+
+  const openDialog = useCallback(() => setShowDialog(true), []);
+  const closeDialog = useCallback(() => setShowDialog(false), []);
+
+  const handleAddToCart = useCallback(() => {
+    toastRef.current?.showPopover();
+    setTimeout(() => toastRef.current?.hidePopover(), 2500);
+    closeDialog();
+  }, [closeDialog]);
 
   return (
     <>
-      <section id="hero" className="lum-section lum-hero">
+      <section id="hero" ref={sectionRef} className="lum-section lum-hero">
         <div className="lum-hero-divider" />
         <div className="lum-hero-content">
-          <p className="lum-badge">Nueva formula 2026</p>
-          <h1 className="lum-hero-title">
+          <motion.p
+            className="lum-badge"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            Nueva formula 2026
+          </motion.p>
+          <motion.h1
+            className="lum-hero-title"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             Tu piel merece <span className="lum-accent">lo natural</span>
-          </h1>
-          <p className="lum-hero-desc">{PRODUCT.desc}</p>
-          <div className="lum-hero-actions">
-            <span className="lum-price">$24.990</span>
-            <button onClick={openDialog} className="lum-btn lum-btn-primary">
+          </motion.h1>
+          <motion.p
+            className="lum-hero-desc"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.35 }}
+          >
+            {PRODUCT.desc}
+          </motion.p>
+          <motion.div
+            className="lum-hero-actions"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+          >
+            <motion.span
+              className="lum-price"
+              layoutId="lum-product-price"
+            >
+              ${PRODUCT.price.toLocaleString('es-AR')}
+            </motion.span>
+            <motion.button
+              onClick={openDialog}
+              className="lum-btn lum-btn-primary"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              layoutId="lum-product-cta"
+            >
               Comprar ahora
-            </button>
-          </div>
-          <p className="lum-hero-footnote">Envio gratis a todo Argentina &middot; Paga en hasta 6 cuotas</p>
+            </motion.button>
+          </motion.div>
+          <motion.p
+            className="lum-hero-footnote"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.65 }}
+          >
+            Envio gratis a todo Argentina · Paga en hasta 6 cuotas
+          </motion.p>
         </div>
         <div className="lum-hero-visual">
           <div className="lum-hero-glow" />
-          <div className="lum-hero-img-wrap">
-            <img
+          <motion.div
+            className="lum-hero-img-wrap"
+            style={{ perspective: 1000 }}
+            animate={{ rotateX, rotateY }}
+            transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+          >
+            <motion.img
               src={PRODUCT.image}
-              alt="Lumina Serum Facial"
+              alt={PRODUCT.name}
               fetchPriority="high"
               width="320"
               height="460"
               className="lum-hero-img"
+              layoutId="lum-product-image"
+              transition={{ type: 'spring', stiffness: 200, damping: 25 }}
             />
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      <dialog ref={dialogRef} id="lum-quickview" className="lum-dialog" closedby="any">
-        <form method="dialog" className="lum-dialog-form">
-          <button type="submit" className="lum-dialog-close" aria-label="Cerrar">&times;</button>
-          <div className="lum-dialog-grid">
-            <div className="lum-dialog-img-wrap">
-              <img src={PRODUCT.image} alt={PRODUCT.name} width="280" height="400" className="lum-dialog-img" />
-            </div>
-            <div className="lum-dialog-info">
-              <h2 className="lum-dialog-title">{PRODUCT.name}</h2>
-              <p className="lum-dialog-desc">{PRODUCT.desc}</p>
-              <div className="lum-dialog-benefits">
-                {PRODUCT.benefits.map((b) => (
-                  <span key={b} className="lum-dialog-badge">{b}</span>
-                ))}
+      <AnimatePresence>
+        {showDialog && (
+          <>
+            <motion.div
+              key="lum-dialog-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeDialog}
+              style={{
+                position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+                backdropFilter: 'blur(4px)', zIndex: 150,
+              }}
+            />
+            <motion.article
+              key="lum-dialog"
+              layoutId="lum-product-card"
+              initial={{ opacity: 0, scale: 0.9, y: 40 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 40 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+              className="lum-dialog"
+              style={{
+                position: 'fixed', top: '50%', left: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 151,
+                width: 'min(92vw, 680px)',
+                maxHeight: '90vh',
+                overflow: 'auto',
+              }}
+            >
+              <div style={{ position: 'relative' }}>
+                <button
+                  onClick={closeDialog}
+                  className="lum-dialog-close"
+                  aria-label="Cerrar"
+                  style={{
+                    position: 'absolute', top: 16, right: 20,
+                    background: 'none', border: 'none', fontSize: 28,
+                    color: 'var(--lum-muted)', cursor: 'pointer', zIndex: 2, lineHeight: 1,
+                  }}
+                >
+                  &times;
+                </button>
+                <div className="lum-dialog-grid">
+                  <div className="lum-dialog-img-wrap">
+                    <motion.img
+                      src={PRODUCT.image}
+                      alt={PRODUCT.name}
+                      width="280"
+                      height="400"
+                      className="lum-dialog-img"
+                      layoutId="lum-product-image"
+                      transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+                    />
+                  </div>
+                  <div className="lum-dialog-info">
+                    <h2 className="lum-dialog-title">{PRODUCT.name}</h2>
+                    <p className="lum-dialog-desc">{PRODUCT.desc}</p>
+                    <div className="lum-dialog-benefits">
+                      {PRODUCT.benefits.map((b) => (
+                        <span key={b} className="lum-dialog-badge">{b}</span>
+                      ))}
+                    </div>
+                    <motion.p
+                      className="lum-dialog-price"
+                      layoutId="lum-product-price"
+                    >
+                      $ {PRODUCT.price.toLocaleString('es-AR')}
+                    </motion.p>
+                    <label className="lum-dialog-qty-label">
+                      Cantidad
+                      <input type="number" defaultValue={1} min={1} max={10} className="lum-dialog-qty" />
+                    </label>
+                    <motion.button
+                      type="button"
+                      className="lum-btn lum-btn-primary lum-dialog-cta"
+                      onClick={handleAddToCart}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      layoutId="lum-product-cta"
+                    >
+                      Agregar al carrito
+                    </motion.button>
+                  </div>
+                </div>
               </div>
-              <p className="lum-dialog-price">$ {PRODUCT.price.toLocaleString('es-AR')}</p>
-              <label className="lum-dialog-qty-label">
-                Cantidad
-                <input type="number" defaultValue={1} min={1} max={10} className="lum-dialog-qty" />
-              </label>
-              <button
-                type="button"
-                className="lum-btn lum-btn-primary lum-dialog-cta"
-                onClick={() => {
-                  const toast = document.getElementById('lum-toast');
-                  if (toast) {
-                    (toast as HTMLDivElement).showPopover();
-                    setTimeout(() => (toast as HTMLDivElement).hidePopover(), 2500);
-                  }
-                  dialogRef.current?.close();
-                }}
-              >
-                Agregar al carrito
-              </button>
-            </div>
-          </div>
-        </form>
-      </dialog>
+            </motion.article>
+          </>
+        )}
+      </AnimatePresence>
+
+      <div ref={toastRef} id="lum-toast" popover="manual" role="status">
+        Agregado al carrito correctamente
+      </div>
     </>
   );
 }

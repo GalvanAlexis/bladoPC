@@ -1,3 +1,5 @@
+'use client';
+
 const TESTIMONIALS = [
   {
     name: 'Carolina M.',
@@ -25,9 +27,13 @@ export default function Testimonios() {
       <div className="lum-container">
         <h2 className="lum-section-title">Lo que dicen nuestras clientas</h2>
         <p className="lum-section-sub">Resultados reales de mujeres como vos</p>
-        <div className="lum-card-grid">
-          {TESTIMONIALS.map((t) => (
-            <div key={t.name} className="lum-card lum-testimonial-card">
+        <div className="lum-testimonial-hscroll">
+          {TESTIMONIALS.map((t, i) => (
+            <div
+              key={t.name}
+              className="lum-card lum-testimonial-card lum-testimonial-reveal"
+              style={{ ['--t-delay' as string]: `${i * 0.15}s` }}
+            >
               <div className="lum-testimonial-header">
                 <div className="lum-testimonial-avatar">
                   <img src={t.img} alt={t.name} loading="lazy" width="44" height="44" className="lum-avatar-img" />
@@ -42,6 +48,32 @@ export default function Testimonios() {
           ))}
         </div>
       </div>
+      <style>{`
+        .lum-testimonial-hscroll {
+          display: flex;
+          gap: 24px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+          padding-bottom: 16px;
+          scrollbar-width: thin;
+        }
+        .lum-testimonial-hscroll > .lum-card {
+          flex: 0 0 320px;
+          scroll-snap-align: start;
+        }
+        .lum-testimonial-reveal {
+          view-timeline-name: --testimonial;
+          view-timeline-axis: block;
+          animation: lum-testimonial-entry both;
+          animation-timeline: view(block);
+          animation-range: entry 0% entry 100%;
+        }
+        @keyframes lum-testimonial-entry {
+          entry 0% { opacity: 0.1; transform: translateY(30px) scale(0.97); }
+          entry 100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+      `}</style>
     </section>
   );
 }
