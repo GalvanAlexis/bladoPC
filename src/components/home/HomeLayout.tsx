@@ -7,6 +7,9 @@ import HeroSection from '@/components/home/HeroSection';
 import ServicesSection from '@/components/home/ServicesSection';
 import AboutSection from '@/components/home/AboutSection';
 import SkillsSection from '@/components/home/SkillsSection';
+import StatsSection from '@/components/home/StatsSection';
+import AdminLogin from '@/components/home/AdminLogin';
+import AdminDashboard from '@/components/home/AdminDashboard';
 import RevealObserver from '@/components/home/RevealObserver';
 import ScrollBackground from '@/components/home/ScrollBackground';
 import CursorGlow from '@/components/home/CursorGlow';
@@ -15,6 +18,8 @@ import ParallaxDecor from '@/components/home/ParallaxDecor';
 
 export default function HomeLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [showAdminDashboard, setShowAdminDashboard] = useState(false);
 
   return (
     <>
@@ -27,9 +32,21 @@ export default function HomeLayout() {
       <Navbar
         onToggleSidebar={() => setSidebarOpen((p) => !p)}
         sidebarOpen={sidebarOpen}
+        onAdminClick={() => setShowAdminLogin(true)}
       />
 
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      <AdminLogin
+        isOpen={showAdminLogin}
+        onClose={() => setShowAdminLogin(false)}
+        onSuccess={() => setShowAdminDashboard(true)}
+      />
+
+      <AdminDashboard
+        isOpen={showAdminDashboard}
+        onClose={() => setShowAdminDashboard(false)}
+      />
 
       <main
         id="main-content"
@@ -42,6 +59,7 @@ export default function HomeLayout() {
         <ServicesSection />
         <AboutSection />
         <SkillsSection />
+        <StatsSection />
 
         <footer
           style={{
