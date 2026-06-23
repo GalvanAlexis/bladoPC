@@ -2,22 +2,18 @@
 
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import type { HistoriaItem } from '../hooks/useAdmin';
 
 const GRANATE = '#7a1a1a';
 const BG_SECTION = '#edeae5';
 const TEXT_PRIMARY = '#1a1a1a';
 const TEXT_SEC = '#5a5550';
 
-const TIMELINE = [
-  { year: '2012', event: 'Fundacion del estudio por el CPN Martin Martinez en Chascomus, enfocado en monotributistas y emprendedores locales.' },
-  { year: '2015', event: 'Incorporacion de la Cra. Laura Gomez como socia. Abrimos el area de Liquidacion de Sueldos para PyMEs.' },
-  { year: '2018', event: 'Superamos los 150 clientes activos. Incorporamos el area de Sociedades y Constitucion de Empresas.' },
-  { year: '2021', event: 'Lanzamos la plataforma online de documentos. Digitalizamos todos los procesos internos.' },
-  { year: '2024', event: 'Alcanzamos los 350 clientes. Abrimos oficina en Av. Lastra 320 con atencion personalizada.' },
-  { year: '2026', event: 'Seguimos creciendo: +2.000 declaraciones anuales, 98% de retencion y un equipo de 8 profesionales.' },
-];
+interface Props {
+  historia: HistoriaItem[];
+}
 
-export default function Timeline() {
+export default function Timeline({ historia }: Props) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-80px' });
 
@@ -59,9 +55,9 @@ export default function Timeline() {
               borderRadius: 1,
             }}
           />
-          {TIMELINE.map((t, i) => (
+          {historia.map((t, i) => (
             <motion.div
-              key={t.year}
+              key={t.id}
               initial={{ opacity: 0, x: -20 }}
               animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
               transition={{ delay: i * 0.1, duration: 0.5, ease: 'easeOut' }}

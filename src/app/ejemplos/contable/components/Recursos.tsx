@@ -8,6 +8,11 @@ const GRANATE = '#7a1a1a';
 const TEXT_PRIMARY = '#1a1a1a';
 const TEXT_SEC = '#5a5550';
 
+const GOV_LINKS: Record<string, string> = {
+  '1': 'https://www.afip.gob.ar/monotributo/',
+  '2': 'https://www.argentina.gob.ar/arca',
+};
+
 interface Props {
   recursos: RecursoItem[];
 }
@@ -34,10 +39,10 @@ export default function Recursos({ recursos }: Props) {
             Recursos
           </p>
           <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 700, margin: '0 0 12px 0', color: TEXT_PRIMARY }}>
-            Articulos y guias
+            Sitios de interes
           </h2>
           <p style={{ fontSize: 15, color: TEXT_SEC, maxWidth: 560, margin: '0 auto', lineHeight: 1.6 }}>
-            Informacion util para mantenerte al dia con tus obligaciones fiscales.
+            Accede a los portales oficiales del gobierno argentino para tus tramites.
           </p>
         </motion.div>
 
@@ -53,100 +58,56 @@ export default function Recursos({ recursos }: Props) {
               No hay recursos disponibles.
             </p>
           )}
-          {recursos.map((r, i) => (
-            <motion.div
-              key={r.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ delay: i * 0.1, duration: 0.5, ease: 'easeOut' }}
-            >
-              <div
-                style={{
-                  background: '#fff',
-                  borderRadius: 10,
-                  padding: 28,
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
-                  border: '1px solid rgba(0,0,0,0.04)',
-                  transition: 'all 0.2s ease',
-                  cursor: 'pointer',
-                }}
+          {recursos.map((r, i) => {
+            const url = GOV_LINKS[r.id] || 'https://www.argentina.gob.ar/';
+            return (
+              <motion.div
+                key={r.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{ delay: i * 0.1, duration: 0.5, ease: 'easeOut' }}
               >
                 <div
                   style={{
-                    width: 36, height: 4, borderRadius: 2,
-                    background: GRANATE, marginBottom: 16,
-                  }}
-                />
-                <h3 style={{ fontSize: 16, fontWeight: 600, margin: '0 0 8px 0', color: TEXT_PRIMARY }}>
-                  {r.titulo}
-                </h3>
-                <p style={{ fontSize: 13, color: TEXT_SEC, lineHeight: 1.6, margin: '0 0 16px 0' }}>
-                  {r.desc}
-                </p>
-                <button
-                  data-popover={r.id}
-                  style={{
-                    fontSize: 13, color: GRANATE, fontWeight: 600,
-                    textDecoration: 'none', background: 'none', border: 'none',
-                    cursor: 'pointer', padding: 0, fontFamily: 'inherit',
-                    display: 'inline-flex', alignItems: 'center', gap: 4,
+                    background: '#fff',
+                    borderRadius: 10,
+                    padding: 28,
+                    boxShadow: '0 1px 4px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
+                    border: '1px solid rgba(0,0,0,0.04)',
+                    transition: 'all 0.2s ease',
                   }}
                 >
-                  Leer articulo &rarr;
-                </button>
-              </div>
-
-              <div
-                id={r.id}
-                popover="auto"
-                style={{
-                  maxWidth: 400,
-                  padding: 24,
-                  borderRadius: 10,
-                  border: '1px solid rgba(122,26,26,0.15)',
-                  background: '#fff',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.10)',
-                  fontFamily: "'Inter', system-ui, sans-serif",
-                  lineHeight: 1.6,
-                  fontSize: 14,
-                  color: TEXT_PRIMARY,
-                }}
-              >
-                <h3 style={{ fontSize: 16, fontWeight: 600, margin: '0 0 12px 0', color: TEXT_PRIMARY }}>
-                  {r.titulo}
-                </h3>
-                <p style={{ margin: '0 0 16px 0', color: TEXT_SEC }}>
-                  {r.popoverContent}
-                </p>
-                <button
-                  popoverTarget={r.id}
-                  popoverTargetAction="hide"
-                  style={{
-                    display: 'inline-block', padding: '8px 20px', borderRadius: 6,
-                    background: GRANATE, color: '#fff', fontSize: 12, fontWeight: 600,
-                    border: 'none', cursor: 'pointer', fontFamily: 'inherit',
-                  }}
-                >
-                  Cerrar
-                </button>
-              </div>
-            </motion.div>
-          ))}
+                  <div
+                    style={{
+                      width: 36, height: 4, borderRadius: 2,
+                      background: GRANATE, marginBottom: 16,
+                    }}
+                  />
+                  <h3 style={{ fontSize: 16, fontWeight: 600, margin: '0 0 8px 0', color: TEXT_PRIMARY }}>
+                    {r.titulo}
+                  </h3>
+                  <p style={{ fontSize: 13, color: TEXT_SEC, lineHeight: 1.6, margin: '0 0 16px 0' }}>
+                    {r.desc}
+                  </p>
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      fontSize: 13, color: GRANATE, fontWeight: 600,
+                      textDecoration: 'none', background: 'none', border: 'none',
+                      cursor: 'pointer', padding: 0, fontFamily: 'inherit',
+                      display: 'inline-flex', alignItems: 'center', gap: 4,
+                    }}
+                  >
+                    Ir al sitio &rarr;
+                  </a>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
-
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `{
-  document.querySelectorAll('[data-popover]').forEach(function(b){
-    b.addEventListener('click', function(){
-      var target = document.getElementById(b.getAttribute('data-popover'));
-      if (target && target.togglePopover) target.togglePopover();
-    });
-  });
-}()`,
-        }}
-      />
     </section>
   );
 }
