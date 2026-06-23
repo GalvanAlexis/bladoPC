@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const ADDON = { name: 'Protector Solar SPF 50+', price: 12500 };
+import { useAdmin } from '../hooks/useAdmin';
 
 interface Props {
   open: boolean;
@@ -11,11 +10,13 @@ interface Props {
 }
 
 export default function Cart({ open, onClose }: Props) {
+  const { mainPrice, addonPrice } = useAdmin();
   const [qty, setQty] = useState(1);
   const [hasAddon, setHasAddon] = useState(false);
   const [status, setStatus] = useState<'idle' | 'paying' | 'success'>('idle');
 
-  const unitPrice = 24990;
+  const ADDON = { name: 'Protector Solar SPF 50+', price: addonPrice };
+  const unitPrice = mainPrice;
   const subtotal = unitPrice * qty;
   const hasDiscount = qty >= 2;
   const discount = hasDiscount ? Math.round(subtotal * 0.2) : 0;

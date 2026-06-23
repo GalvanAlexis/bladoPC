@@ -1,42 +1,41 @@
 'use client';
 
-const TESTIMONIALS = [
-  {
-    name: 'Carolina M.',
-    text: 'Desde que uso Lumina mi piel se ve mas luminosa y las lineas de expresion se notan mucho menos. Lo recomiendo 100%.',
-    rating: 5,
-    img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&q=80',
-  },
-  {
-    name: 'Valentina R.',
-    text: 'Habia probado mil serums y ninguno me habia funcionado como este. En dos semanas note la diferencia.',
-    rating: 5,
-    img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&q=80',
-  },
-  {
-    name: 'Camila L.',
-    text: 'Me encanta que sea natural y que realmente funcione. La textura es super suave y huele increible.',
-    rating: 5,
-    img: 'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=120&q=80',
-  },
+import { useAdmin } from '../hooks/useAdmin';
+import { GALERIA_IMAGES } from './Galeria';
+
+const AVATARS = [
+  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&q=80',
+  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&q=80',
+  'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=120&q=80',
 ];
 
 export default function Testimonios() {
+  const { testimonials } = useAdmin();
+
+  if (testimonials.length === 0) return null;
+
   return (
     <section id="testimonios" className="lum-section lum-testimonios">
       <div className="lum-container">
         <h2 className="lum-section-title">Lo que dicen nuestras clientas</h2>
         <p className="lum-section-sub">Resultados reales de mujeres como vos</p>
         <div className="lum-testimonial-hscroll">
-          {TESTIMONIALS.map((t, i) => (
+          {testimonials.map((t, i) => (
             <div
-              key={t.name}
+              key={t.id}
               className="lum-card lum-testimonial-card lum-testimonial-reveal"
               style={{ ['--t-delay' as string]: `${i * 0.15}s` }}
             >
               <div className="lum-testimonial-header">
                 <div className="lum-testimonial-avatar">
-                  <img src={t.img} alt={t.name} loading="lazy" width="44" height="44" className="lum-avatar-img" />
+                  <img
+                    src={t.img || AVATARS[i % AVATARS.length]}
+                    alt={t.name}
+                    loading="lazy"
+                    width="44"
+                    height="44"
+                    className="lum-avatar-img"
+                  />
                 </div>
                 <div>
                   <div className="lum-stars">{'★'.repeat(t.rating)}</div>

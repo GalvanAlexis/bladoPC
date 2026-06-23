@@ -724,6 +724,34 @@ export default function LuminaPage() {
         .lum-dark .lum-cart-promo { background: rgba(212,148,148,0.1); }
         .lum-dark .lum-cart-addon { border-color: rgba(212,148,148,0.15); }
         .lum-dark .lum-cart-addon:hover { border-color: var(--lum-primary); }
+        .lum-dash-header { padding: 20px 24px; border-bottom: 1px solid rgba(184,118,118,0.1); flex-shrink: 0; }
+        .lum-dash-title { margin: 0; font-size: 20px; font-weight: 700; color: var(--lum-text); display: flex; justify-content: space-between; align-items: center; }
+        .lum-dash-tabs { display: flex; border-bottom: 1px solid rgba(184,118,118,0.1); flex-shrink: 0; }
+        .lum-dash-tab { flex: 1; padding: 12px; text-align: center; font-size: 13px; font-weight: 600; color: var(--lum-muted); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; }
+        .lum-dash-tab-active { color: var(--lum-primary); border-bottom-color: var(--lum-primary); }
+        .lum-dash-body { flex: 1; overflow-y: auto; padding: 20px 24px; }
+        .lum-dash-section { display: flex; flex-direction: column; gap: 16px; }
+        .lum-dash-label { margin: 0; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--lum-muted); }
+        .lum-dash-field { display: flex; flex-direction: column; gap: 4px; }
+        .lum-dash-field-label { font-size: 12px; font-weight: 500; color: var(--lum-muted); }
+        .lum-dash-input { padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(184,118,118,0.2); background: transparent; color: var(--lum-text); font-size: 13px; outline: none; transition: border-color 0.2s; font-family: inherit; }
+        .lum-dash-input:focus { border-color: var(--lum-primary); }
+        .lum-dash-textarea { min-height: 60px; resize: vertical; }
+        .lum-dash-preview { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; margin-top: 4px; border: 1px solid rgba(184,118,118,0.1); }
+        .lum-dash-preview[style*="none"] { display: none; }
+        .lum-dash-rowbtns { display: flex; gap: 8px; }
+        .lum-dash-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+        .lum-dash-list-item { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 10px; background: rgba(184,118,118,0.05); border: 1px solid rgba(184,118,118,0.08); }
+        .lum-dash-list-info { flex: 1; min-width: 0; }
+        .lum-dash-list-info strong { font-size: 13px; color: var(--lum-text); }
+        .lum-dash-list-text { margin: 2px 0 0; font-size: 11px; color: var(--lum-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .lum-dash-list-rating { font-size: 11px; color: #e8a838; }
+        .lum-dash-list-actions { display: flex; gap: 4px; flex-shrink: 0; }
+        .lum-dash-list-btn { width: 28px; height: 28px; border-radius: 8px; border: none; background: rgba(184,118,118,0.1); color: var(--lum-muted); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+        .lum-dash-list-btn:hover { background: rgba(184,118,118,0.2); color: var(--lum-text); }
+        .lum-dash-list-del { color: #c0392b; }
+        .lum-dash-list-del:hover { background: rgba(192,57,43,0.15); color: #c0392b; }
+        .lum-dash-footer { flex-shrink: 0; padding: 16px 24px; border-top: 1px solid rgba(184,118,118,0.1); }
       `}</style>
 
       <div className="lum-fullpage">
