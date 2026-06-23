@@ -249,16 +249,7 @@ export default function LuminaPage() {
           background: radial-gradient(circle, rgba(184,118,118,0.10) 0%, rgba(184,118,118,0.03) 60%, transparent 70%);
           z-index: 0;
         }
-        .lum-hero-img-wrap {
-          width: clamp(200px, 25vw, 320px);
-          height: clamp(300px, 38vw, 460px);
-          border-radius: 80px 80px 40px 40px;
-          overflow: hidden;
-          box-shadow: 0 30px 60px rgba(184,118,118,0.25), 0 10px 20px rgba(0,0,0,0.06);
-          position: relative;
-          z-index: 1;
-        }
-        .lum-hero-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
         .lum-badge {
           font-size: 11px;
           letter-spacing: 0.15em;

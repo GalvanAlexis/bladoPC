@@ -3,12 +3,12 @@
 import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMousePosition } from '../hooks/useMousePosition';
+import Galeria, { GALERIA_IMAGES } from './Galeria';
 
 export const PRODUCT = {
   name: 'Lumina Serum Facial',
   desc: 'Serum facial organico con acido hialuronico, vitamina C y aceite de rosa mosqueta. Hidratacion profunda sin quimicos agresivos.',
   price: 24990,
-  image: 'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=600&q=80',
   benefits: ['Hidratacion 24h', '100% Natural', 'Antioxidante Potente'],
   ingredients: ['Acido Hialuronico', 'Vitamina C', 'Rosa Mosqueta', 'Aloe Vera', 'Colageno Vegetal', 'Aceite de Jojoba'],
 };
@@ -93,23 +93,7 @@ export default function Hero() {
         </div>
         <div className="lum-hero-visual">
           <div className="lum-hero-glow" />
-          <motion.div
-            className="lum-hero-img-wrap"
-            style={{ perspective: 1000 }}
-            animate={{ rotateX, rotateY }}
-            transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-          >
-            <motion.img
-              src={PRODUCT.image}
-              alt={PRODUCT.name}
-              fetchPriority="high"
-              width="320"
-              height="460"
-              className="lum-hero-img"
-              layoutId="lum-product-image"
-              transition={{ type: 'spring', stiffness: 200, damping: 25 }}
-            />
-          </motion.div>
+          <Galeria rotateX={rotateX} rotateY={rotateY} />
         </div>
       </section>
 
@@ -168,7 +152,7 @@ export default function Hero() {
                 <div className="lum-dialog-grid">
                   <div className="lum-dialog-img-wrap">
                     <motion.img
-                      src={PRODUCT.image}
+                      src={GALERIA_IMAGES[0].src}
                       alt={PRODUCT.name}
                       width="280"
                       height="400"
