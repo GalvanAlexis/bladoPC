@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMousePosition } from '../hooks/useMousePosition';
 import Galeria, { GALERIA_IMAGES } from './Galeria';
+import Cart from './Cart';
 
 export const PRODUCT = {
   name: 'Lumina Serum Facial',
@@ -15,8 +16,9 @@ export const PRODUCT = {
 
 export default function Hero() {
   const [showDialog, setShowDialog] = useState(false);
+  const [showCart, setShowCart] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-  const toastRef = useRef<HTMLDivElement>(null);
+  const dialogQtyRef = useRef<HTMLInputElement>(null);
   const mouse = useMousePosition(sectionRef);
 
   const rotateX = mouse.isWithin ? (mouse.progressY - 0.5) * -10 : 0;
@@ -26,9 +28,8 @@ export default function Hero() {
   const closeDialog = useCallback(() => setShowDialog(false), []);
 
   const handleAddToCart = useCallback(() => {
-    toastRef.current?.showPopover();
-    setTimeout(() => toastRef.current?.hidePopover(), 2500);
     closeDialog();
+    setShowCart(true);
   }, [closeDialog]);
 
   return (
@@ -177,7 +178,7 @@ export default function Hero() {
                     </motion.p>
                     <label className="lum-dialog-qty-label">
                       Cantidad
-                      <input type="number" defaultValue={1} min={1} max={10} className="lum-dialog-qty" />
+                      <input ref={dialogQtyRef} type="number" defaultValue={1} min={1} max={10} className="lum-dialog-qty" />
                     </label>
                     <motion.button
                       type="button"
@@ -197,9 +198,7 @@ export default function Hero() {
         )}
       </AnimatePresence>
 
-      <div ref={toastRef} id="lum-toast" popover="manual" role="status">
-        Agregado al carrito correctamente
-      </div>
+      <Cart open={showCart} onClose={() => setShowCart(false)} />
     </>
   );
 }

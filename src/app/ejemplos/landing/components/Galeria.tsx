@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 export const GALERIA_IMAGES = [
   { src: 'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=600&q=80', alt: 'Lumina Serum Frontal' },
   { src: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=80', alt: 'Lumina Serum Botella' },
-  { src: 'https://images.unsplash.com/photo-1570194065650-d99fb4b38e34?w=600&q=80', alt: 'Lumina Serum Aplicacion' },
+  { src: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&q=80', alt: 'Lumina Serum Aplicacion' },
 ];
 
 interface Props {
