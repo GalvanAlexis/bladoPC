@@ -500,6 +500,9 @@ export default function LuminaPage() {
           transition: transform 0.2s;
         }
         .lum-newsletter-btn:hover { transform: scale(1.03); }
+        .lum-newsletter-success { text-align: center; }
+        .lum-newsletter-check { width: 52px; height: 52px; border-radius: 50%; background: #2a8a4a; color: #fff; font-size: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+        .lum-newsletter-code { font-size: 28px; font-weight: 800; letter-spacing: 0.12em; color: #fff; margin: 12px 0 20px; font-family: monospace; }
         .lum-newsletter-footnote {
           font-size: 11px;
           opacity: 0.6;
