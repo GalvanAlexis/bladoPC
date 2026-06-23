@@ -84,61 +84,70 @@ export default function Ingredientes() {
                 background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)',
               }}
             />
-            {(() => {
-              const ing = INGREDIENTS.find(x => x.name === selected);
-              if (!ing) return null;
-              return (
-                <motion.article
-                  key="ing-modal"
-                  initial={{ opacity: 0, scale: 0.85, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.85, y: 20 }}
-                  transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-                  style={{
-                    position: 'fixed', top: '50%', left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    zIndex: 151,
-                    width: 'min(92vw, 480px)',
-                    background: 'var(--lum-bg)',
-                    borderRadius: 20,
-                    padding: 40,
-                    boxShadow: '0 40px 80px rgba(0,0,0,0.25)',
-                    color: 'var(--lum-text)',
-                    textAlign: 'center',
-                  }}
-                >
-                  <button
-                    onClick={() => setSelected(null)}
+            <div
+              style={{
+                position: 'fixed', inset: 0, zIndex: 151,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                pointerEvents: 'none',
+              }}
+            >
+              {(() => {
+                const ing = INGREDIENTS.find(x => x.name === selected);
+                if (!ing) return null;
+                return (
+                  <motion.article
+                    key="ing-modal"
+                    initial={{ opacity: 0, scale: 0.85, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.85, y: 20 }}
+                    transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                     style={{
-                      position: 'absolute', top: 16, right: 20,
-                      background: 'none', border: 'none', fontSize: 28,
-                      color: 'var(--lum-muted)', cursor: 'pointer', lineHeight: 1,
+                      pointerEvents: 'auto',
+                      width: 'min(92vw, 480px)',
+                      maxHeight: '80dvh',
+                      overflow: 'auto',
+                      margin: 16,
+                      background: 'var(--lum-bg)',
+                      borderRadius: 20,
+                      padding: 32,
+                      boxShadow: '0 40px 80px rgba(0,0,0,0.25)',
+                      color: 'var(--lum-text)',
+                      textAlign: 'center',
                     }}
                   >
-                    &times;
-                  </button>
-                  <div
-                    style={{
-                      width: 56, height: 56, borderRadius: '50%',
-                      background: `${ing.color}20`,
-                      margin: '0 auto 16px',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    }}
-                  >
-                    <span style={{ color: ing.color, fontSize: 22, fontWeight: 700 }}>{ing.potency}%</span>
-                  </div>
-                  <h3 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 8px', color: ing.color }}>{ing.name}</h3>
-                  <div
-                    style={{
-                      height: 4, borderRadius: 2, margin: '0 auto 16px',
-                      maxWidth: 200,
-                      background: `linear-gradient(90deg, ${ing.color}, ${ing.color}44)`,
-                    }}
-                  />
-                  <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--lum-muted)', margin: 0 }}>{ing.detail}</p>
-                </motion.article>
-              );
-            })()}
+                    <button
+                      onClick={() => setSelected(null)}
+                      style={{
+                        position: 'absolute', top: 12, right: 16,
+                        background: 'none', border: 'none', fontSize: 28,
+                        color: 'var(--lum-muted)', cursor: 'pointer', lineHeight: 1,
+                      }}
+                    >
+                      &times;
+                    </button>
+                    <div
+                      style={{
+                        width: 56, height: 56, borderRadius: '50%',
+                        background: `${ing.color}20`,
+                        margin: '0 auto 16px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}
+                    >
+                      <span style={{ color: ing.color, fontSize: 22, fontWeight: 700 }}>{ing.potency}%</span>
+                    </div>
+                    <h3 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 8px', color: ing.color }}>{ing.name}</h3>
+                    <div
+                      style={{
+                        height: 4, borderRadius: 2, margin: '0 auto 16px',
+                        maxWidth: 200,
+                        background: `linear-gradient(90deg, ${ing.color}, ${ing.color}44)`,
+                      }}
+                    />
+                    <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--lum-muted)', margin: 0 }}>{ing.detail}</p>
+                  </motion.article>
+                );
+              })()}
+            </div>
           </>
         )}
       </AnimatePresence>

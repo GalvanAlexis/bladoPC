@@ -127,30 +127,38 @@ export default function Hero() {
                 backdropFilter: 'blur(4px)', zIndex: 150,
               }}
             />
-            <motion.article
-              key="lum-dialog"
-              layoutId="lum-product-card"
-              initial={{ opacity: 0, scale: 0.9, y: 40 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 40 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-              className="lum-dialog"
+            <div
               style={{
-                position: 'fixed', top: '50%', left: '50%',
-                transform: 'translate(-50%, -50%)',
-                zIndex: 151,
-                width: 'min(92vw, 680px)',
-                maxHeight: '90vh',
-                overflow: 'auto',
+                position: 'fixed', inset: 0, zIndex: 151,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                pointerEvents: 'none',
               }}
             >
-              <div style={{ position: 'relative' }}>
+              <motion.article
+                key="lum-dialog"
+                layoutId="lum-product-card"
+                initial={{ opacity: 0, scale: 0.9, y: 40 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 40 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+                className="lum-dialog"
+                style={{
+                  pointerEvents: 'auto',
+                  width: 'min(92vw, 680px)',
+                  maxHeight: '85dvh',
+                  overflow: 'auto',
+                  margin: 16,
+                  borderRadius: 20,
+                  background: 'var(--lum-bg)',
+                  boxShadow: '0 40px 80px rgba(0,0,0,0.25)',
+                  color: 'var(--lum-text)',
+                }}
+              >
                 <button
                   onClick={closeDialog}
-                  className="lum-dialog-close"
                   aria-label="Cerrar"
                   style={{
-                    position: 'absolute', top: 16, right: 20,
+                    position: 'absolute', top: 12, right: 16,
                     background: 'none', border: 'none', fontSize: 28,
                     color: 'var(--lum-muted)', cursor: 'pointer', zIndex: 2, lineHeight: 1,
                   }}
@@ -198,9 +206,9 @@ export default function Hero() {
                       Agregar al carrito
                     </motion.button>
                   </div>
-                </div>
               </div>
             </motion.article>
+            </div>
           </>
         )}
       </AnimatePresence>
