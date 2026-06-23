@@ -67,45 +67,54 @@ export default function Beneficios() {
                 background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)',
               }}
             />
-            {(() => {
-              const b = BENEFITS.find(x => x.title === selected);
-              if (!b) return null;
-              return (
-                <motion.article
-                  key="ben-modal"
-                  initial={{ opacity: 0, scale: 0.85, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.85, y: 20 }}
-                  transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-                  style={{
-                    position: 'fixed', top: '50%', left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    zIndex: 151,
-                    width: 'min(92vw, 480px)',
-                    background: 'var(--lum-bg)',
-                    borderRadius: 20,
-                    padding: 40,
-                    boxShadow: '0 40px 80px rgba(0,0,0,0.25)',
-                    color: 'var(--lum-text)',
-                    textAlign: 'center',
-                  }}
-                >
-                  <button
-                    onClick={() => setSelected(null)}
+            <div
+              style={{
+                position: 'fixed', inset: 0, zIndex: 151,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                pointerEvents: 'none',
+              }}
+            >
+              {(() => {
+                const b = BENEFITS.find(x => x.title === selected);
+                if (!b) return null;
+                return (
+                  <motion.article
+                    key="ben-modal"
+                    initial={{ opacity: 0, scale: 0.85, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.85, y: 20 }}
+                    transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                     style={{
-                      position: 'absolute', top: 16, right: 20,
-                      background: 'none', border: 'none', fontSize: 28,
-                      color: 'var(--lum-muted)', cursor: 'pointer', lineHeight: 1,
+                      pointerEvents: 'auto',
+                      width: 'min(92vw, 480px)',
+                      maxHeight: '80dvh',
+                      overflow: 'auto',
+                      margin: 16,
+                      background: 'var(--lum-bg)',
+                      borderRadius: 20,
+                      padding: 32,
+                      boxShadow: '0 40px 80px rgba(0,0,0,0.25)',
+                      color: 'var(--lum-text)',
+                      textAlign: 'center',
                     }}
                   >
-                    &times;
-                  </button>
-                  <div style={{ fontSize: 48, marginBottom: 16 }}>{b.icon}</div>
-                  <h3 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 12px' }}>{b.title}</h3>
-                  <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--lum-muted)', margin: 0 }}>{b.detail}</p>
-                </motion.article>
-              );
-            })()}
+                    <button
+                      onClick={() => setSelected(null)}
+                      style={{
+                        position: 'absolute', top: 12, right: 16,
+                        background: 'none', border: 'none', fontSize: 28,
+                        color: 'var(--lum-muted)', cursor: 'pointer', lineHeight: 1,
+                      }}
+                    >
+                      &times;
+                    </button>
+                    <div style={{ fontSize: 48, marginBottom: 16 }}>{b.icon}</div>
+                    <h3 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 12px' }}>{b.title}</h3>
+                    <p style={{ fontSize: 14, lineHeight: 1.8, color: 'var(--lum-muted)', margin: 0 }}>{b.detail}</p>
+                  </motion.article>
+                );
+              })()}
+            </div>
           </>
         )}
       </AnimatePresence>
