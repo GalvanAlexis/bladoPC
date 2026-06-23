@@ -207,6 +207,14 @@ export default function LuminaPage() {
         }
         .lum-accent { color: var(--lum-primary); }
 
+        .lum-fullpage {
+          min-height: 100vh;
+          background: var(--lum-bg);
+          color: var(--lum-text);
+          font-family: var(--font-sans);
+          line-height: 1.6;
+        }
+
         .lum-hero {
           min-height: 100dvh;
           display: flex;
