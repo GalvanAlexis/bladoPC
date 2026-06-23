@@ -293,7 +293,9 @@ export default function HeroSection() {
                   </Link>
 
                   <a
-                    href="mailto:alexis.galvan@example.com"
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=alexisvladimirgalvan@gmail.com&su=bladoPC"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={{
                       display: 'flex',
                       alignItems: 'center',
