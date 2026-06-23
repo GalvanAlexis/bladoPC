@@ -7,6 +7,9 @@ import Ingredientes from './components/Ingredientes';
 import Testimonios from './components/Testimonios';
 import Newsletter from './components/Newsletter';
 import Footer from './components/Footer';
+import CursorGlow from './components/CursorGlow';
+import ParallaxDecor from './components/ParallaxDecor';
+import ScrollBackground from './components/ScrollBackground';
 
 const COLORS = {
   primary: '#b87676',
@@ -708,6 +711,10 @@ export default function LuminaPage() {
       `}</style>
 
       <div className="lum-fullpage">
+        <CursorGlow />
+        <ParallaxDecor />
+        <ScrollBackground />
+        <div className="lum-progress" />
         <Nav />
         <Hero />
         <Beneficios />
@@ -715,10 +722,6 @@ export default function LuminaPage() {
         <Testimonios />
         <Newsletter />
         <Footer />
-
-        <div id="lum-toast" popover="manual" role="status">
-          Agregado al carrito correctamente
-        </div>
       </div>
 
       <script
