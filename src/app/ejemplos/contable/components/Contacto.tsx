@@ -138,109 +138,7 @@ export default function Contacto() {
         </div>
       </section>
 
-      {/* ─── Floating consulta dialog ─── */}
-      <button
-        id="con-consulta-btn"
-        style={{
-          position: 'fixed',
-          bottom: 'clamp(80px, 10vh, 100px)',
-          right: 24,
-          zIndex: 200,
-          width: 56, height: 56, borderRadius: '50%',
-          background: GRANATE, color: '#fff', border: 'none',
-          cursor: 'pointer',
-          boxShadow: '0 4px 16px rgba(122,26,26,0.35)',
-          fontSize: 22,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-        title="Consulta gratis"
-        aria-label="Abrir consulta rapida"
-      >
-        &#9993;
-      </button>
-
-      <dialog
-        id="con-consulta-dialog"
-        closedby="any"
-        style={{
-          borderRadius: 12,
-          border: 'none',
-          padding: 32,
-          maxWidth: 400,
-          width: 'calc(100% - 48px)',
-          boxShadow: '0 16px 48px rgba(0,0,0,0.15)',
-          fontFamily: "'Inter', system-ui, sans-serif",
-        }}
-      >
-        <form method="dialog">
-          <h2 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px 0', color: TEXT_PRIMARY }}>
-            Consulta gratis
-          </h2>
-          <p style={{ fontSize: 13, color: TEXT_SEC, margin: '0 0 20px 0', lineHeight: 1.5 }}>
-            Dejanos tu consulta y te respondemos en menos de 24h.
-          </p>
-          <div style={{ marginBottom: 16 }}>
-            <input
-              style={{
-                width: '100%', padding: '10px 14px', borderRadius: 6,
-                border: '1px solid rgba(0,0,0,0.08)', fontSize: 14,
-                background: BG_WARM, fontFamily: 'inherit', boxSizing: 'border-box',
-              }}
-              placeholder="Nombre"
-              aria-label="Nombre"
-            />
-          </div>
-          <div style={{ marginBottom: 16 }}>
-            <input
-              style={{
-                width: '100%', padding: '10px 14px', borderRadius: 6,
-                border: '1px solid rgba(0,0,0,0.08)', fontSize: 14,
-                background: BG_WARM, fontFamily: 'inherit', boxSizing: 'border-box',
-              }}
-              type="tel"
-              placeholder="Telefono"
-              aria-label="Telefono"
-            />
-          </div>
-          <div style={{ marginBottom: 20 }}>
-            <textarea
-              style={{
-                width: '100%', padding: '10px 14px', borderRadius: 6,
-                border: '1px solid rgba(0,0,0,0.08)', fontSize: 14,
-                background: BG_WARM, fontFamily: 'inherit', boxSizing: 'border-box',
-                resize: 'vertical', minHeight: 60,
-              }}
-              placeholder="Tu consulta..."
-              aria-label="Tu consulta"
-            />
-          </div>
-          <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
-            <button
-              type="reset"
-              style={{
-                padding: '10px 24px', borderRadius: 6,
-                border: '1px solid rgba(0,0,0,0.08)', background: '#fff',
-                color: TEXT_SEC, fontSize: 13, fontWeight: 500,
-                cursor: 'pointer', fontFamily: 'inherit',
-              }}
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              style={{
-                ...ctaBtn({ padding: '10px 24px', fontSize: 13 }),
-              }}
-            >
-              Enviar
-            </button>
-          </div>
-        </form>
-      </dialog>
-
-      {/* ─── Sticky Mobile CTA ─── */}
+      {/* --- Sticky Mobile CTA --- */}
       <div
         className="con-mobile-cta"
         style={{
@@ -259,17 +157,6 @@ export default function Contacto() {
         <PresupuestoForm label="Solicitar presupuesto gratis" btnStyle={ctaBtn({ width: '100%', textAlign: 'center', padding: 12 })} />
       </div>
 
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `{
-  var btn = document.getElementById('con-consulta-btn');
-  var dialog = document.getElementById('con-consulta-dialog');
-  if (btn && dialog) {
-    btn.addEventListener('click', function(){ dialog.showModal(); });
-  }
-}()`,
-        }}
-      />
       <style>{`
         .con-mobile-cta { display: none !important; }
         @media (max-width: 768px) {
