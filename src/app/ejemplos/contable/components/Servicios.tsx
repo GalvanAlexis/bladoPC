@@ -1,7 +1,7 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import type { ServicioItem } from '../hooks/useAdmin';
 
 const GRANATE = '#7a1a1a';
@@ -17,6 +17,7 @@ interface Props {
 export default function Servicios({ servicios }: Props) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const [expanded, setExpanded] = useState<string | null>(null);
 
   return (
     <section
@@ -39,17 +40,20 @@ export default function Servicios({ servicios }: Props) {
             Todo lo que tu negocio necesita
           </h2>
           <p style={{ fontSize: 15, color: TEXT_SEC, maxWidth: 560, margin: '0 auto', lineHeight: 1.6 }}>
-            Desde monotributo hasta sociedades completas. Te acompanamos en cada etapa de tu negocio.
+            Toca cada servicio para ver los detalles. Desde monotributo hasta sociedades completas.
           </p>
         </motion.div>
 
-          {servicios.map((s, i) => (
+        {servicios.map((s, i) => {
+          const isOpen = expanded === s.id;
+          return (
             <motion.div
               key={s.id}
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ delay: i * 0.08, duration: 0.5, ease: 'easeOut' }}
               className="con-servicio-card"
+              onClick={() => setExpanded(isOpen ? null : s.id)}
               style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -59,11 +63,22 @@ export default function Servicios({ servicios }: Props) {
                 background: i % 2 === 0 ? '#fff' : BG_SECTION,
                 borderRadius: 12,
                 padding: 'clamp(16px, 3vw, 32px)',
-                transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-                cursor: 'default',
+                border: isOpen
+                  ? `1px solid ${GRANATE}20`
+                  : '1px solid transparent',
+                cursor: 'pointer',
+                transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(122,26,26,0.08)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+              onMouseEnter={(e) => {
+                if (!isOpen) {
+                  e.currentTarget.style.boxShadow = '0 8px 30px rgba(122,26,26,0.08)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isOpen) {
+                  e.currentTarget.style.boxShadow = 'none';
+                }
+              }}
             >
               <div style={{ flex: '1 1 55%', minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column', gap: 6, marginBottom: 8 }}>
@@ -87,10 +102,57 @@ export default function Servicios({ servicios }: Props) {
                   {s.desc}
                 </p>
                 {s.precio && (
-                  <div style={{ marginTop: 12, fontSize: 13, color: GRANATE, fontWeight: 600 }}>
+                  <div style={{ marginTop: 8, fontSize: 13, color: GRANATE, fontWeight: 600 }}>
                     {s.precio}
                   </div>
                 )}
+
+                <AnimatePresence initial={false}>
+                  {isOpen && s.detalle && (
+                    <motion.div
+                      key="detalle"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                      style={{ overflow: 'hidden' }}
+                    >
+                      <div
+                        style={{
+                          marginTop: 12,
+                          paddingTop: 12,
+                          borderTop: '1px solid rgba(122,26,26,0.08)',
+                          fontSize: 13,
+                          color: TEXT_SEC,
+                          lineHeight: 1.7,
+                        }}
+                      >
+                        {s.detalle}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <div
+                  style={{
+                    marginTop: 10,
+                    fontSize: 11,
+                    color: GRANATE,
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 4,
+                  }}
+                >
+                  {isOpen ? 'Ver menos' : 'Ver detalle completo'}
+                  <motion.span
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ display: 'inline-block' }}
+                  >
+                    &#9660;
+                  </motion.span>
+                </div>
               </div>
               <div
                 className="con-servicio-circle"
@@ -111,16 +173,17 @@ export default function Servicios({ servicios }: Props) {
                 {s.titulo[0]}
               </div>
             </motion.div>
-          ))}
-          <style>{`
-            .con-servicio-card { flex-direction: row; }
-            .con-servicio-circle { flex: 0 0 64px; height: 64px; }
-            @media (max-width: 600px) {
-              .con-servicio-card { flex-direction: column !important; text-align: center; }
-              .con-servicio-circle { flex: 0 0 48px !important; width: 48px !important; height: 48px !important; font-size: 18px !important; margin-top: 8px; order: -1; }
-              .con-servicio-tag { white-space: normal !important; }
-            }
-          `}</style>
+          );
+        })}
+        <style>{`
+          .con-servicio-card { flex-direction: row; }
+          .con-servicio-circle { flex: 0 0 64px; height: 64px; }
+          @media (max-width: 600px) {
+            .con-servicio-card { flex-direction: column !important; text-align: center; }
+            .con-servicio-circle { flex: 0 0 48px !important; width: 48px !important; height: 48px !important; font-size: 18px !important; margin-top: 8px; order: -1; }
+            .con-servicio-tag { white-space: normal !important; }
+          }
+        `}</style>
       </div>
     </section>
   );

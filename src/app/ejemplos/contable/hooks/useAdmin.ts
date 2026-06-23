@@ -15,6 +15,7 @@ export interface ServicioItem {
   id: string;
   titulo: string;
   desc: string;
+  detalle: string;
   publico: string;
   precio: string;
 }
@@ -51,12 +52,12 @@ const DEFAULTS: ContableAdminState = {
     { id: '3', nombre: 'CPN Federico Lopez', rol: 'Senior', bio: 'Contador Publico. Especialista en Sociedades y Constitucion de Empresas. Expositor en camaras empresariales.' },
   ],
   servicios: [
-    { id: '1', titulo: 'Liquidacion de Sueldos', desc: 'Calculo de remuneraciones, cargas sociales y sindicales. Presentacion de declaraciones juradas mensuales y anuales.', publico: 'Empresas con empleados registrados', precio: 'Desde $15.000/mes' },
-    { id: '2', titulo: 'Impuestos (IVA, Ganancias, BBPP)', desc: 'Liquidacion mensual y anual de todos los impuestos nacionales y provinciales. Regimenes de retencion y percepcion.', publico: 'Monotributistas, autonomos y sociedades', precio: 'Desde $12.000/mes' },
-    { id: '3', titulo: 'Contabilidad General', desc: 'Registro contable completo, balances, libros IVA y societarios. Emision de estados contables certificados.', publico: 'Comercios, industrias y servicios', precio: 'Desde $18.000/mes' },
-    { id: '4', titulo: 'Monotributo', desc: 'Altas, bajas, recategorizaciones y declaraciones juradas mensuales. Gestion de categorias y facturacion.', publico: 'Emprendedores y profesionales independientes', precio: 'Desde $8.000/mes' },
-    { id: '5', titulo: 'Sociedades y Empresas', desc: 'Constitucion de SAS/SRL, asambleas, registros contables y presentacion de estados contables anuales.', publico: 'Empresas constituidas o en formacion', precio: 'Desde $25.000/mes' },
-    { id: '6', titulo: 'Auditoria y Balances', desc: 'Revision de estados contables, auditoria externa y certificacion de balances para entes publicos y privados.', publico: 'Sociedades que requieren balance certificado', precio: 'Desde $30.000/mes' },
+    { id: '1', titulo: 'Liquidacion de Sueldos', desc: 'Calculo de remuneraciones, cargas sociales y sindicales. Presentacion de declaraciones juradas mensuales y anuales.', detalle: 'Incluye calculo de remuneraciones mensuales, cargas sociales (jubilacion, obra social, sindicato), liquidacion anual del SAC, presentacion de declaraciones juradas (F.931), emision de recibos de sueldo digitales y certificaciones de servicios. Gestionamos tambien altas y bajas en AFIP, ART y obra social.', publico: 'Empresas con empleados registrados', precio: 'Desde $15.000/mes' },
+    { id: '2', titulo: 'Impuestos (IVA, Ganancias, BBPP)', desc: 'Liquidacion mensual y anual de todos los impuestos nacionales y provinciales. Regimenes de retencion y percepcion.', detalle: 'Liquidacion mensual de IVA (F.2002), regimen general y monotributo. Impuesto a las Ganancias personas juridicas (F.712) y personas fisicas (F.711). Bienes Personales (F.762). Regimenes de retencion y percepcion de IIBB. Gestion de planes de pago y moratorias.', publico: 'Monotributistas, autonomos y sociedades', precio: 'Desde $12.000/mes' },
+    { id: '3', titulo: 'Contabilidad General', desc: 'Registro contable completo, balances, libros IVA y societarios. Emision de estados contables certificados.', detalle: 'Registro diario de operaciones en libros contables obligatorios (Diario, Inventarios, IVA). Emision de balances mensuales y anuales. Certificacion de estados contables por contador publico. Libros societarios (Actas, Socios). Preparacion de documentacion para entes de control.', publico: 'Comercios, industrias y servicios', precio: 'Desde $18.000/mes' },
+    { id: '4', titulo: 'Monotributo', desc: 'Altas, bajas, recategorizaciones y declaraciones juradas mensuales. Gestion de categorias y facturacion.', detalle: 'Gestion completa de altas, bajas y recategorizaciones automaticas y voluntarias. Categoria optima segun parametros facturacion/alquiler. Declaraciones juradas mensuales. Pago facil con debito automatico. Asesoramiento sobre el momento optimo para pasar a responsable inscripto.', publico: 'Emprendedores y profesionales independientes', precio: 'Desde $8.000/mes' },
+    { id: '5', titulo: 'Sociedades y Empresas', desc: 'Constitucion de SAS/SRL, asambleas, registros contables y presentacion de estados contables anuales.', detalle: 'Constitucion de SAS, SRL y SA. Tramites ante la Inspeccion General de Justicia (IGJ) o Registro Publico. Redaccion de contratos societarios. Asambleas ordinarias y extraordinarias. Aumentos de capital y modificaciones estatutarias. Disolucion y liquidacion de sociedades.', publico: 'Empresas constituidas o en formacion', precio: 'Desde $25.000/mes' },
+    { id: '6', titulo: 'Auditoria y Balances', desc: 'Revision de estados contables, auditoria externa y certificacion de balances para entes publicos y privados.', detalle: 'Revision integral de estados contables segun normas RT y NCPA. Auditoria externa para entes publicos y privados. Certificacion de balances para creditos bancarios, licitaciones y concursos. Due diligence contable-impositiva para fusiones y adquisiciones.', publico: 'Sociedades que requieren balance certificado', precio: 'Desde $30.000/mes' },
   ],
   faq: [
     { id: '1', q: 'Cuanto cuesta una consulta inicial?', a: 'La primera reunion es totalmente gratuita y sin compromiso. Nos conoces, te contamos como trabajamos y si te sentis comodo, ahi recien arrancamos.' },
