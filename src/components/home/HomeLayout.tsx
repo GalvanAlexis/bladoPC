@@ -8,6 +8,7 @@ import ServicesSection from '@/components/home/ServicesSection';
 import AboutSection from '@/components/home/AboutSection';
 import SkillsSection from '@/components/home/SkillsSection';
 import ContactSection from '@/components/home/ContactSection';
+import FAQSection from '@/components/home/FAQSection';
 import AdminLogin from '@/components/home/AdminLogin';
 import AdminDashboard from '@/components/home/AdminDashboard';
 import RevealObserver from '@/components/home/RevealObserver';
@@ -87,6 +88,7 @@ export default function HomeLayout() {
         <ServicesSection />
         <AboutSection />
         <SkillsSection />
+        <FAQSection />
         <ContactSection />
 
         <footer

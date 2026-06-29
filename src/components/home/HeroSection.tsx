@@ -9,6 +9,7 @@ const QUESTIONS = [
   "La PC no anda bien?",
   "Cansado de tareas repetitivas?",
   "Gestionas todo a mano?",
+  "Necesitas una pagina web para tu negocio?",
 ];
 
 export default function HeroSection() {
@@ -119,7 +120,7 @@ export default function HeroSection() {
               marginBottom: '24px',
             }}
           >
-            Soporte IT &middot; Soluciones Digitales &middot; Ciencia de Datos
+            Soporte IT &middot; Soluciones Digitales &middot; Ciencia de Datos &middot; <span style={{ color: 'var(--accent)', fontWeight: 600 }}>en Chascomus</span>
           </motion.p>
 
           {/* Headline */}
