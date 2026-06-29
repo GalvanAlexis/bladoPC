@@ -151,6 +151,9 @@ export default function AboutSection() {
                 }}
               >
                 <motion.article
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={chapter.title}
                   layoutId={`about-card-${chapter.id}`}
                   style={{
                     background: 'var(--background)',

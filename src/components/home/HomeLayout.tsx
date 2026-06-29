@@ -23,6 +23,30 @@ export default function HomeLayout() {
 
   return (
     <>
+      {/* Skip-to-content link para accesibilidad */}
+      <a
+        href="#main-content"
+        style={{
+          position: 'absolute',
+          top: '-100%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 9999,
+          padding: '12px 24px',
+          background: 'var(--accent)',
+          color: '#fff',
+          fontWeight: 600,
+          fontSize: '14px',
+          borderRadius: '0 0 8px 8px',
+          textDecoration: 'none',
+          transition: 'top 0.2s',
+        }}
+        onFocus={e => { e.currentTarget.style.top = '0'; }}
+        onBlur={e => { e.currentTarget.style.top = '-100%'; }}
+      >
+        Saltar al contenido principal
+      </a>
+
       <RevealObserver />
       <ScrollBackground />
       <CursorGlow />
@@ -53,6 +77,7 @@ export default function HomeLayout() {
 
       <main
         id="main-content"
+        role="main"
         style={{
           paddingTop: '56px',
           overflowX: 'hidden',

@@ -57,6 +57,7 @@ function AnimatedCounter({ item, inView }: { item: StatItem; inView: boolean }) 
       }}
     >
       <div
+        aria-label={`${item.prefix || ''}${count}${item.suffix} ${item.label}`}
         style={{
           fontSize: 'clamp(36px, 5vw, 56px)',
           fontWeight: 800,
@@ -69,6 +70,7 @@ function AnimatedCounter({ item, inView }: { item: StatItem; inView: boolean }) 
         {item.prefix || ''}{count}{item.suffix}
       </div>
       <div
+        aria-hidden="true"
         style={{
           fontSize: '13px',
           color: 'var(--muted-light)',
