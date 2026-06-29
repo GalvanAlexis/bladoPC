@@ -69,7 +69,7 @@ export default function ServicesSection() {
     <section
       id="servicios"
       aria-label="Servicios"
-      className="section-padding"
+      className="section-padding section-lazy"
       style={{ position: 'relative', overflow: 'hidden', backgroundColor: 'var(--surface)' }}
     >
       {/* Video Background */}
@@ -87,6 +87,7 @@ export default function ServicesSection() {
           loop
           muted
           playsInline
+          preload="none"
           style={{
             width: '100%',
             height: '100%',

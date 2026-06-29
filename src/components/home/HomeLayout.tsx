@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import HeroSection from '@/components/home/HeroSection';
@@ -12,10 +13,11 @@ import FAQSection from '@/components/home/FAQSection';
 import AdminLogin from '@/components/home/AdminLogin';
 import AdminDashboard from '@/components/home/AdminDashboard';
 import RevealObserver from '@/components/home/RevealObserver';
-import ScrollBackground from '@/components/home/ScrollBackground';
-import CursorGlow from '@/components/home/CursorGlow';
 import ReadingProgress from '@/components/home/ReadingProgress';
-import ParallaxDecor from '@/components/home/ParallaxDecor';
+
+const ScrollBackground = dynamic(() => import('@/components/home/ScrollBackground'), { ssr: false });
+const CursorGlow = dynamic(() => import('@/components/home/CursorGlow'), { ssr: false });
+const ParallaxDecor = dynamic(() => import('@/components/home/ParallaxDecor'), { ssr: false });
 
 export default function HomeLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);

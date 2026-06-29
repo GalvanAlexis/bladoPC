@@ -64,6 +64,7 @@ export default function HeroSection() {
         loop
         muted
         playsInline
+        poster="/video/bad-day-poster.jpg"
         className="hero-video-parallax"
         aria-hidden="true"
         style={{
