@@ -7,9 +7,7 @@
 ## 🔴 OPEN — Pendientes
 
 | ID | Título | Prioridad | Etiquetas |
-|---|---|---|---|
-| [ISS-088](./issues/ISS-088_indexacion-presencia-local.md) | Indexacion, presencia local y autoridad inicial | 🔴 Alta | `seo`, `indexacion`, `local-seo` |
-| [ISS-083](./issues/ISS-083_admin-dashboard-stats-portfolio.md) | Admin Dashboard + Stats Section | 🟡 Media | `feature` |
+|---|---|---|---|---|
 | [ISS-016](./issues/ISS-016_vercel-deploy.md) | Deploy a Vercel | 🟢 Baja | `devops`, `deploy` |
 
 ---
@@ -26,6 +24,9 @@
 | ISS-052 | Nueva About Section | 2026-06-09 |
 | ISS-049 | HomeLayout y rediseño Landing | 2026-06-09 |
 | ISS-048 | Sidebar rediseño corporativo | 2026-06-09 |
+| [ISS-089](./issues/ISS-089_seguridad-admin-token-jwt.md) | Sistema de seguridad admin (bcrypt + JWT + proxy) | 2026-06-29 |
+| [ISS-088](./issues/ISS-088_indexacion-presencia-local.md) | Indexacion, presencia local y autoridad inicial | 2026-06-29 |
+| [ISS-083](./issues/ISS-083_admin-dashboard-stats-portfolio.md) | Admin Dashboard + Stats Section | 2026-06-29 |
 | [ISS-068](./issues/ISS-068_mantenimiento-general.md) | Mantenimiento general y limpieza de legacy + optimizacion home | 2026-06-19 |
 | [ISS-063](./issues/ISS-063_servicios-acordion.md) | Accordion colapsable en catalogo de servicios | 2026-06-18 |
 | [ISS-062](./issues/ISS-062_automatizaciones-ejemplos.md) | Ejemplos de automatizaciones con IA | 2026-06-18 |

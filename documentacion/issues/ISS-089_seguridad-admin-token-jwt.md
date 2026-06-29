@@ -29,9 +29,11 @@ El edge network de Vercel actua como CDN/load balancer: termina SSL, filtra DDoS
 ## Tareas
 
 ### 1. Generar hash bcrypt de la password
-- [ ] Generar hash de la password actual con bcrypt (salt rounds 12)
-- [ ] Guardar en .env.local como ADMIN_PASS_HASH
-- [ ] Documentar en .env.local.example
+- [x] Generar hash de la password actual con bcrypt (salt rounds 12)
+- [x] Guardar en .env.local como ADMIN_PASS_HASH_B64 (base64 para evitar que $ se expanda en dotenv)
+- [x] Documentar en .env.local.example
+- [x] NOTA: dotenv expande $var en valores. bcrypt hash contiene $. Se usa base64 como workaround.
+      `getAdminHash()` en auth.ts decodifica base64 o usa ADMIN_PASS_HASH raw si existe.
 
 ### 2. Crear lib/auth.ts (utilidades compartidas)
 - [ ] `verifyPassword(plain: string, hash: string): boolean` - bcrypt.compare

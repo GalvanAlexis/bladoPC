@@ -7,6 +7,14 @@ const COOKIE_NAME = 'admin_token';
 const TOKEN_EXPIRY = '24h';
 const SALT_ROUNDS = 12;
 
+export function getAdminHash(): string {
+  const raw = process.env.ADMIN_PASS_HASH;
+  if (raw) return raw;
+  const b64 = process.env.ADMIN_PASS_HASH_B64;
+  if (b64) return Buffer.from(b64, 'base64').toString('utf8');
+  return '';
+}
+
 export function verifyPassword(plain: string, hash: string): boolean {
   return bcrypt.compareSync(plain, hash);
 }
