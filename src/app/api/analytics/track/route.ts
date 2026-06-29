@@ -1,18 +1,12 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-/**
- * Parsea el User-Agent para detectar el tipo de dispositivo.
- */
 function parseDevice(ua: string): string {
   if (/mobile/i.test(ua)) return 'Mobile';
   if (/tablet|ipad/i.test(ua)) return 'Tablet';
   return 'Desktop';
 }
 
-/**
- * Parsea el User-Agent para detectar el browser.
- */
 function parseBrowser(ua: string): string {
   if (/edg/i.test(ua)) return 'Edge';
   if (/chrome/i.test(ua)) return 'Chrome';
@@ -22,40 +16,50 @@ function parseBrowser(ua: string): string {
   return 'Other';
 }
 
-/**
- * POST /api/analytics/track
- *
- * Registra un visitante único. Captura:
- * - Geo automática via headers de Vercel (solo en producción)
- * - User-Agent (browser, device)
- * - Referrer (de dónde vino el visitante)
- *
- * Principio: Si este endpoint falla, el visitante NO debe verlo.
- * Siempre retorna { ok: true/false } con status 200.
- */
 export async function POST(request: Request) {
   if (!process.env.DATABASE_URL) {
     return NextResponse.json({ ok: false, reason: 'DB not configured' });
   }
 
   try {
-    const headers = request.headers;
+    const body = await request.json().catch(() => ({}));
+    const { page, title, sessionId } = body;
 
-    // Geo automática de Vercel (solo disponible en producción)
+    const headers = request.headers;
     const country = headers.get('x-vercel-ip-country') ?? null;
     const rawCity = headers.get('x-vercel-ip-city');
     const city = rawCity ? decodeURIComponent(rawCity) : null;
     const region = headers.get('x-vercel-ip-country-region') ?? null;
-
-    // User Agent
     const userAgent = headers.get('user-agent') ?? null;
     const device = userAgent ? parseDevice(userAgent) : null;
     const browser = userAgent ? parseBrowser(userAgent) : null;
-
-    // Referrer (de dónde viene el visitante: LinkedIn, Google, directo, etc.)
     const referrer = headers.get('referer') ?? null;
 
-    await prisma.visitor.create({
+    if (sessionId) {
+      const existing = await prisma.visitor.findFirst({
+        where: { id: sessionId },
+        select: { id: true },
+      });
+
+      if (existing) {
+        await prisma.visitor.update({
+          where: { id: sessionId },
+          data: { lastSeenAt: new Date() },
+        });
+      }
+
+      await prisma.pageView.create({
+        data: {
+          path: page || '/',
+          title: title || null,
+          visitorId: sessionId,
+        },
+      });
+
+      return NextResponse.json({ ok: true });
+    }
+
+    const visitor = await prisma.visitor.create({
       data: {
         country,
         city,
@@ -64,20 +68,25 @@ export async function POST(request: Request) {
         device,
         browser,
         referrer,
+        pageViews: {
+          create: {
+            path: page || '/',
+            title: title || null,
+          },
+        },
       },
     });
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, visitorId: visitor.id });
   } catch (error: unknown) {
     if (typeof error === 'object' && error !== null && 'code' in error) {
       const code = (error as { code: string }).code;
       if (code === 'ECONNREFUSED' || code === 'P1001') {
-        console.warn('[Analytics] Skipped tracking visitor: DB connection refused');
+        console.warn('[Analytics] Skipped tracking: DB connection refused');
       }
     } else {
-      console.error('[Analytics] Error tracking visitor:', error);
+      console.error('[Analytics] Error tracking:', error);
     }
-    // Retornar 200 para que el cliente nunca vea un error
     return NextResponse.json({ ok: false });
   }
 }

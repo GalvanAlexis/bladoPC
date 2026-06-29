@@ -12,18 +12,34 @@ datasource db {
 // ─── Modelos ─────────────────────────────────────────────────────────────────
 
 model Visitor {
-  id        String        @id @default(cuid())
-  createdAt DateTime      @default(now())
-  country   String?       // "AR", "US", "ES"
-  city      String?       // "Buenos Aires"
-  region    String?       // "B" (código de provincia)
-  userAgent String?       // User-Agent completo del browser
-  device    String?       // "Desktop" | "Mobile" | "Tablet"
-  browser   String?       // "Chrome" | "Firefox" | "Safari" | ...
-  referrer  String?       // URL de origen (LinkedIn, Google, etc.)
-  sessions  ChatSession[]
+  id           String        @id @default(cuid())
+  createdAt    DateTime      @default(now())
+  lastSeenAt   DateTime      @default(now())
+  country      String?       // "AR", "US", "ES"
+  city         String?       // "Buenos Aires"
+  region       String?       // "B" (código de provincia)
+  userAgent    String?       // User-Agent completo del browser
+  device       String?       // "Desktop" | "Mobile" | "Tablet"
+  browser      String?       // "Chrome" | "Firefox" | "Safari" | ...
+  referrer     String?       // URL de origen (LinkedIn, Google, etc.)
+  pageViews    PageView[]
+  sessions     ChatSession[]
 
   @@index([country])
+  @@index([createdAt])
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  path      String   // "/", "/chat", "/servicios/landing"
+  title     String?  // Titulo de la pagina
+  duration  Int?     // Segundos en la pagina (opcional)
+  visitor   Visitor  @relation(fields: [visitorId], references: [id])
+  visitorId String
+
+  @@index([visitorId])
+  @@index([path])
   @@index([createdAt])
 }
 

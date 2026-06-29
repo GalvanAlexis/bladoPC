@@ -1,23 +1,46 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { AppProvider } from '@/lib/AppContext';
 
-interface AppShellProps {
-  children: React.ReactNode;
+function getOrCreateSessionId(): string {
+  const key = 'blado_visitor_id';
+  let id = localStorage.getItem(key);
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem(key, id);
+  }
+  return id;
 }
 
-export default function AppShell({ children }: AppShellProps) {
+function trackPageView(page: string, title: string | undefined) {
+  const sessionId = getOrCreateSessionId();
+  fetch('/api/analytics/track', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page, title, sessionId }),
+  }).catch(() => {});
+}
+
+export default function AppShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const [showPrivacyNotice, setShowPrivacyNotice] = useState(false);
+  const prevPath = useRef(pathname);
 
   useEffect(() => {
-    // ISS-022: Registrar visita (fire-and-forget, no bloquea la UI)
-    fetch('/api/analytics/track', { method: 'POST' }).catch(() => {});
+    if (prevPath.current !== pathname) {
+      prevPath.current = pathname;
+      const title = document.title || undefined;
+      trackPageView(pathname, title);
+    }
+  }, [pathname]);
 
-    // ISS-023: Mostrar aviso de privacidad solo en la primera visita
+  useEffect(() => {
+    trackPageView(pathname, document.title || undefined);
+
     const seen = localStorage.getItem('blado_privacy_seen');
     if (!seen) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowPrivacyNotice(true);
       localStorage.setItem('blado_privacy_seen', '1');
       const timer = setTimeout(() => setShowPrivacyNotice(false), 6000);
@@ -29,21 +52,39 @@ export default function AppShell({ children }: AppShellProps) {
     <AppProvider>
       {children}
 
-      {/* ISS-023: Privacy Notice Toast */}
       {showPrivacyNotice && (
         <div
           role="status"
           aria-live="polite"
-          className="fixed bottom-4 left-4 z-50 max-w-xs rounded-lg border border-gray-700 bg-gray-900/90 px-4 py-3 text-xs text-gray-400 shadow-lg backdrop-blur-sm animate-fade-in"
+          style={{
+            position: 'fixed',
+            bottom: '16px',
+            left: '16px',
+            zIndex: 50,
+            maxWidth: '320px',
+            padding: '12px 16px',
+            borderRadius: '8px',
+            border: '1px solid var(--border)',
+            background: 'var(--surface)',
+            color: 'var(--foreground-2)',
+            fontSize: '12px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+          }}
         >
-          🔒 Este sitio registra datos anónimos de visita (país, dispositivo)
-          con fines estadísticos. No se almacenan IPs.
+          Este sitio registra datos anonimos de visita (pagina, pais, dispositivo) con fines estadisticos.
           <button
             onClick={() => setShowPrivacyNotice(false)}
-            className="ml-2 text-gray-600 hover:text-gray-400 transition-colors"
+            style={{
+              marginLeft: '8px',
+              background: 'none',
+              border: 'none',
+              color: 'var(--muted)',
+              cursor: 'pointer',
+              fontSize: '12px',
+            }}
             aria-label="Cerrar aviso"
           >
-            ✕
+            {'\u2715'}
           </button>
         </div>
       )}
