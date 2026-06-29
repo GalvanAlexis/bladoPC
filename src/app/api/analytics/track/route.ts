@@ -79,14 +79,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ ok: true, visitorId: visitor.id });
   } catch (error: unknown) {
-    if (typeof error === 'object' && error !== null && 'code' in error) {
-      const code = (error as { code: string }).code;
-      if (code === 'ECONNREFUSED' || code === 'P1001') {
-        console.warn('[Analytics] Skipped tracking: DB connection refused');
-      }
-    } else {
-      console.error('[Analytics] Error tracking:', error);
-    }
-    return NextResponse.json({ ok: false });
+    let msg = 'Unknown error';
+    if (error instanceof Error) msg = error.message;
+    console.error('[Analytics] Error:', msg);
+    return NextResponse.json({ ok: false, error: msg });
   }
 }
