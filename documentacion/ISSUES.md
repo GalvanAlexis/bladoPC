@@ -8,10 +8,8 @@
 
 | ID | Título | Prioridad | Etiquetas |
 |---|---|---|---|
-| [ISS-084](./issues/ISS-084_meta-jsonld-opengraph.md) | Meta tags, JSON-LD structured data & Open Graph | 🟡 Media | `seo`, `structured-data`, `metadata` |
-| [ISS-085](./issues/ISS-085_semantic-html-accessibility.md) | Semantic HTML + heading hierarchy + accesibilidad SEO | 🟡 Media | `seo`, `a11y`, `html` |
-| [ISS-086](./issues/ISS-086_content-e-e-a-t-faq.md) | Contenido E-E-A-T, keywords locales y FAQ section | 🟡 Media | `seo`, `content`, `local-seo` |
-| [ISS-087](./issues/ISS-087_performance-core-web-vitals.md) | Performance SEO - Core Web Vitals | 🟡 Media | `seo`, `performance`, `core-web-vitals` |
+| [ISS-088](./issues/ISS-088_indexacion-presencia-local.md) | Indexacion, presencia local y autoridad inicial | 🔴 Alta | `seo`, `indexacion`, `local-seo` |
+| [ISS-083](./issues/ISS-083_admin-dashboard-stats-portfolio.md) | Admin Dashboard + Stats Section | 🟡 Media | `feature` |
 | [ISS-016](./issues/ISS-016_vercel-deploy.md) | Deploy a Vercel | 🟢 Baja | `devops`, `deploy` |
 
 ---
