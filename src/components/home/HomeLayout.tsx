@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import HeroSection from '@/components/home/HeroSection';
@@ -8,13 +9,15 @@ import ServicesSection from '@/components/home/ServicesSection';
 import AboutSection from '@/components/home/AboutSection';
 import SkillsSection from '@/components/home/SkillsSection';
 import ContactSection from '@/components/home/ContactSection';
+import FAQSection from '@/components/home/FAQSection';
 import AdminLogin from '@/components/home/AdminLogin';
 import AdminDashboard from '@/components/home/AdminDashboard';
 import RevealObserver from '@/components/home/RevealObserver';
-import ScrollBackground from '@/components/home/ScrollBackground';
-import CursorGlow from '@/components/home/CursorGlow';
 import ReadingProgress from '@/components/home/ReadingProgress';
-import ParallaxDecor from '@/components/home/ParallaxDecor';
+
+const ScrollBackground = dynamic(() => import('@/components/home/ScrollBackground'), { ssr: false });
+const CursorGlow = dynamic(() => import('@/components/home/CursorGlow'), { ssr: false });
+const ParallaxDecor = dynamic(() => import('@/components/home/ParallaxDecor'), { ssr: false });
 
 export default function HomeLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -23,6 +26,30 @@ export default function HomeLayout() {
 
   return (
     <>
+      {/* Skip-to-content link para accesibilidad */}
+      <a
+        href="#main-content"
+        style={{
+          position: 'absolute',
+          top: '-100%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 9999,
+          padding: '12px 24px',
+          background: 'var(--accent)',
+          color: '#fff',
+          fontWeight: 600,
+          fontSize: '14px',
+          borderRadius: '0 0 8px 8px',
+          textDecoration: 'none',
+          transition: 'top 0.2s',
+        }}
+        onFocus={e => { e.currentTarget.style.top = '0'; }}
+        onBlur={e => { e.currentTarget.style.top = '-100%'; }}
+      >
+        Saltar al contenido principal
+      </a>
+
       <RevealObserver />
       <ScrollBackground />
       <CursorGlow />
@@ -32,10 +59,13 @@ export default function HomeLayout() {
       <Navbar
         onToggleSidebar={() => setSidebarOpen((p) => !p)}
         sidebarOpen={sidebarOpen}
-        onAdminClick={() => setShowAdminLogin(true)}
       />
 
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        onAdminClick={() => setShowAdminLogin(true)}
+      />
 
       <AdminLogin
         isOpen={showAdminLogin}
@@ -50,6 +80,7 @@ export default function HomeLayout() {
 
       <main
         id="main-content"
+        role="main"
         style={{
           paddingTop: '56px',
           overflowX: 'hidden',
@@ -59,6 +90,7 @@ export default function HomeLayout() {
         <ServicesSection />
         <AboutSection />
         <SkillsSection />
+        <FAQSection />
         <ContactSection />
 
         <footer

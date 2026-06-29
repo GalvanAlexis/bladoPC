@@ -13,8 +13,8 @@ const SERVICES = [
     id: 'hardware',
     title: 'Reparación de PC',
     subtitle: 'Nivel Componente y Software',
-    desc: 'Diagnóstico preciso, mantenimiento preventivo/correctivo y optimización profunda.',
-    details: 'Mi enfoque técnico de reparación está fuertemente inclinado a la resolución por software y a la optimización del sistema operativo. A nivel de hardware, la reparación se ejecuta mediante el recambio directo del componente dañado. El servicio está destinado exclusivamente a PCs de Escritorio (no notebooks ni dispositivos móviles), asegurando diagnósticos certeros y que el equipo vuelva a rendir al máximo.',
+    desc: 'Diagnostico preciso, mantenimiento preventivo/correctivo y optimizacion profunda de PCs en Chascomus.',
+    details: 'Mi enfoque tecnico de reparacion esta fuertemente inclinado a la resolucion por software y a la optimizacion del sistema operativo. A nivel de hardware, la reparacion se ejecuta mediante el recambio directo del componente danado. El servicio esta destinado exclusivamente a PCs de Escritorio en Chascomus (no notebooks ni dispositivos moviles), asegurando diagnosticos certeros y que el equipo vuelva a rendir al maximo.',
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
@@ -69,7 +69,7 @@ export default function ServicesSection() {
     <section
       id="servicios"
       aria-label="Servicios"
-      className="section-padding"
+      className="section-padding section-lazy"
       style={{ position: 'relative', overflow: 'hidden', backgroundColor: 'var(--surface)' }}
     >
       {/* Video Background */}
@@ -87,6 +87,7 @@ export default function ServicesSection() {
           loop
           muted
           playsInline
+          preload="none"
           style={{
             width: '100%',
             height: '100%',
@@ -258,6 +259,9 @@ export default function ServicesSection() {
                 }}
               >
                 <motion.article
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={srv.title}
                   layoutId={`service-card-${srv.id}`}
                   style={{
                     background: 'var(--surface)',

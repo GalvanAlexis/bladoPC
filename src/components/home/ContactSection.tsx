@@ -2,8 +2,10 @@
 
 import React from 'react';
 
+const GMAIL_COMPOSE = 'https://mail.google.com/mail/?view=cm&fs=1&to=alexisvladimirgalvan@gmail.com&su=bladoPC';
+
 const CONTACT_DATA = {
-  email: 'alexis.galvan@example.com',
+  email: 'alexisvladimirgalvan@gmail.com',
   phone: '+54 2241 567142',
   location: 'Chascomus, Buenos Aires, Argentina',
   socials: [
@@ -18,7 +20,7 @@ const CONTACT_DATA = {
     },
     {
       label: 'LinkedIn',
-      href: 'https://linkedin.com/in/GalvanAlexis',
+      href: 'https://www.linkedin.com/in/alexis-galvan',
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
@@ -33,7 +35,7 @@ export default function ContactSection() {
     <section
       id="contacto"
       aria-label="Contacto"
-      className="section-padding"
+      className="section-padding section-lazy"
       style={{ background: 'var(--surface)', position: 'relative' }}
     >
       <div className="section-container">
@@ -102,12 +104,15 @@ export default function ContactSection() {
             <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--foreground)', margin: '0 0 8px' }}>
               Ubicacion
             </h3>
-            <p style={{ fontSize: '14px', color: 'var(--muted-light)', margin: 0, lineHeight: 1.6 }}>
+            <p style={{ fontSize: '14px', color: 'var(--muted-light)', margin: '0 0 4px', lineHeight: 1.6 }}>
               {CONTACT_DATA.location}
+            </p>
+            <p style={{ fontSize: '12px', color: 'var(--accent)', margin: 0 }}>
+              Disponible para proyectos en Chascomus y remoto
             </p>
           </div>
 
-          {/* Email */}
+          {/* Contacto directo */}
           <div
             style={{
               padding: '24px',
@@ -136,15 +141,19 @@ export default function ContactSection() {
               </svg>
             </div>
             <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--foreground)', margin: '0 0 8px' }}>
-              Email
+              Contacto directo
             </h3>
             <a
-              href={`mailto:${CONTACT_DATA.email}`}
+              href={GMAIL_COMPOSE}
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
                 fontSize: '14px',
                 color: 'var(--accent)',
                 textDecoration: 'none',
                 fontWeight: 500,
+                display: 'block',
+                marginBottom: '8px',
                 transition: 'color 0.2s',
               }}
               onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent-hover)'; }}
@@ -152,6 +161,26 @@ export default function ContactSection() {
             >
               {CONTACT_DATA.email}
             </a>
+            <a
+              href="https://wa.me/5492241567142"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: '14px',
+                color: '#25D366',
+                textDecoration: 'none',
+                fontWeight: 500,
+                display: 'block',
+                transition: 'opacity 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.opacity = '0.8'; }}
+              onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+            >
+              +54 2241 567142
+            </a>
+            <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '8px 0 0' }}>
+              Respondo en menos de 24h
+            </p>
           </div>
 
           {/* Social */}

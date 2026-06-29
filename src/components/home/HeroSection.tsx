@@ -1,14 +1,22 @@
 "use client";
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMousePosition } from '@/components/home/hooks/useMousePosition';
+
+const QUESTIONS = [
+  "La PC no anda bien?",
+  "Cansado de tareas repetitivas?",
+  "Gestionas todo a mano?",
+  "Necesitas una pagina web para tu negocio?",
+];
 
 export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { progressX, progressY, isWithin } = useMousePosition(containerRef);
   const [showDialog, setShowDialog] = useState(false);
+  const [questionIndex, setQuestionIndex] = useState(0);
 
   const rotateX = isWithin ? (progressY - 0.5) * -8 : 0;
   const rotateY = isWithin ? (progressX - 0.5) * 8 : 0;
@@ -17,6 +25,13 @@ export default function HeroSection() {
     hidden: {},
     visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setQuestionIndex((prev) => (prev + 1) % QUESTIONS.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, []);
 
   const fadeUp = {
     hidden: { opacity: 0, y: 24 },
@@ -27,7 +42,8 @@ export default function HeroSection() {
     <section
       id="hero"
       ref={containerRef}
-      aria-label="Presentaci\u00f3n"
+      role="banner"
+      aria-label="Presentacion y servicios IT en Chascomus"
       style={{
         position: 'relative',
         minHeight: '100svh',
@@ -37,13 +53,20 @@ export default function HeroSection() {
         perspective: '1200px',
       }}
     >
+      {/* H2 oculto para SEO semantico estatico */}
+      <h2 className="sr-only">
+        Alexis Galvan - Soluciones IT profesionales en Chascomus: desarrollo web, automatizaciones con IA y ciencia de datos
+      </h2>
+
       {/* Video background */}
       <video
         autoPlay
         loop
         muted
         playsInline
+        poster="/video/bad-day-poster.jpg"
         className="hero-video-parallax"
+        aria-hidden="true"
         style={{
           position: 'absolute',
           top: '-20%',
@@ -98,27 +121,35 @@ export default function HeroSection() {
               marginBottom: '24px',
             }}
           >
-            Soporte IT &middot; Soluciones Digitales &middot; Ciencia de Datos
+            Soporte IT &middot; Soluciones Digitales &middot; Ciencia de Datos &middot; <span style={{ color: 'var(--accent)', fontWeight: 600 }}>en Chascomus</span>
           </motion.p>
 
           {/* Headline */}
           <motion.h1
             variants={fadeUp}
             style={{
-              fontSize: 'clamp(40px, 7vw, 88px)',
+              fontSize: 'clamp(32px, 5vw, 60px)',
               fontWeight: 700,
               letterSpacing: '-0.03em',
-              lineHeight: 1.05,
+              lineHeight: 1.15,
               color: 'var(--foreground)',
-              margin: '0 0 16px',
+              margin: '0 0 8px',
               textWrap: 'balance',
+              minHeight: '1.4em',
             }}
           >
-            &iquest;La PC no anda bien?{' '}
-            <br className="hidden sm:block" />
-            <span style={{ color: 'var(--foreground-2)' }}>
-              &iquest;Cansado de tareas repetitivas?
-            </span>
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={questionIndex}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                style={{ display: 'inline-block' }}
+              >
+                {QUESTIONS[questionIndex]}
+              </motion.span>
+            </AnimatePresence>
           </motion.h1>
 
           {/* Sub-headline */}
@@ -145,6 +176,7 @@ export default function HeroSection() {
             variants={fadeUp}
             style={{
               display: 'flex',
+              justifyContent: 'center',
               flexWrap: 'wrap',
               gap: '12px',
             }}
@@ -247,6 +279,7 @@ export default function HeroSection() {
                     style={{
                       display: 'flex',
                       alignItems: 'center',
+                      justifyContent: 'center',
                       gap: '12px',
                       padding: '14px 16px',
                       borderRadius: '10px',
@@ -265,7 +298,6 @@ export default function HeroSection() {
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-1.102-1.083-1.847-2.37-2.063-2.77-.217-.4-.023-.617.163-.817.167-.18.371-.373.557-.563.186-.19.248-.32.372-.532.124-.212.062-.398-.031-.557-.093-.16-.671-1.618-.919-2.215-.242-.58-.488-.5-.671-.51-.173-.008-.372-.01-.57-.01-.199 0-.521.074-.794.372-.273.297-1.045 1.02-1.045 2.488 0 1.468 1.067 2.886 1.217 3.085.15.2 2.095 3.2 5.076 4.487.708.306 1.261.488 1.693.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.29.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                   </svg>
                     WhatsApp
-                    <span style={{ marginLeft: 'auto', fontSize: '12px', color: 'var(--muted)' }}>2241 567142</span>
                   </a>
 
                   <Link
@@ -274,6 +306,7 @@ export default function HeroSection() {
                     style={{
                       display: 'flex',
                       alignItems: 'center',
+                      justifyContent: 'center',
                       gap: '12px',
                       padding: '14px 16px',
                       borderRadius: '10px',
@@ -293,10 +326,13 @@ export default function HeroSection() {
                   </Link>
 
                   <a
-                    href="mailto:alexis.galvan@example.com"
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=alexisvladimirgalvan@gmail.com&su=bladoPC"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={{
                       display: 'flex',
                       alignItems: 'center',
+                      justifyContent: 'center',
                       gap: '12px',
                       padding: '14px 16px',
                       borderRadius: '10px',

@@ -13,17 +13,33 @@ export default function AdminLogin({ isOpen, onClose, onSuccess }: AdminLoginPro
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === 'admin' && password === 'admin123') {
-      setError('');
-      setUsername('');
-      setPassword('');
-      onSuccess();
-      onClose();
-    } else {
-      setError('Usuario o contrasena incorrectos');
+    setLoading(true);
+    setError('');
+
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (res.ok) {
+        setUsername('');
+        setPassword('');
+        onSuccess();
+        onClose();
+      } else {
+        const data = await res.json();
+        setError(data.error || 'Credenciales incorrectas');
+      }
+    } catch {
+      setError('Error de conexion con el servidor');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -163,15 +179,17 @@ export default function AdminLogin({ isOpen, onClose, onSuccess }: AdminLoginPro
                 <button
                   type="submit"
                   className="btn-primary"
+                  disabled={loading}
                   style={{
                     width: '100%',
                     justifyContent: 'center',
                     marginTop: '4px',
                     border: 'none',
-                    cursor: 'pointer',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    opacity: loading ? 0.6 : 1,
                   }}
                 >
-                  Ingresar
+                  {loading ? 'Verificando...' : 'Ingresar'}
                 </button>
               </div>
             </motion.form>
