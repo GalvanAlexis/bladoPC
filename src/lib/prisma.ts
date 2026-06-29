@@ -13,7 +13,8 @@ const poolConfig: pg.PoolConfig = {};
 
 if (connectionString) {
   poolConfig.connectionString = connectionString;
-  poolConfig.connectionTimeoutMillis = 5000;
+  poolConfig.connectionTimeoutMillis = 10000;
+  poolConfig.ssl = { rejectUnauthorized: false };
 } else if (process.env.NODE_ENV === 'production') {
   throw new Error('DATABASE_URL no configurada en produccion');
 }
