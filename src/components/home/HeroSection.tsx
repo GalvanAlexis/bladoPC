@@ -9,6 +9,7 @@ const QUESTIONS = [
   "La PC no anda bien?",
   "Cansado de tareas repetitivas?",
   "Gestionas todo a mano?",
+  "Necesitas una pagina web para tu negocio?",
 ];
 
 export default function HeroSection() {
@@ -41,7 +42,8 @@ export default function HeroSection() {
     <section
       id="hero"
       ref={containerRef}
-      aria-label="Presentaci\u00f3n"
+      role="banner"
+      aria-label="Presentacion y servicios IT en Chascomus"
       style={{
         position: 'relative',
         minHeight: '100svh',
@@ -51,13 +53,20 @@ export default function HeroSection() {
         perspective: '1200px',
       }}
     >
+      {/* H2 oculto para SEO semantico estatico */}
+      <h2 className="sr-only">
+        Alexis Galvan - Soluciones IT profesionales en Chascomus: desarrollo web, automatizaciones con IA y ciencia de datos
+      </h2>
+
       {/* Video background */}
       <video
         autoPlay
         loop
         muted
         playsInline
+        poster="/video/bad-day-poster.jpg"
         className="hero-video-parallax"
+        aria-hidden="true"
         style={{
           position: 'absolute',
           top: '-20%',
@@ -112,7 +121,7 @@ export default function HeroSection() {
               marginBottom: '24px',
             }}
           >
-            Soporte IT &middot; Soluciones Digitales &middot; Ciencia de Datos
+            Soporte IT &middot; Soluciones Digitales &middot; Ciencia de Datos &middot; <span style={{ color: 'var(--accent)', fontWeight: 600 }}>en Chascomus</span>
           </motion.p>
 
           {/* Headline */}

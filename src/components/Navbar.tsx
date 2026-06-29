@@ -27,6 +27,7 @@ export default function Navbar({ onToggleSidebar, sidebarOpen }: NavbarProps) {
 
   return (
     <nav
+      aria-label="Navegacion principal"
       className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center"
       style={{
         background: scrolled

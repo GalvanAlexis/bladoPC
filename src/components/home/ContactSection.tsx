@@ -35,7 +35,7 @@ export default function ContactSection() {
     <section
       id="contacto"
       aria-label="Contacto"
-      className="section-padding"
+      className="section-padding section-lazy"
       style={{ background: 'var(--surface)', position: 'relative' }}
     >
       <div className="section-container">
@@ -104,12 +104,15 @@ export default function ContactSection() {
             <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--foreground)', margin: '0 0 8px' }}>
               Ubicacion
             </h3>
-            <p style={{ fontSize: '14px', color: 'var(--muted-light)', margin: 0, lineHeight: 1.6 }}>
+            <p style={{ fontSize: '14px', color: 'var(--muted-light)', margin: '0 0 4px', lineHeight: 1.6 }}>
               {CONTACT_DATA.location}
+            </p>
+            <p style={{ fontSize: '12px', color: 'var(--accent)', margin: 0 }}>
+              Disponible para proyectos en Chascomus y remoto
             </p>
           </div>
 
-          {/* Email */}
+          {/* Contacto directo */}
           <div
             style={{
               padding: '24px',
@@ -138,7 +141,7 @@ export default function ContactSection() {
               </svg>
             </div>
             <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--foreground)', margin: '0 0 8px' }}>
-              Email
+              Contacto directo
             </h3>
             <a
               href={GMAIL_COMPOSE}
@@ -149,6 +152,8 @@ export default function ContactSection() {
                 color: 'var(--accent)',
                 textDecoration: 'none',
                 fontWeight: 500,
+                display: 'block',
+                marginBottom: '8px',
                 transition: 'color 0.2s',
               }}
               onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent-hover)'; }}
@@ -156,6 +161,26 @@ export default function ContactSection() {
             >
               {CONTACT_DATA.email}
             </a>
+            <a
+              href="https://wa.me/5492241567142"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: '14px',
+                color: '#25D366',
+                textDecoration: 'none',
+                fontWeight: 500,
+                display: 'block',
+                transition: 'opacity 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.opacity = '0.8'; }}
+              onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+            >
+              +54 2241 567142
+            </a>
+            <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '8px 0 0' }}>
+              Respondo en menos de 24h
+            </p>
           </div>
 
           {/* Social */}

@@ -47,7 +47,7 @@ export default function SkillsSection() {
     <section
       id="skills"
       aria-label="Habilidades"
-      className="section-padding"
+      className="section-padding section-lazy"
       style={{ background: 'var(--surface)', position: 'relative' }}
     >
       <div className="section-container">
@@ -220,6 +220,9 @@ export default function SkillsSection() {
                 }}
               >
                 <motion.article
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={area.title}
                   layoutId={`skill-card-${area.id}`}
                   style={{
                     background: 'var(--surface)',

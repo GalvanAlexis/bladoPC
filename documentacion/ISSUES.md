@@ -8,6 +8,8 @@
 
 | ID | Título | Prioridad | Etiquetas |
 |---|---|---|---|
+| [ISS-088](./issues/ISS-088_indexacion-presencia-local.md) | Indexacion, presencia local y autoridad inicial | 🔴 Alta | `seo`, `indexacion`, `local-seo` |
+| [ISS-083](./issues/ISS-083_admin-dashboard-stats-portfolio.md) | Admin Dashboard + Stats Section | 🟡 Media | `feature` |
 | [ISS-016](./issues/ISS-016_vercel-deploy.md) | Deploy a Vercel | 🟢 Baja | `devops`, `deploy` |
 
 ---
