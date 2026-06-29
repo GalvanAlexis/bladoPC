@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     images: ["https://bladopc.vercel.app/og-image.png"],
   },
   verification: {
-    google: "PENDIENTE-REEMPLAZAR",
+    google: "6UycwHiS0Yp4VO8Kb9kwS1mrVSo5p-H6JxVT1D0Qbgs",
   },
 };
 
