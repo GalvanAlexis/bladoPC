@@ -17,6 +17,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bladopc.vercel.app"),
+  icons: {
+    icon: '/icono.png',
+    shortcut: '/icono.png',
+    apple: '/icono.png',
+  },
   title: {
     template: "%s | Alexis Galvan",
     default: "Alexis Galvan | Desarrollador Full-Stack en Chascomus",
