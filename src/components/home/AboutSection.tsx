@@ -11,16 +11,16 @@ const ABOUT_CHAPTERS = [
   {
     id: 'perfil',
     title: 'El Perfil Técnico',
-    desc: 'Desarrollador Full-Stack, Data Scientist y lider técnico en desarrollo de software a medida.',
-    details: 'Mi visión combina el entendimiento profundo del hardware con el desarrollo de software escalable. Lidero proyectos de software a medida —plataformas e-learning, integraciones avanzadas, aplicaciones SaaS— diseñando arquitecturas de sistemas complejos y gestionando proyectos end-to-end. Integro la Inteligencia Artificial como herramienta potenciadora real, no como un simple parche.',
-    tags: ['Full-Stack', 'Data Science', 'SaaS', 'Arquitectura', 'Liderazgo Técnico'],
+    desc: 'Desarrollador Full-Stack, Data Scientist y lider técnico en desarrollo de software a medida en Chascomus.',
+    details: 'Con mas de 5 anos de experiencia, mi vision combina el entendimiento profundo del hardware con el desarrollo de software escalable. Lidero proyectos de software a medida —plataformas e-learning, integraciones avanzadas, aplicaciones SaaS— disenando arquitecturas de sistemas complejos y gestionando proyectos end-to-end. Integro la Inteligencia Artificial como herramienta potenciadora real, no como un simple parche. Trabajo con clientes en Chascomus, Buenos Aires y de forma remota en todo el pais.',
+    tags: ['Full-Stack', 'Data Science', 'SaaS', 'Arquitectura', '5+ anos exp'],
   },
   {
     id: 'formacion',
-    title: 'Formación y Camino',
-    desc: 'De Técnico de PC a Ingeniero de Sistemas autodidacta.',
-    details: 'Mi formación comenzó como Técnico de Reparación de PC, lo que me dio las bases absolutas sobre hardware y sistemas operativos. Actualmente curso la Tecnicatura en Ciencia de Datos e IA en el ISFDyT 57, a la par que estudio Ingeniería de Sistemas de manera completamente autodidacta (siguiendo el currículum de OSSU Computer Science), abarcando estructuras de datos, algoritmos, y fundamentos matemáticos.',
-    tags: ['Técnico de PC', 'ISFDyT 57', 'Ing. de Sistemas', 'OSSU', 'Autodidacta'],
+    title: 'Formacion y Camino',
+    desc: 'De Tecnico de PC a Ingeniero de Sistemas autodidacta.',
+    details: 'Mi formacion comenzo como Tecnico de Reparacion de PC, lo que me dio las bases absolutas sobre hardware y sistemas operativos. Actualmente curso la Tecnicatura en Ciencia de Datos e IA en el ISFDyT 57, a la par que estudio Ingenieria de Sistemas de manera completamente autodidacta (siguiendo el curriculo de OSSU Computer Science), abarcando estructuras de datos, algoritmos, y fundamentos matematicos.',
+    tags: ['Tecnico de PC', 'ISFDyT 57', 'Ing. de Sistemas', 'OSSU', 'Autodidacta'],
   },
 ];
 
@@ -114,6 +114,53 @@ export default function AboutSection() {
                   </span>
                 ))}
               </motion.div>
+
+              {/* External links (solo en perfil) */}
+              {chapter.id === 'perfil' && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  style={{ display: 'flex', gap: '12px', marginTop: '20px' }}
+                >
+                  <a
+                    href="https://github.com/GalvanAlexis"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      fontSize: '12px',
+                      color: 'var(--muted)',
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      transition: 'color 0.2s',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = 'var(--muted)'; }}
+                  >
+                    GitHub &rarr;
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/alexis-galvan"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      fontSize: '12px',
+                      color: 'var(--muted)',
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      transition: 'color 0.2s',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = 'var(--muted)'; }}
+                  >
+                    LinkedIn &rarr;
+                  </a>
+                </motion.div>
+              )}
             </motion.article>
           ))}
         </div>
