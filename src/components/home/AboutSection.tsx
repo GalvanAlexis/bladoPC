@@ -12,8 +12,8 @@ const ABOUT_CHAPTERS = [
     id: 'perfil',
     title: 'El Perfil Técnico',
     desc: 'Desarrollador Full-Stack, Data Scientist y lider técnico en desarrollo de software a medida en Chascomus.',
-    details: 'Con mas de 5 anos de experiencia, mi vision combina el entendimiento profundo del hardware con el desarrollo de software escalable. Lidero proyectos de software a medida —plataformas e-learning, integraciones avanzadas, aplicaciones SaaS— disenando arquitecturas de sistemas complejos y gestionando proyectos end-to-end. Integro la Inteligencia Artificial como herramienta potenciadora real, no como un simple parche. Trabajo con clientes en Chascomus, Buenos Aires y de forma remota en todo el pais.',
-    tags: ['Full-Stack', 'Data Science', 'SaaS', 'Arquitectura', '5+ anos exp'],
+    details: 'Con mas de 5 a\u00F1os de experiencia, mi vision combina el entendimiento profundo del hardware con el desarrollo de software escalable. Lidero proyectos de software a medida —plataformas e-learning, integraciones avanzadas, aplicaciones SaaS— disenando arquitecturas de sistemas complejos y gestionando proyectos end-to-end. Integro la Inteligencia Artificial como herramienta potenciadora real, no como un simple parche. Trabajo con clientes en Chascomus, Buenos Aires y de forma remota en todo el pais.',
+    tags: ['Full-Stack', 'Data Science', 'SaaS', 'Arquitectura', '5+ a\u00F1os exp'],
   },
   {
     id: 'formacion',

@@ -52,10 +52,10 @@ export interface ContableAdminState {
 const DEFAULTS: ContableAdminState = {
   heroTagline: 'Estudio Contable en Chascomus',
   heroDesc:
-    'Mas de 12 anos asesorando a PyMEs, comercios y profesionales en Chascomus y la region. Liquidacion de sueldos, impuestos, contabilidad general y mas.',
+    'Mas de 12 a\u00F1os asesorando a PyMEs, comercios y profesionales en Chascomus y la region. Liquidacion de sueldos, impuestos, contabilidad general y mas.',
   equipo: [
-    { id: '1', nombre: 'CPN Martin Martinez', rol: 'Socio Fundador', bio: 'Contador Publico (UBA). Especialista en Impuestos. +15 anos de experiencia en asesoria impositiva a PyMEs.' },
-    { id: '2', nombre: 'Cra. Laura Gomez', rol: 'Socia', bio: 'Contadora Publica (UNLP). Especialista en Liquidacion de Sueldos. +12 anos liderando el area laboral.' },
+    { id: '1', nombre: 'CPN Martin Martinez', rol: 'Socio Fundador', bio: 'Contador Publico (UBA). Especialista en Impuestos. +15 a\u00F1os de experiencia en asesoria impositiva a PyMEs.' },
+    { id: '2', nombre: 'Cra. Laura Gomez', rol: 'Socia', bio: 'Contadora Publica (UNLP). Especialista en Liquidacion de Sueldos. +12 a\u00F1os liderando el area laboral.' },
     { id: '3', nombre: 'CPN Federico Lopez', rol: 'Senior', bio: 'Contador Publico. Especialista en Sociedades y Constitucion de Empresas. Expositor en camaras empresariales.' },
   ],
   servicios: [
