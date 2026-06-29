@@ -47,7 +47,7 @@ export default function SkillsSection() {
     <section
       id="skills"
       aria-label="Habilidades"
-      className="section-padding"
+      className="section-padding section-lazy"
       style={{ background: 'var(--surface)', position: 'relative' }}
     >
       <div className="section-container">

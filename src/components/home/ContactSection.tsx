@@ -35,7 +35,7 @@ export default function ContactSection() {
     <section
       id="contacto"
       aria-label="Contacto"
-      className="section-padding"
+      className="section-padding section-lazy"
       style={{ background: 'var(--surface)', position: 'relative' }}
     >
       <div className="section-container">

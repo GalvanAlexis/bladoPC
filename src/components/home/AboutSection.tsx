@@ -31,7 +31,7 @@ export default function AboutSection() {
     <section
       id="about"
       aria-label="Sobre mí"
-      className="section-padding"
+      className="section-padding section-lazy"
       style={{ position: 'relative' }}
     >
       <div className="section-container">

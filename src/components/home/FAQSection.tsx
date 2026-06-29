@@ -19,7 +19,7 @@ export default function FAQSection() {
     <section
       id="faq"
       aria-label="Preguntas frecuentes sobre servicios IT en Chascomus"
-      className="section-padding"
+      className="section-padding section-lazy"
       style={{ position: 'relative' }}
     >
       <script
