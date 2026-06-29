@@ -62,6 +62,9 @@ export default function Sidebar({ isOpen, onClose, onAdminClick }: SidebarProps)
 
       {/* Panel */}
       <aside
+        role="dialog"
+        aria-modal={isOpen}
+        aria-label="Panel de navegacion"
         style={{
           position: 'fixed',
           top: '56px', /* h-14 */
@@ -78,7 +81,6 @@ export default function Sidebar({ isOpen, onClose, onAdminClick }: SidebarProps)
           flexDirection: 'column',
           gap: '0',
         }}
-        aria-label="Panel de navegación"
       >
         {/* Header */}
         <div

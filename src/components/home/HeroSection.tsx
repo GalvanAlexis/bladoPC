@@ -41,7 +41,8 @@ export default function HeroSection() {
     <section
       id="hero"
       ref={containerRef}
-      aria-label="Presentaci\u00f3n"
+      role="banner"
+      aria-label="Presentacion y servicios IT en Chascomus"
       style={{
         position: 'relative',
         minHeight: '100svh',
@@ -51,6 +52,11 @@ export default function HeroSection() {
         perspective: '1200px',
       }}
     >
+      {/* H2 oculto para SEO semantico estatico */}
+      <h2 className="sr-only">
+        Alexis Galvan - Soluciones IT profesionales en Chascomus: desarrollo web, automatizaciones con IA y ciencia de datos
+      </h2>
+
       {/* Video background */}
       <video
         autoPlay
@@ -58,6 +64,7 @@ export default function HeroSection() {
         muted
         playsInline
         className="hero-video-parallax"
+        aria-hidden="true"
         style={{
           position: 'absolute',
           top: '-20%',

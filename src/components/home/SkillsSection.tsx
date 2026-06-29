@@ -220,6 +220,9 @@ export default function SkillsSection() {
                 }}
               >
                 <motion.article
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={area.title}
                   layoutId={`skill-card-${area.id}`}
                   style={{
                     background: 'var(--surface)',

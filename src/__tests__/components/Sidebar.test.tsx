@@ -40,13 +40,13 @@ describe('Sidebar — visibilidad', () => {
     renderSidebar(false);
     // El panel usa CSS transform para ocultar, no unmount.
     // Verificamos que el panel aside está en el DOM pero no visible (transform).
-    const panel = screen.getByRole('complementary', { name: 'Panel de navegación' });
+    const panel = screen.getByRole('dialog', { name: 'Panel de navegacion' });
     expect(panel).toHaveStyle({ transform: 'translateX(-260px)' });
   });
 
   it('muestra el panel de navegación cuando isOpen=true', () => {
     renderSidebar(true);
-    const panel = screen.getByRole('complementary', { name: 'Panel de navegación' });
+    const panel = screen.getByRole('dialog', { name: 'Panel de navegacion' });
     expect(panel).toHaveStyle({ transform: 'translateX(0)' });
   });
 });

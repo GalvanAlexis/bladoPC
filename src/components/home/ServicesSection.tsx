@@ -258,6 +258,9 @@ export default function ServicesSection() {
                 }}
               >
                 <motion.article
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={srv.title}
                   layoutId={`service-card-${srv.id}`}
                   style={{
                     background: 'var(--surface)',
