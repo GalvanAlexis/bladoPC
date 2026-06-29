@@ -9,41 +9,57 @@ El sitio no aparece en Google por 3 problemas: no esta indexado, no tiene autori
 
 ## Tareas
 
+### Archivos creados
+- `src/app/sitemap.ts` -> genera `/sitemap.xml` con 20 URLs estaticas
+- `src/app/robots.ts` -> genera `/robots.txt` con Allow /, Disallow /api/
+
 ### 1. Sitemap.xml
-- [ ] Crear src/app/sitemap.ts que genere sitemap.xml con todas las rutas estaticas: /, /chat, /servicios, /servicios/[slug], /ejemplos/[slug]
-- [ ] Frecuencias: home diaria, servicios semanal, ejemplos mensual
-- [ ] Prioridades: home 1.0, servicios 0.9, ejemplos 0.7, chat 0.5
+- [x] Crear src/app/sitemap.ts que genere sitemap.xml con todas las rutas estaticas
+- [x] Frecuencias: home diaria, servicios semanal, ejemplos mensual
+- [x] Prioridades: home 1.0, servicios 0.9, ejemplos 0.7, chat 0.5
 
 ### 2. Robots.txt
-- [ ] Crear src/app/robots.ts con referencia al sitemap
-- [ ] Allow all crawlers
-- [ ] Referencia a sitemap: https://bladopc.vercel.app/sitemap.xml
-- [ ] Disallow rutas de API (/api/)
+- [x] Crear src/app/robots.ts con referencia al sitemap
+- [x] Allow all crawlers
+- [x] Referencia a sitemap: https://bladopc.vercel.app/sitemap.xml
+- [x] Disallow rutas de API (/api/)
 
-### 3. Search Console - Solicitar indexacion
-- [ ] Enviar sitemap.xml desde Search Console
-- [ ] Solicitar indexacion manual de la URL principal via URL Inspection tool
-- [ ] (Esto lo hace Blado manualmente desde la UI de Search Console)
+### 3. Search Console - Solicitar indexacion (MANUAL)
+- [ ] Ir a https://search.google.com/search-console -> Sitemaps -> ingresar `sitemap.xml` -> enviar
+- [ ] Ir a URL Inspection -> pegar `https://bladopc.vercel.app/` -> "Solicitar indexacion"
+- [ ] Repetir con `/chat`, `/servicios`, `/servicios/landing`
 
-### 4. Google Business Profile
-- [ ] Crear ficha en Google Business Profile (Blado - Servicios IT)
-- [ ] Datos: categoria "Desarrollador web", Chascomus, telefono, web, horario
-- [ ] Esto es MANUAL - Blado debe crearlo desde google.com/business
+### 4. Google Business Profile (MANUAL)
+- [ ] Ir a https://google.com/business -> crear ficha
+- [ ] Nombre: "BladoPC - Servicios IT" o "Blado - Alexis Galvan"
+- [ ] Categoria principal: "Desarrollador web" o "Servicios informaticos"
+- [ ] Direccion: Chascomus, Buenos Aires (si atendes presencial)
+- [ ] Sino, marcar "Servicio a domicilio" y definir area: Chascomus
+- [ ] Telefono: +54 2241 567142
+- [ ] Sitio web: https://bladopc.vercel.app
+- [ ] Horario de atencion
+- [ IMPORTANTE: Es el factor #1 para aparecer en "desarrollador web Chascomus" ]
 
-### 5. Perfiles en plataformas (backlinks iniciales)
-- [ ] Crear perfil en LinkedIn completo con link a bladopc.vercel.app
-- [ ] Crear perfil en GitHub profile con link a bladopc.vercel.app
-- [ ] Crear perfil en Behance / Dribbble si aplica
-- [ ] (Blado lo hace manual, NO es codigo)
+### 5. Perfiles en plataformas (MANUAL)
+- [ ] LinkedIn: actualizar perfil con link a bladopc.vercel.app en la seccion "Contact info" y "Website"
+- [ ] GitHub: editar profile README y agregar link a bladopc.vercel.app
+- [ ] WhatsApp Business: configurar perfil con link al portfolio
+- [ ] Marketplace / plataformas locales de Chascomus si existen (ej: grupos de Facebook, MercadoLibre servicios)
 
-### 6. Canonical fix
-- [ ] Verificar que layout.tsx tenga alternates.canonical correcto (ya esta desde ISS-084)
-- [ ] Verificar que metadataBase apunte a https://bladopc.vercel.app (ya esta)
+### 6. Canonical fix (verificado)
+- [x] layout.tsx tiene alternates.canonical correcto
+- [x] metadataBase apunta a https://bladopc.vercel.app
+
+### 7. Proximo paso recomendado (ISS-089)
+- Crear pagina dedicada de servicios con contenido SEO profundo
+- Blog o seccion de casos de exito para generar contenido indexable
+- Estrategia de backlinks a mediano plazo
 
 ## QA
-- [ ] npm run build (solo si hay cambios de codigo)
-- [ ] Verificar que https://bladopc.vercel.app/sitemap.xml exista y sea valido
-- [ ] Verificar que https://bladopc.vercel.app/robots.txt exista
+- [x] npm run build exitoso
+- [x] npm test 13/13 pass
+- [x] Verificar que https://bladopc.vercel.app/sitemap.xml exista y sea valido
+- [x] Verificar que https://bladopc.vercel.app/robots.txt exista
 
 ## Branch
 feature/ISS-088-indexacion-presencia-local
