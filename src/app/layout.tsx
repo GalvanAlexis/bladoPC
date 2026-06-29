@@ -23,11 +23,11 @@ export const metadata: Metadata = {
     apple: '/icono.png',
   },
   title: {
-    template: "%s | Alexis Galvan",
-    default: "Alexis Galvan | Desarrollador Full-Stack en Chascomus",
+    template: "%s | BladoPC",
+    default: "BladoPC | Desarrollador Full-Stack en Chascomus",
   },
   description:
-    "Portfolio de Alexis Galvan, desarrollador Full-Stack, Data Scientist y lider tecnico en Chascomus, Buenos Aires. Desarrollo web, automatizaciones con IA, ciencia de datos y soporte IT.",
+    "Portfolio de BladoPC - Alexis Galvan, desarrollador Full-Stack, Data Scientist y lider tecnico en Chascomus, Buenos Aires. Desarrollo web, automatizaciones con IA, ciencia de datos y soporte IT.",
   keywords: [
     "desarrollador web Chascomus",
     "desarrollo web Argentina",
@@ -50,8 +50,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_AR",
-    siteName: "BladoPC - Alexis Galvan",
-    title: "Alexis Galvan | Desarrollador Full-Stack en Chascomus",
+    siteName: "BladoPC",
+    title: "BladoPC | Desarrollador Full-Stack en Chascomus",
     description:
       "Portfolio profesional de Alexis Galvan. Desarrollo web, automatizaciones con IA, ciencia de datos y soporte IT en Chascomus.",
     url: "https://bladopc.vercel.app",
@@ -60,15 +60,15 @@ export const metadata: Metadata = {
         url: "https://bladopc.vercel.app/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Alexis Galvan - BladoPC Portfolio",
+        alt: "BladoPC Portfolio",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Alexis Galvan | Desarrollador Full-Stack en Chascomus",
+    title: "BladoPC | Desarrollador Full-Stack en Chascomus",
     description:
-      "Portfolio profesional de Alexis Galvan. Desarrollo web, automatizaciones con IA, ciencia de datos y soporte IT.",
+      "Portfolio profesional de BladoPC. Desarrollo web, automatizaciones con IA, ciencia de datos y soporte IT.",
     images: ["https://bladopc.vercel.app/og-image.png"],
   },
   verification: {
