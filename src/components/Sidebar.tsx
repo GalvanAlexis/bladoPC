@@ -5,22 +5,43 @@
  * Panel lateral de opciones — clean, corporativo.
  */
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAppContext } from '@/lib/AppContext';
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  onAdminClick: () => void;
 }
 
-const NAV_ITEMS = [
-  { label: 'Inicio',    path: '/' },
-  { label: 'Chat Assistant',  path: '/chat' },
+const HOME_SECTIONS = [
+  { id: 'hero', label: 'Inicio' },
+  { id: 'servicios', label: 'Servicios' },
+  { id: 'about', label: 'Sobre m\u00ed' },
+  { id: 'skills', label: 'Habilidades' },
 ];
 
-export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+const NAV_ITEMS = [
+  { label: 'Chat Assistant', path: '/chat' },
+];
+
+export default function Sidebar({ isOpen, onClose, onAdminClick }: SidebarProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { animationsEnabled, setAnimationsEnabled, theme, toggleTheme } = useAppContext();
+
+  const scrollTo = (id: string) => {
+    if (pathname !== '/') {
+      router.push('/');
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+        onClose();
+      }, 200);
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      onClose();
+    }
+  };
 
   return (
     <>
@@ -41,6 +62,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       {/* Panel */}
       <aside
+        role="dialog"
+        aria-modal={isOpen}
+        aria-label="Panel de navegacion"
         style={{
           position: 'fixed',
           top: '56px', /* h-14 */
@@ -57,7 +81,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           flexDirection: 'column',
           gap: '0',
         }}
-        aria-label="Panel de navegación"
       >
         {/* Header */}
         <div
@@ -83,10 +106,39 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           </button>
         </div>
 
-        {/* Navegación — solo mobile */}
-        <section className="sm:hidden" style={{ padding: '12px 0', borderBottom: '1px solid var(--border-subtle)' }}>
+        {/* Secciones del home */}
+        <section style={{ padding: '12px 0', borderBottom: '1px solid var(--border-subtle)' }}>
           <p style={{ padding: '6px 20px 10px', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', fontWeight: 500 }}>
-            Navegación
+            Secciones
+          </p>
+          {HOME_SECTIONS.map(s => (
+            <button
+              key={s.id}
+              onClick={() => scrollTo(s.id)}
+              style={{
+                display: 'block',
+                width: '100%',
+                textAlign: 'left',
+                padding: '10px 20px',
+                fontSize: '14px',
+                color: 'var(--foreground-2)',
+                background: 'transparent',
+                transition: 'color 0.15s, background 0.15s',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.color = 'var(--foreground)'; e.currentTarget.style.background = 'var(--surface-2)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'var(--foreground-2)'; e.currentTarget.style.background = 'transparent'; }}
+            >
+              {s.label}
+            </button>
+          ))}
+        </section>
+
+        {/* Otras páginas */}
+        <section style={{ padding: '12px 0', borderBottom: '1px solid var(--border-subtle)' }}>
+          <p style={{ padding: '6px 20px 10px', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', fontWeight: 500 }}>
+            Páginas
           </p>
           {NAV_ITEMS.map(item => (
             <button
@@ -110,6 +162,47 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               {item.label}
             </button>
           ))}
+        </section>
+
+        {/* Admin & Status */}
+        <section style={{ padding: '12px 0', borderBottom: '1px solid var(--border-subtle)' }}>
+          <p style={{ padding: '6px 20px 10px', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', fontWeight: 500 }}>
+            Sistema
+          </p>
+          <button
+            onClick={() => { onClose(); onAdminClick(); }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              width: '100%',
+              textAlign: 'left',
+              padding: '10px 20px',
+              fontSize: '14px',
+              color: 'var(--foreground-2)',
+              background: 'transparent',
+              transition: 'color 0.15s, background 0.15s',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--foreground)'; e.currentTarget.style.background = 'var(--surface-2)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'var(--foreground-2)'; e.currentTarget.style.background = 'transparent'; }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+            Panel Admin
+          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px' }}>
+            <span style={{ fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', fontWeight: 500 }}>
+              Estado
+            </span>
+            <span className="status-dot" aria-hidden="true" />
+            <span style={{ fontSize: '12px', color: 'var(--muted)' }}>
+              Online
+            </span>
+          </div>
         </section>
 
         {/* Ajustes */}

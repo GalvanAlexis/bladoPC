@@ -1,0 +1,166 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - button "Toggle sidebar" [ref=e5] [cursor=pointer]
+        - link "Portfolio" [ref=e9] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e10]: Portfolio
+      - generic [ref=e11]:
+        - button "Inicio" [ref=e12] [cursor=pointer]
+        - button "Servicios" [ref=e13] [cursor=pointer]
+        - button "Sobre mí" [ref=e14] [cursor=pointer]
+        - button "Habilidades" [ref=e15] [cursor=pointer]
+      - generic [ref=e16]:
+        - button "Panel de administracion" [ref=e17] [cursor=pointer]:
+          - img [ref=e18]
+        - button "Activar modo claro" [ref=e21] [cursor=pointer]:
+          - img [ref=e22]
+        - generic [ref=e26]: Online
+  - complementary "Panel de navegación" [ref=e28]:
+    - generic [ref=e29]:
+      - generic [ref=e30]: Menú
+      - button "Cerrar panel" [ref=e31]: ✕
+    - generic [ref=e32]:
+      - paragraph [ref=e33]: Preferencias
+      - generic [ref=e34] [cursor=pointer]:
+        - generic [ref=e35]: Animaciones
+        - switch "Animaciones" [checked] [ref=e36]
+      - generic [ref=e38] [cursor=pointer]:
+        - generic [ref=e39]: Tema oscuro
+        - button "Tema oscuro" [ref=e40]: ☀
+    - generic [ref=e41]:
+      - link "↗ GitHub del proyecto" [ref=e42] [cursor=pointer]:
+        - /url: https://github.com/GalvanAlexis/bladoPC
+        - generic [ref=e43]: ↗
+        - generic [ref=e44]: GitHub del proyecto
+      - generic [ref=e45]: v1.0.0 — Portfolio Blado
+  - main [ref=e46]:
+    - region "Presentaci\\u00f3n" [ref=e47]:
+      - generic [ref=e50]:
+        - paragraph [ref=e51]: Soporte IT · Soluciones Digitales · Ciencia de Datos
+        - heading "¿La PC no anda bien? ¿Cansado de tareas repetitivas?" [level=1] [ref=e52]:
+          - text: ¿La PC no anda bien?
+          - text: ¿Cansado de tareas repetitivas?
+        - paragraph [ref=e53]: Contactá con Blado para una solución sin vueltas. Dejá de pelear con la tecnología y empezá a aprovecharla.
+        - generic [ref=e54]:
+          - link "Ver servicios" [ref=e55] [cursor=pointer]:
+            - /url: /servicios
+            - text: Ver servicios
+            - img [ref=e56]
+          - button "Contacto rápido" [ref=e58] [cursor=pointer]
+          - link "Hablar con Blado" [ref=e59] [cursor=pointer]:
+            - /url: /chat
+    - region "Servicios" [ref=e60]:
+      - generic [ref=e64]:
+        - paragraph [ref=e66]: Servicios IT
+        - heading "¿Cómo te puedo ayudar?" [level=2] [ref=e67]
+        - generic [ref=e68]:
+          - article [ref=e69] [cursor=pointer]:
+            - img [ref=e71]
+            - heading "Reparación de PC Exclusivo Chascomus" [level=3] [ref=e73]:
+              - text: Reparación de PC
+              - generic [ref=e74]: Exclusivo Chascomus
+            - paragraph [ref=e75]: Nivel Componente y Software
+            - paragraph [ref=e76]: Diagnóstico preciso, mantenimiento preventivo/correctivo y optimización profunda.
+          - article [ref=e77] [cursor=pointer]:
+            - img [ref=e79]
+            - heading "Automatizaciones" [level=3] [ref=e81]
+            - paragraph [ref=e82]: Soluciones Digitales
+            - paragraph [ref=e83]: Sistemas a medida para PyMEs y emprendedores que ahorran horas de trabajo a la semana.
+          - article [ref=e84] [cursor=pointer]:
+            - img [ref=e86]
+            - heading "Ciencia de Datos" [level=3] [ref=e88]
+            - paragraph [ref=e89]: Optimización con IA
+            - paragraph [ref=e90]: Análisis profundo de datos y tableros predictivos para tomar decisiones gerenciales informadas.
+    - region "Sobre mí" [ref=e91]:
+      - generic [ref=e92]:
+        - paragraph [ref=e94]: Biografía
+        - heading "Sobre mí" [level=2] [ref=e95]
+        - generic [ref=e96]:
+          - article [ref=e97] [cursor=pointer]:
+            - heading "El Perfil Técnico" [level=3] [ref=e98]
+            - paragraph [ref=e99]: Desarrollador Full-Stack, Data Scientist y lider técnico en desarrollo de software a medida.
+            - generic [ref=e100]:
+              - generic [ref=e101]: Full-Stack
+              - generic [ref=e102]: Data Science
+              - generic [ref=e103]: SaaS
+              - generic [ref=e104]: Arquitectura
+              - generic [ref=e105]: Liderazgo Técnico
+          - article [ref=e106] [cursor=pointer]:
+            - heading "Formación y Camino" [level=3] [ref=e107]
+            - paragraph [ref=e108]: De Técnico de PC a Ingeniero de Sistemas autodidacta.
+            - generic [ref=e109]:
+              - generic [ref=e110]: Técnico de PC
+              - generic [ref=e111]: ISFDyT 57
+              - generic [ref=e112]: Ing. de Sistemas
+              - generic [ref=e113]: OSSU
+              - generic [ref=e114]: Autodidacta
+    - region "Habilidades" [ref=e115]:
+      - generic [ref=e116]:
+        - paragraph [ref=e118]: Habilidades
+        - heading "Áreas de expertise" [level=2] [ref=e120]
+        - generic [ref=e121]:
+          - article [ref=e122] [cursor=pointer]:
+            - generic [ref=e123]: ⬡
+            - heading "Full-Stack & Mobile" [level=3] [ref=e124]
+            - paragraph [ref=e125]: Aplicaciones web modernas y multiplataforma. Interfaces de alto rendimiento con los mejores frameworks.
+            - generic [ref=e127]:
+              - generic [ref=e128]: Competencia
+              - generic [ref=e129]: 92%
+            - generic [ref=e131]:
+              - generic [ref=e132]: Next.js
+              - generic [ref=e133]: React
+              - generic [ref=e134]: Expo
+              - generic [ref=e135]: NestJS
+              - generic [ref=e136]: HTMX
+              - generic [ref=e137]: Tailwind CSS
+          - article [ref=e138] [cursor=pointer]:
+            - generic [ref=e139]: ▣
+            - heading "Arquitectura Backend" [level=3] [ref=e140]
+            - paragraph [ref=e141]: APIs robustas, microservicios y bases de datos eficientes para sistemas escalables.
+            - generic [ref=e143]:
+              - generic [ref=e144]: Competencia
+              - generic [ref=e145]: 88%
+            - generic [ref=e147]:
+              - generic [ref=e148]: Go (Gin)
+              - generic [ref=e149]: Python (Django)
+              - generic [ref=e150]: PostgreSQL
+              - generic [ref=e151]: Redis
+              - generic [ref=e152]: SQLite
+              - generic [ref=e153]: Node.js
+          - article [ref=e154] [cursor=pointer]:
+            - generic [ref=e155]: ◈
+            - heading "IA & Data Science" [level=3] [ref=e156]
+            - paragraph [ref=e157]: Análisis de datos, NLP y creación de agentes autónomos potenciados por LLMs y Machine Learning.
+            - generic [ref=e159]:
+              - generic [ref=e160]: Competencia
+              - generic [ref=e161]: 85%
+            - generic [ref=e163]:
+              - generic [ref=e164]: Streamlit
+              - generic [ref=e165]: spaCy
+              - generic [ref=e166]: Gemini API
+              - generic [ref=e167]: AI Agents
+              - generic [ref=e168]: Pandas
+    - region "Estadísticas" [ref=e169]:
+      - generic [ref=e171]:
+        - generic [ref=e172]:
+          - generic [ref=e173]: 0+
+          - generic [ref=e174]: Proyectos entregados
+        - generic [ref=e175]:
+          - generic [ref=e176]: "0"
+          - generic [ref=e177]: Clientes activos
+        - generic [ref=e178]:
+          - generic [ref=e179]: "0"
+          - generic [ref=e180]: Años de experiencia
+        - generic [ref=e181]:
+          - generic [ref=e182]: 0+
+          - generic [ref=e183]: Tecnologías dominadas
+    - paragraph [ref=e185]:
+      - text: © 2026 Alexis Galván · Portfolio Blado ·
+      - link "GitHub ↗" [ref=e186] [cursor=pointer]:
+        - /url: https://github.com/GalvanAlexis/bladoPC
+  - status [ref=e187]:
+    - text: 🔒 Este sitio registra datos anónimos de visita (país, dispositivo) con fines estadísticos. No se almacenan IPs.
+    - button "Cerrar aviso" [ref=e188]: ✕
+  - alert [ref=e189]
