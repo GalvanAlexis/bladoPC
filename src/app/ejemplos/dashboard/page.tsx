@@ -412,19 +412,7 @@ export default function DashboardPage() {
             </PanelCard>
           )}
 
-          {/* CTA */}
-          <div style={{ ...cardBase, padding: 'clamp(24px, 4vw, 36px)', textAlign: 'center', marginTop: '40px' }}>
-            <h2 style={{ fontSize: 'clamp(16px, 2.5vw, 20px)', fontWeight: 700, margin: '0 0 8px 0', color: '#fff' }}>
-              Necesitas un dashboard para tu negocio?
-            </h2>
-            <p style={{ fontSize: '13px', color: TEXT_SEC, margin: '0 0 20px 0', maxWidth: '400px', marginInline: 'auto' }}>
-              Conectamos tus fuentes de datos y creamos un tablero a medida con las metricas que realmente importan.
-            </p>
-            <a href="https://wa.me/5492241567142" target="_blank" rel="noopener noreferrer" className="cta-button"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 24px', borderRadius: '10px', background: ACCENT, color: '#000', fontSize: '13px', fontWeight: 600, textDecoration: 'none' }}>
-              Quiero mi dashboard
-            </a>
-          </div>
+
         </div>
 
         {/* Desktop sidebar */}
