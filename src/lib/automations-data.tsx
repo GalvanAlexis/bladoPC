@@ -63,7 +63,7 @@ export const AUTOMATION_EJEMPLOS: AutomationExample[] = [
       'Generacion de posts para Instagram, LinkedIn, Twitter y Facebook',
       'Redaccion de newsletters con tu tone of voice',
       'Fichas de producto con descripciones SEO optimizadas',
-      'Calendarizacion automatica con建議 de mejor horario de publicacion',
+      'Calendarizacion automatica con sugerencia de mejor horario de publicacion',
       'Variantes A/B del mismo contenido para testear',
       'Revision humana opcional antes de publicar',
     ],
