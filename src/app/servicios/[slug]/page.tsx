@@ -5,7 +5,7 @@ import { CATALOGO, findServiceBySlug, getComplexityLabel, getComplexityColors } 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return CATALOGO.filter((svc) => svc.id !== 'automations').map((svc) => ({ slug: svc.id }));
+  return CATALOGO.filter((svc) => svc.id !== 'automations' && svc.id !== 'dashboard').map((svc) => ({ slug: svc.id }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

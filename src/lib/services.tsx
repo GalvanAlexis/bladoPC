@@ -186,6 +186,7 @@ export const CATALOGO: ServiceItem[] = [
     description: 'Tableros de control con KPIs clave, graficos interactivos, exportacion de reportes y multi-tenant. Convierte datos dispersos en decisiones informadas.',
     persona: 'Gerentes, directores, areas de datos, negocios con volumen de operaciones.',
     complexity: 'compleja',
+    ejemploSlug: 'dashboard',
   },
   {
     id: 'elearning',
