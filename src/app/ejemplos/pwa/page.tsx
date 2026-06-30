@@ -248,7 +248,7 @@ export default function PWAPage() {
   return (
     <div style={STYLES.section}>
       <div className="section-container" style={STYLES.container}>
-        <Link href="/servicios/pwa" style={STYLES.back}>
+        <Link href="/servicios" style={STYLES.back}>
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <path d="M10 12L6 8l4-4" />
           </svg>
