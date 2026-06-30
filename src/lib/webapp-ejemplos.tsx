@@ -19,7 +19,7 @@ export const WEBAPP_EJEMPLOS: WebAppExample[] = [
     id: 'collabboard',
     title: 'CollabBoard',
     description: 'Pizarra colaborativa infinita donde varios usuarios dibujan y escriben simultaneamente.',
-    longDescription: 'Pizarra infinita con herramientas de dibujo, notas adhesivas, texto e imagenes. Cada cambio se replica al instante a todos los participantes via WebSocket. Cursor de cada usuario con su color. Exportacion a PDF. Ideal para brainstorming remoto y sesiones de diseno en equipo.',
+    longDescription: 'Pizarra infinita con herramientas de dibujo, notas adhesivas, texto e imagenes. Cada cambio se replica al instante a todos los participantes via WebSocket. Cursor de cada usuario con su color. Exportacion a PDF. Ideal para brainstorming remoto y sesiones de diseño en equipo.',
     category: 'colaboracion',
     capabilities: ['tiempo-real', 'multi-usuario', 'websocket', 'export'],
     icon: <svg {...ICON_SIZE} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 3v18"/></svg>,
@@ -99,8 +99,8 @@ export const WEBAPP_EJEMPLOS: WebAppExample[] = [
   {
     id: 'canvasstudio',
     title: 'CanvasStudio',
-    description: 'Editor de imagenes y diseno en navegador con capas, filtros y colaboracion.',
-    longDescription: 'Editor de imagenes con capas, filtros, texto, recortes y formas. Similar a Canva pero con colaboracion en vivo: varios disenadores trabajando en el mismo proyecto. Plantillas predisenadas por rubro. Exportacion a PNG, JPG, PDF. Ideal para equipos de marketing que crean contenido visual en equipo.',
+    description: 'Editor de imagenes y diseño en navegador con capas, filtros y colaboracion.',
+    longDescription: 'Editor de imagenes con capas, filtros, texto, recortes y formas. Similar a Canva pero con colaboracion en vivo: varios diseñadores trabajando en el mismo proyecto. Plantillas prediseñadas por rubro. Exportacion a PNG, JPG, PDF. Ideal para equipos de marketing que crean contenido visual en equipo.',
     category: 'diseno',
     capabilities: ['tiempo-real', 'multi-usuario', 'drag-drop', 'export'],
     icon: <svg {...ICON_SIZE} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>,
@@ -110,7 +110,7 @@ export const WEBAPP_EJEMPLOS: WebAppExample[] = [
 export const WEBAPP_CATEGORIES: { id: WebAppCategory; label: string }[] = [
   { id: 'colaboracion', label: 'Colaboracion' },
   { id: 'datos', label: 'Datos y Visualizacion' },
-  { id: 'diseno', label: 'Diseno' },
+  { id: 'diseno', label: 'Diseño' },
   { id: 'gestion', label: 'Gestion' },
   { id: 'comunicacion', label: 'Comunicacion' },
 ];
@@ -127,7 +127,7 @@ export const CAPABILITY_LABELS: Record<string, string> = {
 
 export const RUBRO_GUIDE: { rubro: string; ideal: string; reason: string }[] = [
   { rubro: 'Tecnologia / Software', ideal: 'CodePair, SchemaForge, TaskForge', reason: 'Editores colaborativos, diagramacion de sistemas y gestion de proyectos agil.' },
-  { rubro: 'Marketing / Diseno', ideal: 'CanvasStudio, CollabBoard, DataLens', reason: 'Diseno en equipo, brainstorming visual y dashboards de metricas de campanas.' },
+  { rubro: 'Marketing / Diseño', ideal: 'CanvasStudio, CollabBoard, DataLens', reason: 'Diseño en equipo, brainstorming visual y dashboards de metricas de campanas.' },
   { rubro: 'Atencion al Cliente', ideal: 'ChatPro, FormKit, DataLens', reason: 'Panel multicanal en vivo, formularios inteligentes y reportes de volumen.' },
   { rubro: 'Logistica / Flotas', ideal: 'MapExplorer, DataLens, TaskForge', reason: 'Mapas interactivos con rutas, dashboards de operaciones y gestion de tareas.' },
   { rubro: 'Educacion / Capacitacion', ideal: 'DocuFlow, CollabBoard, CodePair', reason: 'Documentos compartidos, pizarras colaborativas y coding en vivo.' },
@@ -177,3 +177,4 @@ export const PWA_VS_WEBAPP: { aspect: string; webapp: string; pwa: string }[] = 
     pwa: 'Reemplazar app nativa en mobile',
   },
 ];
+
