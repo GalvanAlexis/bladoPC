@@ -142,6 +142,7 @@ export default function DashboardPage() {
 
   const growthStr = period === '6m' ? '+18%' : period === '30d' ? '+12%' : '+5%';
   const marginPct = ((periodAgg.revenue - periodAgg.cost) / periodAgg.revenue * 100).toFixed(1);
+  const periodScale = period === '6m' ? 1 : period === '30d' ? monthsInPeriod.length / 6 : monthsInPeriod.length / 6;
 
   const totalByCat = useMemo(() => ([
     { name: 'Remeras', value: periodAgg.remeras },
@@ -154,10 +155,17 @@ export default function DashboardPage() {
   const projData = useMemo(() => PROJECTION.map((d) => ({ month: d.month, actual: d.actual ?? null, projected: d.projected })), []);
 
   const filteredProducts = useMemo(() => {
-    if (!searchProd.trim()) return TOP_PRODUCTS;
+    const scaled = TOP_PRODUCTS.map((p) => ({
+      ...p,
+      units: Math.round(p.units * periodScale),
+      revenue: Math.round(p.revenue * periodScale),
+      stock: p.stock,
+      margin: p.margin,
+    }));
+    if (!searchProd.trim()) return scaled;
     const q = searchProd.toLowerCase();
-    return TOP_PRODUCTS.filter((p) => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
-  }, [searchProd]);
+    return scaled.filter((p) => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+  }, [searchProd, periodScale]);
 
   const chartData: any[] = useMemo(() => {
     if (period === '7d') return DAILY_DATA.slice(-7);
@@ -419,7 +427,7 @@ export default function DashboardPage() {
 
           {/* ===== PRODUCTOS ===== */}
           {activeTab === 'productos' && (
-            <PanelCard title="Productos" subtitle="Rendimiento por producto en el semestre">
+            <PanelCard title="Productos" subtitle={`Rendimiento por producto — ${period === '6m' ? 'ultimos 6 meses' : period === '30d' ? 'ultimos 30 dias' : 'ultimos 7 dias'}`}>
               <div style={{ marginBottom: '16px' }}>
                 <input type="text" placeholder="Buscar producto o categoria..."
                   value={searchProd} onChange={(e) => setSearchProd(e.target.value)}
@@ -502,10 +510,10 @@ export default function DashboardPage() {
               <div style={{ ...cardBase, padding: 'clamp(14px, 2vw, 24px)', flex: '1 1 300px', minWidth: isMobile ? '100%' : '280px' }}>
                 <div style={{ marginBottom: '16px' }}>
                   <div style={{ fontSize: '14px', fontWeight: 600, color: '#fff' }}>Ventas por dia</div>
-                  <div style={{ fontSize: '12px', color: TEXT_SEC, marginTop: '2px' }}>Pedidos promedio por dia de la semana</div>
+                  <div style={{ fontSize: '12px', color: TEXT_SEC, marginTop: '2px' }}>Pedidos promedio por dia — {period === '6m' ? '6 meses' : period === '30d' ? '30 dias' : '7 dias'}</div>
                 </div>
                 <ResponsiveContainer width="100%" height={smH}>
-                  <BarChart data={WEEKDAY_DATA} barCategoryGap="30%">
+                  <BarChart data={WEEKDAY_DATA.map((d) => ({ ...d, orders: Math.round(d.orders * periodScale) }))} barCategoryGap="30%">
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
                     <XAxis dataKey="day" tick={{ fill: TEXT_SEC, fontSize: 11 }} axisLine={false} tickLine={false} />
                     <YAxis hide />
