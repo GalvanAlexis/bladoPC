@@ -115,6 +115,7 @@ export const CATALOGO: ServiceItem[] = [
     description: 'Aplicacion web que funciona como una app nativa: instalable en el celular, funciona offline, notificaciones push y acceso a camara/GPS. Sin pasar por las tiendas de apps.',
     persona: 'Startups, negocios mobile-first, medios, servicios con alta interaccion movil.',
     complexity: 'media',
+    ejemploSlug: 'pwa',
   },
   {
     id: 'portal',
