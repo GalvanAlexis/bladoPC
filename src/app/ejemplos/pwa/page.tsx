@@ -255,6 +255,8 @@ export default function PWAPage() {
           Volver al servicio
         </Link>
 
+        <div className="section-divider" />
+
         <div style={STYLES.heroTag}>Progressive Web App</div>
         <h1 style={STYLES.heroTitle}>
           Apps que funcionan como nativas<br />
