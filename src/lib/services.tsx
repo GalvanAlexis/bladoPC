@@ -158,6 +158,7 @@ export const CATALOGO: ServiceItem[] = [
     description: 'Plataforma multi-vendedor o directorio con busqueda avanzada, filtros, perfiles, reviews y sistema de reputacion. Conecta oferta con demanda en un mismo ecosistema.',
     persona: 'Plataformas de servicios, clasificados, comunidades, hubs locales.',
     complexity: 'compleja',
+    ejemploSlug: 'marketplace',
   },
   {
     id: 'automations',
