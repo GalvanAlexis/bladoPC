@@ -124,11 +124,31 @@ export default function DashboardPage() {
   const chH = isMobile ? 220 : 300;
   const smH = isMobile ? 180 : 240;
 
-  const totalByCat = useMemo(() => {
-    const acc = { remeras: 0, jeans: 0, vestidos: 0, abrigos: 0, calzado: 0 };
-    MONTHLY_DATA.forEach((m) => { acc.remeras += m.remeras; acc.jeans += m.jeans; acc.vestidos += m.vestidos; acc.abrigos += m.abrigos; acc.calzado += m.calzado; });
-    return Object.entries(acc).map(([k, v]) => ({ name: k.charAt(0).toUpperCase() + k.slice(1), value: v }));
-  }, []);
+  const monthsInPeriod = useMemo(() => {
+    if (period === '7d') return MONTHLY_DATA.slice(-1);
+    if (period === '30d') return MONTHLY_DATA.slice(-2);
+    return MONTHLY_DATA;
+  }, [period]);
+
+  const periodAgg = useMemo(() => {
+    const acc = { revenue: 0, cost: 0, orders: 0, returns: 0, remeras: 0, jeans: 0, vestidos: 0, abrigos: 0, calzado: 0 };
+    monthsInPeriod.forEach((m) => {
+      acc.revenue += m.revenue; acc.cost += m.cost; acc.orders += m.orders; acc.returns += m.returns;
+      acc.remeras += m.remeras; acc.jeans += m.jeans; acc.vestidos += m.vestidos; acc.abrigos += m.abrigos; acc.calzado += m.calzado;
+    });
+    return acc;
+  }, [monthsInPeriod]);
+
+  const growthStr = period === '6m' ? '+18%' : period === '30d' ? '+12%' : '+5%';
+  const marginPct = ((periodAgg.revenue - periodAgg.cost) / periodAgg.revenue * 100).toFixed(1);
+
+  const totalByCat = useMemo(() => ([
+    { name: 'Remeras', value: periodAgg.remeras },
+    { name: 'Jeans', value: periodAgg.jeans },
+    { name: 'Vestidos', value: periodAgg.vestidos },
+    { name: 'Abrigos', value: periodAgg.abrigos },
+    { name: 'Calzado', value: periodAgg.calzado },
+  ]), [periodAgg]);
 
   const projData = useMemo(() => PROJECTION.map((d) => ({ month: d.month, actual: d.actual ?? null, projected: d.projected })), []);
 
@@ -279,26 +299,26 @@ export default function DashboardPage() {
           {activeTab === 'resumen' && (
             <>
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '12px' }}>
-                <KpiCard label="Ingresos" value={`$${(TOTAL_REVENUE / 1000).toFixed(0)}K`}
+                <KpiCard label="Ingresos" value={`$${(periodAgg.revenue / 1000).toFixed(0)}K`}
                   gradient="linear-gradient(135deg, rgba(99,102,241,0.12), transparent)"
-                  subtitle={`+${18}% vs semestre anterior`}
+                  subtitle={`${growthStr} vs periodo anterior`}
                   sparkData={REVENUE_TREND} sparkColor="#818cf8" />
-                <KpiCard label="Ganancia bruta" value={`$${(TOTAL_GROSS_PROFIT / 1000).toFixed(0)}K`}
+                <KpiCard label="Ganancia bruta" value={`$${((periodAgg.revenue - periodAgg.cost) / 1000).toFixed(0)}K`}
                   gradient="linear-gradient(135deg, rgba(52,211,153,0.12), transparent)"
-                  subtitle={`Margen ${PROFIT_MARGIN}%`}
+                  subtitle={`Margen ${marginPct}%`}
                   sparkData={REVENUE_TREND.map((r, i) => r - MONTHLY_DATA[i].cost)} sparkColor="#34d399" />
-                <KpiCard label="Pedidos" value={TOTAL_ORDERS.toLocaleString()}
+                <KpiCard label="Pedidos" value={periodAgg.orders.toLocaleString()}
                   gradient="linear-gradient(135deg, rgba(244,114,182,0.12), transparent)"
-                  subtitle={`${TOTAL_RETURNS} devoluciones (5.4%)`}
+                  subtitle={`${periodAgg.returns} devoluciones (${((periodAgg.returns / periodAgg.orders) * 100).toFixed(1)}%)`}
                   sparkData={ORDER_TREND} sparkColor="#f472b6" />
-                <KpiCard label="ROI" value={`${ROI}%`}
+                <KpiCard label="ROI" value={`${((periodAgg.revenue - periodAgg.cost) / periodAgg.cost * 100).toFixed(0)}%`}
                   gradient="linear-gradient(135deg, rgba(251,191,36,0.12), transparent)"
-                  subtitle={`$${TOTAL_COST.toLocaleString()} en costos`} />
+                  subtitle={`$${periodAgg.cost.toLocaleString()} en costos`} />
               </div>
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                 <PanelCard>
                   <div style={{ display: 'flex', gap: '24px', justifyContent: 'space-around', flexWrap: 'wrap' }}>
-                    {MONTHLY_DATA.slice(-3).map((m) => (
+                    {monthsInPeriod.slice(-3).map((m) => (
                       <div key={m.month} style={{ textAlign: 'center', padding: '8px 16px' }}>
                         <div style={{ fontSize: '11px', color: TEXT_SEC, marginBottom: '4px' }}>{m.month}</div>
                         <div style={{ fontSize: '20px', fontWeight: 700, color: '#fff' }}>${(m.revenue / 1000).toFixed(0)}K</div>
@@ -344,16 +364,18 @@ export default function DashboardPage() {
                   )}
                 </AreaChart>
               </ResponsiveContainer>
-              {period === '6m' && (
-                <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginTop: '16px', flexWrap: 'wrap' }}>
-                  {[{ label: 'Total ingresos', value: TOTAL_REVENUE }, { label: 'Total costos', value: TOTAL_COST }, { label: 'Ganancia bruta', value: TOTAL_GROSS_PROFIT }].map((d) => (
-                    <div key={d.label} style={{ textAlign: 'center', padding: '10px 20px', borderRadius: '10px', border: `1px solid ${CARD_BORDER}` }}>
-                      <div style={{ fontSize: '10px', color: TEXT_SEC, marginBottom: '2px' }}>{d.label}</div>
-                      <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff' }}>${(d.value / 1000).toFixed(0)}K</div>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginTop: '16px', flexWrap: 'wrap' }}>
+                {[
+                  { label: 'Ingresos', value: periodAgg.revenue },
+                  { label: 'Costos', value: periodAgg.cost },
+                  { label: 'Ganancia', value: periodAgg.revenue - periodAgg.cost },
+                ].map((d) => (
+                  <div key={d.label} style={{ textAlign: 'center', padding: '10px 20px', borderRadius: '10px', border: `1px solid ${CARD_BORDER}` }}>
+                    <div style={{ fontSize: '10px', color: TEXT_SEC, marginBottom: '2px' }}>{d.label}</div>
+                    <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff' }}>${(d.value / 1000).toFixed(0)}K</div>
+                  </div>
+                ))}
+              </div>
             </PanelCard>
           )}
 
