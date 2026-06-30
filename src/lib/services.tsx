@@ -16,6 +16,7 @@ export interface ServiceItem {
   complexity: 'simple' | 'media' | 'compleja';
   examples?: ServiceExample[];
   ejemploSlug?: string;
+  ejemploUrl?: string;
 }
 
 export const CATALOGO: ServiceItem[] = [
@@ -129,6 +130,7 @@ export const CATALOGO: ServiceItem[] = [
     description: 'Sistema con acceso privado por roles: administradores, empleados, clientes. Gestion documental, paneles internos, comunicacion y reportes. Centraliza la operacion del negocio.',
     persona: 'Empresas con equipos, instituciones educativas, ONGs, clubes.',
     complexity: 'media',
+    ejemploUrl: 'https://bts-arg.vercel.app/',
   },
   {
     id: 'webapp',
