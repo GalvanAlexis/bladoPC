@@ -60,6 +60,8 @@ export default function WebAppPage() {
           Volver al servicio
         </Link>
 
+        <div className="section-divider" />
+
         <div style={S.tag}>Web App Interactiva</div>
         <h1 style={S.h1}>Herramientas web potentes<br />en tiempo real</h1>
         <p style={S.desc}>

@@ -51,12 +51,18 @@ Todo cambio de código DEBE seguir este flujo en orden estricto:
 4. **Implementar:** Codificar siguiendo las guías.
 5. **Quality Gates:** `npm test && npm run build` — AMBOS deben pasar.
 6. **Commit:** `git commit -m "tipo: descripcion infinitivo ISS-XXX"`.
-7. **PR, Merge y Deploy:** `git push` -> `gh pr create` -> `gh pr merge --merge` -> `git checkout master; git pull`.
+7. **PR y Merge:** `git push` -> `gh pr create` -> `gh pr merge --merge` -> `git checkout master; git pull`.
+   - **NO hacer deploy a Vercel.** El deploy solo se hace cuando Blado lo solicite explicitamente.
+   - Para testear local: `npm run dev` en terminal aparte.
 8. **Memoria (Cierre):** `engram_mem_session_summary` + `engram_mem_save` si aplica.
 
 ## Quality Gates por Defecto
 Verificar los scripts del `package.json` del proyecto para determinar los comandos correctos.
 Ejemplo típico: `npm test && npm run build` — deben pasar SIEMPRE antes de cerrar cualquier tarea.
+
+## Testeo Local (antes de commit)
+Blado levanta `npm run dev` en un terminal aparte para testear visualmente.
+No hacer deploy a Vercel a menos que Blado lo pida explicitamente.
 
 ## Lo que NO hacer
 - ❌ No hacer push directo a `master` — siempre via PR
