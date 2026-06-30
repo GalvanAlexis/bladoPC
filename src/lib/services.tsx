@@ -144,6 +144,7 @@ export const CATALOGO: ServiceItem[] = [
     description: 'Aplicaciones con funcionalidad en tiempo real: dashboards interactivos, mapas, editores colaborativos, visualizacion de datos, juegos o herramientas profesionales.',
     persona: 'Startups tecnologicas, herramientas digitales, negocios con operaciones en tiempo real.',
     complexity: 'media',
+    ejemploSlug: 'webapp',
   },
   {
     id: 'marketplace',
