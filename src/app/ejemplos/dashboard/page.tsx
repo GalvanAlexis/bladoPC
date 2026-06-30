@@ -1,10 +1,10 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   ResponsiveContainer, LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, Area, ComposedChart,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ComposedChart,
 } from 'recharts';
 import {
   MONTHLY_DATA, TOTAL_REVENUE, TOTAL_ORDERS, AVG_TICKET, GROWTH,
@@ -20,13 +20,11 @@ const TEXT_SEC = 'rgba(255,255,255,0.5)';
 const TEXT_MUTED = 'rgba(255,255,255,0.3)';
 const COLORS = ['#818cf8', '#f472b6', '#34d399', '#fbbf24', '#fb923c'];
 const REGION_COLORS = ['#818cf8', '#f472b6', '#34d399', '#fbbf24', 'rgba(255,255,255,0.2)'];
-const MONTH_COLORS = ['#1e1b4b', '#312e81', '#3730a3', '#4338ca', '#4f46e5', '#6366f1'];
 
 const cardBase = {
   background: CARD_BG,
   border: `1px solid ${CARD_BORDER}`,
   borderRadius: '16px',
-  backdropFilter: 'blur(12px)',
 };
 
 function AnimatedKPICard({ label, value, suffix, gradient, subtitle }: {
@@ -43,9 +41,9 @@ function AnimatedKPICard({ label, value, suffix, gradient, subtitle }: {
   );
 }
 
-function ChartCard({ title, subtitle, children, style }: { title: string; subtitle?: string; children: React.ReactNode; style?: React.CSSProperties }) {
+function ChartCard({ title, subtitle, children, style, isMobile }: { title: string; subtitle?: string; children: React.ReactNode; style?: React.CSSProperties; isMobile?: boolean }) {
   return (
-    <div style={{ ...cardBase, padding: 'clamp(16px, 2vw, 24px)', flex: '1 1 300px', minWidth: '280px', ...style }}>
+    <div style={{ ...cardBase, padding: 'clamp(16px, 2vw, 24px)', flex: '1 1 300px', minWidth: isMobile ? '100%' : '280px', ...style }}>
       <div style={{ marginBottom: '20px' }}>
         <div style={{ fontSize: '14px', fontWeight: 600, color: '#fff' }}>{title}</div>
         {subtitle && <div style={{ fontSize: '12px', color: TEXT_SEC, marginTop: '2px' }}>{subtitle}</div>}
@@ -78,6 +76,19 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 const formatCurrency = (v: number) => `$${v.toLocaleString()}`;
 
 export default function DashboardPage() {
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    setWidth(window.innerWidth);
+    const onResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  const isMobile = width > 0 && width < 640;
+  const yAxisWidth = isMobile ? 45 : 60;
+  const pieRadius = isMobile ? { inner: 35, outer: 55 } : { inner: 55, outer: 80 };
+  const chartHeight = isMobile ? 200 : 260;
+  const smallChartHeight = isMobile ? 180 : 220;
+
   const totalByCategory = useMemo(() => {
     return [
       { name: 'Remeras', value: MONTHLY_DATA.reduce((s, m) => s + m.remeras, 0) },
@@ -95,7 +106,7 @@ export default function DashboardPage() {
   })), []);
 
   return (
-    <div style={{ minHeight: '100vh', background: BG, color: '#fff', fontFamily: 'var(--font-sans)' }}>
+    <div style={{ minHeight: '100vh', background: BG, color: '#fff', fontFamily: 'var(--font-sans)', overflowX: 'hidden' }}>
       <div className="section-container" style={{ paddingTop: 'clamp(80px, 12vh, 120px)', paddingBottom: 'clamp(60px, 8vh, 100px)' }}>
         <Link href="/servicios" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: TEXT_SEC, textDecoration: 'none', marginBottom: '12px' }}>
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M10 12L6 8l4-4" /></svg>
@@ -148,24 +159,24 @@ export default function DashboardPage() {
 
         {/* Fila 2: Ventas mensuales + Categorias */}
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '12px' }}>
-          <ChartCard title="Ventas mensuales" subtitle="Ingresos por mes en los ultimos 6 meses">
-            <ResponsiveContainer width="100%" height={260}>
+          <ChartCard title="Ventas mensuales" subtitle="Ingresos por mes en los ultimos 6 meses" isMobile={isMobile}>
+            <ResponsiveContainer width="100%" height={chartHeight}>
               <LineChart data={MONTHLY_DATA}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                <XAxis dataKey="month" tick={{ fill: TEXT_SEC, fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis tickFormatter={formatCurrency} tick={{ fill: TEXT_SEC, fontSize: 12 }} axisLine={false} tickLine={false} width={60} />
+                <XAxis dataKey="month" tick={{ fill: TEXT_SEC, fontSize: isMobile ? 10 : 12 }} axisLine={false} tickLine={false} />
+                <YAxis tickFormatter={formatCurrency} tick={{ fill: TEXT_SEC, fontSize: isMobile ? 10 : 12 }} axisLine={false} tickLine={false} width={yAxisWidth} />
                 <Tooltip content={<CustomTooltip />} />
-                <Line type="monotone" dataKey="revenue" stroke={ACCENT} strokeWidth={2.5} dot={{ fill: ACCENT, r: 4 }} activeDot={{ r: 6 }} name="revenue" />
+                <Line type="monotone" dataKey="revenue" stroke={ACCENT} strokeWidth={2.5} dot={{ fill: ACCENT, r: isMobile ? 2 : 4 }} activeDot={{ r: isMobile ? 4 : 6 }} name="revenue" />
               </LineChart>
             </ResponsiveContainer>
           </ChartCard>
 
-          <ChartCard title="Ventas por categoria" subtitle="Acumulado Enero-Junio 2026">
-            <ResponsiveContainer width="100%" height={260}>
-              <BarChart data={totalByCategory} barCategoryGap="20%">
+          <ChartCard title="Ventas por categoria" subtitle="Acumulado Enero-Junio 2026" isMobile={isMobile}>
+            <ResponsiveContainer width="100%" height={chartHeight}>
+              <BarChart data={totalByCategory} barCategoryGap={isMobile ? '10%' : '20%'}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-                <XAxis dataKey="name" tick={{ fill: TEXT_SEC, fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tickFormatter={formatCurrency} tick={{ fill: TEXT_SEC, fontSize: 11 }} axisLine={false} tickLine={false} width={60} />
+                <XAxis dataKey="name" tick={{ fill: TEXT_SEC, fontSize: isMobile ? 9 : 11 }} axisLine={false} tickLine={false} />
+                <YAxis tickFormatter={formatCurrency} tick={{ fill: TEXT_SEC, fontSize: isMobile ? 9 : 11 }} axisLine={false} tickLine={false} width={yAxisWidth} />
                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
                 <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                   {totalByCategory.map((_, i) => (
@@ -179,7 +190,7 @@ export default function DashboardPage() {
 
         {/* Fila 3: Top productos + Region + Dia semana */}
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '12px' }}>
-          <ChartCard title="Top 5 productos" subtitle="Unidades vendidas en el semestre">
+          <ChartCard title="Top 5 productos" subtitle="Unidades vendidas en el semestre" isMobile={isMobile}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {TOP_PRODUCTS.map((p, i) => {
                 const pct = (p.units / TOP_PRODUCTS[0].units) * 100;
@@ -201,10 +212,10 @@ export default function DashboardPage() {
             </div>
           </ChartCard>
 
-          <ChartCard title="Distribucion por region" subtitle="% de ingresos por provincia" style={{ flex: '1 1 200px', minWidth: '200px' }}>
-            <ResponsiveContainer width="100%" height={220}>
+          <ChartCard title="Distribucion por region" subtitle="% de ingresos por provincia" isMobile={isMobile} style={{ flex: '1 1 200px', minWidth: isMobile ? '100%' : '200px' }}>
+            <ResponsiveContainer width="100%" height={smallChartHeight}>
               <PieChart>
-                <Pie data={REGION_DATA} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={3}>
+                <Pie data={REGION_DATA} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={pieRadius.inner} outerRadius={pieRadius.outer} paddingAngle={3}>
                   {REGION_DATA.map((_, i) => (
                     <Cell key={i} fill={REGION_COLORS[i]} stroke="transparent" />
                   ))}
@@ -227,8 +238,8 @@ export default function DashboardPage() {
             </div>
           </ChartCard>
 
-          <ChartCard title="Ventas por dia" subtitle="Pedidos promedio por dia de la semana">
-            <ResponsiveContainer width="100%" height={220}>
+          <ChartCard title="Ventas por dia" subtitle="Pedidos promedio por dia de la semana" isMobile={isMobile}>
+            <ResponsiveContainer width="100%" height={smallChartHeight}>
               <BarChart data={WEEKDAY_DATA} barCategoryGap="30%">
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
                 <XAxis dataKey="day" tick={{ fill: TEXT_SEC, fontSize: 11 }} axisLine={false} tickLine={false} />
@@ -246,12 +257,12 @@ export default function DashboardPage() {
 
         {/* Fila 4: Proyeccion + Recomendaciones */}
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '12px' }}>
-          <ChartCard title="Proyeccion Julio-Diciembre" subtitle="Estimacion basada en tendencia del semestre + estacionalidad">
-            <ResponsiveContainer width="100%" height={260}>
+          <ChartCard title="Proyeccion Julio-Diciembre" subtitle="Estimacion basada en tendencia del semestre + estacionalidad" isMobile={isMobile}>
+            <ResponsiveContainer width="100%" height={chartHeight}>
               <ComposedChart data={projData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
                 <XAxis dataKey="month" tick={{ fill: TEXT_SEC, fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tickFormatter={formatCurrency} tick={{ fill: TEXT_SEC, fontSize: 11 }} axisLine={false} tickLine={false} width={60} />
+                <YAxis tickFormatter={formatCurrency} tick={{ fill: TEXT_SEC, fontSize: isMobile ? 9 : 11 }} axisLine={false} tickLine={false} width={yAxisWidth} />
                 <Tooltip content={<CustomTooltip />} />
                 <Bar dataKey="actual" fill={ACCENT} fillOpacity={0.6} radius={[4, 4, 0, 0]} name="actual" />
                 <Line type="monotone" dataKey="projected" stroke={ACCENT2} strokeWidth={2} strokeDasharray="6 4" dot={{ fill: ACCENT2, r: 3 }} name="projected" />
@@ -262,7 +273,7 @@ export default function DashboardPage() {
             </ResponsiveContainer>
           </ChartCard>
 
-          <ChartCard title="Recomendaciones" subtitle="Insights basados en datos del semestre">
+          <ChartCard title="Recomendaciones" subtitle="Insights basados en datos del semestre" isMobile={isMobile}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {RECOMMENDATIONS.map((r, i) => (
                 <div key={i} style={{ padding: '14px 16px', borderRadius: '12px', background: r.gradient, border: `1px solid ${CARD_BORDER}` }}>
