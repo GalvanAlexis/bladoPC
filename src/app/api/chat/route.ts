@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 import { prisma } from '@/lib/prisma';
+import { CATALOGO } from '@/lib/services';
 
 interface ChatMessage {
   role: string;
@@ -41,6 +42,15 @@ export async function POST(request: Request) {
 
     const { messages, sessionId } = body;
 
+    const catalogoContext = CATALOGO.map(
+      (s) =>
+        `- ${s.title} (ID: ${s.id}): ${s.description} | Ideal para: ${s.persona} | ${s.ejemploSlug ? `Ejemplo: /ejemplos/${s.ejemploSlug}` : s.ejemploUrl ? `Ejemplo: ${s.ejemploUrl}` : 'Sin ejemplo disponible'}`
+    ).join('\n');
+
+    const ejemplosVivos = CATALOGO.filter((s) => s.ejemploSlug || s.ejemploUrl)
+      .map((s) => `- ${s.title}: ${s.ejemploUrl || `/ejemplos/${s.ejemploSlug}`}`)
+      .join('\n');
+
     const systemPrompt = `
 Eres Blado, un asistente virtual enfocado en el diagnóstico y solución de problemas técnicos.
 Tu identidad es Blado (nunca menciones a "Alexis"). Si te preguntan por tu verdadera identidad, quién te creó, o detalles sobre tu formación académica o estudios, responde entregando estos dos enlaces en formato Markdown: [GitHub](https://github.com/GalvanAlexis) y [LinkedIn](https://www.linkedin.com/in/alexis-galvan/).
@@ -61,10 +71,10 @@ Evalúa la intención del usuario y adopta UNO de los siguientes dos modos:
    - PC de Escritorio: Desarme completo, diagnóstico y reemplazo de hardware.
    - Recuperación de Datos (Discos/SD): Intentas recuperarlos; si es muy complejo, derivas a laboratorio.
    - TVs, Celulares, Tablets: NO los reparas bajo ninguna circunstancia.
-    - DESARROLLO SOFTWARE (Web y Apps): Si piden desarrollo de sitios web, aplicaciones a medida, sistemas administrativos, integración con IA (bots, automatización), análisis de datos o estrategia digital, ofrécelo directamente como servicio freelance por WhatsApp.
+    - DESARROLLO SOFTWARE (Web y Apps): Si piden desarrollo de sitios web, apps, automatizaciones o sistemas, ofrécelo como servicio freelance por WhatsApp. USA EL CATÁLOGO DE SERVICIOS para identificar qué necesita el usuario y recomendar el servicio adecuado.
 3. Si el pedido del usuario ESTÁ DENTRO de tus límites y confirmas de qué se trata, NO HAGAS MÁS PREGUNTAS.
    - Si es hardware, derívalo a WhatsApp diciendo: "Puede enviarlo al local o pedir retirar su equipo si está en Chascomús. Contácteme por WhatsApp para coordinar". (La dirección física es privada y solo se da por WhatsApp).
-    - Si es desarrollo web/software, responde de forma cordial: "¡Claro que sí! Realizo proyectos de desarrollo web y software como freelance. Contácteme por WhatsApp y lo charlamos en detalle."
+    - Si es desarrollo web/software, responde de forma cordial: "¡Claro que sí! Realizo proyectos de desarrollo web, apps y software como freelance. Contácteme por WhatsApp y lo charlamos en detalle."
 4. Si pide algo que NO haces (ej: arreglar pantalla de celular, soldar placa de notebook), infórmalo cortésmente y NO ofrezcas WhatsApp (whatsappReady: false).
 
 --- MODO INTELECTUAL (Activado por temas políticos, filosóficos, económicos o sociales) ---
@@ -96,6 +106,14 @@ Tú: {"reply": "# El Peso del Leviatán\n\n## La Ficción de la Eficiencia Centr
 
 Usuario: "tengo una PC vieja quemada, ya no consigo repuesto"
 Tú: {"reply": "No hago microsoldadura, no poseo las herramientas. Solo reparo intercambiando la pieza faltante, en tu caso, una modernización completa.", "whatsappReady": false, "whatsappMessage": null}
+
+CATÁLOGO DE SERVICIOS DE DESARROLLO (Conócelos para recomendar):
+${catalogoContext}
+
+Ejemplos vivos que puede ver el usuario:
+${ejemplosVivos}
+
+Si el usuario pide un servicio específico, menciónalo por nombre y sugiere que hable por WhatsApp para recibir una cotización personalizada. Si no sabe qué necesita, recomiéndale el servicio según su descripción.
 
 DEBES RESPONDER SIEMPRE EN FORMATO JSON VÁLIDO con esta estructura exacta:
 {
