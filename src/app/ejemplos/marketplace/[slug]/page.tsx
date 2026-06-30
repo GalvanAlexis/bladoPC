@@ -78,7 +78,7 @@ export default async function ProfessionalPage({ params }: { params: Promise<{ s
                 {pro.rating.toFixed(1)}
               </div>
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '4px' }}><StarRating rating={pro.rating} /></div>
-              <div style={{ fontSize: '11px', color: 'var(--muted)' }}>{pro.reviewCount} resenas</div>
+              <div style={{ fontSize: '11px', color: 'var(--muted)' }}>{pro.reviewCount} reseñas</div>
             </div>
           </div>
 
@@ -99,7 +99,7 @@ export default async function ProfessionalPage({ params }: { params: Promise<{ s
             ))}
           </div>
 
-          <h2 style={{ fontSize: '17px', fontWeight: 700, margin: '0 0 16px 0' }}>Resenas de clientes ({pro.reviewCount})</h2>
+          <h2 style={{ fontSize: '17px', fontWeight: 700, margin: '0 0 16px 0' }}>Reseñas de clientes ({pro.reviewCount})</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '32px' }}>
             {pro.reviews.map((rev, i) => (
               <div key={i} style={{ padding: '16px 20px', borderRadius: '10px', border: '1px solid var(--border)' }}>

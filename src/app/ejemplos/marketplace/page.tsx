@@ -76,7 +76,7 @@ export default function MarketplacePage() {
         </div>
 
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '36px' }}>
-          <button onClick={() => setActiveCategory('all')} style={S.pill(activeCategory === 'all')}>Todas las categorias</button>
+          <button onClick={() => setActiveCategory('all')} style={S.pill(activeCategory === 'all')}>Todas las categorÃ­as</button>
           {CATEGORIES.map((cat) => (
             <button key={cat.id} onClick={() => setActiveCategory(cat.id)} style={S.pill(activeCategory === cat.id)}>
               {cat.id} ({cat.count})
@@ -86,7 +86,7 @@ export default function MarketplacePage() {
 
         {activeCategory === 'all' && !search && (
           <>
-            <h2 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 20px 0' }}>Categorias</h2>
+            <h2 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 20px 0' }}>CategorÃ­as</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '14px', marginBottom: '48px' }}>
               {CATEGORIES.map((cat) => {
                 const catPros = PROFESSIONALS.filter((p) => p.category === cat.id);
@@ -131,7 +131,7 @@ export default function MarketplacePage() {
                   <span style={{ fontSize: '12px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px', background: ratingBg(pro.rating), color: ratingColor(pro.rating) }}>
                     {pro.rating.toFixed(1)}
                   </span>
-                  <span style={{ fontSize: '11px', color: 'var(--muted)' }}>({pro.reviewCount} resenas)</span>
+                  <span style={{ fontSize: '11px', color: 'var(--muted)' }}>({pro.reviewCount} reseñas)</span>
                 </div>
                 <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--muted)' }}>{pro.priceRange}</span>
               </div>
