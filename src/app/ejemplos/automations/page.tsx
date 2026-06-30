@@ -39,7 +39,7 @@ export default function AutomationsPage() {
   return (
     <div style={S.section}>
       <div className="section-container" style={S.container}>
-        <Link href="/servicios/automations" style={S.back}>
+        <Link href="/servicios" style={S.back}>
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M10 12L6 8l4-4" /></svg>
           Volver al servicio
         </Link>

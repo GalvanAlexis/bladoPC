@@ -2,8 +2,10 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { CATALOGO, findServiceBySlug, getComplexityLabel, getComplexityColors } from '@/lib/services';
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
-  return CATALOGO.map((svc) => ({ slug: svc.id }));
+  return CATALOGO.filter((svc) => svc.id !== 'automations').map((svc) => ({ slug: svc.id }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
