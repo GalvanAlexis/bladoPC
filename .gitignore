@@ -31,9 +31,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files
-.env
-.env.local
-.env*.local
+.env*
 
 # vercel
 .vercel
@@ -52,3 +50,10 @@ next-env.d.ts
 .env*
 
 supabase/
+
+# build caches
+.swc/
+.playwright-mcp/
+
+# local env artifacts
+.env.vercel
