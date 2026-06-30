@@ -76,7 +76,7 @@ export default function MarketplacePage() {
         </div>
 
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '36px' }}>
-          <button onClick={() => setActiveCategory('all')} style={S.pill(activeCategory === 'all')}>Todas las categorÃ­as</button>
+          <button onClick={() => setActiveCategory('all')} style={S.pill(activeCategory === 'all')}>Todas las categorías</button>
           {CATEGORIES.map((cat) => (
             <button key={cat.id} onClick={() => setActiveCategory(cat.id)} style={S.pill(activeCategory === cat.id)}>
               {cat.id} ({cat.count})
@@ -86,7 +86,7 @@ export default function MarketplacePage() {
 
         {activeCategory === 'all' && !search && (
           <>
-            <h2 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 20px 0' }}>CategorÃ­as</h2>
+            <h2 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 20px 0' }}>Categorías</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '14px', marginBottom: '48px' }}>
               {CATEGORIES.map((cat) => {
                 const catPros = PROFESSIONALS.filter((p) => p.category === cat.id);
