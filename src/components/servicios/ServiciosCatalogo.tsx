@@ -272,19 +272,37 @@ export default function ServiciosCatalogo() {
                         </span>
                       </div>
 
-                      <Link
-                        href={svc.ejemploSlug ? `/ejemplos/${svc.ejemploSlug}` : `/servicios/${svc.id}`}
-                        className="btn-primary"
-                        style={{
-                          alignSelf: 'flex-start',
-                          fontSize: '12px',
-                          padding: '8px 18px',
-                          textDecoration: 'none',
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        Ver ejemplo →
-                      </Link>
+                      {svc.ejemploUrl ? (
+                        <a
+                          href={svc.ejemploUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-primary"
+                          style={{
+                            alignSelf: 'flex-start',
+                            fontSize: '12px',
+                            padding: '8px 18px',
+                            textDecoration: 'none',
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Ver ejemplo →
+                        </a>
+                      ) : (
+                        <Link
+                          href={svc.ejemploSlug ? `/ejemplos/${svc.ejemploSlug}` : `/servicios/${svc.id}`}
+                          className="btn-primary"
+                          style={{
+                            alignSelf: 'flex-start',
+                            fontSize: '12px',
+                            padding: '8px 18px',
+                            textDecoration: 'none',
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Ver ejemplo →
+                        </Link>
+                      )}
                     </div>
                   </motion.div>
                 )}
