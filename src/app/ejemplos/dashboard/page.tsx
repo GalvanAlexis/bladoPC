@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useId } from 'react';
 import Link from 'next/link';
 import {
   ResponsiveContainer, LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
@@ -56,7 +56,8 @@ const fmtCurr = (v: number) => `$${v.toLocaleString()}`;
 const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'];
 
 function MiniSparkline({ data, color }: { data: number[]; color: string }) {
-  const id = `spark-${Math.random().toString(36).slice(2, 6)}`;
+  const uid = useId();
+  const id = `spark-${uid}`;
   const w = 80; const h = 28;
   const max = Math.max(...data);
   const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - (v / max) * h}`).join(' ');
