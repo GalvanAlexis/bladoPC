@@ -510,15 +510,304 @@ h1, h2, h3, h4, h5, h6 {
   border: 0;
 }
 
+/* ─────────────────────────────────────────────────────────
+   ANIMISTA — Keyframes integrados (animista.net)
+   slide-in-bottom, scale-in-center, shake-horizontal
+   ───────────────────────────────────────────────────────── */
+
+@keyframes slide-in-bottom {
+  0%   { transform: translateY(40px); opacity: 0; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes scale-in-center {
+  0%   { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes shake-horizontal {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70% { transform: translateX(-4px); }
+  20%, 40%, 60% { transform: translateX(4px); }
+  80% { transform: translateX(3px); }
+  90% { transform: translateX(-3px); }
+}
+
+/* ─── Catalogo Servicios — Grid + Cards + Modal ─── */
+
+/* Filtros pill */
+.servicios-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.servicios-filter-btn {
+  padding: 6px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted-light);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.servicios-filter-btn:hover {
+  border-color: var(--accent);
+  color: var(--foreground);
+}
+
+.servicios-filter-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+
+.servicios-filter-btn.active-simple {
+  background: rgba(34,197,94,0.15);
+  border-color: rgba(34,197,94,0.4);
+  color: #22c55e;
+  box-shadow: 0 4px 14px rgba(34,197,94,0.2);
+}
+
+.servicios-filter-btn.active-media {
+  background: rgba(234,179,8,0.15);
+  border-color: rgba(234,179,8,0.4);
+  color: #eab308;
+  box-shadow: 0 4px 14px rgba(234,179,8,0.2);
+}
+
+.servicios-filter-btn.active-compleja {
+  background: rgba(239,68,68,0.12);
+  border-color: rgba(239,68,68,0.35);
+  color: #ef4444;
+  box-shadow: 0 4px 14px rgba(239,68,68,0.18);
+}
+
+/* Grid de servicios */
+.servicios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* Card de servicio */
+.servicio-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  background: rgba(15, 15, 15, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  cursor: pointer;
+  overflow: hidden;
+
+  /* Animista slide-in-bottom staggered via CSS custom property */
+  animation: slide-in-bottom 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation-delay: var(--card-delay, 0ms);
+
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Accent line top */
+.servicio-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--card-accent-color, var(--accent));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 16px 16px 0 0;
+}
+
+.servicio-card:hover::before {
+  opacity: 1;
+}
+
+.servicio-card:hover {
+  border-color: rgba(225, 29, 72, 0.25);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 30px var(--accent-glow);
+  transform: translateY(-6px) scale(1.01);
+}
+
+/* Variantes de hover por complejidad */
+.servicio-card[data-complexity="simple"]:hover {
+  border-color: rgba(34, 197, 94, 0.25);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 24px rgba(34,197,94,0.12);
+}
+
+.servicio-card[data-complexity="media"]:hover {
+  border-color: rgba(234, 179, 8, 0.25);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 24px rgba(234,179,8,0.12);
+}
+
+.servicio-card[data-complexity="compleja"]:hover {
+  border-color: rgba(239, 68, 68, 0.25);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 24px rgba(239,68,68,0.12);
+}
+
+/* Light mode overrides */
+.blado-light .servicio-card {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.blado-light .servicio-card:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08), 0 0 24px var(--accent-glow);
+}
+
+/* Ícono de card */
+.servicio-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--accent-dim);
+  color: var(--accent);
+  transition: transform 0.3s ease;
+}
+
+.servicio-card:hover .servicio-card-icon {
+  transform: scale(1.1) rotate(-3deg);
+}
+
+/* Descripción truncada */
+.servicio-card-desc {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--foreground-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  overflow: hidden;
+  margin: 0;
+  flex: 1;
+}
+
+/* CTA de card */
+.servicio-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  padding-top: 4px;
+}
+
+.servicio-card:hover .servicio-card-cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Modal de detalle ─── */
+.servicio-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fade-in 0.2s ease-out both;
+}
+
+.servicio-modal {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  max-height: 90dvh;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 40px rgba(0,0,0,0.4);
+  animation: scale-in-center 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.blado-light .servicio-modal {
+  background: #fff;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.15), 0 0 40px rgba(0,0,0,0.06);
+}
+
+.servicio-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--muted-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.servicio-modal-close:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Badge de complejidad animado */
+.complexity-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  animation: scale-in-center 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
 /* ─── prefers-reduced-motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .status-dot,
   .animate-fade-in,
   .reveal,
-  .reveal-fade {
+  .reveal-fade,
+  .servicio-card,
+  .servicio-modal,
+  .servicio-modal-overlay,
+  .complexity-badge {
     animation: none !important;
     transition: none !important;
     opacity: 1 !important;
     transform: none !important;
   }
 }
+
