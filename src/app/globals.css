@@ -543,6 +543,17 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 40px;
 }
 
+@media (max-width: 480px) {
+  .servicios-filters {
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+  .servicios-filter-btn {
+    padding: 5px 14px;
+    font-size: 11px;
+  }
+}
+
 .servicios-filter-btn {
   padding: 6px 18px;
   border-radius: 999px;
@@ -593,8 +604,15 @@ h1, h2, h3, h4, h5, h6 {
 /* Grid de servicios */
 .servicios-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 16px;
+}
+
+@media (max-width: 480px) {
+  .servicios-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
 }
 
 /* Card de servicio */
@@ -602,8 +620,8 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 24px;
+  gap: 14px;
+  padding: 20px;
   background: rgba(15, 15, 15, 0.5);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -617,6 +635,13 @@ h1, h2, h3, h4, h5, h6 {
   animation-delay: var(--card-delay, 0ms);
 
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (min-width: 481px) {
+  .servicio-card {
+    padding: 24px;
+    gap: 16px;
+  }
 }
 
 /* Accent line top */
@@ -720,6 +745,14 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(0);
 }
 
+/* En touch (sin hover real) el CTA siempre visible */
+@media (hover: none) {
+  .servicio-card-cta {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ─── Modal de detalle ─── */
 .servicio-modal-overlay {
   position: fixed;
@@ -748,6 +781,27 @@ h1, h2, h3, h4, h5, h6 {
   padding: 32px;
   box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 40px rgba(0,0,0,0.4);
   animation: scale-in-center 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* Mobile: bottom-sheet (16:9 portrait) */
+@media (max-width: 640px) {
+  .servicio-modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .servicio-modal {
+    max-height: 85dvh;
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px 32px;
+    animation: slide-in-bottom 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    /* Handle visual indicator */
+    background-image: radial-gradient(ellipse 40px 4px at 50% 14px, var(--border) 100%, transparent 100%);
+    background-repeat: no-repeat;
+  }
+  .servicio-modal-close {
+    top: 20px;
+    right: 16px;
+  }
 }
 
 .blado-light .servicio-modal {
