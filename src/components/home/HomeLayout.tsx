@@ -1,22 +1,21 @@
-"use client";
-
-import React, { useState, lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import HeroSection from '@/components/home/HeroSection';
-import ServicesSection from '@/components/home/ServicesSection';
-import AboutSection from '@/components/home/AboutSection';
-import SkillsSection from '@/components/home/SkillsSection';
 import ContactSection from '@/components/home/ContactSection';
 import FAQSection from '@/components/home/FAQSection';
 
 import RevealObserver from '@/components/home/RevealObserver';
 import ReadingProgress from '@/components/home/ReadingProgress';
 
-const ScrollBackground = dynamic(() => import('@/components/home/ScrollBackground'), { ssr: false });
-const CursorGlow = dynamic(() => import('@/components/home/CursorGlow'), { ssr: false });
-const ParallaxDecor = dynamic(() => import('@/components/home/ParallaxDecor'), { ssr: false });
+const ServicesSection = dynamic(() => import('@/components/home/ServicesSection'));
+const AboutSection = dynamic(() => import('@/components/home/AboutSection'));
+const SkillsSection = dynamic(() => import('@/components/home/SkillsSection'));
+
+const ScrollBackground = dynamic(() => import('@/components/home/ScrollBackground'));
+const CursorGlow = dynamic(() => import('@/components/home/CursorGlow'));
+const ParallaxDecor = dynamic(() => import('@/components/home/ParallaxDecor'));
 
 export default function HomeLayout() {
   return (
@@ -24,23 +23,7 @@ export default function HomeLayout() {
       {/* Skip-to-content link para accesibilidad */}
       <a
         href="#main-content"
-        style={{
-          position: 'absolute',
-          top: '-100%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 9999,
-          padding: '12px 24px',
-          background: 'var(--accent)',
-          color: '#fff',
-          fontWeight: 600,
-          fontSize: '14px',
-          borderRadius: '0 0 8px 8px',
-          textDecoration: 'none',
-          transition: 'top 0.2s',
-        }}
-        onFocus={e => { e.currentTarget.style.top = '0'; }}
-        onBlur={e => { e.currentTarget.style.top = '-100%'; }}
+        className="fixed left-1/2 -translate-x-1/2 -top-[100%] focus:top-0 z-[9999] px-6 py-3 bg-[var(--accent)] text-white font-semibold text-sm rounded-b-lg no-underline transition-[top] duration-200"
       >
         Saltar al contenido principal
       </a>
@@ -66,9 +49,19 @@ export default function HomeLayout() {
         }}
       >
         <HeroSection />
-        <ServicesSection />
-        <AboutSection />
-        <SkillsSection />
+        
+        <Suspense fallback={<div style={{ minHeight: '600px' }} />}>
+          <ServicesSection />
+        </Suspense>
+        
+        <Suspense fallback={<div style={{ minHeight: '600px' }} />}>
+          <AboutSection />
+        </Suspense>
+        
+        <Suspense fallback={<div style={{ minHeight: '600px' }} />}>
+          <SkillsSection />
+        </Suspense>
+
         <FAQSection />
         <ContactSection />
 

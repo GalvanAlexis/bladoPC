@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FAQ_DATA } from '@/data/faq-data';
 
 const faqSchema = {
@@ -15,11 +15,6 @@ const faqSchema = {
 };
 
 export default function FAQSection() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  const handleToggle = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
 
   return (
     <section
@@ -72,21 +67,13 @@ export default function FAQSection() {
           {FAQ_DATA.map((item, index) => (
             <details
               key={index}
-              className="reveal"
-              open={openIndex === index}
-              onClick={(e) => {
-                e.preventDefault();
-                handleToggle(index);
-              }}
+              className="reveal group hover:border-[var(--accent)] transition-colors"
               style={{
                 background: 'var(--surface)',
                 border: '1px solid var(--border)',
                 borderRadius: '12px',
                 overflow: 'hidden',
-                transition: 'border-color 0.2s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; }}
             >
               <summary
                 style={{
@@ -108,9 +95,9 @@ export default function FAQSection() {
                   style={{
                     fontSize: '14px',
                     color: 'var(--accent)',
-                    transition: 'transform 0.2s',
                     flexShrink: 0,
                   }}
+                  className="transition-transform group-open:rotate-45"
                 >
                   +
                 </span>

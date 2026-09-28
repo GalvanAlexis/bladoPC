@@ -1,5 +1,3 @@
-"use client";
-
 import React from 'react';
 
 const GMAIL_COMPOSE = 'https://mail.google.com/mail/?view=cm&fs=1&to=alexisvladimirgalvan@gmail.com&su=bladoPC';
@@ -154,10 +152,8 @@ export default function ContactSection() {
                 fontWeight: 500,
                 display: 'block',
                 marginBottom: '8px',
-                transition: 'color 0.2s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent-hover)'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'var(--accent)'; }}
+              className="hover:text-[var(--accent-hover)] transition-colors"
             >
               {CONTACT_DATA.email}
             </a>
@@ -171,10 +167,8 @@ export default function ContactSection() {
                 textDecoration: 'none',
                 fontWeight: 500,
                 display: 'block',
-                transition: 'opacity 0.2s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.opacity = '0.8'; }}
-              onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+              className="hover:opacity-80 transition-opacity"
             >
               +54 2241 567142
             </a>
@@ -231,19 +225,9 @@ export default function ContactSection() {
                     color: 'var(--muted-light)',
                     background: 'var(--surface)',
                     border: '1px solid var(--border)',
-                    transition: 'all 0.2s',
                     textDecoration: 'none',
                   }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.color = 'var(--accent)';
-                    e.currentTarget.style.borderColor = 'var(--accent)';
-                    e.currentTarget.style.background = 'var(--accent-dim)';
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.color = 'var(--muted-light)';
-                    e.currentTarget.style.borderColor = 'var(--border)';
-                    e.currentTarget.style.background = 'var(--surface)';
-                  }}
+                  className="hover:text-[var(--accent)] hover:border-[var(--accent)] hover:bg-[var(--accent-dim)] transition-all"
                 >
                   {s.icon}
                 </a>

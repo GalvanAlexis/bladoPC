@@ -32,12 +32,10 @@ function getInitialTheme(): Theme {
 }
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [isMounted, setIsMounted] = useState(false);
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
   const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
-    setIsMounted(true);
     const initial = getInitialTheme();
     setTheme(initial);
     document.documentElement.classList.toggle('blado-light', initial === 'light');
@@ -51,10 +49,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       return next;
     });
   }, []);
-
-  if (!isMounted) {
-    return <div style={{ minHeight: '100vh', background: '#050505' }} />;
-  }
 
   return (
     <AppContext.Provider value={{ animationsEnabled, setAnimationsEnabled, theme, toggleTheme }}>
