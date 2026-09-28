@@ -9,11 +9,7 @@ export default function RevealObserver() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('in-view');
-            // Optional: unobserve after revealing so it only animates once
-            // observer.unobserve(entry.target);
-          } else {
-            // Remove to animate again if scrolling up
-            entry.target.classList.remove('in-view');
+            observer.unobserve(entry.target);
           }
         });
       },

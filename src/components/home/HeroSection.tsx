@@ -97,6 +97,7 @@ export default function HeroSection() {
       {/* Video background */}
       <video
         autoPlay
+        preload="none"
         loop
         muted
         playsInline
